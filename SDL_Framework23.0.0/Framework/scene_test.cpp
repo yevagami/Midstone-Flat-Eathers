@@ -3,6 +3,10 @@
 #include "VMath.h"
 using namespace std;
 
+void printStuff() {
+	cout << "Tick Tock" << endl;
+}
+
 scene_test::scene_test(SDL_Window* sdlWindow_) {
 	window = sdlWindow_;
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
@@ -52,6 +56,7 @@ bool scene_test::OnCreate() {
 	//Load the bodie's hitbox
 	player->LoadHitbox();
 	notThePlayer->LoadHitbox();
+
 	return true;
 }
 
@@ -66,14 +71,16 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 }
 
 void scene_test::Update(const float deltaTime) {
+	
 	player->Update(deltaTime);
+
 	if (player->collisionCheck(notThePlayer->hitbox)) {
 		//cout << "Colliding\n";
 	}
 
 	Vec3 playerPos = PhysicsSpaceToScreenSpace(player->pos);
 	
-	cout << "Player pos( " << playerPos.x << ", " << playerPos.y << ")\n";
+	//cout << "Player pos( " << playerPos.x << ", " << playerPos.y << ")\n";
 
 }
 
@@ -160,6 +167,7 @@ void scene_test::OnDestroy() {
 	background->OnDestory();
 	player->OnDestory();
 	notThePlayer->OnDestory();
+	printTime->OnDestroy();
 
 	// Destroy the renderer.
 	if (screenRenderer) {
@@ -171,6 +179,7 @@ void scene_test::OnDestroy() {
 
 scene_test::~scene_test() {
 	cout << "deleting child class: " << sceneName << endl;
+	delete printTime;
 	delete background;
 	delete player;
 	delete notThePlayer;

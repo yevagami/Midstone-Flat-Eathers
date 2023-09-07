@@ -2,12 +2,17 @@
 #include <iostream>
 
 class Clock{
-	float duration;
-	float timer = 0
-	unsigned int (*function) ();
-
+public:
+	Clock();
+	Clock(float duration_);
+	void (*callback)();
 	void Update(float deltaTime);
-	void CallBack(callback);
 	void OnDestroy();
+	void Reset();
+
+private:
+	float duration;
+	float timer = 0;
+	bool completed = false;
 };
 

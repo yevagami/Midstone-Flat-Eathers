@@ -5,10 +5,14 @@
 #include "Body.h"
 #include "Player.h"
 #include <cstring>
+#include "Clock.h"
 
 class scene_test : public Scene{
 	//Name of the scene for organizing stuff
 	std::string sceneName = "scene_test";
+
+	//Clock
+	Clock* printTime;
 
 	//SDL window stuff
 	SDL_Window* window;
