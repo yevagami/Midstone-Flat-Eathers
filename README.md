@@ -1,7 +1,7 @@
 # Midstone-Flat-Eathers
 **Foundation Code**
 - ~~Player Movement~~
-- - ~~Collision~~
+- ~~Collision~~
 - Menu
 - Camera Movement (optional??)
 - Collision Responses
