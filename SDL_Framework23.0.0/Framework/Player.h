@@ -4,9 +4,9 @@
 class Player : public Body{
 	Vec2 movement;
 
-	float walkSpeed = 100.0f;
+	float walkSpeed = 200.0f;
 	float currentSpeed;
-	float maxSpeed = 100.0f;
+	float maxSpeed = 200.0f;
 
 public:
 	Player();

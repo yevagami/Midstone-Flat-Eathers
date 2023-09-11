@@ -152,6 +152,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="scene_test.cpp" />
+    <ClCompile Include="state.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -166,6 +168,8 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="scene_test.h" />
+    <ClInclude Include="state.h" />
+    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
