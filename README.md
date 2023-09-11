@@ -1,9 +1,9 @@
 # Midstone-Flat-Eathers
 **Foundation Code**
 - ~~Player Movement~~
+- - ~~Collision~~
 - Menu
 - Camera Movement (optional??)
-- Collision
 - Collision Responses
 - Enemies
 - Enemy AI
@@ -18,3 +18,4 @@
 - Obstacles
 - Data Saving
 - Projectiles
+- State Machine
