@@ -5,19 +5,15 @@
 #include "Body.h"
 #include "Player.h"
 #include <cstring>
-#include "Clock.h"
 
 class scene_test : public Scene{
 	//Name of the scene for organizing stuff
 	std::string sceneName = "scene_test";
 
-	//Clock
-	Clock* printTime;
-
 	//SDL window stuff
 	SDL_Window* window;
-	int screenWidth, screenHeight, screenDepth = 1;
-	float physicsScreenWidth = 30.0f, physicsScreenHeight = 15.0f, physicsScreenDepth = 0.0f;
+	int screenWidth, screenHeight, screenDepth;
+	int virtualWidth, virtualHeight, virtualDepth;
 
 	SDL_Renderer* screenRenderer;
 

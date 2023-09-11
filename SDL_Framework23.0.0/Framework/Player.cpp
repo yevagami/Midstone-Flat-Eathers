@@ -1,7 +1,14 @@
 #include "Player.h"
 
+
 Player::Player() {
 	currentSpeed = walkSpeed;
+}
+
+
+void Player::Update(float deltaTime){
+	vel = Vec3(movement.x * currentSpeed, movement.y * currentSpeed, 0.0f);
+	Body::Update(deltaTime);
 }
 
 
@@ -22,6 +29,4 @@ void Player::playerController(const SDL_Event& sdlEvent){
 	else {
 		currentSpeed = walkSpeed;
 	}
-
-	vel = Vec3(movement.x * currentSpeed, movement.y * currentSpeed, 0.0f);
 }

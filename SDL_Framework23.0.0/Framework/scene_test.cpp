@@ -3,13 +3,11 @@
 #include "VMath.h"
 using namespace std;
 
-void printStuff() {
-	cout << "Tick Tock" << endl;
-}
-
 scene_test::scene_test(SDL_Window* sdlWindow_) {
 	window = sdlWindow_;
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
+	virtualWidth = 2000;
+	virtualHeight = 365;
 
 	screenRenderer = nullptr;
 
@@ -21,14 +19,13 @@ scene_test::scene_test(SDL_Window* sdlWindow_) {
 
 	notThePlayer = new Body();
 	notThePlayer->SetTextureFile("textures/blue_block.jpg");
-
 }
 
 
 bool scene_test::OnCreate() {
 	//Reposition the player
-	player->pos = Vec3(5.0f, 5.0f, 0.0f);
-	notThePlayer->pos = Vec3(10.0f, 10.0f, 0.0f);
+	player->pos = Vec3(virtualWidth / 2.0f, virtualDepth / 2.0f, 0.0f);
+	notThePlayer->pos = Vec3(virtualWidth / 2.0f + 128.0f, virtualDepth / 2.0f + 128.0f, 0.0f);
 
 	//Create renderer for window
 	screenRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -36,6 +33,7 @@ bool scene_test::OnCreate() {
 		std::cout << "SDL_Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
+	SDL_RenderSetScale(screenRenderer, 0.5f, 0.5f);
 	cout << "creating " << sceneName << endl;
 
 	//Initialize renderer color (black)
@@ -54,8 +52,8 @@ bool scene_test::OnCreate() {
 	notThePlayer->SetTexture(loadImage(notThePlayer->GetTextureFile()));
 	
 	//Load the bodie's hitbox
-	player->LoadHitbox();
-	notThePlayer->LoadHitbox();
+	player->LoadHitbox(100.0f, 100.0f);
+	notThePlayer->LoadHitbox(200.0f, 200.0f);
 
 	return true;
 }
@@ -63,35 +61,50 @@ bool scene_test::OnCreate() {
 
 void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	player->playerController(sdlEvent);
-	//Limiting the player's speed 
-	//speed = sqrt(x^2 + y^2) | x = y (they both have inputs)
-	//speed = sqrt(2x^2)
-	//speed^2 = 2x^2
-	//x = sqrt(speed^2/2)
 }
+
 
 void scene_test::Update(const float deltaTime) {
-	
-	player->Update(deltaTime);
-
-	if (player->collisionCheck(notThePlayer->hitbox)) {
-		//cout << "Colliding\n";
-	}
-
 	Vec3 playerPos = PhysicsSpaceToScreenSpace(player->pos);
-	
-	//cout << "Player pos( " << playerPos.x << ", " << playerPos.y << ")\n";
+	Vec3 playerDimensions = Vec3(player->width * screenWidth / virtualWidth, player->height * screenWidth / virtualWidth, 0.0f);
 
+	Vec3 blockPos = PhysicsSpaceToScreenSpace(notThePlayer->pos);
+	Vec3 blockDimensions = Vec3(notThePlayer->width * screenWidth / virtualWidth, notThePlayer->height * screenWidth / virtualWidth, 0.0f);
+
+	if ((playerPos.x < blockPos.x + blockDimensions.x) &&
+		(blockPos.x < playerPos.x + playerDimensions.x) &&
+
+		(playerPos.y < blockPos.y + blockDimensions.y) &&
+		(blockPos.y < playerPos.y + playerDimensions.y)){
+		std::cout << "Collided\n\n";
+		player->collisionResponse(deltaTime);
+	}
+	/*
+		I spent days, wondering why the hitboxes won't collide properly
+		This is because I failed to understand the fundamental differences between physics space and screen space
+		things that look like should be happening in screen space do not actually occur in physics space
+		countless hours I pondering why the hitboxes aren't colliding in the place where they are supposed to be
+		I even brought out the graphinc calculator to make sure that I'm not going insane
+		The math was correct, so why wasn't it working properly???
+		That's because everything was a lie
+		Screen space is not what's actually happening in the math side
+		While things occur in physics space they are being interpertated into screen space
+		and that interpertation is what we see in screen space
+		so while 2 objects look like THEY SHOULD be colliding in screen space
+		they are not actually that close in physics space
+		so I have concluded that hitboxes should be checked in screenspace and anything related to motion should be done in physics space
+
+	*/
+	player->Update(deltaTime);
 }
 
-
-Vec3 scene_test::PhysicsSpaceToScreenSpace(Vec3 physicsCoords){
-	float x = physicsCoords.x * screenWidth / physicsScreenWidth;
+Vec3 scene_test::PhysicsSpaceToScreenSpace(Vec3 physicsCoords) {
+	float x = physicsCoords.x * screenWidth / virtualWidth;
 	// We need to subtract the y coords from the physicsScreenHeight because
 	// in physics space, y = 0 is at the bottom while in screen space,
 	// it is at the top
-	float y = (physicsScreenHeight - physicsCoords.y) * screenHeight / physicsScreenHeight;
-	float z = physicsCoords.z * screenDepth / physicsScreenDepth;
+	float y = (virtualHeight - physicsCoords.y) * screenHeight / virtualHeight;
+	float z = physicsCoords.z * screenDepth / virtualDepth;
 	return Vec3(x, y, z);
 }
 
@@ -102,24 +115,26 @@ void scene_test::Render() {
 
 	// Render the background to the window.
 	SDL_RenderCopy(screenRenderer, background->GetTexture(), nullptr, nullptr);
-	Vec3 destCoords = PhysicsSpaceToScreenSpace(player->pos);
-	SDL_Rect dest = scale(player->GetTexture(), destCoords.x, destCoords.y, 1.0f);
-	SDL_RenderCopy(screenRenderer, player->GetTexture(), nullptr, &dest);
-	//Draw the player's hitbox
-	/*
-	SDL_SetRenderDrawBlendMode(screenRenderer, SDL_BLENDMODE_BLEND);
+
+	Vec3 screenCoordinates = PhysicsSpaceToScreenSpace(player->pos);
+	Vec3 screenDimensions(player->width * screenWidth / virtualWidth, player->height * screenWidth / virtualWidth, 0.0f);
+
+	//Render the player's hitbox
+	SDL_Rect dest = { screenCoordinates.x, screenCoordinates.y, screenDimensions.x, screenDimensions.y};
+	SDL_SetRenderDrawBlendMode(screenRenderer, SDL_BLENDMODE_ADD);
 	SDL_SetRenderDrawColor(screenRenderer, 255, 255, 255, 100);
 	SDL_RenderFillRect(screenRenderer, &dest);
-	*/
-	
-	destCoords = PhysicsSpaceToScreenSpace(notThePlayer->pos);
-	dest = scale(notThePlayer->GetTexture(), destCoords.x, destCoords.y, 1.0f);
-	SDL_RenderCopy(screenRenderer, notThePlayer->GetTexture(), nullptr, &dest);
+
+	//Render the block
+	screenCoordinates = PhysicsSpaceToScreenSpace(notThePlayer->pos);
+	screenDimensions = Vec3(notThePlayer->width * screenWidth / virtualWidth, notThePlayer->height * screenWidth / virtualWidth, 0.0f);
+	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, (int)screenDimensions.x, (int)screenDimensions.y };
+	SDL_RenderFillRect(screenRenderer, &dest);
 
 	// Update screen
-	SDL_RenderSetScale(screenRenderer, 0.5f, 0.5f);
 	SDL_RenderPresent(screenRenderer);
 }
+
 
 SDL_Texture* scene_test::loadImage(const char* textureFile)
 {
@@ -152,6 +167,8 @@ SDL_Texture* scene_test::loadImage(const char* textureFile)
 
 	return newTexture;
 }
+
+
 SDL_Rect scene_test::scale(SDL_Texture* objectTexture, int start_x, int start_y, float scale) {
 
 	// Get the size of the input texture
@@ -167,7 +184,6 @@ void scene_test::OnDestroy() {
 	background->OnDestory();
 	player->OnDestory();
 	notThePlayer->OnDestory();
-	printTime->OnDestroy();
 
 	// Destroy the renderer.
 	if (screenRenderer) {
@@ -179,7 +195,6 @@ void scene_test::OnDestroy() {
 
 scene_test::~scene_test() {
 	cout << "deleting child class: " << sceneName << endl;
-	delete printTime;
 	delete background;
 	delete player;
 	delete notThePlayer;

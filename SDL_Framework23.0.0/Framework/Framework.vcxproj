@@ -147,6 +147,7 @@
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="debugFunc.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene0.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Body.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="debugFunc.h" />
+    <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene0.h" />
     <ClInclude Include="Scene.h" />

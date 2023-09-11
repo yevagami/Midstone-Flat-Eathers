@@ -6,8 +6,8 @@
 using namespace std;
 
 //Screen dimensions
-const int SCREEN_WIDTH = 960;
-const int SCREEN_HEIGHT = 540;
+const int SCREEN_WIDTH = 1366;
+const int SCREEN_HEIGHT = 768;
 
 // For SDL2 to work in the main function, you need to pass on the following arguments.
 // This is a standard C-style entry point. 

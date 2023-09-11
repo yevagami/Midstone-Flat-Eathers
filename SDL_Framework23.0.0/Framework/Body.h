@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector.h"
 #include "VMath.h"
+#include "Hitbox.h"
 #include <SDL_image.h>
 
 using namespace MATH;
@@ -12,7 +13,14 @@ class Body {
 	
 
 public:
-	SDL_Rect hitbox;
+
+	//Collisions
+	int width;
+	int height;
+	void LoadHitbox(float w_, float h_);
+	void drawHitbox(SDL_Renderer* screenRenderer, int screenWidth, int screenHeight, float physicsScreenWidth, float physicsScreenHeight);
+	bool collisionCheck(Body* other, int screenHeight);
+	void collisionResponse(float deltaTime);
 
 	// Vectors set to [0,0,0] by their default constructor
 	Vec3 pos;
@@ -38,9 +46,6 @@ public:
 
 
 	void Update(float deltaTime);
-	void LoadHitbox();
-	void drawHitbox(SDL_Renderer* screenRenderer);
-	bool collisionCheck(SDL_Rect other);
 	void OnDestory();
 
 	//Destructor

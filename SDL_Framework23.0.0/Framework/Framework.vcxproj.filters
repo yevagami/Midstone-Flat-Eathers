@@ -75,6 +75,9 @@
     <ClCompile Include="Clock.cpp">
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="Hitbox.cpp">
+      <Filter>Source Files\Body</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="Clock.h">
       <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Hitbox.h">
+      <Filter>Header Files\Body</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

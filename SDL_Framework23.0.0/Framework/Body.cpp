@@ -28,43 +28,51 @@ void Body::Update(float deltaTime) {
 }
 
 
-void Body::LoadHitbox(){
-	if (texture != nullptr) {
-		SDL_Point point;
-		SDL_QueryTexture(texture, nullptr, nullptr, &point.x, &point.y);
-		point.x = point.x / 2;
-		hitbox = { (int)pos.x, (int)pos.y, point.x, point.y };
-	}
+void Body::LoadHitbox(float w_, float h_){
+	width = w_;
+	height = h_;
 }
 
 
-bool Body::collisionCheck(SDL_Rect other){
-	/*
-	if (hitbox.y + hitbox.h <= other.y){
-		return false;
-	}
-
-	if (hitbox.y >= other.y + other.h){
-		return false;
-	}
-
-	if (hitbox.x + hitbox.w <= other.x){
-		return false;
-	}
-
-	if (hitbox.x >= other.x + other.w){
-		return false;
-	}
-	*/
-
-	if ((hitbox.y + hitbox.h >= other.y || hitbox.y <= other.y + other.h) &&
-		(hitbox.x + hitbox.w >= other.x || hitbox.x <= other.x + other.w)) {
-		return true;
-	}
-
-	return false;
+void Body::drawHitbox(SDL_Renderer* screenRenderer, int screenWidth, int screenHeight, float physicsScreenWidth, float physicsScreenHeight){
+	return;
 }
 
+
+bool Body::collisionCheck(Body* other, int screenHeight){
+	float selfY = screenHeight - pos.y;
+	float otherY = screenHeight - other->pos.y;
+
+	if (pos.x > other->pos.x + other->width)
+	{
+		return false;
+	}
+
+	if (selfY > otherY + other->height)
+	{
+		return false;
+	}
+
+	if (other->pos.x > pos.x + width)
+	{
+		return false;
+	}
+
+	if (otherY > selfY + height)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+
+void Body::collisionResponse(float deltaTime) {
+	std::cout << "Collided\n";
+	pos.x -= vel.x * deltaTime;
+	pos.y -= vel.y * deltaTime;
+	pos.z -= vel.z * deltaTime;
+}
 
 void Body::OnDestory(){
 	SDL_DestroyTexture(texture);

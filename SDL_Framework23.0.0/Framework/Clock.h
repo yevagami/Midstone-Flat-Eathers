@@ -4,7 +4,7 @@
 class Clock{
 public:
 	Clock();
-	Clock(float duration_);
+	Clock(float duration_, bool isLooping_);
 	void (*callback)();
 	void Update(float deltaTime);
 	void OnDestroy();
@@ -14,5 +14,6 @@ private:
 	float duration;
 	float timer = 0;
 	bool completed = false;
+	bool isLooping = false;
 };
 
