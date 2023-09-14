@@ -19,7 +19,8 @@ public:
 	void LoadHitbox(float w_, float h_);
 	void drawHitbox(SDL_Renderer* screenRenderer, int screenWidth, int screenHeight, float physicsScreenWidth, float physicsScreenHeight);
 	bool collisionCheck(Vec3 pos, Vec3 otherPos, SDL_Rect hitbox, SDL_Rect otherHitbox);
-	void collisionResponse(float deltaTime);
+	void collisionResponse(float deltaTime, Body* other);
+	bool solid = false;
 
 	// Vectors set to [0,0,0] by their default constructor
 	Vec3 pos;
@@ -40,8 +41,10 @@ public:
 	//Constructors
 	Body();
 	Body(Vec3 pos_);
-	Body(Vec3 pos_, Vec3 vel_, Vec3 accel_, 
+	Body(Vec3 pos_, Vec3 vel_, Vec3 accel_,
 		float mass_, const char* textureFile_);
+	Body(Vec3 pos_, Vec3 vel_, Vec3 accel_,
+		float mass_, const char* textureFile_, bool solid_);
 
 
 	void Update(float deltaTime);

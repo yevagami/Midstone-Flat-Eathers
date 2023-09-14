@@ -6,9 +6,9 @@
 
 class Player : public Body{
 	//timers and cooldowns
-	Clock* dash_timer;
-	Clock* dash_cooldown;
-	std::vector<Clock*> cooldowns;
+	Clock* dash_timer; //how long the player can dash for
+	Clock* dash_cooldown; //how long before the player can dash again
+	std::vector<Clock*> cooldowns; //list of cooldowns to update
 
 	//dashing variables
 	float dashDuration = 0.5f;
@@ -16,10 +16,12 @@ class Player : public Body{
 
 	//movement variables
 	Vec2 movement;
-	float walkSpeed = 200.0f;
-	float dashSpeed = 1000.0f;
+	Vec2 playerDirection;
+	bool canMove = true;
+	float walkSpeed = 500.0f;
+	float dashSpeed = 2000.0f;
 	float currentSpeed;
-	float maxSpeed = 500.0f;
+	float maxSpeed;
 
 	//states
 	enum states{idle, walk, dash};

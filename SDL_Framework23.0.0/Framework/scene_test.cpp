@@ -19,6 +19,7 @@ scene_test::scene_test(SDL_Window* sdlWindow_) {
 
 	notThePlayer = new Body();
 	notThePlayer->SetTextureFile("textures/blue_block.jpg");
+	notThePlayer->solid = true;
 }
 
 
@@ -67,7 +68,7 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 void scene_test::Update(const float deltaTime) {
 	if (player->collisionCheck(PhysicsSpaceToScreenSpace(player->pos),
 		PhysicsSpaceToScreenSpace(notThePlayer->pos), player->hitbox, notThePlayer->hitbox)) {
-		player->collisionResponse(deltaTime);
+		player->collisionResponse(deltaTime, notThePlayer);
 	}
 	
 	/*
