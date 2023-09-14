@@ -87,6 +87,14 @@ void scene_test::Update(const float deltaTime) {
 		so I have concluded that hitboxes should be checked in screenspace and anything related to motion should be done in physics space
 		The hitbox width and height will be represented in screen coords, and when doing collision checks they should be done using the screen coords
 	*/
+	
+	//save testing
+	Save s;
+	s.readSaveData();
+
+
+	
+
 	player->Update(deltaTime);
 }
 

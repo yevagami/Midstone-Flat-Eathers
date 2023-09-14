@@ -6,6 +6,8 @@
 #include "Player.h"
 #include <cstring>
 
+#include "Save.h"
+
 class scene_test : public Scene{
 	//Name of the scene for organizing stuff
 	std::string sceneName = "scene_test";

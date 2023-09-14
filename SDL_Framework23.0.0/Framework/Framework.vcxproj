@@ -150,6 +150,7 @@
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Save.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="scene_test.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="debugFunc.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Save.h" />
     <ClInclude Include="Scene0.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="GameManager.h" />
