@@ -81,6 +81,9 @@
     <ClCompile Include="Save.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UtilFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="Save.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,3 +7,5 @@ void debugFunc::printXYZ_Vec3(Vec3 v){
 void debugFunc::printXY_Vec3(Vec3 v){
 	std::cout << "(" << v.x << ", " << v.y << ")\n";
 }
+
+

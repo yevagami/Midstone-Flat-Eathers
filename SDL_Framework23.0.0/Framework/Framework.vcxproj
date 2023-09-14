@@ -154,6 +154,7 @@
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="scene_test.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="UtilFunctions.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="scene_test.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UtilFunctions.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Window.h" />
