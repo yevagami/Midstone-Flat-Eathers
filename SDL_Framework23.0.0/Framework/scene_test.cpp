@@ -1,7 +1,6 @@
 #include "scene_test.h"
 #include "debugFunc.h"
 #include "VMath.h"
-using namespace std;
 
 scene_test::scene_test(SDL_Window* sdlWindow_) {
 	window = sdlWindow_;
@@ -20,6 +19,10 @@ scene_test::scene_test(SDL_Window* sdlWindow_) {
 	notThePlayer = new Body();
 	notThePlayer->SetTextureFile("textures/blue_block.jpg");
 	notThePlayer->solid = true;
+
+	bodyObjects.push_back(background);
+	bodyObjects.push_back(player);
+	bodyObjects.push_back(notThePlayer);
 }
 
 
@@ -52,9 +55,14 @@ bool scene_test::OnCreate() {
 	player->SetTexture(loadImage(player->GetTextureFile()));
 	notThePlayer->SetTexture(loadImage(notThePlayer->GetTextureFile()));
 	
-	//Load the bodie's hitbox
+	//Load the body object's hitbox
 	player->LoadHitbox(128.0f, 128.0f);
 	notThePlayer->LoadHitbox(225.0f, 225.0f);
+
+	for (Body* body : bodyObjects) {
+		body->screenDimensions = Vec3(screenWidth, screenHeight, screenDepth);
+		body->virtualDimensions = Vec3(virtualWidth, virtualHeight, virtualDepth);
+	}
 
 	return true;
 }
@@ -66,8 +74,7 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 
 
 void scene_test::Update(const float deltaTime) {
-	if (player->collisionCheck(PhysicsSpaceToScreenSpace(player->pos),
-		PhysicsSpaceToScreenSpace(notThePlayer->pos), player->hitbox, notThePlayer->hitbox)) {
+	if (player->hitbox.collisionCheck(notThePlayer->hitbox)) {
 		player->collisionResponse(deltaTime, notThePlayer);
 	}
 	
@@ -89,13 +96,9 @@ void scene_test::Update(const float deltaTime) {
 	*/
 	
 	//save testing
-	Save s;
-	s.openSaveFile();
-
-
-	
-
+	notThePlayer->Update(deltaTime);
 	player->Update(deltaTime);
+
 }
 
 Vec3 scene_test::PhysicsSpaceToScreenSpace(Vec3 physicsCoords) {
@@ -127,7 +130,7 @@ void scene_test::Render() {
 	SDL_RenderCopy(screenRenderer, player->GetTexture(), nullptr, &dest);
 
 	//Render the player's hitbox
-	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, player->hitbox.w, player->hitbox.h};
+	dest = { (int)player->hitbox.x, (int)player->hitbox.y, (int)player->hitbox.w, (int)player->hitbox.h};
 	SDL_SetRenderDrawBlendMode(screenRenderer, SDL_BLENDMODE_ADD);
 	SDL_SetRenderDrawColor(screenRenderer, 255, 255, 255, 100);
 	SDL_RenderFillRect(screenRenderer, &dest);
@@ -142,7 +145,7 @@ void scene_test::Render() {
 	SDL_RenderCopy(screenRenderer, notThePlayer->GetTexture(), nullptr, &dest);
 
 	//Render the block's hitbox
-	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, notThePlayer->hitbox.w, notThePlayer->hitbox.h };
+	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, (int)notThePlayer->hitbox.w, (int)notThePlayer->hitbox.h };
 	SDL_RenderFillRect(screenRenderer, &dest);
 
 
@@ -196,9 +199,9 @@ SDL_Rect scene_test::scale(SDL_Texture* objectTexture, int start_x, int start_y,
 
 void scene_test::OnDestroy() {
 	// Free loaded images.
-	background->OnDestory();
-	player->OnDestory();
-	notThePlayer->OnDestory();
+	for (Body* body : bodyObjects) {
+		body->OnDestory();
+	}
 
 	// Destroy the renderer.
 	if (screenRenderer) {
@@ -210,7 +213,8 @@ void scene_test::OnDestroy() {
 
 scene_test::~scene_test() {
 	cout << "deleting child class: " << sceneName << endl;
-	delete background;
-	delete player;
-	delete notThePlayer;
+	for (Body* body : bodyObjects) {
+		delete body;
+	}
+	bodyObjects.clear();
 }

@@ -32,6 +32,13 @@ void Body::Update(float deltaTime) {
 	pos.x += vel.x * deltaTime;
 	pos.y += vel.y * deltaTime;
 	pos.z += vel.z * deltaTime;
+
+	screenPos.x = (pos.x * screenDimensions.x) / virtualDimensions.x;
+	screenPos.y = ((virtualDimensions.y - pos.y) * screenDimensions.y)/ virtualDimensions.y ;
+	screenPos.z = (pos.z * screenDimensions.z) / virtualDimensions.z;
+
+	hitbox.x = screenPos.x;
+	hitbox.y = screenPos.y;
 }
 
 
@@ -46,25 +53,15 @@ void Body::drawHitbox(SDL_Renderer* screenRenderer, int screenWidth, int screenH
 }
 
 
-bool Body::collisionCheck(Vec3 pos, Vec3 otherPos, SDL_Rect hitbox, SDL_Rect otherHitbox){
-	if (pos.x > otherPos.x + otherHitbox.w) { return false; }
-	if (otherPos.x > pos.x + hitbox.w) { return false; }
-
-	if (pos.y > otherPos.y + otherHitbox.h) { return false; }
-	if (otherPos.y > pos.y + hitbox.h) { return false; }
-
-	return true;
-}
-
-
-void Body::collisionResponse(float deltaTime, Body* other){
-	//std::cout << "Collided\n";
-	if (other->solid) {
+void Body::collisionResponse(float deltaTime, Body* other_){
+	std::cout << "Collided\n";
+	if (other_->solid) {
 		pos.x -= vel.x * deltaTime;
 		pos.y -= vel.y * deltaTime;
 		pos.z -= vel.z * deltaTime;
 	}
 }
+
 
 void Body::OnDestory(){
 	SDL_DestroyTexture(texture);

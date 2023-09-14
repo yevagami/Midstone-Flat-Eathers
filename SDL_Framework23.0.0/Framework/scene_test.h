@@ -4,10 +4,11 @@
 #include "Scene.h"
 #include "Body.h"
 #include "Player.h"
-#include <cstring>
-
+#include <vector>
+#include <string>
 #include "Save.h"
 
+using namespace std;
 class scene_test : public Scene{
 	//Name of the scene for organizing stuff
 	std::string sceneName = "scene_test";
@@ -23,6 +24,7 @@ class scene_test : public Scene{
 	Body* background;
 	Body* notThePlayer;
 	Player* player;
+	vector<Body*>bodyObjects;
 
 	//Texture loading methods
 	SDL_Texture* loadImage(const char* textureFile);

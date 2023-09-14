@@ -17,14 +17,14 @@ void Player::Update(float deltaTime){
 	switch (currentState) {
 		//Idle state
 		case idle: 
-			std::cout << "idle state \n";
+			//std::cout << "idle state \n";
 			canMove = true;
 			break;
 
 
 		//Walk state
 		case walk:
-			std::cout << "walk state \n";
+			//std::cout << "walk state \n";
 			currentSpeed = walkSpeed;
 			maxSpeed = walkSpeed;
 			break;
@@ -32,7 +32,7 @@ void Player::Update(float deltaTime){
 
 		//Dash state
 		case dash:
-			std::cout << "dash state " << "time elapsed: " << dash_timer->timer << "\n";
+			//std::cout << "dash state " << "time elapsed: " << dash_timer->timer << "\n";
 			canMove = false; //disables the player's movement input
 			dash_timer->Update(deltaTime); 
 
