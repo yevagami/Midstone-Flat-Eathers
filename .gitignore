@@ -437,4 +437,6 @@ FodyWeavers.xsd
 
 *.lock
 *.db
+*.VC
 *.vsidx
+*.suo

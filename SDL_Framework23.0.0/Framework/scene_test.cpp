@@ -90,7 +90,7 @@ void scene_test::Update(const float deltaTime) {
 	
 	//save testing
 	Save s;
-	s.readSaveData();
+	s.openSaveFile();
 
 
 	

@@ -1,6 +1,5 @@
 #pragma once
 #include "Vector.h"
-
 using namespace MATH;
 
 struct debugFunc {
