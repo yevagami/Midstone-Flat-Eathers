@@ -3,14 +3,16 @@
 
 class Clock{
 public:
+	//Methods
 	Clock();
 	Clock(float duration_, bool isLooping_);
-	void (*callback)();
 	void Update(float deltaTime);
 	void OnDestroy();
 	void Reset();
+	void Start();
 
-private:
+	//Variables
+	bool hasStarted = false;
 	float duration;
 	float timer = 0;
 	bool completed = false;

@@ -65,17 +65,11 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 
 
 void scene_test::Update(const float deltaTime) {
-	Vec3 playerPos = PhysicsSpaceToScreenSpace(player->pos);
-	Vec3 blockPos = PhysicsSpaceToScreenSpace(notThePlayer->pos);
-	
-	if ((playerPos.x < blockPos.x + notThePlayer->width) &&
-		(blockPos.x < playerPos.x + player->width) &&
-
-		(playerPos.y < blockPos.y + notThePlayer->height) &&
-		(blockPos.y < playerPos.y + player->height)){
-		std::cout << "Collided\n\n";
+	if (player->collisionCheck(PhysicsSpaceToScreenSpace(player->pos),
+		PhysicsSpaceToScreenSpace(notThePlayer->pos), player->hitbox, notThePlayer->hitbox)) {
 		player->collisionResponse(deltaTime);
 	}
+	
 	/*
 		I spent days, wondering why the hitboxes won't collide properly
 		This is because I failed to understand the fundamental differences between physics space and screen space
@@ -117,14 +111,14 @@ void scene_test::Render() {
 
 	//Render the player
 	Vec3 screenCoordinates = PhysicsSpaceToScreenSpace(player->pos);
-	Vec3 screenDimensions(player->width * screenWidth / virtualWidth, player->height * screenWidth / virtualWidth, 0.0f);
+	Vec3 screenDimensions(player->hitbox.w * screenWidth / virtualWidth, player->hitbox.h * screenWidth / virtualWidth, 0.0f);
 
 	//Render the player's texture
 	SDL_Rect dest = scale(player->GetTexture(), screenCoordinates.x, screenCoordinates.y, 1.0f);
 	SDL_RenderCopy(screenRenderer, player->GetTexture(), nullptr, &dest);
 
 	//Render the player's hitbox
-	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, player->width, player->height};
+	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, player->hitbox.w, player->hitbox.h};
 	SDL_SetRenderDrawBlendMode(screenRenderer, SDL_BLENDMODE_ADD);
 	SDL_SetRenderDrawColor(screenRenderer, 255, 255, 255, 100);
 	SDL_RenderFillRect(screenRenderer, &dest);
@@ -132,14 +126,14 @@ void scene_test::Render() {
 
 	//Render the block
 	screenCoordinates = PhysicsSpaceToScreenSpace(notThePlayer->pos);
-	screenDimensions = Vec3(notThePlayer->width * screenWidth / virtualWidth, notThePlayer->height * screenWidth / virtualWidth, 0.0f);
+	screenDimensions = Vec3(notThePlayer->hitbox.w * screenWidth / virtualWidth, notThePlayer->hitbox.h * screenWidth / virtualWidth, 0.0f);
 
 	//Render the block's texture
 	dest = scale(notThePlayer->GetTexture(), screenCoordinates.x, screenCoordinates.y, 1.0f);
 	SDL_RenderCopy(screenRenderer, notThePlayer->GetTexture(), nullptr, &dest);
 
 	//Render the block's hitbox
-	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, notThePlayer->width, notThePlayer->height };
+	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, notThePlayer->hitbox.w, notThePlayer->hitbox.h };
 	SDL_RenderFillRect(screenRenderer, &dest);
 
 

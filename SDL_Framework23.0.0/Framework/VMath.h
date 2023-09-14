@@ -26,6 +26,10 @@ namespace MATH {
 			return(sqrt(a.x * a.x + a.y * a.y + a.z * a.z));
 		}
 
+		inline static float mag(const Vec2& a) {
+			return(sqrt(a.x * a.x + a.y * a.y));
+		}
+
 
 		///  Angle-Axis rotation
 		static Vec3 rotate(const Vec3 &n, float theta, const Vec3 &v) {

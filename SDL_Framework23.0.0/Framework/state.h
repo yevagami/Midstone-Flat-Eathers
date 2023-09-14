@@ -1,5 +1,9 @@
 #pragma once
-class state
-{
+
+class State{
+public:
+	virtual void enterState();
+	virtual void updateState();
+	virtual void exitState();
 };
 

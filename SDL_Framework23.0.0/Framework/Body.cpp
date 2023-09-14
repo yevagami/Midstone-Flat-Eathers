@@ -29,8 +29,8 @@ void Body::Update(float deltaTime) {
 
 
 void Body::LoadHitbox(float w_, float h_){
-	width = w_;
-	height = h_;
+	hitbox.w = w_;
+	hitbox.h = h_;
 }
 
 
@@ -39,29 +39,12 @@ void Body::drawHitbox(SDL_Renderer* screenRenderer, int screenWidth, int screenH
 }
 
 
-bool Body::collisionCheck(Body* other, int screenHeight){
-	float selfY = screenHeight - pos.y;
-	float otherY = screenHeight - other->pos.y;
+bool Body::collisionCheck(Vec3 pos, Vec3 otherPos, SDL_Rect hitbox, SDL_Rect otherHitbox){
+	if (pos.x > otherPos.x + otherHitbox.w) { return false; }
+	if (otherPos.x > pos.x + hitbox.w) { return false; }
 
-	if (pos.x > other->pos.x + other->width)
-	{
-		return false;
-	}
-
-	if (selfY > otherY + other->height)
-	{
-		return false;
-	}
-
-	if (other->pos.x > pos.x + width)
-	{
-		return false;
-	}
-
-	if (otherY > selfY + height)
-	{
-		return false;
-	}
+	if (pos.y > otherPos.y + otherHitbox.h) { return false; }
+	if (otherPos.y > pos.y + hitbox.h) { return false; }
 
 	return true;
 }
