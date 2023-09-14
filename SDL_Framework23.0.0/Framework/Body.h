@@ -15,15 +15,19 @@ class Body {
 public:
 
 	//Collisions
-	SDL_Rect hitbox;
+	Hitbox hitbox;
 	void LoadHitbox(float w_, float h_);
 	void drawHitbox(SDL_Renderer* screenRenderer, int screenWidth, int screenHeight, float physicsScreenWidth, float physicsScreenHeight);
-	bool collisionCheck(Vec3 pos, Vec3 otherPos, SDL_Rect hitbox, SDL_Rect otherHitbox);
 	void collisionResponse(float deltaTime, Body* other);
 	bool solid = false;
 
+	//World information
+	Vec3 screenDimensions;
+	Vec3 virtualDimensions;
+
 	// Vectors set to [0,0,0] by their default constructor
 	Vec3 pos;
+	Vec3 screenPos;
 	Vec3 vel;
 	Vec3 acc;
 

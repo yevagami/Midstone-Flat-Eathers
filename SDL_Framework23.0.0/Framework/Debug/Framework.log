@@ -1,3 +1,30 @@
-﻿  Save.cpp
-C:\Users\Micha\Documents\School\Visual Studio Projects\Flat Earthers\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Save.cpp(82,21): warning C4018: '<': signed/unsigned mismatch
-  Framework.vcxproj -> C:\Users\Micha\Documents\School\Visual Studio Projects\Flat Earthers\Midstone-Flat-Eathers\SDL_Framework23.0.0\Debug\Framework.exe
+﻿  Body.cpp
+  GameManager.cpp
+  Hitbox.cpp
+  Player.cpp
+  Scene0.cpp
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Scene0.cpp(77,64): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Scene0.cpp(77,48): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Scene0.cpp(122,45): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Scene0.cpp(122,45): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Scene0.cpp(122,61): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Scene0.cpp(122,61): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  scene_test.cpp
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(8,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(9,31): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(63,60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(63,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(63,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(64,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(64,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(64,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(129,84): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(129,63): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(144,81): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(144,60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(195,45): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(195,45): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(195,61): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(195,61): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Framework.vcxproj -> C:\Adriel\School\Humber\Sem 3\Midstone\Midstone-Flat-Eathers\SDL_Framework23.0.0\Debug\Framework.exe

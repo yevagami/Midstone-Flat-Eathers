@@ -5,7 +5,8 @@ public:
 	float y;
 	float w;
 	float h;
-
-
+	void (*collisionResponse)();
+	void onCollision(Hitbox other_);
+	bool collisionCheck(Hitbox other);
 };
 
