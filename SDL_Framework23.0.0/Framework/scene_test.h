@@ -8,6 +8,8 @@
 #include <string>
 #include "Save.h"
 
+#include "Save.h"
+
 using namespace std;
 class scene_test : public Scene{
 	//Name of the scene for organizing stuff

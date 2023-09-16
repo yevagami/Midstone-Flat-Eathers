@@ -1,6 +1,6 @@
 Cat: [meow]
 Dog: [woof]
 Goose: [honk]
-Cow: [beef maker]
-Pig: [oink]
+Cow: [got beef?]
+Pig: [beep beep bacon]
 Sheep: [baaah]

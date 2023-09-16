@@ -5,20 +5,32 @@
 #include <iostream>
 
 #include "UtilFunctions.h"
+#include "debugFunc.h"
 using namespace std;
 
 
-class Save {
+class SaveManager {
 private:
 	///	Variables
-	const char* testFile = "SaveData/testFile.txt";
-	const char* saveFile = "SaveData/saveData.txt";
-	const char* tempSaveFile = "SaveData/tempSaveData.txt";
+
+	const char 
+		*saveFile = "SaveData/saveData.txt",
+		*currentSaveFile = "SaveData/tempSaveData.txt",
+		*testFile = "SaveData/testFile.txt";
+
+	vector <string>
+		saveDataOld,
+		saveDataCurrent;
+
+
 
 	/// Utility Methods
 	//	for managing console text
 	void consoleManager(const char* type, const char* MSG);
-	///	Main Methods
+
+
+	///	Main Private Methods
+	//	creates a file at the provided directory ex. "Folder\Folder\File.txt"
 	bool createFile(const char* fileDir);
 	// scan the provided vector for the variable name's value
 	string getValue(vector<string> vector, const char* variableName_);
@@ -26,23 +38,42 @@ private:
 	vector<string> replaceValue(const char* variableName_, const char* newValue_, vector<string>& strings);
 	//	write the provided vector<string> to the provided file directory
 	bool writeData(vector<string>& savedData, const char* fileDir);
+	//	forcefully load the provided vector<string> with the provided file directory file contents
+	bool loadData(vector<string>& savedData, const char* fileDir);
+
 
 
 public:
-	//	loads the saveFile contents into the tempSaveFile
-	bool loadGame();
-	//saves the game (transfers the contents from the tempSaveFile to the main saveFile)
+	///	'Variables'
+
+	vector<string> getSaveDataOld() { return saveDataOld; };
+	vector<string> getSaveDataCurrent() { return saveDataCurrent; };
+	const char* getSaveFile() { return saveFile; };
+	const char* getCurrentSaveFile() { return currentSaveFile; };
+	const char* getTestFile() { return testFile; };
+
+	bool
+		isConsoleTextEnabled;
+
+
+
+	SaveManager();
+	~SaveManager();
+
+
+
+	///	Main Public Methods
+	//	loads the game; saveFile into the currentSaveData
+	bool loadGame(); 
+	//	saves the game; currentSaveData into the saveFile
 	bool saveGame();
-	//	updates a value in the temporary save file
-	void replaceValueForSaving(const char* variableName_, const char* newValue_);
-	//	parse the passed file, storing all the information into the passed vector<string>.
+
+	//	parses the passed file, storing all the information into a vector of strings
 	vector<string> parseTHIS(const char* fileDir);
+	//	updates a value in the temporary save file
+	void replaceValueInCurrentSave(const char* variableName_, const char* newValue_);
 
-
-	string whatIs(const char* variableName) { return getValue(parseTHIS(saveFile), variableName); }
+	//	these functions allow for reading of variables, returning the value in a string
 	string whatIs(const char* variableName, vector<string>& vector) { return getValue(vector, variableName); }
 	string whatIs(const char* variableName, const char* fileDir) { return getValue(parseTHIS(fileDir), variableName); }
-
-
 };
-

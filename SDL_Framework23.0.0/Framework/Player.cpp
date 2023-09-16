@@ -109,11 +109,12 @@ void Player::playerController(const SDL_Event& sdlEvent){
 		else { currentState = idle; }
 	}
 
-	//dash controls
+	//	dash controls
 	if (keyStates[SDL_SCANCODE_LSHIFT] == 1 && currentState != dash && (!dash_cooldown->hasStarted || dash_cooldown->completed)) {
 		currentState = dash;
 		dash_timer->Start();
 	}
+
 }
 
 Player::~Player(){

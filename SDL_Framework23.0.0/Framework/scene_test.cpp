@@ -68,9 +68,14 @@ bool scene_test::OnCreate() {
 }
 
 
+
 void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	player->playerController(sdlEvent);
+
+
+
 }
+
 
 
 void scene_test::Update(const float deltaTime) {
@@ -95,10 +100,23 @@ void scene_test::Update(const float deltaTime) {
 		The hitbox width and height will be represented in screen coords, and when doing collision checks they should be done using the screen coords
 	*/
 	
-	//save testing
-	Save s;
-	s.replaceValueForSaving("Cow", "beef maker");
-	s.saveGame();
+
+
+
+
+#pragma region Save Testing
+	SaveManager save;	//	save.isConsoleTextEnabled = false;
+
+	//	loads the save file into the currentSaveData
+	save.loadGame();
+
+	//changing values by typing the "variableName" then the "newValue"
+	save.replaceValueInCurrentSave("Cow", "got beef?");
+	save.replaceValueInCurrentSave("Pig", "beep beep bacon");
+
+	//	saves the currentSaveData into the save file
+	save.saveGame();
+#pragma endregion
 
 
 

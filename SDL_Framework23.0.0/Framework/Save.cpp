@@ -1,36 +1,57 @@
 #include "Save.h"
-#include "debugFunc.h"
 
-void Save::consoleManager(const char* type, const char* MSG) {
-	if (type == "error") {
-		cerr << "\033[31m" << "Error Occured: [" << MSG << "]\033[0m" << endl;
-	} else if (type == "not error") {
-		cerr << "\033[32m" << "So Silly: [" << MSG << "]\033[0m" << endl; }
-	else if (type == "" || type == " ") {
-		cout	<< "\033[33m" << "[" << MSG << "]\033[0m" << endl; }
+SaveManager::SaveManager(){
+	saveDataOld = parseTHIS(saveFile); // save the full saveFile into a vector<string>
+	saveDataCurrent = parseTHIS(currentSaveFile); // save the full tempSaveFile into a vector<string>
 
-
-	else {
-		cerr << "\033[31m" << "error in the error handler : O *dun dun dun*" << "\033[0m" << endl; }
+	isConsoleTextEnabled = true;
 }
 
 
-bool Save::createFile(const char* fileDir) {
+
+SaveManager::~SaveManager() {
+	saveDataOld.clear();
+	saveDataCurrent.clear();
+}
+
+
+
+void SaveManager::consoleManager(const char* type, const char* MSG) {
+	if (isConsoleTextEnabled) {
+		if (type == "error") {
+			cerr << "\033[31m" << "Error Occured: [" << MSG << "]\033[0m" << endl; }
+		else if (type == "not error") {
+			cerr << "\033[32m" << "So Silly: [" << MSG << "]\033[0m" << endl; }
+		else if (type == "" || type == " ") {
+			cout << "\033[33m" << "[" << MSG << "]\033[0m" << endl; }
+
+
+		else {
+			cerr << "\033[31m" << "error in the error handler : O *dun dun dun*" << "\033[0m" << endl; }
+	} }
+
+
+
+bool SaveManager::createFile(const char* fileDir) {
 	fstream file(fileDir);
 	if (file.fail()) {
 		//	if it doesn't open...
 		consoleManager("error", "file failed to open");
-		file.open(saveFile, ios::out); //creating the file if it doesn't exist
-		if (file.fail()) {
+		file.open(saveFile, ios::out);
+		if (file.fail()) {	//creating the file if it doesn't exist
 			//	if the file isn't created...
 			consoleManager("error", "file failed to be created");
 			file.close();
 			return false;
-		} else {
-			//	if it is created...
+
+
+
+		} else {	//	if it is created...
 			consoleManager("not error", "file successfully created!");
 			file.close();
 			return true;
+
+
 		}
 
 	} else {
@@ -38,61 +59,63 @@ bool Save::createFile(const char* fileDir) {
 		consoleManager("not error", "file opened");
 		file.close();
 		return true;
+
 	}
 }
 
 
-bool Save::loadGame() {
-	if (createFile(saveFile)) {
-		vector<string> saveDataOld = parseTHIS(saveFile); // save the full saveFile into a vector<string>
-		vector<string> saveDataNew = parseTHIS(tempSaveFile); // save the full tempSaveFile into a vector<string>
 
-		if (writeData(saveDataOld, tempSaveFile)) {
-			consoleManager("not error", "file successfully loaded"); }
-		else { consoleManager("error", "uh oh... file loadn't"); }
+bool SaveManager::loadGame() {
+	if (createFile(saveFile)) {
+		loadData(saveDataCurrent, saveFile);
+		consoleManager("not error", "SaveManager load succeeded");
 		return true;
 
 	}
 	else {
-		consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
+		consoleManager("error", "SaveManager load failed, save file doesn't exist and cannot be created...");
 		return false;
+
 	}
 }
 
-bool Save::saveGame() {
+
+
+bool SaveManager::saveGame() {
 	if (createFile(saveFile)) {
 		consoleManager("", "goofiness aside, it's ready to save");
-		vector<string> saveDataOld = parseTHIS(saveFile); // save the full saveFile into a vector<string>
-		vector<string> saveDataNew = parseTHIS(tempSaveFile); // save the full tempsavefile into a vector<string>
+		
+		if (isConsoleTextEnabled) {
+			debugFunc dF;
+			consoleManager("", "replacing:");
+			dF.printVectorString(saveDataOld);
+			consoleManager("", "with:");
+			dF.printVectorString(saveDataCurrent);
+		}
 
-		debugFunc dF;
-		dF.printVectorString(saveDataOld);
-		dF.printVectorString(saveDataNew);
-
-		//copies the contents from the temp save file to the main save file.
-		if (writeData(saveDataNew, saveFile)) {
+		//copies the contents from the temp SaveManager file to the main SaveManager file.
+		if (writeData(saveDataCurrent, saveFile)) {
 			consoleManager("not error", "file successfully saved");
-		} else { consoleManager("error", "uh oh... file saven't"); }
-
-
-
+		} else { consoleManager("error", "uh oh... file saved't"); }
 		return true;
+
+
 	}else {
 		consoleManager("error", "save game failed, save file doesn't exist and cannot be created...");	
-		return false;
-	} 
+		return false; } 
 }
 
-void Save::replaceValueForSaving(const char* variableName_, const char* newValue_) {
-	vector<string> tempVector = parseTHIS(tempSaveFile);
+
+
+void SaveManager::replaceValueInCurrentSave(const char* variableName_, const char* newValue_) {
+	vector<string> tempVector = parseTHIS(currentSaveFile);
 	tempVector = replaceValue(variableName_, newValue_, tempVector);
-	writeData(tempVector, tempSaveFile);
+	writeData(tempVector, currentSaveFile);
 }
 
 
 
-
-vector<string> Save::parseTHIS(const char* fileDir) {
+vector<string> SaveManager::parseTHIS(const char* fileDir) {
 	vector<string> data;
 	fstream file(fileDir, ios::in);
 
@@ -106,25 +129,28 @@ vector<string> Save::parseTHIS(const char* fileDir) {
 				data.push_back(line);	//	add the whole line to data vector
 			} }
 		file.close();
-	}
-	else { consoleManager("error", "Couldn't open saveFile in Save::Parser"); }
-	
+
+
+	} else { consoleManager("error", "Couldn't open saveFile in SaveManager::Parser"); }
 	return data;
+
 }
 
 
-bool Save::writeData(vector<string>& savedData, const char* fileDir) {
+
+bool SaveManager::writeData(vector<string>& SaveManagerdData, const char* fileDir) {
 	ofstream file(fileDir);
 	if (file.is_open()) {
 		// loop through the vector elements
-		for (const auto& element : savedData) {
+		for (const auto& element : SaveManagerdData) {
 			// write each element to the file, followed by a newline
 			file << element << "\n";
 		}
 		file.close();
 		return true;
-	}
-	else {
+
+
+	} else {
 		consoleManager("error", "file didn't open in writeData function");
 		return false;
 	}
@@ -132,7 +158,25 @@ bool Save::writeData(vector<string>& savedData, const char* fileDir) {
 }
 
 
-string Save::getValue(vector<string> vector, const char* variableName_) {
+
+bool SaveManager::loadData(vector<string>& saveData, const char* fileDir) {
+	if (createFile(fileDir)) {
+		if (writeData(saveData, fileDir)) {
+			consoleManager("not error", "file successfully loaded"); }
+		else { consoleManager("error", "uh oh... file loadn't"); }
+		return true;
+
+	} else {
+		consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
+		return false; 
+	
+	}
+
+}
+
+
+
+string SaveManager::getValue(vector<string> vector, const char* variableName_) {
 	string variableName = variableName_;
 
 	for (string string : vector) {
@@ -147,12 +191,13 @@ string Save::getValue(vector<string> vector, const char* variableName_) {
 			} }
 	}
 
-	//	if nothing is found, return an empty string
+
 	return "";
 }
 
 
-vector<string> Save::replaceValue(const char* variableName_, const char* newValue_, vector<string>& strings) {
+
+vector<string> SaveManager::replaceValue(const char* variableName_, const char* newValue_, vector<string>& strings) {
 	string variableName = variableName_;
 	string newValue = newValue_;
 	vector<string> result;
@@ -172,7 +217,11 @@ vector<string> Save::replaceValue(const char* variableName_, const char* newValu
 		result.push_back(str);
 
 
-	} if (!flag) { consoleManager("error", "no match or replacement was made for Save::replaceValues"); }
+
+	} if (!flag) { 
+		consoleManager("error", "no match or replacement was made for SaveManager::replaceValues"); 
+	}
+
 
 	return result;
 }
