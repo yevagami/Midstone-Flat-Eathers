@@ -1,0 +1,6 @@
+Cat: [meow]
+Dog: [borque]
+Goose: [honk]
+Cow: [i love beef]
+Pig: [oinque]
+Sheep: [baaah]

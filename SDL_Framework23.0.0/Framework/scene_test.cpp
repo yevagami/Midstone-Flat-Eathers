@@ -96,6 +96,14 @@ void scene_test::Update(const float deltaTime) {
 	*/
 	
 	//save testing
+	Save s;
+	s.replaceValueForSaving("Cow", "beef maker");
+	s.saveGame();
+
+
+
+
+
 	notThePlayer->Update(deltaTime);
 	player->Update(deltaTime);
 
