@@ -440,3 +440,5 @@ FodyWeavers.xsd
 *.VC
 *.vsidx
 *.suo
+SDL_Framework23.0.0/.vs/Framework/v17/.suo
+*.db
