@@ -1,4 +1,7 @@
-﻿  scene_test.cpp
+﻿  GameManager.cpp
+  Save.cpp
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\Save.cpp(206,20): warning C4018: '<': signed/unsigned mismatch
+  scene_test.cpp
 C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(8,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(9,31): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(63,60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
@@ -7,12 +10,13 @@ C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framew
 C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(64,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(64,48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(64,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(150,84): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(150,63): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(165,81): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(165,60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(216,45): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(216,45): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(216,61): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
-C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(216,61): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(155,84): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(155,63): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(170,81): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(170,60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(221,45): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(221,45): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(221,61): warning C4838: conversion from 'float' to 'int' requires a narrowing conversion
+C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Framework\scene_test.cpp(221,61): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   Framework.vcxproj -> C:\Users\Micha\Documents\Visual Studio Projects\Midstone-Flat-Eathers\SDL_Framework23.0.0\Debug\Framework.exe

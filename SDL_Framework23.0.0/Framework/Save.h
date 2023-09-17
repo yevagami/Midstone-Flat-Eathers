@@ -12,7 +12,6 @@ using namespace std;
 class SaveManager {
 private:
 	///	Variables
-
 	const char 
 		*saveFile = "SaveData/saveData.txt",
 		*currentSaveFile = "SaveData/tempSaveData.txt",
@@ -45,7 +44,6 @@ private:
 
 public:
 	///	'Variables'
-
 	vector<string> getSaveDataOld() { return saveDataOld; };
 	vector<string> getSaveDataCurrent() { return saveDataCurrent; };
 	const char* getSaveFile() { return saveFile; };

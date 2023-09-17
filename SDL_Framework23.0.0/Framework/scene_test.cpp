@@ -111,8 +111,8 @@ void scene_test::Update(const float deltaTime) {
 	save.loadGame();
 
 	//changing values by typing the "variableName" then the "newValue"
-	save.replaceValueInCurrentSave("Cow", "got beef?");
-	save.replaceValueInCurrentSave("Pig", "beep beep bacon");
+	save.replaceValueInCurrentSave("Cat", "meeeeooowwww");
+	save.replaceValueInCurrentSave("Dog", "bJork bJorque");
 
 	//	saves the currentSaveData into the save file
 	save.saveGame();

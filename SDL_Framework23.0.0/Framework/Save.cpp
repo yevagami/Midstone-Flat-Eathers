@@ -68,12 +68,12 @@ bool SaveManager::createFile(const char* fileDir) {
 bool SaveManager::loadGame() {
 	if (createFile(saveFile)) {
 		loadData(saveDataCurrent, saveFile);
-		consoleManager("not error", "SaveManager load succeeded");
+		consoleManager("not error", "save load succeeded");
 		return true;
 
 	}
 	else {
-		consoleManager("error", "SaveManager load failed, save file doesn't exist and cannot be created...");
+		consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
 		return false;
 
 	}
