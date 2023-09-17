@@ -1,21 +1,3 @@
 # Midstone-Flat-Eathers
-**Foundation Code**
-- ~~Player Movement~~
-- ~~Collision~~
-- Menu
-- Camera Movement (optional??)
-- Collision Responses
-- Enemies
-- Enemy AI
-- Levels
-- Attacks
-- Text Box
-- Movement Tech (dashing)
-- iFrames
-- Sprite Animation
-- UI
-- Health
-- Obstacles
-- Data Saving
-- Projectiles
-- State Machine
+**Trello board link** 
+https://trello.com/b/pDFUepqf/midstone-sprint-plan
