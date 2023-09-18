@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Body">
       <UniqueIdentifier>{a09ba3ba-b04f-47bb-891b-f1c3b834d9d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\File Stuff">
+      <UniqueIdentifier>{fa77737c-5d5a-4a2e-9827-a598c02ee169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\File Stuff">
+      <UniqueIdentifier>{5a73e712-884e-47dc-b6e1-d489f3f82e87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -79,10 +85,16 @@
       <Filter>Source Files\Body</Filter>
     </ClCompile>
     <ClCompile Include="Save.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\File Stuff</Filter>
     </ClCompile>
-    <ClCompile Include="UtilFunctions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>Source Files\File Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsistentConsole.cpp">
+      <Filter>Source Files\File Stuff</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveManager.cpp">
+      <Filter>Source Files\File Stuff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,11 +140,17 @@
     <ClInclude Include="Hitbox.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-    <ClInclude Include="Save.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FileManager.h">
+      <Filter>Header Files\File Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="UtilFunctions.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Save.h">
+      <Filter>Header Files\File Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsistentConsole.h">
+      <Filter>Header Files\File Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveManager.h">
+      <Filter>Header Files\File Stuff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

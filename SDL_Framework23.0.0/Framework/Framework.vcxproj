@@ -145,32 +145,36 @@
   <ItemGroup>
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Clock.cpp" />
+    <ClCompile Include="ConsistentConsole.cpp" />
     <ClCompile Include="debugFunc.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Save.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="scene_test.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="UtilFunctions.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="ConsistentConsole.h" />
     <ClInclude Include="debugFunc.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Save.h" />
+    <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene0.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="scene_test.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="UtilFunctions.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Window.h" />

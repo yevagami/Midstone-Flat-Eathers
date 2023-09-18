@@ -1,6 +1,6 @@
 #include "Save.h"
 
-SaveManager::SaveManager(){
+Save::Save(){
 	isConsoleTextEnabled = true;
 
 
@@ -13,13 +13,13 @@ SaveManager::SaveManager(){
 
 
 
-SaveManager::~SaveManager() {
+Save::~Save() {
 	isSafeToSave = false;
 }
 
 
 
-void SaveManager::consoleManager(const char* type, const char* MSG) {
+void Save::consoleManager(const char* type, const char* MSG) {
 	if (isConsoleTextEnabled) {
 		if (type == "error") {
 			cerr << "\033[31m" << "Error Occured: [" << MSG << "]\033[0m" << endl; }
@@ -36,7 +36,7 @@ void SaveManager::consoleManager(const char* type, const char* MSG) {
 
 
 
-bool SaveManager::createFile(const char* fileDirectory) {
+bool Save::createFile(const char* fileDirectory) {
 	fstream file(fileDirectory);
 	if (file.fail()) {
 		consoleManager("error", "file failed to open");
@@ -61,7 +61,7 @@ bool SaveManager::createFile(const char* fileDirectory) {
 
 
 
-bool SaveManager::loadGame() {
+bool Save::loadGame() {
 	if (isSafeToSave) {
 		vector<string> saveDataCurrentTemp = getCurrentSaveData();
 		readData(saveDataCurrentTemp, saveFile);
@@ -78,7 +78,7 @@ bool SaveManager::loadGame() {
 
 
 
-bool SaveManager::saveGame() {
+bool Save::saveGame() {
 	if (isSafeToSave) {
 		consoleManager("", "goofiness aside, it's ready to save");
 		vector<string> saveDataCurrent = getCurrentSaveData();
@@ -92,7 +92,7 @@ bool SaveManager::saveGame() {
 			dF.printVectorString(saveDataCurrent);
 		}
 
-		//copies the contents from the temp SaveManager file to the main SaveManager file.
+		//copies the contents from the temp Save file to the main Save file.
 		if (writeData(saveDataCurrent, saveFile)) {
 			consoleManager("not error", "file successfully saved");
 		} else { consoleManager("error", "uh oh... file saved't"); }
@@ -104,7 +104,7 @@ bool SaveManager::saveGame() {
 		return false; } 
 }
 
-bool SaveManager::addValueToCurrentSave(const char* variableName_, const char* value_) {
+bool Save::addValueToCurrentSave(const char* variableName_, const char* value_) {
 	if (!scanFileFor(variableName_, currentSaveFile)) {
 		string toAdd = formatString(variableName_, value_);
 		addToFile(toAdd, currentSaveFile);
@@ -122,7 +122,7 @@ bool SaveManager::addValueToCurrentSave(const char* variableName_, const char* v
 
 
 
-bool SaveManager::replaceValueInCurrentSave(const char* variableName_, const char* newValue_) {
+bool Save::replaceValueInCurrentSave(const char* variableName_, const char* newValue_) {
 	vector<string> tempVector = getCurrentSaveData();
 	tempVector = replaceValueInVector(variableName_, newValue_, tempVector);
 	if (writeData(tempVector, currentSaveFile)) {
@@ -136,7 +136,7 @@ bool SaveManager::replaceValueInCurrentSave(const char* variableName_, const cha
 
 
 
-vector<string> SaveManager::parseTHIS(const char* fileDirectory) {
+vector<string> Save::parseTHIS(const char* fileDirectory) {
 	vector<string> data;
 	fstream file(fileDirectory, ios::in);
 
@@ -152,18 +152,18 @@ vector<string> SaveManager::parseTHIS(const char* fileDirectory) {
 		file.close();
 
 
-	} else { consoleManager("error", "Couldn't open saveFile in SaveManager::Parser"); }
+	} else { consoleManager("error", "Couldn't open saveFile in Save::Parser"); }
 	return data;
 
 }
 
 
 
-bool SaveManager::writeData(vector<string>& SaveManagerdData, const char* fileDirectory) {
+bool Save::writeData(vector<string>& SavedData, const char* fileDirectory) {
 	ofstream file(fileDirectory);
 	if (file.is_open()) {
 		// loop through the vector elements
-		for (const auto& element : SaveManagerdData) {
+		for (const auto& element : SavedData) {
 			// write each element to the file, followed by a newline
 			file << element << "\n";
 		}
@@ -180,7 +180,7 @@ bool SaveManager::writeData(vector<string>& SaveManagerdData, const char* fileDi
 
 
 
-bool SaveManager::readData(vector<string>& saveData, const char* fileDirectory) {
+bool Save::readData(vector<string>& saveData, const char* fileDirectory) {
 	if (createFile(fileDirectory)) {
 		if (writeData(saveData, fileDirectory)) {
 			consoleManager("not error", "file successfully loaded"); }
@@ -195,7 +195,7 @@ bool SaveManager::readData(vector<string>& saveData, const char* fileDirectory) 
 
 }
 
-bool SaveManager::scanFileFor(const char* target, const char* fileDirectory) {
+bool Save::scanFileFor(const char* target, const char* fileDirectory) {
 	ifstream file;
 	file.open(fileDirectory);
 	if (file.is_open()) {
@@ -216,7 +216,7 @@ bool SaveManager::scanFileFor(const char* target, const char* fileDirectory) {
 	}
 }
 
-bool SaveManager::addToFile(string content, const char* fileDirectory) {
+bool Save::addToFile(string content, const char* fileDirectory) {
 	const char* contentCC = content.c_str();
 
 
@@ -239,7 +239,7 @@ bool SaveManager::addToFile(string content, const char* fileDirectory) {
 	}
 }
 
-bool SaveManager::deleteFromFile(string content, const char* fileDirectory) {
+bool Save::deleteFromFile(string content, const char* fileDirectory) {
 	//	from ai
 
 
@@ -299,7 +299,7 @@ bool SaveManager::deleteFromFile(string content, const char* fileDirectory) {
 
 
 
-string SaveManager::scanVectorFor(vector<string> vector, const char* variableName_) {
+string Save::scanVectorFor(vector<string> vector, const char* variableName_) {
 	string variableName = variableName_;
 
 	for (string string : vector) {
@@ -320,7 +320,7 @@ string SaveManager::scanVectorFor(vector<string> vector, const char* variableNam
 
 
 
-vector<string> SaveManager::replaceValueInVector(const char* variableName_, const char* newValue_, vector<string>& strings) {
+vector<string> Save::replaceValueInVector(const char* variableName_, const char* newValue_, vector<string>& strings) {
 	string variableName = variableName_;
 	string newValue = newValue_;
 	vector<string> result;
@@ -342,14 +342,14 @@ vector<string> SaveManager::replaceValueInVector(const char* variableName_, cons
 
 
 	} if (!flag) { 
-		consoleManager("error", "no match or replacement was made for SaveManager::replaceValues"); 
+		consoleManager("error", "no match or replacement was made for Save::replaceValues"); 
 	}
 
 
 	return result;
 }
 
-string SaveManager::formatString(const char* variableName, const char* value) {
+string Save::formatString(const char* variableName, const char* value) {
 	string result;
 	result += variableName;
 

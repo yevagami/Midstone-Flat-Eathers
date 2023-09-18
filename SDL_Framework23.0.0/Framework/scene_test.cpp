@@ -106,19 +106,19 @@ void scene_test::Update(const float deltaTime) {
 
 #pragma region Save Testing
 	SaveManager save;
-	debugFunc dF;
+	ConsistentConsole cc;
+	FileManager fm;
 
-	//turns debug text off
-	save.toggleConsoleText();
+	//	turns debug text off
+	cc.toggleConsoleText();
 
 	//	loads the save file into the currentSaveData
 	save.loadGame();
 
 
-
-	if (save.getConsoleTextState()) {
-		dF.printVectorString(save.getOldSaveData());
-		dF.printVectorString(save.getCurrentSaveData());
+	if (cc.getConsoleTextState()) {
+		fm.printVectorString(save.getOldSaveData());
+		fm.printVectorString(save.getCurrentSaveData());
 	}
 
 
@@ -127,9 +127,9 @@ void scene_test::Update(const float deltaTime) {
 	save.addValueToCurrentSave("party mode", "engaged");
 
 
-	if (save.getConsoleTextState()) {
-		dF.printVectorString(save.getOldSaveData());
-		dF.printVectorString(save.getCurrentSaveData());
+	if (cc.getConsoleTextState()) {
+		fm.printVectorString(save.getOldSaveData());
+		fm.printVectorString(save.getCurrentSaveData());
 	}
 
 
@@ -140,9 +140,9 @@ void scene_test::Update(const float deltaTime) {
 	save.addValueToCurrentSave("max health", "420");
 
 
-	if (save.getConsoleTextState()) {
-		dF.printVectorString(save.getOldSaveData());
-		dF.printVectorString(save.getCurrentSaveData());
+	if (cc.getConsoleTextState()) {
+		fm.printVectorString(save.getOldSaveData());
+		fm.printVectorString(save.getCurrentSaveData());
 	}
 
 

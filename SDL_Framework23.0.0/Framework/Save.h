@@ -4,12 +4,11 @@
 #include <fstream>
 #include <iostream>
 
-#include "UtilFunctions.h"
 #include "debugFunc.h"
 using namespace std;
 
 
-class SaveManager {
+class Save {
 protected:
 	///	Variables
 	const char 
@@ -76,8 +75,8 @@ public:
 	void toggleSafeToSave() { isSafeToSave = !isSafeToSave; consoleManager("not error", "safeToSave toggled"); }
 	
 
-	SaveManager();
-	~SaveManager();
+	Save();
+	~Save();
 
 
 	///	Main Public Methods
