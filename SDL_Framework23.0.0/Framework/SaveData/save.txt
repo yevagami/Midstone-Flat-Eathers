@@ -1,0 +1,4 @@
+health: [0]
+aliveness: [yes]
+party mode: [disengaged]
+max health: [420]

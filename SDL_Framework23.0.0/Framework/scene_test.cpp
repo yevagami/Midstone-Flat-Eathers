@@ -105,14 +105,47 @@ void scene_test::Update(const float deltaTime) {
 
 
 #pragma region Save Testing
-	SaveManager save;	//	save.isConsoleTextEnabled = false;
+	SaveManager save;
+	debugFunc dF;
+
+	//turns debug text off
+	save.toggleConsoleText();
 
 	//	loads the save file into the currentSaveData
 	save.loadGame();
 
-	//changing values by typing the "variableName" then the "newValue"
-	save.replaceValueInCurrentSave("Cat", "meeeeooowwww");
-	save.replaceValueInCurrentSave("Dog", "bJork bJorque");
+
+
+	if (save.getConsoleTextState()) {
+		dF.printVectorString(save.getOldSaveData());
+		dF.printVectorString(save.getCurrentSaveData());
+	}
+
+
+	save.addValueToCurrentSave("health", "100");
+	save.addValueToCurrentSave("aliveness", "yes");
+	save.addValueToCurrentSave("party mode", "engaged");
+
+
+	if (save.getConsoleTextState()) {
+		dF.printVectorString(save.getOldSaveData());
+		dF.printVectorString(save.getCurrentSaveData());
+	}
+
+
+	save.replaceValueInCurrentSave("health", "0");
+	save.replaceValueInCurrentSave("party mode", "disengaged");
+	save.replaceValueInCurrentSave("deathitude", "big not alive");
+
+	save.addValueToCurrentSave("max health", "420");
+
+
+	if (save.getConsoleTextState()) {
+		dF.printVectorString(save.getOldSaveData());
+		dF.printVectorString(save.getCurrentSaveData());
+	}
+
+
 
 	//	saves the currentSaveData into the save file
 	save.saveGame();

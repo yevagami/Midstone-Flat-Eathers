@@ -27,6 +27,8 @@ class Player : public Body{
 	enum states{idle, walk, dash};
 	states currentState;
 
+
+
 public:
 	Player();
 	void Update(float deltaTime);
