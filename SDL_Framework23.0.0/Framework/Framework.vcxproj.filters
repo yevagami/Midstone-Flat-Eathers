@@ -96,6 +96,9 @@
     <ClCompile Include="SaveManager.cpp">
       <Filter>Source Files\File Stuff</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="SaveManager.h">
       <Filter>Header Files\File Stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

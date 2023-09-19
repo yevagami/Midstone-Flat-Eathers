@@ -1,18 +1,20 @@
 #include "FileManager.h"
 #include "ConsistentConsole.h"
-ConsistentConsole cc;
+
+ConsistentConsole ccFile;
+
 
 
 bool FileManager::createFile(const char* fileDirectory) {
 	fstream file(fileDirectory);
 	if (file.fail()) {
-		cc.consoleManager("error", "file failed to open");
+		ccFile.consoleManager("error", "file failed to open");
 		file.open(fileDirectory, ios::out);
 		if (file.fail()) {	//creating the file if it doesn't exist
-			cc.consoleManager("error", "file failed to be created");
+			ccFile.consoleManager("error", "file failed to be created");
 			file.close();
 			return false;
-
+	
 		}
 		else {	//	 if it is created...
 			file.close();
@@ -26,6 +28,12 @@ bool FileManager::createFile(const char* fileDirectory) {
 		return true;
 
 	}
+}
+
+
+bool FileManager::checkFile(const char* fileDirectory) {
+	ifstream file(fileDirectory);
+	return file.good();
 }
 
 
@@ -47,7 +55,7 @@ vector<string> FileManager::parseTHIS(const char* fileDirectory) {
 
 
 	}
-	else { cc.consoleManager("error", "Couldn't open saveFile in SaveManager::Parser"); }
+	else { ccFile.consoleManager("error", "Couldn't open saveFile in SaveManager::Parser"); }
 	return data;
 
 }
@@ -67,7 +75,7 @@ bool FileManager::writeData(vector<string>& savedData, const char* fileDirectory
 
 	}
 	else {
-		cc.consoleManager("error", "file didn't open in writeData function");
+		ccFile.consoleManager("error", "file didn't open in writeData function");
 		return false;
 	}
 }
@@ -76,14 +84,14 @@ bool FileManager::writeData(vector<string>& savedData, const char* fileDirectory
 bool FileManager::readData(vector<string>& savedData, const char* fileDirectory) {
 	if (createFile(fileDirectory)) {
 		if (writeData(savedData, fileDirectory)) {
-			cc.consoleManager("not error", "file successfully loaded");
+			ccFile.consoleManager("not error", "file successfully loaded");
 		}
-		else { cc.consoleManager("error", "uh oh... file loadn't"); }
+		else { ccFile.consoleManager("error", "uh oh... file loadn't"); }
 		return true;
 
 	}
 	else {
-		cc.consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
+		ccFile.consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
 		return false;
 
 	}
@@ -91,7 +99,15 @@ bool FileManager::readData(vector<string>& savedData, const char* fileDirectory)
 }
 
 
-bool FileManager::scanFileFor(const char* target, const char* fileDirectory) {
+bool FileManager::emptyFile(const char* fileDirectory) {
+	ofstream file(fileDirectory, ios::trunc);
+		//opens the file in truncate (t r u n c) mode
+		file.close();
+		return true;
+}
+
+
+bool FileManager::scanFileFor(const char* searchTarget, const char* fileDirectory) {
 	ifstream file;
 	file.open(fileDirectory);
 	if (file.is_open()) {
@@ -99,7 +115,7 @@ bool FileManager::scanFileFor(const char* target, const char* fileDirectory) {
 
 
 		while (getline(file, line)) {
-			if (line.find(target) != string::npos) {
+			if (line.find(searchTarget) != string::npos) {
 				file.close(); return true;
 			}
 		}
@@ -109,14 +125,24 @@ bool FileManager::scanFileFor(const char* target, const char* fileDirectory) {
 
 	}
 	else {
-		cc.consoleManager("error", "scanFileFor failed, file cannot be opened");
+		ccFile.consoleManager("error", "scanFileFor failed, file cannot be opened");
 		return false;
 	}
 }
 
+
+bool FileManager::isEmpty(const char* fileDirectory) {
+	ifstream file(fileDirectory); // open the file
+	return file.peek() == ifstream::traits_type::eof(); // check if the file is empty
+}
+
+
 string FileManager::whatIs(const char* variableName, const char* fileDir) { 
 	return scanVectorFor(parseTHIS(fileDir), variableName); 
 }
+
+
+void FileManager::printString(string string) { cout << string << "\n"; }
 
 
 bool FileManager::addToFile(string content, const char* fileDirectory) {
@@ -137,7 +163,7 @@ bool FileManager::addToFile(string content, const char* fileDirectory) {
 
 		}
 		else {
-			cc.consoleManager("error", "addToFile failed. cannot open file");
+			ccFile.consoleManager("error", "addToFile failed. cannot open file");
 			return false;
 		}
 	}
@@ -187,12 +213,12 @@ bool FileManager::deleteFromFile(string content, const char* fileDirectory) {
 
 			}
 			else {
-				cc.consoleManager("error", "deleteLine failed. cannot open temporary file");
+				ccFile.consoleManager("error", "deleteLine failed. cannot open temporary file");
 				return false;
 			}
 		}
 		else {
-			cc.consoleManager("error", "deleteLine failed. cannot open original file");
+			ccFile.consoleManager("error", "deleteLine failed. cannot open original file");
 			return false;
 		}
 	}
@@ -210,7 +236,7 @@ string FileManager::scanVectorFor(vector<string> vector, const char* variableNam
 	string variableName = variableName_;
 
 	for (string string : vector) {
-		// check if the string starts with the variable name, followed by a colon and a space
+		// check if the string starts with the variable name, followed by a colon (formatting stuff)
 		if (string.find(variableName + ": ") == 0) {
 			// find the position of the square brackets in the string
 			size_t pos1 = string.find('[');
@@ -222,38 +248,34 @@ string FileManager::scanVectorFor(vector<string> vector, const char* variableNam
 		}
 	}
 
-
 	return "";
 }
 
 
-vector<string> FileManager::replaceValueInVector(const char* variableName_, const char* newValue_, vector<string>& strings) {
+vector<string> FileManager::replaceValueInVector(vector<string> vectorS, const char* variableName_, const char* newValue_) {
 	string variableName = variableName_;
 	string newValue = newValue_;
 	vector<string> result;
 	bool flag = false;
 
-	for (int i = 0; i < strings.size(); i++) {
-		string str = strings[i];
+	for (int i = 0; i < vectorS.size(); i++) {
+		string str = vectorS[i];
 		if (str.find(variableName + ": ") == 0) {
 			// find the position of the square brackets in the string
 			size_t pos1 = str.find('[');
 			size_t pos2 = str.find(']');
+		
 			// if both positions are valid, replace the substring between them with the new value, keeping the brackets
 			if (pos1 != string::npos && pos2 != string::npos) {
 				str.replace(pos1 + 1, pos2 - pos1 - 1, newValue);
-				flag = true;
-			}
+				flag = true; }
 		}
-
 		result.push_back(str);
 
 
 
 	} if (!flag) {
-		cc.consoleManager("error", "no match or replacement was made for SaveManager::replaceValues");
-	}
-
+		ccFile.consoleManager("error", "no match or replacement was made for SaveManager::replaceValues"); }
 
 	return result;
 }
@@ -261,12 +283,12 @@ vector<string> FileManager::replaceValueInVector(const char* variableName_, cons
 
 void FileManager::printVectorString(vector<string> vector) {
 	if (!vector.empty()) {
-		for (std::string string : vector) {
-			std::cout << string << "\n";
+		for (string string : vector) {
+			cout << string << "\n";
 		}
 	}
 	else {
-		std::cout << "its empty\n";
+		cout << "its empty\n";
 	}
 
 }

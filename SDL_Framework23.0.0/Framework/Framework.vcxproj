@@ -151,6 +151,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Save.cpp" />
     <ClCompile Include="SaveManager.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="debugFunc.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Hitbox.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="SaveManager.h" />

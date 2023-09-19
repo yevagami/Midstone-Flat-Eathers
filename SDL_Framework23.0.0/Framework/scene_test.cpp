@@ -113,7 +113,7 @@ void scene_test::Update(const float deltaTime) {
 	cc.toggleConsoleText();
 
 	//	loads the save file into the currentSaveData
-	save.loadGame();
+	save.readSave();
 
 
 	if (cc.getConsoleTextState()) {
@@ -133,22 +133,16 @@ void scene_test::Update(const float deltaTime) {
 	}
 
 
-	save.replaceValueInCurrentSave("health", "0");
-	save.replaceValueInCurrentSave("party mode", "disengaged");
-	save.replaceValueInCurrentSave("deathitude", "big not alive");
-
-	save.addValueToCurrentSave("max health", "420");
-
-
-	if (cc.getConsoleTextState()) {
-		fm.printVectorString(save.getOldSaveData());
-		fm.printVectorString(save.getCurrentSaveData());
-	}
-
-
-
 	//	saves the currentSaveData into the save file
-	save.saveGame();
+	save.writeSave();
+
+
+	vector<string> vString = fm.parseTHIS(save.getCurrentSaveFileDirectory());
+	fm.printVectorString(vString);
+	string string = fm.scanVectorFor(vString, "health");
+	fm.printString(string);
+
+
 #pragma endregion
 
 

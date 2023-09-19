@@ -1,4 +1,7 @@
 #pragma once
+
+
+
 class Hitbox{
 public: 
 	float x;

@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-using namespace std;
+
 
 
 class ConsistentConsole {
@@ -8,15 +8,27 @@ class ConsistentConsole {
 protected:
 	///	Variables
 	bool isConsoleTextEnabled;
-
+	int consoleTextVisibilityLevel;
+		
+	
 public:
+	
+	ConsistentConsole();
+	ConsistentConsole(int visibility);
+
+	//	toggles the console text visibility
 	void toggleConsoleText() { isConsoleTextEnabled = !isConsoleTextEnabled;  consoleManager("not error", "consoleText toggled"); }
 	bool getConsoleTextState() { return isConsoleTextEnabled; }
+	void setConsoleTextVisibility();
 
 
-	/// Methods
+	///	Methods
+	//	error, not error, update, or "". Then a message for context. ez.
 	void consoleManager(const char* type, const char* MSG);
+	//	red, blue, green, purple, cyan, yellow, clear
 	void colour(const char* colour);
+	//clears the console using system("cls");
+	void clearConsole();
 
 };
 
