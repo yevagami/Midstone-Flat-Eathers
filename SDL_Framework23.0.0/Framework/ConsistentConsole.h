@@ -13,8 +13,10 @@ protected:
 	
 public:
 	
+	//	starts the class with default console text
 	ConsistentConsole();
-	ConsistentConsole(int visibility);
+	// starts the class with console text off
+	ConsistentConsole(bool visibility);
 
 	//	toggles the console text visibility
 	void toggleConsoleText() { isConsoleTextEnabled = !isConsoleTextEnabled;  consoleManager("not error", "consoleText toggled"); }

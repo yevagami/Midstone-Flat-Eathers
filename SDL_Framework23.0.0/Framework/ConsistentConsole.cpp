@@ -3,14 +3,11 @@
 using namespace std;
 
 ConsistentConsole::ConsistentConsole(){
-isConsoleTextEnabled = true;
-//or
-consoleTextVisibilityLevel = 3;	
+isConsoleTextEnabled = true;	
 }
-ConsistentConsole::ConsistentConsole(int visibilityLevel){
-	isConsoleTextEnabled = true;
-	consoleTextVisibilityLevel = visibilityLevel;
-	
+
+ConsistentConsole::ConsistentConsole(bool visibility){
+	isConsoleTextEnabled = visibility;
 }
 
 
