@@ -73,12 +73,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\GameDev\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="ConsistentConsole.cpp" />
@@ -153,14 +156,17 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PrettyPrinting.cpp" />
     <ClCompile Include="Save.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="scene_test.cpp" />
+    <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="ConsistentConsole.h" />
@@ -169,6 +175,7 @@
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PrettyPrinting.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene0.h" />
@@ -176,6 +183,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="scene_test.h" />
+    <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />

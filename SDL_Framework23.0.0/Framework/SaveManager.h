@@ -8,18 +8,20 @@ class SaveManager : public FileManager {
 protected:
 	///	Variable
 	bool
+		//	do both of the main save files exist (saveFile and currentSaveFile)
 		isSafeToSave = false;
 
 	const char
+		//	Save Files
 		* saveFile = "SaveData/save.txt",
 		* currentSaveFile = "SaveData/currentSave.txt",
 		* defaultSaveFile = "SaveData/currentSave.txt",
+		//	Debug
 		* testFile = "SaveData/testFile.txt";
 
 public:
 	///	Constructors / Destructors
 	SaveManager();
-	~SaveManager();
 
 
 	///	Getters / Setters
@@ -47,6 +49,9 @@ public:
 	bool addValueToCurrentSave(const char* variableName_, const char* value_);
 	//	updates a value in the current save file
 	bool replaceValueInCurrentSave(const char* variableName_, const char* newValue_);
+	//	reads the VALUE associated with a variable from a FILE
+	string whatIs(const char* variableName);
+
 };
 
 

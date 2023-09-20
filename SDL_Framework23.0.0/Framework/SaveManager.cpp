@@ -1,9 +1,11 @@
 #include "SaveManager.h"
 #include "ConsistentConsole.h"
+#include "PrettyPrinting.h"
 
 FileManager fmSave;
-ConsistentConsole ccSave;
+ConsistentConsole ccSave(false);
 SaveState ssSave;
+PrettyPrinting ppSave; //	lol pp
 
 
 
@@ -15,29 +17,24 @@ void SaveManager::toggleSafeToSave() {
 
 SaveManager::SaveManager() {
 	//	safeguard in the constructor (WIP)
-	if (createFile(ssSave.getCurrentSaveFileDirectory()) && createFile(ssSave.getCurrentSaveFileDirectory())) {
+	if ((ssSave.getCurrentSaveFileDirectory()) && checkFile(ssSave.getCurrentSaveFileDirectory())) {
 		isSafeToSave = true;
 	}
 
 }
 
 
-SaveManager::~SaveManager() {
-	isSafeToSave = false;
-}
-
-
 bool SaveManager::writeSave() {
 	if (isSafeToSave) {
-		ccSave.consoleManager("", "goofiness aside, it's ready to save");
+		ccSave.consoleManager("update", "goofiness aside, saving...");
 		vector<string> saveDataCurrent = getCurrentSaveData();
 		vector<string> saveDataOld = getOldSaveData();
 
-		if (ccSave.getConsoleTextState()) {
+		if (ccSave.getConsoleState()) {
 			ccSave.consoleManager("", "replacing:");
-			fmSave.printVectorString(saveDataOld);
+			ppSave.printVS(saveDataOld);
 			ccSave.consoleManager("", "with:");
-			fmSave.printVectorString(saveDataCurrent);
+			ppSave.printVS(saveDataCurrent);
 		}
 
 		//copies the contents from the temp SaveManager file to the main SaveManager file.
@@ -92,7 +89,7 @@ bool SaveManager::readSave() {
 	if (isSafeToSave) {
 		vector<string> saveDataCurrentTemp = getCurrentSaveData();
 		readData(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
-		ccSave.consoleManager("not error", "save load succ1essful");
+		ccSave.consoleManager("not error", "save loaded");
 		return true;
 
 	}
@@ -119,8 +116,14 @@ bool SaveManager::replaceValueInCurrentSave(const char* variableName_, const cha
 }
 
 
+string SaveManager::whatIs(const char* variableName)
+{
+	return scanVectorFor(parseTHIS(currentSaveFile), variableName);
+}
+
+
 bool SaveManager::addValueToCurrentSave(const char* variableName_, const char* value_) {
-	if (!scanFileFor(variableName_, ssSave.getCurrentSaveFileDirectory())) {
+	if (!isHere(variableName_, ssSave.getCurrentSaveFileDirectory())) {
 		string toAdd = fmSave.formatString(variableName_, value_);
 		addToFile(toAdd, ssSave.getCurrentSaveFileDirectory());
 
@@ -146,13 +149,16 @@ vector<string> SaveManager::getCurrentSaveData() {
 	return fmSave.parseTHIS(getCurrentSaveFileDirectory());
 }
 
+
 const char* SaveManager::getSaveFileDirectory() {
 	return saveFile;
 }
 
+
 const char* SaveManager::getCurrentSaveFileDirectory() {
 	return currentSaveFile;
 }
+
 
 const char* SaveManager::getDefaultSaveFileDirectory() {
 	return defaultSaveFile;

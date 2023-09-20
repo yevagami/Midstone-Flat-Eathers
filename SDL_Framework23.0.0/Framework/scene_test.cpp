@@ -1,6 +1,8 @@
 #include "scene_test.h"
-#include "debugFunc.h"
 #include "VMath.h"
+
+#include "debugFunc.h"
+#include "PrettyPrinting.h"
 
 scene_test::scene_test(SDL_Window* sdlWindow_) {
 	window = sdlWindow_;
@@ -72,13 +74,77 @@ bool scene_test::OnCreate() {
 void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	player->playerController(sdlEvent);
 
+#pragma region debuggingKeys
+	//	debug keys (for debugging)
+	if (sdlEvent.key.keysym.sym == SDLK_f && sdlEvent.type == SDL_KEYDOWN) {
+		SaveManager save;
+		ConsistentConsole cc;
+		cc.consoleManager("", "f");
 
+		save.clearBothSaves();
+
+
+	}
+
+
+	if (sdlEvent.key.keysym.sym == SDLK_u && sdlEvent.type == SDL_KEYDOWN) {
+		ConsistentConsole cc;
+		PrettyPrinting pp;
+		SaveManager save;
+		cc.consoleManager("", "u");
+
+		const char* soniChu = "0";
+		save.replaceValueInCurrentSave("health", soniChu);
+
+
+	}
+
+
+	if (sdlEvent.key.keysym.sym == SDLK_i && sdlEvent.type == SDL_KEYDOWN) {
+		ConsistentConsole cc;
+		PrettyPrinting pp;
+		SaveManager save;
+		cc.consoleManager("", "i");
+
+		const char* soniChu = "100";
+		save.replaceValueInCurrentSave("health", soniChu);
+
+
+	}
+
+
+	if (sdlEvent.key.keysym.sym == SDLK_o && sdlEvent.type == SDL_KEYDOWN) {
+		SaveManager save;
+		ConsistentConsole cc;
+		cc.consoleManager("", "o");
+
+		save.addValueToCurrentSave("health", "100");
+		save.addValueToCurrentSave("aliveness", "no");
+		save.addValueToCurrentSave("party mode", "engaged");
+		save.addValueToCurrentSave("good kitty", "");
+
+
+	}
+
+
+	if (sdlEvent.key.keysym.sym == SDLK_p && sdlEvent.type == SDL_KEYDOWN) {
+		ConsistentConsole cc;
+		PrettyPrinting pp;
+		SaveManager save;
+		cc.consoleManager("", "p");
+
+		if (cc.getConsoleState()) {
+			pp.printVS(save.getOldSaveData());
+			pp.printVS(save.getCurrentSaveData());
+		}
+
+
+	}
+#pragma endregion
 
 }
 
-
-
-void scene_test::Update(const float deltaTime) {
+	void scene_test::Update(const float deltaTime) {
 	if (player->hitbox.collisionCheck(notThePlayer->hitbox)) {
 		player->collisionResponse(deltaTime, notThePlayer);
 	}
@@ -104,44 +170,17 @@ void scene_test::Update(const float deltaTime) {
 
 
 
-#pragma region Save Testing
+#pragma region Save Testing | Read and Write save (copies the oldSave -> new save, then new save -> old save)
 	SaveManager save;
-	ConsistentConsole cc;
-	FileManager fm;
-
-	//	turns debug text off
-	cc.toggleConsoleText();
+	ConsistentConsole cc(false);
+	FileManager file;
+	PrettyPrinting pp; //lol pp
 
 	//	loads the save file into the currentSaveData
 	save.readSave();
 
-
-	if (cc.getConsoleTextState()) {
-		fm.printVectorString(save.getOldSaveData());
-		fm.printVectorString(save.getCurrentSaveData());
-	}
-
-
-	save.addValueToCurrentSave("health", "100");
-	save.addValueToCurrentSave("aliveness", "yes");
-	save.addValueToCurrentSave("party mode", "engaged");
-
-
-	if (cc.getConsoleTextState()) {
-		fm.printVectorString(save.getOldSaveData());
-		fm.printVectorString(save.getCurrentSaveData());
-	}
-
-
 	//	saves the currentSaveData into the save file
 	save.writeSave();
-
-
-	vector<string> vString = fm.parseTHIS(save.getCurrentSaveFileDirectory());
-	fm.printVectorString(vString);
-	string string = fm.scanVectorFor(vString, "health");
-	fm.printString(string);
-
 
 #pragma endregion
 

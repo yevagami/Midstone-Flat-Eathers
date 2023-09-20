@@ -8,29 +8,27 @@ class ConsistentConsole {
 protected:
 	///	Variables
 	bool isConsoleTextEnabled;
-	int consoleTextVisibilityLevel;
 		
 	
 public:
-	
-	//	starts the class with default console text
+	//	starts the class with console text enabled
 	ConsistentConsole();
-	// starts the class with console text off
+	// starts the class with console text set to the provided bool
 	ConsistentConsole(bool visibility);
 
-	//	toggles the console text visibility
-	void toggleConsoleText() { isConsoleTextEnabled = !isConsoleTextEnabled;  consoleManager("not error", "consoleText toggled"); }
-	bool getConsoleTextState() { return isConsoleTextEnabled; }
-	void setConsoleTextVisibility();
+
+	//	sets the console text state to the provided bool
+	void setConsoleState(bool state) { isConsoleTextEnabled = state; }
+	//	returns the consoleText boolean state
+	bool getConsoleState() { return isConsoleTextEnabled; }
 
 
 	///	Methods
 	//	error, not error, update, or "". Then a message for context. ez.
 	void consoleManager(const char* type, const char* MSG);
-	//	red, blue, green, purple, cyan, yellow, clear
+	//	red, blue, green, purple, cyan, yellow, pink, clear
 	void colour(const char* colour);
-	//clears the console using system("cls");
+	//	clears the console using system("cls");
 	void clearConsole();
 
 };
-

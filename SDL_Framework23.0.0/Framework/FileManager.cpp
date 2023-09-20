@@ -1,7 +1,7 @@
 #include "FileManager.h"
 #include "ConsistentConsole.h"
 
-ConsistentConsole ccFile;
+ConsistentConsole ccFile(false);
 
 
 
@@ -84,7 +84,7 @@ bool FileManager::writeData(vector<string>& savedData, const char* fileDirectory
 bool FileManager::readData(vector<string>& savedData, const char* fileDirectory) {
 	if (createFile(fileDirectory)) {
 		if (writeData(savedData, fileDirectory)) {
-			ccFile.consoleManager("not error", "file successfully loaded");
+			ccFile.consoleManager("not error", "file loaded");
 		}
 		else { ccFile.consoleManager("error", "uh oh... file loadn't"); }
 		return true;
@@ -107,7 +107,7 @@ bool FileManager::emptyFile(const char* fileDirectory) {
 }
 
 
-bool FileManager::scanFileFor(const char* searchTarget, const char* fileDirectory) {
+bool FileManager::isHere(const char* searchTarget, const char* fileDirectory) {
 	ifstream file;
 	file.open(fileDirectory);
 	if (file.is_open()) {
@@ -136,20 +136,28 @@ bool FileManager::isEmpty(const char* fileDirectory) {
 	return file.peek() == ifstream::traits_type::eof(); // check if the file is empty
 }
 
+bool FileManager::is(const char* variable, const char* value, const char* fileDirectory) {
+	//is variable value = to filedirectory value
+	string VarValue = value;
+
+	//file value
+	string fileVarValue = whatIs(variable, fileDirectory);
+	if (VarValue == fileVarValue) {
+		return true; } else { return false; }
+
+}
+
 
 string FileManager::whatIs(const char* variableName, const char* fileDir) { 
 	return scanVectorFor(parseTHIS(fileDir), variableName); 
 }
 
 
-void FileManager::printString(string string) { cout << string << "\n"; }
-
-
 bool FileManager::addToFile(string content, const char* fileDirectory) {
 	const char* contentcc = content.c_str();
 
 
-	bool exists = scanFileFor(contentcc, fileDirectory);
+	bool exists = isHere(contentcc, fileDirectory);
 
 	if (!exists) {
 		ofstream outFile;
@@ -168,68 +176,6 @@ bool FileManager::addToFile(string content, const char* fileDirectory) {
 		}
 	}
 }
-
-
-bool FileManager::deleteFromFile(string content, const char* fileDirectory) {
-	//	from ai
-	//don't use. like fr dont.
-
-	const char* contentcc = content.c_str();
-	bool exists = scanFileFor(contentcc, fileDirectory);
-
-
-	if (exists) {
-		ifstream inFile;
-		inFile.open(fileDirectory);
-		if (inFile.is_open()) {
-			// Create a temporary file name
-			string tempFileName = "temp.txt";
-			// Create an output file stream object
-			ofstream outFile;
-			// Open the temporary file in write mode
-			outFile.open(tempFileName);
-			// Check if the temporary file is opened successfully
-			if (outFile.is_open()) {
-				// Create a string variable to store each line of the file
-				string line;
-				// Loop through the file line by line
-				while (getline(inFile, line)) {
-					// Check if the content is found in the current line
-					if (line.find(content) == string::npos) {
-						// If not, then write the line to the temporary file
-						outFile << line << "\n";
-					}
-				}
-				// Close both files
-				inFile.close();
-				outFile.close();
-				// Remove the original file
-				remove(fileDirectory);
-				// Rename the temporary file to the original file name
-				rename(tempFileName.c_str(), fileDirectory);
-
-				return true;
-
-
-			}
-			else {
-				ccFile.consoleManager("error", "deleteLine failed. cannot open temporary file");
-				return false;
-			}
-		}
-		else {
-			ccFile.consoleManager("error", "deleteLine failed. cannot open original file");
-			return false;
-		}
-	}
-	else {
-		// Return false to indicate that the content does not exist in the file
-		return false;
-	}
-}
-
-
-
 
 
 string FileManager::scanVectorFor(vector<string> vector, const char* variableName_) {
@@ -281,19 +227,6 @@ vector<string> FileManager::replaceValueInVector(vector<string> vectorS, const c
 }
 
 
-void FileManager::printVectorString(vector<string> vector) {
-	if (!vector.empty()) {
-		for (string string : vector) {
-			cout << string << "\n";
-		}
-	}
-	else {
-		cout << "its empty\n";
-	}
-
-}
-
-
 string FileManager::formatString(const char* variableName, const char* value) {
 	string result;
 	result += variableName;
@@ -306,6 +239,66 @@ string FileManager::formatString(const char* variableName, const char* value) {
 	return result;
 }
 
+
 string FileManager::whatIs(const char* variableName, vector<string>& vector) {
 	return scanVectorFor(vector, variableName);
+}
+
+
+bool FileManager::deleteFromFile(string content, const char* fileDirectory) {
+	//	from ai
+	//don't use. like fr dont.
+
+	const char* contentcc = content.c_str();
+	bool exists = isHere(contentcc, fileDirectory);
+
+
+	if (exists) {
+		ifstream inFile;
+		inFile.open(fileDirectory);
+		if (inFile.is_open()) {
+			// Create a temporary file name
+			string tempFileName = "temp.txt";
+			// Create an output file stream object
+			ofstream outFile;
+			// Open the temporary file in write mode
+			outFile.open(tempFileName);
+			// Check if the temporary file is opened successfully
+			if (outFile.is_open()) {
+				// Create a string variable to store each line of the file
+				string line;
+				// Loop through the file line by line
+				while (getline(inFile, line)) {
+					// Check if the content is found in the current line
+					if (line.find(content) == string::npos) {
+						// If not, then write the line to the temporary file
+						outFile << line << "\n";
+					}
+				}
+				// Close both files
+				inFile.close();
+				outFile.close();
+				// Remove the original file
+				remove(fileDirectory);
+				// Rename the temporary file to the original file name
+				rename(tempFileName.c_str(), fileDirectory);
+
+				return true;
+
+
+			}
+			else {
+				ccFile.consoleManager("error", "deleteLine failed. cannot open temporary file");
+				return false;
+			}
+		}
+		else {
+			ccFile.consoleManager("error", "deleteLine failed. cannot open original file");
+			return false;
+		}
+	}
+	else {
+		// Return false to indicate that the content does not exist in the file
+		return false;
+	}
 }

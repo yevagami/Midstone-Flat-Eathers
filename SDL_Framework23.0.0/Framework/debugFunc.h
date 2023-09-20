@@ -3,14 +3,14 @@
 #include <string>
 #include <vector>
 
-using namespace MATH;
-using namespace std;
+
+//	all of these methods are now availible under PrettyPrinting (its pretty)
 
 struct debugFunc {
-	static void printXYZ_Vec3(Vec3 v);
-	static void printXY_Vec3(Vec3 v);
+	static void printXYZ_Vec3(MATH::Vec3 v);
+	static void printXY_Vec3(MATH::Vec3 v);
 
-	static void printVectorString(vector<string> vString);
+	static void printVectorString(std:: vector<std::string> vString);
 
 
 };

@@ -24,13 +24,19 @@ public:
 	bool readData(vector<string>& savedData, const char* fileDirectory);
 	// clears the given file
 	bool emptyFile(const char* fileDirectory);
-
 	//	adds the string to the file
 	bool addToFile(string content, const char* fileDirectory);
-	//	scans for the string in the file
-	bool scanFileFor(const char* searchTarget, const char* fileDirectory);
+
+	//	returns true if the provided variable's value is equal to the 
+	bool is(const char* variable, const char* value, const char* fileDirectory);
 	//	returns true if the file is empty
 	bool isEmpty(const char* fileDirectory);
+	//	scans for the string in the file
+	bool isHere(const char* searchTarget, const char* fileDirectory);
+	//	reads the VALUE associated with a variable from a VECTOR
+	string whatIs(const char* variableName, vector<string>& vector);
+	//	reads the VALUE associated with a variable from a FILE
+	string whatIs(const char* variableName, const char* fileDir);
 
 
 	///	Vector & String Methods
@@ -42,15 +48,5 @@ public:
 	vector<string> replaceValueInVector(vector<string> vectorS, const char* variableName_, const char* newValue_);
 	// scans the vector for the *value associated with* the provided variableName
 	string scanVectorFor(vector<string> vector, const char* variableName_);
-
-	//	prints the provided string vector
-	void printVectorString(vector<string> vector);
-	//	literally just prints a string. NOTHING fancy
-	void printString(string string);
-
-	//	reads the value associated with a variable from a VECTOR
-	string whatIs(const char* variableName, vector<string>& vector);
-	//	reads the value associated with a variable from a FILE
-	string whatIs(const char* variableName, const char* fileDir);
 
 };

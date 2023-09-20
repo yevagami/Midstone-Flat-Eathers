@@ -1,3 +1,4 @@
 health: [100]
-aliveness: [yes]
+aliveness: [no]
 party mode: [engaged]
+good kitty: []
