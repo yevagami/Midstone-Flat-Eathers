@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "SDL.h"
+#include "SDL_mixer.h"
 
 
 #include "ConsistentConsole.h"
@@ -13,32 +14,21 @@
 
 class Audio {
 protected:
-	std::vector<std::string> audioDirectories;
-	const char* audioDirectory;
-
-	SDL_AudioDeviceID device; // the audio device id
-	SDL_AudioSpec spec; // the audio specification
-	double phase; // the current phase of the sine wave
-	double freq; // the frequency of the sine wave
-	int samples; // the number of samples left to play
-
+	//std::vector<std::string> audioDirectories;
+	//const char* audioDirectory;
 public:
-	std::vector<std::string> getAudioDirectories();
-	const char* getAudioDirectory();
-
-
+	//std::vector<std::string> getAudioDirectories();
+	//const char* getAudioDirectory();
 
 protected:
-	///	Variables
-	//volume
-	//pitch
-	//y a w
-	//more
+	Mix_Chunk* chunk; // the sound effect object
 
 public:
 
-	Audio();
-	~Audio();
+    Audio(const char* fileDir);
+    ~Audio();
+
+	void playSound(int times);
 
 };
 
