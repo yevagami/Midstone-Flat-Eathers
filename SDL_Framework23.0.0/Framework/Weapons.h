@@ -80,7 +80,7 @@ public:
 	int getSharpness() const { return sharpness; }
 	void setSharpness(float newSharpness){ sharpness = newSharpness; }
 	int getSwingSpeed() const {	return swingSpeed; }
-	void setSwingSpeed(int newSwingSpeed){ swingSpeed = new }
+	void setSwingSpeed(int newSwingSpeed) { swingSpeed = newSwingSpeed; }
 	int getStaminaCost() const { return staminaCost; }
 	int getDamage() {	
 		float damageModifier = sharpness + 1; //	sharpness should always be between 0 and 1 (or close to that)

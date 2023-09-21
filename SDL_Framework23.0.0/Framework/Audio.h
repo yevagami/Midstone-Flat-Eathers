@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "SDL.h"
-#include "SDL_mixer.h"
+//#include "SDL_mixer.h"
 
 
 #include "ConsistentConsole.h"
@@ -21,7 +21,7 @@ public:
 	//const char* getAudioDirectory();
 
 protected:
-	Mix_Chunk* chunk; // the sound effect object
+	//Mix_Chunk* chunk; // the sound effect object
 
 public:
 
