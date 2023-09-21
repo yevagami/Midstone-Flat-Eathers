@@ -3,6 +3,8 @@
 #include "Clock.h"
 #include <vector>
 
+#include "Weapon.h"
+
 
 class Player : public Body{
 	//timers and cooldowns
@@ -26,7 +28,6 @@ class Player : public Body{
 	//states
 	enum states{idle, walk, dash};
 	states currentState;
-
 
 
 public:

@@ -9,7 +9,6 @@
 
 class Weapon {
 protected:
-	/// Variables | Attributes
 	//	weapon's name
 	std::string name;
 	//	amount of damage dealt
@@ -19,16 +18,14 @@ protected:
 
 public:
 
-	// Constructor: create a new 'weapon' with the provided name, dmg, and range
 	Weapon(std::string weaponName, int damage, int range) : 
 		name(weaponName), 
 		damage(damage), 
 		range(range) 
 	{ }
 
-	// Constructor: create a new 'weapon' with default name, dmg, and range
 	Weapon() {
-		name = "winston";
+		name = "unknown weapon";
 		damage = 0;
 		range = 0;
 	}
@@ -37,12 +34,10 @@ public:
 
 	virtual std::string getName() const { return name; }
 	virtual void setName(const char* newName) { name = newName; }
-	
 	virtual int getDamage() const { return damage; }
 	virtual void setDamage(int newDamage){ damage = newDamage; }
-	
 	virtual int getRange() const { return range; }
-	virtual void setRange(int newRange){ range = newRange; }
+	virtuall void setRange(int newRange){ range = newRange; }
 
 	virtual void attack();
 };
@@ -67,7 +62,7 @@ public:
 	{ };
 
 	Melee() {
-		name = "reinhardt";
+		name = "unknown melee weapon";
 		damage = 0;
 		range = 0;
 		sharpness = 0.0f;
@@ -80,13 +75,14 @@ public:
 	int getSharpness() const { return sharpness; }
 	void setSharpness(float newSharpness){ sharpness = newSharpness; }
 	int getSwingSpeed() const {	return swingSpeed; }
-	void setSwingSpeed(int newSwingSpeed){ swingSpeed = new }
+	void setSwingSpeed(int newSwingSpeed){ swingSpeed = newSwingSpeed; }
 	int getStaminaCost() const { return staminaCost; }
 	int getDamage() {	
 		float damageModifier = sharpness + 1; //	sharpness should always be between 0 and 1 (or close to that)
-		return damage * damageModifier;
-		}
+		return damage * damageModifier; }
+	void setDamage(int newDamage){ damage = newDamage; }
 
+	
 	void attack() override {
 		bool
 			swingCon = true;
@@ -130,7 +126,7 @@ public:
 	{ };
 
 	Ranged() {
-		name = "joey gunceffa";
+		name = "unknown ranged weapon";
 		damage = 0;
 		range = 0;
 		ammo = 0;
@@ -140,8 +136,11 @@ public:
 	~Ranged() {}
 
 	int getAmmo() const { return ammo; }
+	void setAmmo(int newAmmo){ ammo = newAmmo; }
 	int getReloadTime() const {	return reloadTime; }
-
+	void setReloadTime(int newReloadTime){ reloadTime = newReloadTime; }
+	
+	
 	void attack() override;
 
 	void reload();
@@ -167,7 +166,7 @@ public:
 	{ };
 
 	Shield() {
-		name = "brigitte";
+		name = "unknown shield";
 		damage = 0;
 		range = 0;
 		durability = 0;
@@ -179,13 +178,13 @@ public:
 	~Shield() {}
 
 	int getDurability() const { return durability; }
+	void setDurability(int newDurability) { durability = newDurability; }
 	int getMaxDurability() const { return maxDurability; }
+	void setMaxDurability(int newMaxDurability){ maxDurability = newMaxDurability; }
 	float getBlockChance() const { return blockChance; }
+	void setBlockChance(float newBlockChance) { blockChance = newBlockChance; }
 	int getBlockPower() const { return blockPower; }
-
-	//TO DO
-	void attack() override;
-
+	void setBlockPower(int newBlockPPower){ blockPower = newBlockPower; }
 	//	returns how much damage is blocked by the current shield
 	int getDamage(int incomingDamage) {
 		//to do: add blocking logic
@@ -199,6 +198,10 @@ public:
 
 
 	};
+	
+	
+	//TO DO
+	void attack() override;
 
 	void bash();
 
