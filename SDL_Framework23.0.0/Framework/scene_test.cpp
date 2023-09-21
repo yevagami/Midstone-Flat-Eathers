@@ -73,6 +73,7 @@ bool scene_test::OnCreate() {
 
 void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	player->playerController(sdlEvent);
+<<<<<<< Updated upstream
 
 #pragma region debuggingKeys
 	//	debug keys (for debugging)
@@ -142,6 +143,8 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	}
 #pragma endregion
 
+=======
+>>>>>>> Stashed changes
 }
 
 	void scene_test::Update(const float deltaTime) {
@@ -181,8 +184,17 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 #pragma endregion
 
 
+<<<<<<< Updated upstream
 	notThePlayer->Update(deltaTime);
 	player->Update(deltaTime);
+=======
+
+
+
+	for (Body* body : bodyObjects) {
+		body->Update(deltaTime);
+	}
+>>>>>>> Stashed changes
 
 }
 

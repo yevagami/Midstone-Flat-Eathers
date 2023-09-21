@@ -51,7 +51,7 @@ public:
 		float mass_, const char* textureFile_, bool solid_);
 
 
-	void Update(float deltaTime);
+	virtual void Update(float deltaTime);
 	void OnDestory();
 
 	//Destructor
