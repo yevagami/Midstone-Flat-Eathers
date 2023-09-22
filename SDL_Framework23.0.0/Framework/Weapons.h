@@ -9,7 +9,6 @@
 
 class Weapon {
 protected:
-	/// Variables | Attributes
 	//	weapon's name
 	std::string name;
 	//	amount of damage dealt
@@ -19,16 +18,14 @@ protected:
 
 public:
 
-	// Constructor: create a new 'weapon' with the provided name, dmg, and range
 	Weapon(std::string weaponName, int damage, int range) : 
 		name(weaponName), 
 		damage(damage), 
 		range(range) 
 	{ }
 
-	// Constructor: create a new 'weapon' with default name, dmg, and range
 	Weapon() {
-		name = "winston";
+		name = "unknown weapon";
 		damage = 0;
 		range = 0;
 	}
@@ -42,7 +39,7 @@ public:
 	virtual void setDamage(int newDamage){ damage = newDamage; }
 	
 	virtual int getRange() const { return range; }
-	virtual void setRange(int newRange){ range = newRange; }
+	virtuall void setRange(int newRange){ range = newRange; }
 
 	virtual void attack();
 };
@@ -67,7 +64,7 @@ public:
 	{ };
 
 	Melee() {
-		name = "reinhardt";
+		name = "unknown melee weapon";
 		damage = 0;
 		range = 0;
 		sharpness = 0.0f;
@@ -80,7 +77,7 @@ public:
 	int getSharpness() const { return sharpness; }
 	void setSharpness(float newSharpness){ sharpness = newSharpness; }
 	int getSwingSpeed() const {	return swingSpeed; }
-	void setSwingSpeed(int newSwingSpeed) { swingSpeed = newSwingSpeed; }
+	void setSwingSpeed(int newSwingSpeed){ swingSpeed = new }
 	int getStaminaCost() const { return staminaCost; }
 	int getDamage() {	
 		float damageModifier = sharpness + 1; //	sharpness should always be between 0 and 1 (or close to that)
@@ -130,7 +127,7 @@ public:
 	{ };
 
 	Ranged() {
-		name = "joey gunceffa";
+		name = "unknown ranged weapon";
 		damage = 0;
 		range = 0;
 		ammo = 0;
@@ -167,7 +164,7 @@ public:
 	{ };
 
 	Shield() {
-		name = "brigitte";
+		name = "unknown shield";
 		damage = 0;
 		range = 0;
 		durability = 0;

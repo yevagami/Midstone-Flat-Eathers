@@ -152,6 +152,7 @@
     <ClCompile Include="debugFunc.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Health.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="ConsistentConsole.h" />
     <ClInclude Include="debugFunc.h" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="Health.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />

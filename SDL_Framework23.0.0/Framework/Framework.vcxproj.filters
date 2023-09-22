@@ -49,6 +49,12 @@
     <Filter Include="Source Files\File Stuff">
       <UniqueIdentifier>{5a73e712-884e-47dc-b6e1-d489f3f82e87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Body\Player">
+      <UniqueIdentifier>{1090a163-b510-406c-8d3b-313aaa80ef62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Body\Player">
+      <UniqueIdentifier>{defa3015-3ad7-4f36-bd1f-fa3c4ff3040d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -71,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="debugFunc.cpp">
       <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Body</Filter>
     </ClCompile>
     <ClCompile Include="Body.cpp">
       <Filter>Source Files\Body</Filter>
@@ -102,14 +105,20 @@
     <ClCompile Include="PrettyPrinting.cpp">
       <Filter>Source Files\File Stuff</Filter>
     </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Weapons.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Body\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Health.cpp">
+      <Filter>Source Files\Body\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +155,6 @@
     <ClInclude Include="Body.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
     <ClInclude Include="Clock.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -173,14 +179,20 @@
     <ClInclude Include="PrettyPrinting.h">
       <Filter>Header Files\File Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Weapons.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Body\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>Header Files\Body\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -93,7 +93,7 @@ void Player::playerController(const SDL_Event& sdlEvent){
 
 	//resets the input each frame
 	movement = Vec2(0.0f, 0.0f);
-	
+
 	//movement controls
 	if (canMove) {
 		if (keyStates[SDL_SCANCODE_W] == 1) { movement.y += 1.0f;}
