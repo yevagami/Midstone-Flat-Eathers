@@ -74,6 +74,8 @@ bool scene_test::OnCreate() {
 void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	player->playerController(sdlEvent);
 
+
+
 #pragma region debuggingKeys
 	//	debug keys (for debugging)
 	if (sdlEvent.key.keysym.sym == SDLK_f && sdlEvent.type == SDL_KEYDOWN) {
@@ -165,10 +167,6 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 		so I have concluded that hitboxes should be checked in screenspace and anything related to motion should be done in physics space
 		The hitbox width and height will be represented in screen coords, and when doing collision checks they should be done using the screen coords
 	*/
-	
-
-
-
 
 #pragma region Save Testing | Read and Write save (copies the oldSave -> new save, then new save -> old save)
 	SaveManager save;
@@ -177,19 +175,17 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	PrettyPrinting pp; //lol pp
 
 	//	loads the save file into the currentSaveData
-	save.readSave();
+	//save.readSave();
 
 	//	saves the currentSaveData into the save file
-	save.writeSave();
+	//save.writeSave();
 
 #pragma endregion
 
 
-
-
-
-	notThePlayer->Update(deltaTime);
-	player->Update(deltaTime);
+	for (Body* body : bodyObjects) {
+		body->Update(deltaTime);
+	}
 
 }
 

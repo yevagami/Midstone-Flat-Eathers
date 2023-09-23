@@ -4,9 +4,11 @@
 #include <vector>
 
 #include "Weapons.h"
+#include "Health.h"
 
 
-class Player : public Body{
+//	The player is made out of subclasses
+class Player : public Body, Health {
 	//timers and cooldowns
 	Clock* dash_timer; //how long the player can dash for
 	Clock* dash_cooldown; //how long before the player can dash again

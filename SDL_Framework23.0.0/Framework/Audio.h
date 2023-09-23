@@ -1,35 +1,38 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "SDL.h"
+
 
 
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
 
 
-///	the in-progress audio handling class. just put everything audio related here *for now*.
+//  USING
+#include "SDL_mixer.h"
+//  MAKE A CLASS THAT LETS U GIVE A DIRECTORY AND IT PLAYS THAT SOUND EFFECT
+//  fill out the class <3
+//   i believe in you.
+
 
 
 class Audio {
 protected:
-	std::vector<std::string> audioDirectories;
-	const char* audioDirectory;
-public:
-	std::vector<std::string> getAudioDirectories();
-	const char* getAudioDirectory();
-
-
-protected:
-	///	Variables
-	//volume
-	//pitch
-	//y a w
-	//more
 
 public:
+    
+    Audio();
+    ~Audio();
 
-	Audio();
-	~Audio();
+	void playSound(const char* fileDirectory);
+    void playSoundAt(const char* fileDirectory, float position);
+
+    void stopSound();
+
+    void pauseSound();
+    void continueSound();
+
 
 };
 
