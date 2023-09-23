@@ -7,11 +7,11 @@
 using namespace MATH;
 
 class Body {
+protected:
 	//Texture stuff
 	SDL_Texture* texture = nullptr;
 	const char* textureFile = "";
 	
-
 public:
 
 	//Collisions
