@@ -33,6 +33,5 @@ public:
     void pauseSound();
     void continueSound();
 
-
 };
 
