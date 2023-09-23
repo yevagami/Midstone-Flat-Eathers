@@ -6,8 +6,8 @@
 #include "Body.h"
 
 
-//	not the enum struct
-//	reason for being outside the character class is cuz if its outside its easier to make factions of entities. we could use that for bosses (the boss spawns a faction of enemies)
+//	top 500 enum structs
+//	Affiliationns/Tags are labels to give each spawned entity
 enum struct Affiliation { 
 	Undefined, 
 	Entity, 
@@ -17,7 +17,7 @@ enum struct Affiliation {
 	Debug
 };
 
-//	for the futureeeee oOoOOoooOo (examples, idk if this will even stay)
+//	Factions are formed by groups of entities in special situations (boss fights)
 enum struct Faction { 
 	Undefined,
 	Enemies, 
@@ -25,6 +25,7 @@ enum struct Faction {
 	Debug
 };
 
+//	Status effects go here:
 enum struct StatusType {
 	None,
 	Poisoned,
@@ -35,6 +36,7 @@ enum struct StatusType {
 
 class Entity {
 public: 
+	//	Constructors:
 	Entity();
 	Entity(const Vec3& initialPosition);
 	Entity(const Vec3& initialPosition, float initialHealth);
@@ -43,30 +45,57 @@ public:
 	Entity(const Vec3& initialPosition, Affiliation initialAffiliation);
 	Entity(const Vec3& initialPosition, float initialHealthAffiliation, Affiliation initialAffiliation);
 	Entity(const Vec3& initialPosition, float initialHealth, Weapon initialWeapon, Affiliation initialAffiliation);
-
-
-
+	
+	//	Apply force
 	void ApplyForce(const Vec3& force);
+	//	Update
 	void Update(float deltaTime);
-
+	//	Entity event handler
 	void entityController(const SDL_Event& events);
+	
+	
+	///	to-do:
+	
+	//	sprites
+	
+	//	hitboxes
+	
+	//	collisions
+	
+	//	death and despawn
+	
+	//	destructor
+	
+	//	then change the current constructors to support sprites
+	
 
 
 #pragma region gettes and setters
 public:
+	//	calculates how much damage should be taken
 	virtual void takeDamage(float damage);
 
+	//	heal by the provided float
 	void heal(float health);
+	//	return the current health
 	float getHealth();
+	//	return the max health
 	float getMaxHealth();
+	//	set a new max health
 	void setMaxHealth(float newMaxHealth);
+	//	return the default health
 	float getDefaultHealth();
+	//	set a new default health
 	void setDefaultHealth(float newDefaultHealth);
+	//	equip the provided weapon
 	void equipWeapon(Weapon newWeapon);
-
+	//	return the current entity's tag
 	Affiliation getTag();
+	//	set a new tag
 	void setTag(Affiliation newAffiliation);
+	//	return the current entity's faction
 	Faction getFaction();
+	//	set a new faction
 	void setFaction(Faction newFaction);
 
 #pragma endregion
