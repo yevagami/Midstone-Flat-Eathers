@@ -37,12 +37,12 @@ enum struct StatusType {
 
 class Entity {
 protected:
-	//Texture stuff
+	//	Texture stuff
 	SDL_Texture* texture = nullptr;
 	const char* textureFile = "";
 
 public:
-	//Texture methods
+	//	Texture methods
 	SDL_Texture* GetTexture() { return texture; }
 	void SetTexture(SDL_Texture* texture_) { texture = texture_; }
 
@@ -62,6 +62,7 @@ public:
 	Entity(const char* entityName, const Vec3& initialPosition, float initialHealthAffiliation, Affiliation initialAffiliation, const char* textureFile_);
 	Entity(const char* entityName, const Vec3& initialPosition, float initialHealth, Weapon initialWeapon, Affiliation initialAffiliation, const char* textureFile_);
 	
+	//	SDL Methods
 	void onCreate();
 	//	Apply force
 	void ApplyForce(const Vec3& force);
@@ -71,20 +72,21 @@ public:
 	void EntityController(const SDL_Event& events);
 	//	Render
 	void Render();
-
+	//	On Destroy
 	void onDestroy();
 		
 
 
 	///	to-do:
-	//	hitboxes
-	bool generateHitboxFromSprite(); //	if this is possible... @adriel
-	bool makeHitbox();
-	//	collisions
-	//	spawning, death and despawn
-	//	destructor
-	//	then change the current constructors to support sprites
-	//	movement
+	
+		//	hitboxes
+		bool generateHitboxFromSprite();
+		bool makeHitbox();
+		//	collisions
+		//	spawning, death and despawn
+		//	destructor
+		//	then change the current constructors to support sprites
+		//	movement
 	
 
 
@@ -121,6 +123,8 @@ public:
 protected:
 	//	health, status effect, equipped weapon
 	Character self;
+	//	Basic Movement
+	Transform move;
 	//	affiliation tag
 	Affiliation tag;
 	//	faction group
@@ -153,7 +157,7 @@ struct Character {
 	};
 };
 
-struct move {
+struct Transform {
 	//int x, y;
 	//is moving done here? or in the body..?
 	//also is position here, or in the body?
@@ -167,18 +171,3 @@ struct StatusEffect {
 	StatusEffect(StatusType statusType, float effectDuration) : type(statusType), duration(effectDuration) 
 	{}
 };
-
-
-#pragma region plans and such
-///Entity:
-//	sprites
-//	animations for sprites
-
-///Body:
-//	physics
-//	hitboxes
-//	anything scary math-y
-
-
-///	TEXTURES IN THE ENTITY OR THE BODY CLASS?
-#pragma endregion

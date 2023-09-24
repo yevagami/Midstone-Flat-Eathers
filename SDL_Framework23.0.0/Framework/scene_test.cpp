@@ -4,6 +4,8 @@
 #include "debugFunc.h"
 #include "PrettyPrinting.h"
 
+Entity entity;
+
 scene_test::scene_test(SDL_Window* sdlWindow_) {
 	window = sdlWindow_;
 	SDL_GetWindowSize(window, &screenWidth, &screenHeight);
@@ -167,6 +169,20 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 		so I have concluded that hitboxes should be checked in screenspace and anything related to motion should be done in physics space
 		The hitbox width and height will be represented in screen coords, and when doing collision checks they should be done using the screen coords
 	*/
+
+
+
+
+	//idk how this works.
+	Entity* creeper;
+	creeper = new Entity("creepin' around", Vec3(1, 2, 3));
+	creeper->addToCurrentHealth(100);
+	creeper->Update(deltaTime); //not the creeper with the deltatime
+
+
+
+
+
 
 #pragma region Save Testing | Read and Write save (copies the oldSave -> new save, then new save -> old save)
 	SaveManager save;
