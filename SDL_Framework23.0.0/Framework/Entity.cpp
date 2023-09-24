@@ -4,32 +4,52 @@ ConsistentConsole ccEntity;
 
 #pragma region Constructors
 Entity::Entity() {
+	self.name = "defaultName";
+	textureFile = "";
 	body.pos = Vec3(0, 0, 0);
-
 	self.currentHealth = self.defaultHealth;
+	//	no weapon
 
 	tag = Affiliation::Undefined;
 	group = Faction::Undefined;
 }
 
-Entity::Entity(const Vec3& initialPosition) {
+Entity::Entity(const char* entityName, const Vec3& initialPosition) {
+	self.name = entityName;
+	textureFile = "";
 	body.pos = initialPosition;
-
 	self.currentHealth = self.defaultHealth;
+	//	no weapon
 
 	tag = Affiliation::Undefined;
 	group = Faction::Undefined;
 }
 
-Entity::Entity(const Vec3& initialPosition, float initialHealth) {
+Entity::Entity(const char* entityName, const Vec3& initialPosition, const char* textureFile_) {
+	self.name = entityName;
+	textureFile = textureFile_;
+	body.pos = initialPosition;
+	self.currentHealth = self.defaultHealth;
+	//	no weapon
+
+	tag = Affiliation::Undefined;
+	group = Faction::Undefined;
+}
+
+Entity::Entity(const char* entityName, const Vec3& initialPosition, float initialHealth, const char* textureFile_) {
+	self.name = entityName;
+	textureFile = textureFile_;
 	body.pos = initialPosition;
 	self.currentHealth = initialHealth;
+	//	no weapon
 
 	tag = Affiliation::Undefined;
 	group = Faction::Undefined;
 }
 
-Entity::Entity(const Vec3& initialPosition, float initialHealth, Weapon initialWeapon) {
+Entity::Entity(const char* entityName, const Vec3& initialPosition, float initialHealth, Weapon initialWeapon, const char* textureFile_) {
+	self.name = entityName;
+	textureFile = textureFile_;
 	body.pos = initialPosition;
 	self.currentHealth = initialHealth;
 	self.equippedWeapon = initialWeapon;
@@ -38,23 +58,31 @@ Entity::Entity(const Vec3& initialPosition, float initialHealth, Weapon initialW
 	group = Faction::Undefined;
 }
 
-Entity::Entity(const Vec3& initialPosition, Affiliation initialAffiliation) {
+Entity::Entity(const char* entityName, const Vec3& initialPosition, Affiliation initialAffiliation, const char* textureFile_) {
+	self.name = entityName;
+	textureFile = textureFile_;
 	body.pos = initialPosition;
 	self.currentHealth = self.defaultHealth;
+	//	no weapon
 
 	tag = initialAffiliation;
 	group = Faction::Undefined;
 }
 
-Entity::Entity(const Vec3& initialPosition, float initialHealth, Affiliation initialAffiliation) {
+Entity::Entity(const char* entityName, const Vec3& initialPosition, float initialHealth, Affiliation initialAffiliation, const char* textureFile_) {
+	self.name = entityName;
+	textureFile = textureFile_;
 	body.pos = initialPosition;
 	self.currentHealth = initialHealth;
+	//	no weapon
 
 	tag = initialAffiliation;
 	group = Faction::Undefined;
 }
 
-Entity::Entity(const Vec3& initialPosition, float initialHealth, Weapon initialWeapon, Affiliation initialAffiliation) {
+Entity::Entity(const char* entityName, const Vec3& initialPosition, float initialHealth, Weapon initialWeapon, Affiliation initialAffiliation, const char* textureFile_) {
+	self.name = entityName;
+	textureFile = textureFile_;
 	body.pos = initialPosition;
 	self.currentHealth = initialHealth;
 	self.equippedWeapon = initialWeapon;
@@ -65,8 +93,26 @@ Entity::Entity(const Vec3& initialPosition, float initialHealth, Weapon initialW
 #pragma endregion
 
 #pragma region Getters n Setters
-float Entity::getHealth() {
+float Entity::getCurrentHealth() {
 	return self.currentHealth;
+}
+
+void Entity::setCurrentHealth(float newHealth) {
+	if (newHealth <= self.maxHealth) {
+		self.currentHealth = newHealth;
+	} else {
+		ccEntity.consoleManager("error", "cannot set entity health, ur health healths too hard");
+	}
+}
+
+void Entity::addToCurrentHealth(float healthToAdd) {
+	if (healthToAdd <= self.maxHealth) {
+		self.currentHealth += healthToAdd;
+	} else {
+		ccEntity.consoleManager("error", "cannot add to entity health, thats rough");
+	}
+	
+
 }
 
 float Entity::getMaxHealth() {
@@ -118,17 +164,6 @@ void Entity::Update(float deltaTime) {
 
 }
 
-
 void Entity::takeDamage(float damage) {
 	self.currentHealth -= damage;
-}
-
-
-void Entity::heal(float health) {
-	bool canHeal = self.currentHealth <= self.maxHealth;
-	if (canHeal) {
-		self.currentHealth += health; 
-	} else {
-		ccEntity.consoleManager("error", "cannot heal entity, they're already at max health"); 
-	}
 }
