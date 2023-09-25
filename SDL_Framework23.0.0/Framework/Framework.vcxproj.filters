@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Body\Player">
       <UniqueIdentifier>{defa3015-3ad7-4f36-bd1f-fa3c4ff3040d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{29ffd224-0af0-4683-b1c7-5d53ef636b19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{4de93a1e-5023-44c4-85fb-f400fa52c386}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -105,9 +111,6 @@
     <ClCompile Include="PrettyPrinting.cpp">
       <Filter>Source Files\File Stuff</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Weapons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source Files\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +188,6 @@
     <ClInclude Include="PrettyPrinting.h">
       <Filter>Header Files\File Stuff</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Weapons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Header Files\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
