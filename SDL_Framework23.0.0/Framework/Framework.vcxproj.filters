@@ -1,215 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Math">
-      <UniqueIdentifier>{e8b4d17c-0b74-4d08-b131-1e48ea79d139}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Math">
-      <UniqueIdentifier>{f449e33d-4221-491f-a145-a473c1c67bad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Visualization Handler">
-      <UniqueIdentifier>{5cc13659-e573-4d9d-a7de-52a90aaab3ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Visualization Handler">
-      <UniqueIdentifier>{fcc91bac-fc7b-4f69-a49c-782aa2f9bdd5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene">
-      <UniqueIdentifier>{73c4dd02-fb17-48a1-82bf-763eae12a038}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene">
-      <UniqueIdentifier>{e9274533-74ff-4587-b66e-5d4b2d671553}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Misc">
-      <UniqueIdentifier>{6c189f23-6e59-4664-ad15-7daba38ce6de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Misc">
-      <UniqueIdentifier>{4f73263f-f2ae-4d6d-9790-f87ff428645a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Body">
-      <UniqueIdentifier>{b1375e22-ce77-4374-8e49-c0ce96d05699}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Body">
-      <UniqueIdentifier>{a09ba3ba-b04f-47bb-891b-f1c3b834d9d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\File Stuff">
-      <UniqueIdentifier>{fa77737c-5d5a-4a2e-9827-a598c02ee169}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\File Stuff">
-      <UniqueIdentifier>{5a73e712-884e-47dc-b6e1-d489f3f82e87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Body\Player">
-      <UniqueIdentifier>{1090a163-b510-406c-8d3b-313aaa80ef62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Body\Player">
-      <UniqueIdentifier>{defa3015-3ad7-4f36-bd1f-fa3c4ff3040d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Audio">
-      <UniqueIdentifier>{29ffd224-0af0-4683-b1c7-5d53ef636b19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{4de93a1e-5023-44c4-85fb-f400fa52c386}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Body.cpp" />
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Clock.cpp" />
+    <ClCompile Include="ConsistentConsole.cpp" />
+    <ClCompile Include="debugFunc.cpp" />
+    <ClCompile Include="FileManager.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Health.cpp" />
+    <ClCompile Include="Hitbox.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PrettyPrinting.cpp" />
+    <ClCompile Include="Save.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
+    <ClCompile Include="Scene0.cpp" />
+    <ClCompile Include="scene_test.cpp" />
+    <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Weapons.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files\Visualization Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files\Visualization Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Source Files\Visualization Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene0.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="scene_test.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="debugFunc.cpp">
-      <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Body.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="Clock.cpp">
-      <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Hitbox.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="Save.cpp">
-      <Filter>Source Files\File Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="FileManager.cpp">
-      <Filter>Source Files\File Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsistentConsole.cpp">
-      <Filter>Source Files\File Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="SaveManager.cpp">
-      <Filter>Source Files\File Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PrettyPrinting.cpp">
-      <Filter>Source Files\File Stuff</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Body\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Health.cpp">
-      <Filter>Source Files\Body\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
+    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Body.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="Clock.h" />
+    <ClInclude Include="ConsistentConsole.h" />
+    <ClInclude Include="debugFunc.h" />
+    <ClInclude Include="FileManager.h" />
+    <ClInclude Include="Health.h" />
+    <ClInclude Include="Hitbox.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PrettyPrinting.h" />
+    <ClInclude Include="Save.h" />
+    <ClInclude Include="SaveManager.h" />
+    <ClInclude Include="Scene0.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="scene_list.h" />
+    <ClInclude Include="scene_test.h" />
+    <ClInclude Include="Textures.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="VMath.h" />
+    <ClInclude Include="Weapons.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files\Visualization Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Header Files\Visualization Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files\Visualization Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene0.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="scene_test.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="scene_list.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="debugFunc.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="VMath.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Body.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="Clock.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Hitbox.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="FileManager.h">
-      <Filter>Header Files\File Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="Save.h">
-      <Filter>Header Files\File Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsistentConsole.h">
-      <Filter>Header Files\File Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="SaveManager.h">
-      <Filter>Header Files\File Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PrettyPrinting.h">
-      <Filter>Header Files\File Stuff</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Body\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
-      <Filter>Header Files\Body\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>Header Files\Audio</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="README.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
+    <Text Include="README.txt" />
   </ItemGroup>
 </Project>

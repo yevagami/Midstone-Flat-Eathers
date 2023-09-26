@@ -18,17 +18,17 @@ public:
 
 
 	//	sets the console text state to the provided bool
-	inline void setConsoleState(bool state) { isConsoleTextEnabled = state; }
+	void setConsoleState(bool state) { isConsoleTextEnabled = state; }
 	//	returns the consoleText boolean state
-	inline bool getConsoleState() { return isConsoleTextEnabled; }
+	bool getConsoleState() { return isConsoleTextEnabled; }
 
 
 	///	Methods
 	//	error, not error, update, or "". Then a message for context. ez.
-	inline void consoleManager(const char* type, const char* MSG);
+	void consoleManager(const char* type, const char* MSG);
 	//	red, blue, green, purple, cyan, yellow, pink, clear
-	inline void colour(const char* colour);
+	void colour(const char* colour);
 	//	clears the console using system("cls");
-	inline void clearConsole();
+	void clearConsole();
 
 };

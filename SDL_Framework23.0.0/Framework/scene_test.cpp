@@ -2,9 +2,11 @@
 #include "VMath.h"
 
 #include "debugFunc.h"
-#include "PrettyPrinting.h"
+//#include "PrettyPrinting.h"
+//#include "ConsistentConsole.h"
 
-Entity entity;
+//#include "Entity.h"
+//Entity entity;
 
 scene_test::scene_test(SDL_Window* sdlWindow_) {
 	window = sdlWindow_;
@@ -81,66 +83,66 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 #pragma region debuggingKeys
 	//	debug keys (for debugging)
 	if (sdlEvent.key.keysym.sym == SDLK_f && sdlEvent.type == SDL_KEYDOWN) {
-		SaveManager save;
-		ConsistentConsole cc;
-		cc.consoleManager("", "f");
+		//SaveManager save;
+		//ConsistentConsole cc;
+		//cc.consoleManager("", "f");
 
-		save.clearBothSaves();
+		//save.clearBothSaves();
 
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_u && sdlEvent.type == SDL_KEYDOWN) {
-		ConsistentConsole cc;
-		PrettyPrinting pp;
-		SaveManager save;
-		cc.consoleManager("", "u");
+		//ConsistentConsole cc;
+		//PrettyPrinting pp;
+		//SaveManager save;
+		//cc.consoleManager("", "u");
 
-		const char* soniChu = "0";
-		save.replaceValueInCurrentSave("health", soniChu);
+		//const char* soniChu = "0";
+		//save.replaceValueInCurrentSave("health", soniChu);
 
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_i && sdlEvent.type == SDL_KEYDOWN) {
-		ConsistentConsole cc;
-		PrettyPrinting pp;
-		SaveManager save;
-		cc.consoleManager("", "i");
+		//ConsistentConsole cc;
+		//PrettyPrinting pp;
+		//SaveManager save;
+		//cc.consoleManager("", "i");
 
-		const char* soniChu = "100";
-		save.replaceValueInCurrentSave("health", soniChu);
+		//const char* soniChu = "100";
+		//save.replaceValueInCurrentSave("health", soniChu);
 
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_o && sdlEvent.type == SDL_KEYDOWN) {
-		SaveManager save;
+	/*	SaveManager save;
 		ConsistentConsole cc;
 		cc.consoleManager("", "o");
 
 		save.addValueToCurrentSave("health", "100");
 		save.addValueToCurrentSave("aliveness", "no");
 		save.addValueToCurrentSave("party mode", "engaged");
-		save.addValueToCurrentSave("good kitty", "");
+		save.addValueToCurrentSave("good kitty", "");*/
 
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_p && sdlEvent.type == SDL_KEYDOWN) {
-		ConsistentConsole cc;
-		PrettyPrinting pp;
-		SaveManager save;
-		cc.consoleManager("", "p");
+		//ConsistentConsole cc;
+		//PrettyPrinting pp;
+		//SaveManager save;
+		//cc.consoleManager("", "p");
 
-		if (cc.getConsoleState()) {
-			pp.printVS(save.getOldSaveData());
-			pp.printVS(save.getCurrentSaveData());
-		}
+		//if (cc.getConsoleState()) {
+		//	pp.printVS(save.getOldSaveData());
+		//	pp.printVS(save.getCurrentSaveData());
+		//}
 
 
 	}
@@ -169,34 +171,6 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 		so I have concluded that hitboxes should be checked in screenspace and anything related to motion should be done in physics space
 		The hitbox width and height will be represented in screen coords, and when doing collision checks they should be done using the screen coords
 	*/
-
-
-
-
-	//idk how this works.
-	Entity* creeper;
-	creeper = new Entity("creepin' around", Vec3(1, 2, 3));
-	creeper->addToCurrentHealth(100);
-	creeper->Update(deltaTime); //not the creeper with the deltatime
-
-
-
-
-
-
-#pragma region Save Testing | Read and Write save (copies the oldSave -> new save, then new save -> old save)
-	SaveManager save;
-	ConsistentConsole cc(false);
-	FileManager file;
-	PrettyPrinting pp; //lol pp
-
-	//	loads the save file into the currentSaveData
-	//save.readSave();
-
-	//	saves the currentSaveData into the save file
-	//save.writeSave();
-
-#pragma endregion
 
 
 	for (Body* body : bodyObjects) {

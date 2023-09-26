@@ -8,10 +8,7 @@
 #include <string>
 #include "Save.h"
 
-#include "Entity.h"
-
 #include "SaveManager.h"
-#include "ConsistentConsole.h"
 
 using namespace std;
 class scene_test : public Scene{
