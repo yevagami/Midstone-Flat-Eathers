@@ -50,8 +50,7 @@ bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
 	{"update", green},
 	{"warning", yellow},
 	{"safe", purple},
-	};	if (types.find(type) == types.end()) { return false; }
-		if (!isConsoleTextEnabled) { return false; }
+	};	if (types.find(type) == types.end() || !isConsoleTextEnabled) { return false; }
 
 	ostringstream formattedString;
 	colour(types.at(type));

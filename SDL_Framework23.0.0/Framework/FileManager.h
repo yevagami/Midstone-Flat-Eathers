@@ -48,8 +48,8 @@ public:
 	// formats the provided information into a Fancy Formatted String:tm:
 	string formatString(const char* variableName, const char* value);
 	//	replace the value with a provided newValue
-	vector<string> replaceValueInVector(vector<string> vectorS, const char* variableName_, const char* newValue_);
+	vector<string> replaceValueInVector(vector<string>& vectorS, const char* variableName_, const char* newValue_);
 	// scans the vector for the *value associated with* the provided variableName
-	string scanVectorFor(vector<string> vector, const char* variableName_);
+	string scanVectorFor(const vector<string> vector, const char* variableName_);
 	
 };
