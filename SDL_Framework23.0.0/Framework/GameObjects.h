@@ -4,47 +4,75 @@
 #include <SDL_image.h>
 
 
-
 //	its so lonely in my mansion :(
 class GameObject {
 protected:
 	//	Texture stuff (stolen from body)
-	SDL_Texture* texture = nullptr;
-	const char* textureFile = "";
+	SDL_Texture* texture;
+	const char* textureFile;
 
 	bool 
-		isActive,	//	should this object be active? is it going to be put through update();
-		isSolid;		//	is the hitbox active?
+		isActive,		//	should this object be active? is it going to be put through update();
+		isSolid;			//	is the hitbox active?
 
 	const char 
 		*name;
 
 public:
-		//	Constructors
-	GameObject();
+	 // Constructors
+	// given a name and a position
+	GameObject(const char* objectName, Vec3 position); 
+	// given a name, a position, and a texture file
+	GameObject(const char* objectName, Vec3 position, const char* textureFile_); 
+	// given a name, position, textureFileDir, isActive bool, and an isSolid bool
+	GameObject(const char *objectName, Vec3 position, const char* textureFile_, bool isActive_, bool isSolid_); 
 
-	GameObject(const char* objectName, Vec3 position); // given a name and a position
-	GameObject(const char *objectName, Vec3 position, const char* textureFile, bool isActive, bool isSolid); // given a name, position, textureFileDir, isActive bool, and an isSolid bool
+	~GameObject() {};
 
 	//	SDL Functions
-	virtual void OnCreate();
-	virtual void Update();
-	virtual void HandleEvents(const SDL_Event* events);
-	virtual void OnDestroy();
+	void OnCreate();
+	void Update();
+	void HandleEvents(const SDL_Event* events);
+	void OnDestroy();
 
-public:
+
 	void LoadHitbox(float w_, float h_);
 
 
-	protected:
-		//	sub-components
-	Body body; //	physPos, screenPos vel, accel, 
-	Hitbox hitbox; //	hitbox
+#pragma region getters and setters
+
+public:
+	//	bools
+	bool getIsSolid();
+	void setIsSolid(bool state);
+	bool getIsActive();
+	void setIsActive(bool state);
+
+	//	c_str
+	const char* getName();
+	void setName(const char* newName);
+
+	//	SDL_Texture
+	SDL_Texture* getSDLTexture();
+	void setSDLTexture(SDL_Texture* newTexture);	
+
+#pragma endregion
+
+protected:
+	Body body;		 //	physPos, screenPos, mass, vel, accel, 
+	Hitbox hitbox;	 //	hitbox
 };
 
 
 
 class Entity : public GameObject {
+public:
+
+	//void Update();
+	//void HandleEvents(const SDL_Event* events);
+	//void OnCreate();
+	//void OnDestroy();
+
 protected: 
 	float 
 		maxHealth,

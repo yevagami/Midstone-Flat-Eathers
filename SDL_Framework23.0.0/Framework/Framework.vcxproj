@@ -147,20 +147,17 @@
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Body.cpp" />
-    <ClCompile Include="Character.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="ConsistentConsole.cpp" />
     <ClCompile Include="debugFunc.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObjects.cpp" />
-    <ClCompile Include="Health.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PrettyPrinting.cpp" />
-    <ClCompile Include="Save.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="scene_test.cpp" />
@@ -172,19 +169,16 @@
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Body.h" />
-    <ClInclude Include="Character.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="ConsistentConsole.h" />
     <ClInclude Include="debugFunc.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GameObjects.h" />
-    <ClInclude Include="Health.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PrettyPrinting.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Save.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene0.h" />
     <ClInclude Include="Scene.h" />

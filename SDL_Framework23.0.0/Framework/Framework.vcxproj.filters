@@ -16,12 +16,6 @@
     <ClCompile Include="Body.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="Health.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
     <ClCompile Include="Hitbox.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
@@ -61,9 +55,6 @@
     <ClCompile Include="ConsistentConsole.cpp">
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Save.cpp">
-      <Filter>Source Files\Saving</Filter>
-    </ClCompile>
     <ClCompile Include="FileManager.cpp">
       <Filter>Source Files\Saving</Filter>
     </ClCompile>
@@ -83,12 +74,6 @@
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Body.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="Hitbox.h">
@@ -134,9 +119,6 @@
       <Filter>Header Files\Saving</Filter>
     </ClInclude>
     <ClInclude Include="SaveManager.h">
-      <Filter>Header Files\Saving</Filter>
-    </ClInclude>
-    <ClInclude Include="Save.h">
       <Filter>Header Files\Saving</Filter>
     </ClInclude>
     <ClInclude Include="Vector.h">

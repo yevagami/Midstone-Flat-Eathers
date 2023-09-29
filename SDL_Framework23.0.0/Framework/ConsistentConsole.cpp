@@ -2,6 +2,7 @@
 #pragma region constants
 const char* clear = "clear";
 const char* newline = "newline";
+const char* indent = "indent";
 const char* blue = "blue";
 const char* cyan = "cyan";
 const char* green = "green";
@@ -45,12 +46,14 @@ ConsistentConsole::ConsistentConsole(bool visibility){
 
 
 bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
+	if (!isConsoleTextEnabled) { return false; }
+
 	static map<const char*, const char*> types = {
 	{"error", red},
 	{"update", green},
 	{"warning", yellow},
 	{"safe", purple},
-	};	if (types.find(type) == types.end() || !isConsoleTextEnabled) { return false; }
+	};	if (types.find(type) == types.end()) { return false; }
 
 	ostringstream formattedString;
 	colour(types.at(type));
@@ -67,7 +70,7 @@ bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
 
 
 #pragma region formatting
-bool ConsistentConsole::colour(const char* colour) {
+inline bool ConsistentConsole::colour(const char* colour) {
 	static map<const char*, const char*> colours = {
 	{clear, "\033[0m"},
 	{red, "\033[31m"},
@@ -79,22 +82,35 @@ bool ConsistentConsole::colour(const char* colour) {
 	{pink, "\033[95m"}
 	}; if (colours.find(colour) == colours.end()) { return false; }
 
-	cout << colours.at(colour);	 }
-
-
-void ConsistentConsole::bold(const char* message) {
 	cout 
-		<< "\e[1m"
-		<< message
-		<< "\e[22m";
+		<< colours.at(colour);	 
+
+	return true;
 }
 
+inline bool ConsistentConsole::colour(const char* colour, const char* modifier) {
+	static map<const char*, const char*> colours = {
+	{clear, "\033[0m"},
+	{red, "\033[31m"},
+	{blue , "\033[34m"},
+	{green, "\033[32m"},
+	{purple, "\033[35m"},
+	{cyan, "\033[36m"},
+	{yellow, "\033[33m"},
+	{pink, "\033[95m"}
+	}; if (colours.find(colour) == colours.end()) { return false; }
 
-void ConsistentConsole::italics(const char* message) {
+	static map<const char*, const char*> modifiers = {
+		{clear, "\033[0m"},
+		{newline, "\n"},
+		{indent, "\t"},
+	}; if (modifiers.find(modifier) == modifiers.end()) { return false; }
+
 	cout
-		<< "\e[3m"
-		<< message
-		<< "\e[23m";
+		<< colours.at(colour)
+		<< modifiers.at(modifier);
+
+	return true;
 }
 
 

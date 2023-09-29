@@ -24,12 +24,8 @@ public:
 
 	//	red, blue, green, purple, cyan, yellow, pink, clear
 	inline bool colour(const char* colour);
-	//inline void colour(const char* colour, const char* modifier);
-
-	//	makes the message bold
-	void bold(const char* message);
-	//	makes the message in italics
-	void italics(const char* message);
+	//	clear, newline, indent
+	inline bool colour(const char* colour, const char* modifier);
 	//	clears the console using system("cls"); (literally just system("cls");)
 	void clearConsole();
 	//	logs the provided const char* to the log file
@@ -44,6 +40,7 @@ protected:
 #pragma region constants
 extern const char* clear;
 extern const char* newline;
+extern const char* indent;
 extern const char* blue;
 extern const char* cyan;
 extern const char* green;
