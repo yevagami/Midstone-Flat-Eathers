@@ -65,7 +65,7 @@ bool Save::loadGame() {
 	if (isSafeToSave) {
 		vector<string> saveDataCurrentTemp = getCurrentSaveData();
 		readData(saveDataCurrentTemp, saveFile);
-		consoleManager("not error", "save load successful");
+		consoleManager("update", "save load successful");
 		return true;
 
 	}
@@ -94,7 +94,7 @@ bool Save::saveGame() {
 
 		//copies the contents from the temp Save file to the main Save file.
 		if (writeData(saveDataCurrent, saveFile)) {
-			consoleManager("not error", "file successfully saved");
+			consoleManager("update", "file successfully saved");
 		} else { consoleManager("error", "uh oh... file saved't"); }
 		return true;
 
@@ -183,7 +183,7 @@ bool Save::writeData(vector<string>& SavedData, const char* fileDirectory) {
 bool Save::readData(vector<string>& saveData, const char* fileDirectory) {
 	if (createFile(fileDirectory)) {
 		if (writeData(saveData, fileDirectory)) {
-			consoleManager("not error", "file successfully loaded"); }
+			consoleManager("update", "file successfully loaded"); }
 		else { consoleManager("error", "uh oh... file loadn't"); }
 		return true;
 

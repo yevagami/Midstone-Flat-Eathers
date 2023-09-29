@@ -153,6 +153,7 @@
     <ClCompile Include="debugFunc.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameObjects.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -176,11 +177,13 @@
     <ClInclude Include="ConsistentConsole.h" />
     <ClInclude Include="debugFunc.h" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="GameObjects.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PrettyPrinting.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Save.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene0.h" />
@@ -197,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Framework.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

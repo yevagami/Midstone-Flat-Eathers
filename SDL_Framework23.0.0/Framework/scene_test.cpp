@@ -2,8 +2,12 @@
 #include "VMath.h"
 
 #include "debugFunc.h"
+
 //#include "PrettyPrinting.h"
-//#include "ConsistentConsole.h"
+#include "FileManager.h"
+#include "ConsistentConsole.h"
+ConsistentConsole cc;
+
 
 //#include "Entity.h"
 //Entity entity;
@@ -94,56 +98,35 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_u && sdlEvent.type == SDL_KEYDOWN) {
-		//ConsistentConsole cc;
-		//PrettyPrinting pp;
-		//SaveManager save;
-		//cc.consoleManager("", "u");
+		const char* magicdog = "wowwww";
 
-		//const char* soniChu = "0";
-		//save.replaceValueInCurrentSave("health", soniChu);
+		//	console code management:
+		//	it prints like this:
+		//	"code_type : [message provided]"
+		//	so... "error : [magicdog]"
+		//or... "warning : [magicdog]"
+
+		cc.consoleManager(error, magicdog);		//	red
+		cc.consoleManager(update, magicdog);		//	green
+		cc.consoleManager(warning, magicdog);	//	yellow
+		cc.consoleManager(safe, magicdog);			//	purple
+
 
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_i && sdlEvent.type == SDL_KEYDOWN) {
-		//ConsistentConsole cc;
-		//PrettyPrinting pp;
-		//SaveManager save;
-		//cc.consoleManager("", "i");
-
-		//const char* soniChu = "100";
-		//save.replaceValueInCurrentSave("health", soniChu);
-
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_o && sdlEvent.type == SDL_KEYDOWN) {
-	/*	SaveManager save;
-		ConsistentConsole cc;
-		cc.consoleManager("", "o");
-
-		save.addValueToCurrentSave("health", "100");
-		save.addValueToCurrentSave("aliveness", "no");
-		save.addValueToCurrentSave("party mode", "engaged");
-		save.addValueToCurrentSave("good kitty", "");*/
-
 
 	}
 
 
 	if (sdlEvent.key.keysym.sym == SDLK_p && sdlEvent.type == SDL_KEYDOWN) {
-		//ConsistentConsole cc;
-		//PrettyPrinting pp;
-		//SaveManager save;
-		//cc.consoleManager("", "p");
-
-		//if (cc.getConsoleState()) {
-		//	pp.printVS(save.getOldSaveData());
-		//	pp.printVS(save.getCurrentSaveData());
-		//}
-
 
 	}
 #pragma endregion
@@ -154,6 +137,7 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 	if (player->hitbox.collisionCheck(notThePlayer->hitbox)) {
 		player->collisionResponse(deltaTime, notThePlayer);
 	}
+
 	
 	/*
 		I spent days, wondering why the hitboxes won't collide properly

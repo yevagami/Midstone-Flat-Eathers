@@ -84,7 +84,7 @@ bool FileManager::writeData(vector<string>& savedData, const char* fileDirectory
 bool FileManager::readData(vector<string>& savedData, const char* fileDirectory) {
 	if (createFile(fileDirectory)) {
 		if (writeData(savedData, fileDirectory)) {
-			ccFile.consoleManager("not error", "file loaded");
+			ccFile.consoleManager("update", "file loaded");
 		}
 		else { ccFile.consoleManager("error", "uh oh... file loadn't"); }
 		return true;
@@ -136,7 +136,7 @@ bool FileManager::isEmpty(const char* fileDirectory) {
 	return file.peek() == ifstream::traits_type::eof(); // check if the file is empty
 }
 
-bool FileManager::is(const char* variable, const char* value, const char* fileDirectory) {
+bool FileManager::isEqual(const char* variable, const char* value, const char* fileDirectory) {
 	//is variable value = to filedirectory value
 	string VarValue = value;
 
@@ -155,12 +155,10 @@ string FileManager::whatIs(const char* variableName, const char* fileDir) {
 
 bool FileManager::addToFile(string content, const char* fileDirectory) {
 	const char* contentcc = content.c_str();
-
-
 	bool exists = isHere(contentcc, fileDirectory);
 
-	if (!exists) {
-		ofstream outFile;
+
+	if (!exists) { ofstream outFile;
 		// open the file in the given directory in append mode (allows edits)
 		outFile.open(fileDirectory, ios::app);
 		if (outFile.is_open()) {
@@ -169,11 +167,19 @@ bool FileManager::addToFile(string content, const char* fileDirectory) {
 			return true;
 
 
-		}
-		else {
+		} else {
 			ccFile.consoleManager("error", "addToFile failed. cannot open file");
 			return false;
 		}
+	} 
+}
+
+bool FileManager::logTo(string content, const char* fileDirectory) {
+	if (checkFile(fileDirectory)) {
+		addToFile(content, fileDirectory);
+		return true;
+	} else {
+		return false;
 	}
 }
 

@@ -67,6 +67,7 @@
     <ClCompile Include="FileManager.cpp">
       <Filter>Source Files\Saving</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -144,6 +145,8 @@
     <ClInclude Include="VMath.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="GameObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.txt" />
@@ -188,5 +191,8 @@
     <Filter Include="Source Files\Scene">
       <UniqueIdentifier>{54de1615-425f-45c6-83ca-ed28f455f0ce}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Framework.rc" />
   </ItemGroup>
 </Project>

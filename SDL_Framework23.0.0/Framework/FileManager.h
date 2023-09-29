@@ -26,9 +26,12 @@ public:
 	bool emptyFile(const char* fileDirectory);
 	//	adds the string to the file
 	bool addToFile(string content, const char* fileDirectory);
+	
+	//	adds the string to the file (repeat)
+	bool logTo(string content, const char* fileDirectory);
 
-	//	returns true if the provided variable's value is equal to the 
-	bool is(const char* variable, const char* value, const char* fileDirectory);
+	//	returns true if the provided value is equal to the file's variable value
+	bool isEqual(const char* variable, const char* value, const char* fileDirectory);
 	//	returns true if the file is empty
 	bool isEmpty(const char* fileDirectory);
 	//	scans for the string in the file
@@ -48,5 +51,5 @@ public:
 	vector<string> replaceValueInVector(vector<string> vectorS, const char* variableName_, const char* newValue_);
 	// scans the vector for the *value associated with* the provided variableName
 	string scanVectorFor(vector<string> vector, const char* variableName_);
-
+	
 };

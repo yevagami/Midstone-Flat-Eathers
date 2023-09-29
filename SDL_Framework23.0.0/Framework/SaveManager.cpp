@@ -11,7 +11,7 @@ PrettyPrinting ppSave; //	lol pp
 
 void SaveManager::toggleSafeToSave() {
  isSafeToSave = !isSafeToSave; 
- ccSave.consoleManager("not error", "safeToSave toggled"); 
+ ccSave.consoleManager("update", "safeToSave toggled"); 
 }
 
 
@@ -39,7 +39,7 @@ bool SaveManager::writeSave() {
 
 		//copies the contents from the temp SaveManager file to the main SaveManager file.
 		if (writeData(saveDataCurrent, getSaveFileDirectory())) {
-			ccSave.consoleManager("not error", "file succ1essfully saved");
+			ccSave.consoleManager("update", "file succ1essfully saved");
 		}
 		else { ccSave.consoleManager("error", "uh oh... file saved't"); }
 		return true;
@@ -89,7 +89,7 @@ bool SaveManager::readSave() {
 	if (isSafeToSave) {
 		vector<string> saveDataCurrentTemp = getCurrentSaveData();
 		readData(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
-		ccSave.consoleManager("not error", "save loaded");
+		ccSave.consoleManager("update", "save loaded");
 		return true;
 
 	}

@@ -70,9 +70,9 @@ public:
 	const char* getCurrentSaveFileDirectory() { return currentSaveFile; };
 	const char* getDefaultSaveFileDirectory() { return defaultSaveFile; };
 		
-	void toggleConsoleText() { isConsoleTextEnabled = !isConsoleTextEnabled;  consoleManager("not error", "consoleText toggled"); }
+	void toggleConsoleText() { isConsoleTextEnabled = !isConsoleTextEnabled;  consoleManager("update", "consoleText toggled"); }
 	bool getConsoleTextState() {return isConsoleTextEnabled; }
-	void toggleSafeToSave() { isSafeToSave = !isSafeToSave; consoleManager("not error", "safeToSave toggled"); }
+	void toggleSafeToSave() { isSafeToSave = !isSafeToSave; consoleManager("update", "safeToSave toggled"); }
 	
 
 	Save();

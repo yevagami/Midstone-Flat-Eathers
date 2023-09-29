@@ -1,15 +1,10 @@
 #pragma once
 #include <iostream>
-
+#include <map>
 
 
 class ConsistentConsole {
 	//	Console Consistency!!! oh, the beauty of cc...
-protected:
-	///	Variables
-	bool isConsoleTextEnabled;
-		
-	
 public:
 	//	starts the class with console text enabled
 	ConsistentConsole();
@@ -25,10 +20,43 @@ public:
 
 	///	Methods
 	//	error, not error, update, or "". Then a message for context. ez.
-	void consoleManager(const char* type, const char* MSG);
-	//	red, blue, green, purple, cyan, yellow, pink, clear
-	void colour(const char* colour);
-	//	clears the console using system("cls");
-	void clearConsole();
+	bool consoleManager(const char* type, const char* MSG);
 
+	//	red, blue, green, purple, cyan, yellow, pink, clear
+	inline bool colour(const char* colour);
+	//inline void colour(const char* colour, const char* modifier);
+
+	//	makes the message bold
+	void bold(const char* message);
+	//	makes the message in italics
+	void italics(const char* message);
+	//	clears the console using system("cls"); (literally just system("cls");)
+	void clearConsole();
+	//	logs the provided const char* to the log file
+	void log(const char* logTHIS);
+
+protected:
+	///	Variables
+	bool isConsoleTextEnabled;
+	//static std::map<std::string, std::string> types;
 };
+
+#pragma region constants
+extern const char* clear;
+extern const char* newline;
+extern const char* blue;
+extern const char* cyan;
+extern const char* green;
+extern const char* purple;
+extern const char* pink;
+extern const char* yellow;
+extern const char* red;
+
+extern const char* bold;
+extern const char* italic;
+
+extern const char* error;
+extern const char* update;
+extern const char* safe;
+extern const char* warning;
+#pragma endregion

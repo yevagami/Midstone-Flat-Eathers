@@ -13,7 +13,6 @@ protected:
 	const char* textureFile = "";
 	
 public:
-
 	//Collisions
 	Hitbox hitbox;
 	void LoadHitbox(float w_, float h_);
