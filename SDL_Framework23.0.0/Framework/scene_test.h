@@ -9,6 +9,8 @@
 
 #include "SaveManager.h"
 
+#include "GameObjects.h"
+
 using namespace std;
 class scene_test : public Scene{
 	//Name of the scene for organizing stuff
@@ -22,6 +24,8 @@ class scene_test : public Scene{
 	SDL_Renderer* screenRenderer;
 
 	// Bodies in the scene
+	GameObject* testGameObject;
+
 	Body* background;
 	Body* notThePlayer;
 	Player* player;

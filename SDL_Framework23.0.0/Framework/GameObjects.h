@@ -19,25 +19,26 @@ protected:
 		*name;
 
 public:
+
+	Vec3 position;
 	 // Constructors
 	// given a name and a position
-	GameObject(const char* objectName, Vec3 position); 
+	GameObject(const char* objectName, Vec3 position_); 
 	// given a name, a position, and a texture file
-	GameObject(const char* objectName, Vec3 position, const char* textureFile_); 
+	GameObject(const char* objectName, Vec3 position_, const char* textureFile_); 
 	// given a name, position, textureFileDir, isActive bool, and an isSolid bool
-	GameObject(const char *objectName, Vec3 position, const char* textureFile_, bool isActive_, bool isSolid_); 
+	GameObject(const char *objectName, Vec3 position_, const char* textureFile_, bool isActive_, bool isSolid_); 
 
 	~GameObject() {};
 
 	//	SDL Functions
 	void OnCreate();
-	void Update();
+	void Update(float deltaTime);
 	void HandleEvents(const SDL_Event* events);
 	void OnDestroy();
 
 
 	void LoadHitbox(float w_, float h_);
-
 
 #pragma region getters and setters
 
@@ -55,6 +56,8 @@ public:
 	//	SDL_Texture
 	SDL_Texture* getSDLTexture();
 	void setSDLTexture(SDL_Texture* newTexture);	
+	const char* getTextureFile();	
+	void setTextureFile(const char* newTextureFile);	
 
 #pragma endregion
 

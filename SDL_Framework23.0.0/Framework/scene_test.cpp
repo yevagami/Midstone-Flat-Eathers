@@ -23,12 +23,21 @@ scene_test::scene_test(SDL_Window* sdlWindow_) {
 	background = new Body(); // use the default values for the constructor
 	background->SetTextureFile("textures/grass.png");
 
+	testGameObject = new GameObject(
+		"testObject",																								//	name
+		Vec3(virtualWidth / 2.0f + 500.0f, virtualDepth / 2.0f + 550.0f, 0.0f),		// pos	
+		"testures/test.png", 																					//	texture file
+		true,																												//	isActive
+		true);																											//	isSolid
+
+
 	player = new Player();
 	player->SetTextureFile("textures/heart.png");
 
 	notThePlayer = new Body();
 	notThePlayer->SetTextureFile("textures/blue_block.jpg");
 	notThePlayer->solid = true;
+
 
 	bodyObjects.push_back(background);
 	bodyObjects.push_back(player);
@@ -60,14 +69,20 @@ bool scene_test::OnCreate() {
 		return false;
 	}
 
+
 	// Load the bodies's textures
 	background->SetTexture(loadImage(background->GetTextureFile()));
 	player->SetTexture(loadImage(player->GetTextureFile()));
 	notThePlayer->SetTexture(loadImage(notThePlayer->GetTextureFile()));
 	
+	testGameObject->setSDLTexture(loadImage(testGameObject->getTextureFile()));
+
+	
 	//Load the body object's hitbox
 	player->LoadHitbox(128.0f, 128.0f);
 	notThePlayer->LoadHitbox(225.0f, 225.0f);
+	//testGameObject->LoadHitbox(255.0f, 255.0f);
+	//^ not implemented yet
 
 	for (Body* body : bodyObjects) {
 		body->screenDimensions = Vec3(screenWidth, screenHeight, screenDepth);
@@ -161,6 +176,8 @@ void scene_test::HandleEvents(const SDL_Event& sdlEvent) {
 		body->Update(deltaTime);
 	}
 
+	testGameObject->Update(deltaTime);
+
 }
 
 Vec3 scene_test::PhysicsSpaceToScreenSpace(Vec3 physicsCoords) {
@@ -209,6 +226,22 @@ void scene_test::Render() {
 	//Render the block's hitbox
 	dest = { (int)screenCoordinates.x, (int)screenCoordinates.y, (int)notThePlayer->hitbox.w, (int)notThePlayer->hitbox.h };
 	SDL_RenderFillRect(screenRenderer, &dest);
+
+
+	//Render the testobj
+	screenCoordinates = PhysicsSpaceToScreenSpace(testGameObject->position);
+	//Vec3 screenDimensions(testGameObject->hitbox.w * screenWidth / virtualWidth, player->hitbox.h * screenWidth / virtualWidth, 0.0f);
+
+	//Render the testobj's texture
+	dest = scale(testGameObject->getSDLTexture(), screenCoordinates.x, screenCoordinates.y, 1.0f);
+	SDL_RenderCopy(screenRenderer, testGameObject->getSDLTexture(), nullptr, &dest);
+
+	////Render the testobj's hitbox
+	//dest = { (int)player->hitbox.x, (int)player->hitbox.y, (int)player->hitbox.w, (int)player->hitbox.h };
+	//SDL_SetRenderDrawBlendMode(screenRenderer, SDL_BLENDMODE_ADD);
+	//SDL_SetRenderDrawColor(screenRenderer, 255, 255, 255, 100);
+	//SDL_RenderFillRect(screenRenderer, &dest);
+
 
 
 	// Update screen
