@@ -3,6 +3,9 @@
 const char* clear = "clear";
 const char* newline = "newline";
 const char* indent = "indent";
+const char* bold = "bold";
+const char* italic = "italic";
+
 const char* blue = "blue";
 const char* cyan = "cyan";
 const char* green = "green";
@@ -11,24 +14,19 @@ const char* pink = "pink";
 const char* yellow = "yellow";
 const char* red = "red";
 
-const char* bold = "bold";
-const char* italic = "italic";
-
 const char* error = "error";
 const char* update = "update";
 const char* warning = "warning";
 const char* safe = "safe";
 #pragma endregion
+
 #include <string>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 #include <cstdlib>
 
-//	keep this LOW... [header includes]
-#include "FileManager.h"
-
 //	class instances and namespaces
-FileManager ccFile;
 using namespace std;
 
 
@@ -48,30 +46,40 @@ ConsistentConsole::ConsistentConsole(bool visibility){
 bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
 	if (!isConsoleTextEnabled) { return false; }
 
-	static map<const char*, const char*> types = {
-	{"error", red},
-	{"update", green},
-	{"warning", yellow},
-	{"safe", purple},
-	};	if (types.find(type) == types.end()) { return false; }
+	static unordered_map<const char*, const char*> types = {
+		{"error", red},
+		{"update", green},
+		{"warning", yellow},
+		{"safe", purple},
+	};
+	if (types.find(type) == types.end()) { return false; }
 
 	ostringstream formattedString;
 	colour(types.at(type));
-	formattedString	//	omg its the string stream!!1!
-		<< type	//	format
-		<< ": ["	//	the
-		<< MSG	//	string 
-		<< "]";	//	stream
-	cout << formattedString.str() 	<< endl;	//	the string:tm:
+
+	const char* specialMessage = "";
+	if (strcmp(type, "error") == 0) {
+		specialMessage = "error: "; }
+	else if (strcmp(type, "update") == 0) {
+		specialMessage = "update: "; }
+	else if (strcmp(type, "warning") == 0) {
+		specialMessage = "uh oh: "; }
+	else if (strcmp(type, "safe") == 0) {
+		specialMessage = ": "; }
+
+	formattedString
+		<< specialMessage
+		<< "[" << MSG << "]";
+
+	cout << formattedString.str() << endl;
 	colour(clear);
 	return true;
-	//log(formattedString.str().c_str());
 }
 
 
 #pragma region formatting
 inline bool ConsistentConsole::colour(const char* colour) {
-	static map<const char*, const char*> colours = {
+	static unordered_map<const char*, const char*> colours = {
 	{clear, "\033[0m"},
 	{red, "\033[31m"},
 	{blue , "\033[34m"},
@@ -89,18 +97,18 @@ inline bool ConsistentConsole::colour(const char* colour) {
 }
 
 inline bool ConsistentConsole::colour(const char* colour, const char* modifier) {
-	static map<const char*, const char*> colours = {
-	{clear, "\033[0m"},
-	{red, "\033[31m"},
-	{blue , "\033[34m"},
-	{green, "\033[32m"},
-	{purple, "\033[35m"},
-	{cyan, "\033[36m"},
-	{yellow, "\033[33m"},
-	{pink, "\033[95m"}
+	static unordered_map<const char*, const char*> colours = {
+		{clear, "\033[0m"},
+		{red, "\033[31m"},
+		{blue , "\033[34m"},
+		{green, "\033[32m"},
+		{purple, "\033[35m"},
+		{cyan, "\033[36m"},
+		{yellow, "\033[33m"},
+		{pink, "\033[95m"}
 	}; if (colours.find(colour) == colours.end()) { return false; }
 
-	static map<const char*, const char*> modifiers = {
+	static unordered_map<const char*, const char*> modifiers = {
 		{clear, "\033[0m"},
 		{newline, "\n"},
 		{indent, "\t"},
@@ -116,9 +124,4 @@ inline bool ConsistentConsole::colour(const char* colour, const char* modifier) 
 
 void ConsistentConsole::clearConsole() { cout << "\e[2J"; }
 
-
-void ConsistentConsole::log(const char* logTHIS) {
-	const char* logFile = "SaveData/logs/log.txt";
-	ccFile.logTo(logTHIS, logFile);
-}
 #pragma endregion

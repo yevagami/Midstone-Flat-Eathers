@@ -231,7 +231,7 @@ void scene_test::Render() {
 	//Render the testobj
 	screenCoordinates = PhysicsSpaceToScreenSpace(testGameObject->position);
 	//Vec3 screenDimensions(testGameObject->hitbox.w * screenWidth / virtualWidth, player->hitbox.h * screenWidth / virtualWidth, 0.0f);
-
+	
 	//Render the testobj's texture
 	dest = scale(testGameObject->getSDLTexture(), screenCoordinates.x, screenCoordinates.y, 1.0f);
 	SDL_RenderCopy(screenRenderer, testGameObject->getSDLTexture(), nullptr, &dest);

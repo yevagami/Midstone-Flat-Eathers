@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <map>
 
 
 class ConsistentConsole {
@@ -11,25 +10,20 @@ public:
 	// starts the class with console text set to the provided bool
 	ConsistentConsole(bool visibility);
 
-
-	//	sets the console text state to the provided bool
-	void setConsoleState(bool state) { isConsoleTextEnabled = state; }
-	//	returns the consoleText boolean state
-	bool getConsoleState() { return isConsoleTextEnabled; }
-
-
 	///	Methods
 	//	error, not error, update, or "". Then a message for context. ez.
 	bool consoleManager(const char* type, const char* MSG);
-
 	//	red, blue, green, purple, cyan, yellow, pink, clear
 	inline bool colour(const char* colour);
 	//	clear, newline, indent
 	inline bool colour(const char* colour, const char* modifier);
 	//	clears the console using system("cls"); (literally just system("cls");)
 	void clearConsole();
-	//	logs the provided const char* to the log file
-	void log(const char* logTHIS);
+
+	//	sets the console text state to the provided bool
+	void setConsoleState(bool state) { isConsoleTextEnabled = state; }
+	//	returns the consoleText boolean state
+	bool getConsoleState() { return isConsoleTextEnabled; }
 
 protected:
 	///	Variables

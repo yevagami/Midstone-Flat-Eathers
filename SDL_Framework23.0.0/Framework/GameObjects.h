@@ -3,6 +3,8 @@
 #include "Hitbox.h"
 #include <SDL_image.h>
 
+//	steal the structure of gails body / playerbody classes >:)
+
 
 //	its so lonely in my mansion :(
 class GameObject {
