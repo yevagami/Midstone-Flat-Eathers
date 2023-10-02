@@ -1,6 +1,0 @@
-variableName: [meow]
-otherVarName: [woof]
-variableName: [honk]
-otherVarName: [moo]
-variableName: [oink]
-otherVarName: [baaah]

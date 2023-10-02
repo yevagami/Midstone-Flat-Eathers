@@ -1,6 +1,0 @@
-Cat: [meeeeooowwww]
-Dog: [bJork bJorque]
-Goose: [honk]
-Cow: [got beef?]
-Pig: [beep beep bacon]
-Sheep: [baaah]
