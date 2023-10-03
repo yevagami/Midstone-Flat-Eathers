@@ -10,8 +10,7 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
 	yAxis = 15.0f;
 }
 
-Scene1::~Scene1(){
-}
+Scene1::~Scene1(){}
 
 bool Scene1::OnCreate() {
 	int w, h;

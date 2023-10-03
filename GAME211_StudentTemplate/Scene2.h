@@ -3,6 +3,8 @@
 
 class Scene2 : public Scene{
 private:
+	Body* block;
+
 	float xAxis;	
 	float yAxis;
 	SDL_Window* window;		
@@ -11,7 +13,7 @@ private:
 	Matrix4 inverseProjection;	
 
 public:
-	Scene2(SDL_Window* sdlWindow, GameManager* game_);
+	Scene2(SDL_Window* sdlWindow_, GameManager* game_);
 	~Scene2();
 	bool OnCreate();
 	void OnDestroy();

@@ -37,6 +37,7 @@ public:
         float angular_
     );
     void LoadHitbox(float w_, float h_);
+    Hitbox getHitbox() { return hitbox; }
 	virtual ~Body();
     virtual void Update(float deltaTime);
     virtual void ApplyForce(Vec3 force_);
