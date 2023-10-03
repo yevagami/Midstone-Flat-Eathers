@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-
 
 class ConsistentConsole {
 	//	Console Consistency!!! oh, the beauty of cc...
@@ -9,6 +7,7 @@ public:
 	ConsistentConsole();
 	// starts the class with console text set to the provided bool
 	ConsistentConsole(bool visibility);
+	ConsistentConsole(bool visability, bool logToFile);
 
 	///	Methods
 	//	error, not error, update, or "". Then a message for context. ez.

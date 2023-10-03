@@ -20,11 +20,13 @@ const char* warning = "warning";
 const char* safe = "safe";
 #pragma endregion
 
-#include <string>
+#include <iostream>
+#include <cstdlib>
+#include <string> 
 #include <sstream>
 #include <vector>
 #include <unordered_map>
-#include <cstdlib>
+
 
 //	class instances and namespaces
 using namespace std;
@@ -39,6 +41,9 @@ ConsistentConsole::ConsistentConsole() {
 
 ConsistentConsole::ConsistentConsole(bool visibility){
 	isConsoleTextEnabled = visibility;
+}
+ConsistentConsole::ConsistentConsole(bool visability, bool logToFile) {
+
 }
 #pragma endregion
 
