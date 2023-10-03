@@ -46,7 +46,7 @@ public:
 	bool clearCurrentSave();
 
 	//	adds a variable and value to the current save file
-	bool addValueToCurrentSave(const char* variableName_, const char* value_);
+	bool addValueToCurrentSaveFile(const char* variableName_, const char* value_);
 	//	updates a value in the current save file
 	bool replaceValueInCurrentSave(const char* variableName_, const char* newValue_);
 	//	reads the VALUE associated with a variable from a FILE
@@ -64,5 +64,5 @@ protected:
 	//saveDataCurrent;
 
 public:
-
+	
 };
