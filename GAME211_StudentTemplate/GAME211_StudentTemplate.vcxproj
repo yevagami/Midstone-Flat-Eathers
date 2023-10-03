@@ -66,6 +66,7 @@
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="VMath.h" />
     <ClInclude Include="Weapons.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

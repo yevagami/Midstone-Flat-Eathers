@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include "Body.h"
 #include "GameManager.h"
+#include "Clock.h"
+#include <vector>
 
 class PlayerBody : public Body{
 
@@ -18,10 +20,7 @@ protected:
     class GameManager* game;
 
 public:
-    PlayerBody() : Body{}
-    {
-        game = nullptr;
-    }
+    PlayerBody() : Body{} { game = nullptr; }
 
     // Note the last parameter in this constructor!
     // Look in GameManager.cpp to see how this is called.
@@ -53,7 +52,30 @@ public:
     void HandleEvents( const SDL_Event& event );
     void Update( float deltaTime );
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
-    
+    ~PlayerBody();
+
+private:
+    //timers and cooldowns
+    Clock* dash_timer; //how long the player can dash for
+    Clock* dash_cooldown; //how long before the player can dash again
+    std::vector<Clock*> cooldowns; //list of cooldowns to update
+
+    //dashing variables
+    float dashDuration = 0.5f;
+    float dashCooldown = 0.3f;
+
+    //movement variables
+    Vec3 movement;
+    Vec3 playerDirection;
+    bool canMove = true;
+    float walkSpeed = 10.0f;
+    float dashSpeed = 20.0f;
+    float currentSpeed;
+    float maxSpeed;
+
+    //states
+    enum states { idle, walk, dash };
+    states currentState;
 };
 
 #endif /* PLAYERBODY_H */

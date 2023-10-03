@@ -49,6 +49,9 @@
     <Filter Include="Source Files\Misc">
       <UniqueIdentifier>{07ad6976-5c36-4876-b38f-15c1694f2073}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{9b61642b-8f4b-4f38-8843-5cc700767ac2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="VMath.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
