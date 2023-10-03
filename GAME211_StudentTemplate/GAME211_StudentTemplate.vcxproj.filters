@@ -72,7 +72,6 @@
     <ClCompile Include="Body.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
-<<<<<<< HEAD:GAME211_StudentTemplate/GAME211_StudentTemplate.vcxproj.filters
     <ClCompile Include="PlayerBody.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
@@ -103,37 +102,10 @@
     <ClCompile Include="Hitbox.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
     <ClCompile Include="Health.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
     <ClCompile Include="PrettyPrinting.cpp">
-=======
-    <ClCompile Include="Hitbox.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapons.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Source Files\Visualisation</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Source Files\Visualisation</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files\Visualisation</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files\Visualisation</Filter>
-    </ClCompile>
-    <ClCompile Include="Clock.cpp">
->>>>>>> Entity-Changes:SDL_Framework23.0.0/Framework/Framework.vcxproj.filters
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="debugFunc.cpp">
@@ -142,18 +114,12 @@
     <ClCompile Include="ConsistentConsole.cpp">
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
-<<<<<<< HEAD:GAME211_StudentTemplate/GAME211_StudentTemplate.vcxproj.filters
     <ClCompile Include="Audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Source Files\Scene</Filter>
-=======
-    <ClCompile Include="FileManager.cpp">
-      <Filter>Source Files\Saving</Filter>
->>>>>>> Entity-Changes:SDL_Framework23.0.0/Framework/Framework.vcxproj.filters
     </ClCompile>
-    <ClCompile Include="GameObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Weapons.h">
@@ -207,7 +173,6 @@
     <ClInclude Include="Hitbox.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-<<<<<<< HEAD:GAME211_StudentTemplate/GAME211_StudentTemplate.vcxproj.filters
     <ClInclude Include="ConsistentConsole.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -216,122 +181,18 @@
     </ClInclude>
     <ClInclude Include="PrettyPrinting.h">
       <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="Health.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-=======
-    <ClInclude Include="Hitbox.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapons.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files\Vusialisation</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Header Files\Vusialisation</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files\Vusialisation</Filter>
-    </ClInclude>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files\Vusialisation</Filter>
-    </ClInclude>
->>>>>>> Entity-Changes:SDL_Framework23.0.0/Framework/Framework.vcxproj.filters
     <ClInclude Include="Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD:GAME211_StudentTemplate/GAME211_StudentTemplate.vcxproj.filters
     <ClInclude Include="Scene2.h">
       <Filter>Header Files\Scene</Filter>
-=======
-    <ClInclude Include="debugFunc.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Clock.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="PrettyPrinting.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsistentConsole.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="FileManager.h">
-      <Filter>Header Files\Saving</Filter>
-    </ClInclude>
-    <ClInclude Include="SaveManager.h">
-      <Filter>Header Files\Saving</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files\Math</Filter>
->>>>>>> Entity-Changes:SDL_Framework23.0.0/Framework/Framework.vcxproj.filters
     </ClInclude>
     <ClInclude Include="VMath.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="GameObjects.h" />
   </ItemGroup>
-<<<<<<< HEAD:GAME211_StudentTemplate/GAME211_StudentTemplate.vcxproj.filters
-=======
-  <ItemGroup>
-    <Text Include="README.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{55a550f4-e939-4bec-a1c2-d2ca24b2ff18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{ea539478-8bd1-4a99-a0c2-73bb4c518330}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene">
-      <UniqueIdentifier>{8376da6f-e50a-434b-9756-53233a6041d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Body">
-      <UniqueIdentifier>{0fd0a793-e93d-4a10-a672-cf99379f1b10}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Vusialisation">
-      <UniqueIdentifier>{88abea20-e4e4-491a-8f48-ad6fa1fca3ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Misc">
-      <UniqueIdentifier>{06a74a06-bb75-43ba-a70a-0ca4ff4f7209}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Saving">
-      <UniqueIdentifier>{75199311-a2e5-49fe-96a6-d603481405dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Math">
-      <UniqueIdentifier>{e4848e4c-a62c-4c37-b73c-35a34f61876a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Saving">
-      <UniqueIdentifier>{efae5492-1a2e-4f53-bf9a-b19cdaf2989c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Misc">
-      <UniqueIdentifier>{79b04f0d-c235-4961-992d-0c1498f31335}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Visualisation">
-      <UniqueIdentifier>{b1340718-1e31-45a2-8168-0d1bdbc9eef2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Body">
-      <UniqueIdentifier>{9a41e6c3-bd35-47dc-b99f-f891cec26f95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene">
-      <UniqueIdentifier>{54de1615-425f-45c6-83ca-ed28f455f0ce}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Framework.rc" />
-  </ItemGroup>
->>>>>>> Entity-Changes:SDL_Framework23.0.0/Framework/Framework.vcxproj.filters
 </Project>

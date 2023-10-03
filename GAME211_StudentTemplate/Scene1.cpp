@@ -24,6 +24,8 @@ bool Scene1::OnCreate() {
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 
+	name = "scene1";
+
 	return true;
 }
 

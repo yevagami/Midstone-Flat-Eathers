@@ -10,6 +10,7 @@ using namespace MATH;
 
 class Scene {
 public:
+	const char* name;
     class GameManager* game = NULL;
 	virtual bool OnCreate() = 0;
 	virtual void OnDestroy() = 0;
