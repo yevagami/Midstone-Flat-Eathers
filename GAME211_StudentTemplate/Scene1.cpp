@@ -39,7 +39,7 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 	// render the player
-	game->RenderPlayer(0.10f);
+	game->RenderPlayer(0.1f);
 
 	SDL_RenderPresent(renderer);
 }

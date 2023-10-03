@@ -37,6 +37,7 @@
     <ClCompile Include="Save.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene1.cpp" />
+    <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Weapons.cpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene1.h" />
+    <ClInclude Include="Scene2.h" />
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />

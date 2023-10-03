@@ -51,8 +51,7 @@ public:
     virtual void setImage(SDL_Surface* image_) { image = image_; }
     virtual SDL_Surface* getImage() { return image; }
 
-    virtual void setImageSizeWorldCoords(Vec3 imageSizeWorldCoords_)
-    {
+    virtual void setImageSizeWorldCoords(Vec3 imageSizeWorldCoords_){
         imageSizeWorldCoords = imageSizeWorldCoords_;
 	}
 
@@ -64,6 +63,8 @@ public:
 	// Added this as public to deal with my demo
 	// so that mouse position can be copied into a Body.
     virtual void setPos( Vec3 pos );
+
+    virtual void Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale = 1.0f);
 };
 
 #endif /* BODY_H */

@@ -64,23 +64,47 @@ void Body::Update( float deltaTime ){
 }
 
 
-void Body::HandleEvents( const SDL_Event& event )
-{
-    if ( event.type == SDL_MOUSEBUTTONDOWN )
-    {
+void Body::HandleEvents( const SDL_Event& event ){
+    if ( event.type == SDL_MOUSEBUTTONDOWN ){
         printf("Mousedown\n");
     }
-    else if ( event.type == SDL_KEYDOWN )
-    {
-        if ( event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-        {
+    else if ( event.type == SDL_KEYDOWN ){
+        if ( event.key.keysym.scancode == SDL_SCANCODE_SPACE){
             printf("Space\n");
         }
     }
     // etc
 }
 
-void Body::setPos( Vec3 pos_ )
-{
+void Body::setPos( Vec3 pos_ ){
     pos = pos_;
+}
+
+
+void Body::Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale){
+    SDL_Rect square;
+    Vec3 screenCoords;
+    float w, h;
+
+    // convert the position from game coords to screen coords.
+    screenCoords = projectionMatrix * pos;
+
+    // Scale the image, in case the .png file is too big or small
+    w = image->w * scale;
+    h = image->h * scale;
+
+    // The square's x and y values represent the top left corner of 
+    // where SDL will draw the .png image.
+    // The 0.5f * w/h offset is to place the .png so that pos represents the center
+    // (Note the y axis for screen coords points downward, hence subtraction!!!!)
+    square.x = static_cast<int>(screenCoords.x - 0.5f * w);
+    square.y = static_cast<int>(screenCoords.y - 0.5f * h);
+    square.w = static_cast<int>(w);
+    square.h = static_cast<int>(h);
+
+    // Convert character orientation from radians to degrees.
+    float orientationDegrees = orientation * 180.0f / M_PI;
+
+    SDL_RenderCopyEx(renderer, texture, nullptr, &square,
+        orientationDegrees, nullptr, SDL_FLIP_NONE);
 }

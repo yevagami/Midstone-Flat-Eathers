@@ -1,5 +1,6 @@
 #include "GameManager.h"
-#include "Scene1.h"
+#include "scene_list.h"
+
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -9,14 +10,15 @@ GameManager::GameManager() {
     player = nullptr;
 }
 
+
 bool GameManager::OnCreate() {
     // My display is 1920 x 1080 but the following seems to work best to fill the screen.
     //const int SCREEN_WIDTH = 1540;
     //const int SCREEN_HEIGHT = 860;
 
     // Use 1000x600 for less than full screen
-    const int SCREEN_WIDTH = 1000;
-    const int SCREEN_HEIGHT = 600;
+    const int SCREEN_WIDTH = 1366;
+    const int SCREEN_HEIGHT = 768;
 
     windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {
@@ -35,9 +37,9 @@ bool GameManager::OnCreate() {
 	}
 
     // select scene for specific assignment
-
     currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
     
+
     // create player
     float mass = 1.0f;
     float radius = 0.5f;
@@ -92,6 +94,7 @@ void GameManager::Run() {
 	}
 }
 
+
 void GameManager::handleEvents() 
 {
     SDL_Event event;
@@ -133,6 +136,7 @@ void GameManager::handleEvents()
     }
 }
 
+
 GameManager::~GameManager() {}
 
 void GameManager::OnDestroy(){
@@ -140,6 +144,8 @@ void GameManager::OnDestroy(){
 	if (timer) delete timer;
 	if (currentScene) delete currentScene;
 }
+
+
 
 // This might be unfamiliar
 float GameManager::getSceneHeight() { return currentScene->getyAxis(); }
@@ -163,7 +169,7 @@ SDL_Renderer* GameManager::getRenderer()
 // This might be unfamiliar
 void GameManager::RenderPlayer(float scale)
 {
-    player->Render(scale);
+    player->Render(getRenderer(), currentScene->getProjectionMatrix(), scale);
 }
 
 void GameManager::LoadScene( int i )

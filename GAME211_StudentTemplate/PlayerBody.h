@@ -50,7 +50,6 @@ public:
     // use the base class versions of getters
 
     bool OnCreate();
-    void Render( float scale = 1.0f );
     void HandleEvents( const SDL_Event& event );
     void Update( float deltaTime );
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
