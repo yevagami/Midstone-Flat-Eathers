@@ -4,7 +4,7 @@
 
 
 
-class SaveManager : public FileManager {
+class SaveManager : private FileManager {
 protected:
 	///	Variable
 	bool

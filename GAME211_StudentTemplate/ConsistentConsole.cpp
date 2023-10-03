@@ -26,7 +26,8 @@ const char* safe = "safe";
 #include <sstream>
 #include <vector>
 #include <unordered_map>
-
+//header includes:
+#include "LogManager.h"
 
 //	class instances and namespaces
 using namespace std;
@@ -37,13 +38,17 @@ using namespace std;
 #pragma region constructors
 ConsistentConsole::ConsistentConsole() {
 	isConsoleTextEnabled = true;
+	isLogging = false;
 }
 
 ConsistentConsole::ConsistentConsole(bool visibility){
 	isConsoleTextEnabled = visibility;
+	isLogging = false;
 }
-ConsistentConsole::ConsistentConsole(bool visability, bool logToFile) {
 
+ConsistentConsole::ConsistentConsole(bool visibility, bool logToFile) {
+	isConsoleTextEnabled = visibility;
+	isLogging = logToFile;
 }
 #pragma endregion
 
@@ -56,8 +61,7 @@ bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
 		{"update", green},
 		{"warning", yellow},
 		{"safe", purple},
-	};
-	if (types.find(type) == types.end()) { return false; }
+	}; if (types.find(type) == types.end()) { return false; }
 
 	ostringstream formattedString;
 	colour(types.at(type));
@@ -77,6 +81,7 @@ bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
 		<< "[" << MSG << "]";
 
 	cout << formattedString.str() << endl;
+	
 	colour(clear);
 	return true;
 }

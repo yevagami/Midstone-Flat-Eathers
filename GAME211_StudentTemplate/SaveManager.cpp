@@ -2,10 +2,10 @@
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
 
-FileManager fmSave;
+//FileManager fmSave;
 ConsistentConsole ccSave(false);
 SaveState ssSave;
-PrettyPrinting ppSave; //	lol pp
+//PrettyPrinting ppSave; //	lol pp
 
 
 
@@ -17,7 +17,7 @@ void SaveManager::toggleSafeToSave() {
 
 SaveManager::SaveManager() {
 	//	safeguard in the constructor (WIP)
-	if ((ssSave.getCurrentSaveFileDirectory()) && checkFile(ssSave.getCurrentSaveFileDirectory())) {
+	if ((ssSave.getCurrentSaveFileDirectory()) && fileCheck(ssSave.getCurrentSaveFileDirectory())) {
 		isSafeToSave = true;
 	}
 
@@ -27,39 +27,42 @@ SaveManager::SaveManager() {
 bool SaveManager::writeSave() {
 	if (!isSafeToSave) {
 		ccSave.consoleManager("error", "save game failed, save file doesn't exist and cannot be created...");
-		return false; }
+		return false;
+	}
 
 	ccSave.consoleManager("update", "goofiness aside, saving...");
 	vector<string> saveDataCurrent = getCurrentSaveData();
 	vector<string> saveDataOld = getOldSaveData();
 
-		//	printing
+	//	printing
 	if (ccSave.getConsoleState()) {
 		ccSave.consoleManager("", "replacing:");
-		ppSave.printVS(saveDataOld);
+		//ppSave.printVS(saveDataOld);
 		ccSave.consoleManager("", "with:");
-		ppSave.printVS(saveDataCurrent); }
+		//ppSave.printVS(saveDataCurrent); }
 
 	//copies the contents from the temp SaveManager file to the main SaveManager file.
-	if (!writeData(saveDataCurrent, getSaveFileDirectory())) {
-		ccSave.consoleManager("error", "uh oh... file saved't"); }
-		
+		if (!fileWrite(saveDataCurrent, getSaveFileDirectory())) {
+			ccSave.consoleManager("error", "uh oh... file saved't");
+		}
+
 		ccSave.consoleManager("update", "file succ1essfully saved");
 		return true;
 
+	}
 }
 
-bool SaveManager::clearBothSaves() {
-	if (!clearOldSave() && !clearCurrentSave()) {
-		ccSave.consoleManager("error", "couldn't clear both the Saves");
-		return false;
+	bool SaveManager::clearBothSaves() {
+		if (!clearOldSave() && !clearCurrentSave()) {
+			ccSave.consoleManager("error", "couldn't clear both the Saves");
+			return false;
+		}
+
+		return true;
 	}
 
-	return true;
-}
-
 bool SaveManager::clearOldSave() {
-	if (!fmSave.emptyFile(getSaveFileDirectory())) {
+	if (!fileEmpty(getSaveFileDirectory())) {
 		ccSave.consoleManager("error", "couldn't clear the Old Save");
 		return false;
 	}
@@ -68,7 +71,7 @@ bool SaveManager::clearOldSave() {
 }
 
 bool SaveManager::clearCurrentSave() {
-	if (!fmSave.emptyFile(getCurrentSaveFileDirectory())) {
+	if (!fileEmpty(getCurrentSaveFileDirectory())) {
 		ccSave.consoleManager("error", "couldn't clear the Current Save");
 		return false;
 	}
@@ -84,7 +87,7 @@ bool SaveManager::readSave() {
 	}
 
 	vector<string> saveDataCurrentTemp = getCurrentSaveData();
-	readData(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
+	fileRead(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
 	ccSave.consoleManager("update", "save loaded");
 	return true;
 
@@ -94,9 +97,9 @@ bool SaveManager::readSave() {
 
 bool SaveManager::replaceValueInCurrentSave(const char* variableName_, const char* newValue_) {
 	vector<string> tempVector = getCurrentSaveData();
-	tempVector = fmSave.replaceValueInVector(tempVector, variableName_, newValue_);
+	tempVector = replaceValue(variableName_, newValue_, tempVector);
 
-	if (writeData(tempVector, ssSave.getCurrentSaveFileDirectory())) {
+	if (fileWrite(tempVector, ssSave.getCurrentSaveFileDirectory())) {
 		return true; 
 	} else {
 		return false;
@@ -111,8 +114,8 @@ string SaveManager::whatIs(const char* variableName) {
 
 bool SaveManager::addValueToCurrentSaveFile(const char* variableName_, const char* value_) {
 	if (!isHere(variableName_, ssSave.getCurrentSaveFileDirectory())) {
-		string toAdd = fmSave.formatString(variableName_, value_);
-		addToFile(toAdd, ssSave.getCurrentSaveFileDirectory());
+		string toAdd = stringReformat(variableName_, value_);
+		fileInsert(toAdd, ssSave.getCurrentSaveFileDirectory());
 		return true;
 
 	} else {
@@ -123,12 +126,12 @@ bool SaveManager::addValueToCurrentSaveFile(const char* variableName_, const cha
 
 
 vector<string> SaveManager::getOldSaveData() {
-	return fmSave.parseTHIS(getSaveFileDirectory());
+	return parseTHIS(getSaveFileDirectory());
 }
 
 
 vector<string> SaveManager::getCurrentSaveData() { 
-	return fmSave.parseTHIS(getCurrentSaveFileDirectory());
+	return parseTHIS(getCurrentSaveFileDirectory());
 }
 
 

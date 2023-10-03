@@ -1,11 +1,14 @@
 #include "FileManager.h"
 #include "ConsistentConsole.h"
 
-ConsistentConsole ccFile(false);
+//#include <unordered_map>
+
+
+ConsistentConsole ccFile(true);
 
 
 
-bool FileManager::createFile(const char* fileDirectory) {
+bool FileManager::fileCreate(const char* fileDirectory) {
 	fstream file(fileDirectory);
 	if (file.fail()) {
 		ccFile.consoleManager("error", "file failed to open");
@@ -21,7 +24,7 @@ bool FileManager::createFile(const char* fileDirectory) {
 }
 
 
-bool FileManager::checkFile(const char* fileDirectory) {
+bool FileManager::fileCheck(const char* fileDirectory) {
 	ifstream file(fileDirectory);
 	return file.good();
 }
@@ -48,7 +51,7 @@ vector<string> FileManager::parseTHIS(const char* fileDirectory) {
 }
 
 
-bool FileManager::writeData(vector<string>& savedData, const char* fileDirectory) {
+bool FileManager::fileWrite(vector<string>& savedData, const char* fileDirectory) {
 	ofstream file(fileDirectory);
 
 	if (file.fail()) {
@@ -66,12 +69,12 @@ bool FileManager::writeData(vector<string>& savedData, const char* fileDirectory
 }
 
 
-bool FileManager::readData(vector<string>& savedData, const char* fileDirectory) {
-	if (!checkFile(fileDirectory)) {
+bool FileManager::fileRead(vector<string>& savedData, const char* fileDirectory) {
+	if (!fileCheck(fileDirectory)) {
 		ccFile.consoleManager("error", "uh oh... file loadn't");
 		return false;
 	}
-	if (!writeData(savedData, fileDirectory)) {
+	if (!fileWrite(savedData, fileDirectory)) {
 		ccFile.consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
 		return false;
 	}
@@ -84,7 +87,7 @@ bool FileManager::readData(vector<string>& savedData, const char* fileDirectory)
 
 
 
-bool FileManager::emptyFile(const char* fileDirectory) {
+bool FileManager::fileEmpty(const char* fileDirectory) {
 	ofstream file(fileDirectory, ios::trunc);
 		//opens the file in truncate (t r u n c) mode
 	if (!file.is_open()) {
@@ -116,23 +119,38 @@ bool FileManager::isHere(const char* searchTarget, const char* fileDirectory) {
 	return false;
 }
 
+bool FileManager::isHere(const char* searchTarget, vector<string> vString) {
+	for (std::string& str : vString) {
+		if (str.find(searchTarget) != std::string::npos) {
+			return true;
+		} 
+	}
+	return false;
+}
+
 
 bool FileManager::isEmpty(const char* fileDirectory) {
 	ifstream file(fileDirectory); // open the file
 	return file.peek() == ifstream::traits_type::eof(); // check if the file is empty
 }
 
+
 bool FileManager::isEqual(const char* variable, const char* value, const char* fileDirectory) {
-	return std::string(value) == whatIs(variable, fileDirectory); 
+	return std::string(value) == isWhat(variable, fileDirectory);
 }
 
 
-string FileManager::whatIs(const char* variableName, const char* fileDir) { 
+bool FileManager::isEqual(const char* variable, const char* value, vector<string> vString) {
+	return std::string(value) == isWhat(variable, vString);
+}
+
+
+string FileManager::isWhat(const char* variableName, const char* fileDir) { 
 	return scanVectorFor(parseTHIS(fileDir), variableName); 
 }
 
 
-bool FileManager::addToFile(string content, const char* fileDirectory) {
+bool FileManager::fileInsert(string content, const char* fileDirectory) {
 	if (isHere(content.c_str(), fileDirectory)) {
 		return false; // Content already exists in the file.
 	}
@@ -148,14 +166,42 @@ bool FileManager::addToFile(string content, const char* fileDirectory) {
 	}
 }
 
-//	not the telemetry
-bool FileManager::logTo(string content, const char* fileDirectory) {
-	if (checkFile(fileDirectory)) {
-		addToFile(content, fileDirectory);
-		return true;
-	} else {
+bool FileManager::replaceValue(const char* variable, const char* newValue, const char* fileDirectory) {
+	std::ifstream inputFile(fileDirectory);
+	if (inputFile.fail()) {
+		ccFile.consoleManager(error, "couldn't open file to replace variable in");
 		return false;
 	}
+	std::string line;
+	std::string fileContents;
+	bool didReplace = false;
+
+	while (getline(inputFile, line)) {
+		size_t pos = line.find(variable);
+		if (pos != std::string::npos) {
+			size_t pos1 = line.find('[');
+			size_t pos2 = line.find(']');
+			if (pos1 != std::string::npos && pos2 != std::string::npos) {
+				line.replace(pos1 + 1, pos2 - 1, newValue);
+				didReplace = true;
+			}
+		}
+		fileContents += line + "\n";
+	}
+	inputFile.close();
+
+	if (didReplace) {
+		std::ofstream outputFile(fileDirectory);
+		if (!outputFile.is_open()) {
+			std::cerr << "Error: Could not open file " << fileDirectory << " for writing." << std::endl;
+			return false;
+		}
+		outputFile << fileContents;
+		outputFile.close();
+	}
+
+	return didReplace;
+
 }
 
 
@@ -179,7 +225,7 @@ string FileManager::scanVectorFor(const vector<string> vector, const char* varia
 }
 
 
-vector<string> FileManager::replaceValueInVector(vector<string>& vectorS, const char* variableName_, const char* newValue_) {
+vector<string> FileManager::replaceValue(const char* variableName_, const char* newValue_, vector<string>& vectorS) {
 	string variableName = variableName_;
 	string newValue = newValue_;
 	vector<string> result;
@@ -211,7 +257,7 @@ vector<string> FileManager::replaceValueInVector(vector<string>& vectorS, const 
 }
 
 
-string FileManager::formatString(const char* variableName, const char* value) {
+string FileManager::stringReformat(const char* variableName, const char* value) {
 	string result;
 	result += variableName;
 
@@ -224,7 +270,7 @@ string FileManager::formatString(const char* variableName, const char* value) {
 }
 
 
-string FileManager::whatIs(const char* variableName, vector<string>& vector) {
+string FileManager::isWhat(const char* variableName, vector<string>& vector) {
 	return scanVectorFor(vector, variableName);
 }
 

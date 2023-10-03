@@ -1,32 +1,58 @@
 #pragma once
 
+/// <summary>
+/// The Console Message Management Class
+/// 
+///		Possible Constructors:
+/// - default | visibility = true, logging = false
+/// - visibility constructor | visibility = your choice, logging = false
+/// - visibility and logging constructor | visibility and logging = your choice
+/// 
+///		Main Methods:
+/// - consoleManager
+/// - colour
+/// 
+///		Goals:
+/// - cleaning up the console with consistency, colours, and confetti! (sans confetti)
+/// - allow for console messages to be togglable (visibility)
+/// </summary>
+
 class ConsistentConsole {
 	//	Console Consistency!!! oh, the beauty of cc...
 public:
-	//	starts the class with console text enabled
+	//	visibility = true, logging = false
 	ConsistentConsole();
-	// starts the class with console text set to the provided bool
+	// visibility constructor
 	ConsistentConsole(bool visibility);
+	//	visibility and logging constructor
 	ConsistentConsole(bool visability, bool logToFile);
 
 	///	Methods
-	//	error, not error, update, or "". Then a message for context. ez.
+	//	error, warning, safe, or update. Then a message for context. ez.
 	bool consoleManager(const char* type, const char* MSG);
-	//	red, blue, green, purple, cyan, yellow, pink, clear
+	//	colour options: red, blue, green, purple, cyan, yellow, pink, clear
 	inline bool colour(const char* colour);
-	//	clear, newline, indent
+	//	modifier options: clear, newline, indent
 	inline bool colour(const char* colour, const char* modifier);
+
 	//	clears the console using system("cls"); (literally just system("cls");)
 	void clearConsole();
 
+#pragma region getters / setters
 	//	sets the console text state to the provided bool
 	void setConsoleState(bool state) { isConsoleTextEnabled = state; }
 	//	returns the consoleText boolean state
-	bool getConsoleState() { return isConsoleTextEnabled; }
-
+	bool getConsoleState() { return isConsoleTextEnabled; }	
+	
+	//	sets the logging state to the provided bool
+	void setLogState(bool state) { isLogging = state; }
+	//	returns the log boolean state
+	bool getLogState() { return isLogging; }
+#pragma endregion
 protected:
 	///	Variables
 	bool isConsoleTextEnabled;
+	bool isLogging;
 	//static std::map<std::string, std::string> types;
 };
 

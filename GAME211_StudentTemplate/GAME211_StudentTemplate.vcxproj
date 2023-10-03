@@ -23,17 +23,17 @@
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="ConsistentConsole.cpp" />
-    <ClCompile Include="debugFunc.cpp" />
+    <ClCompile Include="EntityMap.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PrettyPrinting.cpp" />
-    <ClCompile Include="Save.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="Scene2.cpp" />
@@ -47,16 +47,16 @@
     <ClInclude Include="Body.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="ConsistentConsole.h" />
-    <ClInclude Include="debugFunc.h" />
+    <ClInclude Include="EntityMap.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LogManager.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PrettyPrinting.h" />
-    <ClInclude Include="Save.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene1.h" />
@@ -123,6 +123,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\MathLibrary\include;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\MathLibrary\include;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnabled>false</VcpkgEnabled>
   </PropertyGroup>
@@ -163,6 +166,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

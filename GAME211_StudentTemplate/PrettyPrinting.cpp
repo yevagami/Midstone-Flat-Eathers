@@ -16,6 +16,7 @@ void PrettyPrinting::printXYZ(Vec3 v) {
 
 void PrettyPrinting::printXY(Vec3 v) {
 	ccPrint.colour(purple);
+
 	cout << "Vec3(2D):"; 	ccPrint.colour(pink); cout << "[" << v.x << ", " << v.y << "] \n";
 
 	ccPrint.colour(clear);
@@ -24,6 +25,7 @@ void PrettyPrinting::printXY(Vec3 v) {
 
 void PrettyPrinting::printXY(Vec2 v) {
 	ccPrint.colour(purple);
+
 	cout << "Vec2D:"; 	ccPrint.colour(pink); cout << "[" << v.x << ", " << v.y << "] \n";
 
 	ccPrint.colour(clear);
@@ -32,6 +34,7 @@ void PrettyPrinting::printXY(Vec2 v) {
 
 void PrettyPrinting::printVS(vector<string> vString) {
 	ccPrint.colour(purple);
+
 	cout << "Vector String: \n";
 	ccPrint.colour(pink);
 	if (!vString.empty()) {
@@ -49,6 +52,7 @@ void PrettyPrinting::printVS(vector<string> vString) {
 
 void PrettyPrinting::printS(string string) {
 	ccPrint.colour(purple);
+
 	cout << "String: [";
 	ccPrint.colour(pink);
 	cout << string;
