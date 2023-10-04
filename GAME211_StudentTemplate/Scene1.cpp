@@ -1,5 +1,6 @@
 #include "Scene1.h"
 #include <VMath.h>
+#include <SDL_ttf.h>
 
 #include "ConsistentConsole.h"
 ConsistentConsole cc;
@@ -16,8 +17,13 @@ EntityMap eMap;
 //keybinds::keys key;
 
 
+
+#include "Menu.h"
+
+
 // See notes about this constructor in Scene1.h.
 Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_){
+	
 	window = sdlWindow_;
     game = game_;
 	renderer = SDL_GetRenderer(window);
@@ -48,11 +54,65 @@ void Scene1::OnDestroy() {}
 void Scene1::Update(const float deltaTime) {
 	// Update player
 	game->getPlayer()->Update(deltaTime);
+
+
+
 }
 
 void Scene1::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
+
+
+	///	TEMP. MENUUUUUU::::::
+
+
+	//	1. Load a font
+	TTF_Font* font;
+	font = TTF_OpenFont("fonts/COMIC.TTF", 50);
+
+	//	testText is now ready to render...
+	//menu::Text testText(renderer, std::string("test"), font);
+	//testText.Render(0.0f,0.0f, )
+
+
+
+	if (!font) { cc.consoleManager(error, "failed to load font | scene1 render");
+	} else {
+
+		//	2. Set up a surface image with some text
+		SDL_Surface* text;
+		SDL_Color colour = { 255,255,255 }; //text = white
+
+		text = TTF_RenderText_Solid(font, "RAAAAAAA (centered)", colour);
+		if (!text) { cc.consoleManager(error, "failed to render text");
+		} else {
+
+
+
+
+			// 3. set up a texture for the surface
+			SDL_Texture* text_ure;
+			text_ure = SDL_CreateTextureFromSurface(renderer, text);
+
+
+			menu::Button testButton(renderer, 5.0, 2.0, 700.0, 300.0, string("meow"));
+			testButton.Render(text_ure, font);
+
+
+			//SDL_Rect dest = { 0,0,text->w, text->h };
+
+			//SDL_RenderCopy(renderer, text_ure, NULL, &dest);
+
+
+			//	freeing stuff up
+			SDL_DestroyTexture(text_ure);
+			SDL_FreeSurface(text);
+
+		}
+	}
+
+
 
 	// render the player
 	game->RenderPlayer(0.1f);

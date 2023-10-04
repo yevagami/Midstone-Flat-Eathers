@@ -2,6 +2,7 @@
 #include "scene_list.h"
 
 
+
 GameManager::GameManager() {
 	windowPtr = nullptr;
 	timer = nullptr;
@@ -12,6 +13,15 @@ GameManager::GameManager() {
 
 
 bool GameManager::OnCreate() {
+
+    /// font
+    if (TTF_Init() < 0) {
+  std::cout << TTF_GetError() << std::endl;
+        return false;
+    }
+    ///
+
+
     // My display is 1920 x 1080 but the following seems to work best to fill the screen.
     //const int SCREEN_WIDTH = 1540;
     //const int SCREEN_HEIGHT = 860;
@@ -145,6 +155,11 @@ void GameManager::OnDestroy(){
 	if (timer) delete timer;
 	if (currentScene) delete currentScene;
     if (player) delete player;
+    
+    
+    TTF_Quit();
+
+
 }
 
 
