@@ -118,19 +118,19 @@ void PrettyPrinting::printCC(const char* constChar) {
 
 void PrettyPrinting::printEM(EntityMap& entityMap) {
 	for (const auto& pair : entityMap.getEntityMap()) {
-		//std::string formatted = pair.first + " : " + pair.second; //	adjust g a p
+
 		std::string first = pair.first;
 		std::string second = pair.second;
 
 		ccPrint.colour(themeAccent);
 		cout << "Entity Map: ";
-
 		ccPrint.colour(themePrimary);
 		cout << first;
 		ccPrint.colour(themeSecondary);
 		cout << " : ";
 		ccPrint.colour(themePrimary);
 		cout << second << "\n";
+
 	}
 
 	ccPrint.colour(clear);

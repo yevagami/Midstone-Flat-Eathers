@@ -25,6 +25,7 @@ private:
 	class EntityMap* eMap;
 
 };
+
 #pragma region constants
 extern const char* themePrimary;
 extern const char* themeSecondary;

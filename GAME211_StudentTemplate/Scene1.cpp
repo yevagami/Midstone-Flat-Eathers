@@ -68,6 +68,7 @@ void Scene1::Render() {
 
 
 	//	1. Load a font
+
 	TTF_Font* font;
 	font = TTF_OpenFont("fonts/COMIC.TTF", 50);
 
@@ -81,22 +82,25 @@ void Scene1::Render() {
 	} else {
 
 		//	2. Set up a surface image with some text
+
 		SDL_Surface* text;
 		SDL_Color colour = { 255,255,255 }; //text = white
 
 		text = TTF_RenderText_Solid(font, "RAAAAAAA (centered)", colour);
 		if (!text) { cc.consoleManager(error, "failed to render text");
 		} else {
-
 			// 3. set up a texture for the surface
+
 			SDL_Texture* text_ure;
 			text_ure = SDL_CreateTextureFromSurface(renderer, text);
 
-
-			menu::Button testButton(renderer, 5.0, 2.0, 700.0, 300.0, string("ig this literally does not matter"));
+			menu::Button testButton(renderer, 5.0, 5.0);
+			menu::Button myAsson(renderer, 5.0, 500.0);
 			testButton.setBackgroundColor(menu::SDL_COLOR_WHEAT);
+			myAsson.setScreenDimensions(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 			testButton.Render(text_ure, font);
+			myAsson.Render(text_ure, font);
 
 
 			//	freeing stuff up

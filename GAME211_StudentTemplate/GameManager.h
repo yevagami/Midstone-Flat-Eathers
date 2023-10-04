@@ -9,6 +9,15 @@
 #include "PlayerBody.h"
 
 
+// My display is 1920 x 1080 but the following seems to work best to fill the screen.
+//const int SCREEN_WIDTH = 1540;
+//const int SCREEN_HEIGHT = 860;
+
+// Use 1000x600 for less than full screen
+const int SCREEN_WIDTH = 1366;
+const int SCREEN_HEIGHT = 768;
+
+
 class GameManager {
 private:
 	/// These are called "forward declarations" The idea is that a pointer is 
@@ -29,6 +38,7 @@ private:
     class PlayerBody *player;
 
 public:
+
 	GameManager();
 	~GameManager();
 	bool OnCreate();

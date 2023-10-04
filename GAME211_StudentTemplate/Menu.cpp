@@ -141,8 +141,8 @@ SDL_Color SDL_COLOR_YELLOW_GREEN = { 154, 205, 50, 255 };
 #pragma endregion
 
 
-	menu::Button::Button(SDL_Renderer* buttRenderer, int x, int y, int width, int height, const std::string& buttText)
-		: renderer(buttRenderer), rect({ x, y, width, height }), text(buttText), isTextCentered(false) {
+	menu::Button::Button(SDL_Renderer* buttRenderer, int x, int y, int width, int height, bool centered)
+		: renderer(buttRenderer), rect({ x, y, width, height }), isTextCentered(centered) {
 		backgroundColour = SDL_COLOR_GRAY;     // Default background color
 		textColour = SDL_COLOR_BLACK;              // Default text color
 		borderColour = SDL_COLOR_BLACK;          // Default border color
@@ -231,6 +231,18 @@ SDL_Color SDL_COLOR_YELLOW_GREEN = { 154, 205, 50, 255 };
 
 	void Button::setCentered(bool centered) {
 		isTextCentered = centered;
+	}
+
+
+	void Button::setScreenDimensions(int screenWidth_, int screenHeight_, bool centered) {
+		this->screenHeight_b = screenHeight_;
+		this->screenWidth_b = screenWidth_;
+
+		if (centered) {
+			rect.x = (screenWidth_ - rect.w) / 2;
+			rect.y = (screenHeight_ - rect.h) / 2;
+		}
+
 	}
 #pragma endregion
 

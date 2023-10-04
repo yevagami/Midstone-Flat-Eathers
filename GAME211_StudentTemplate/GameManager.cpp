@@ -22,14 +22,6 @@ bool GameManager::OnCreate() {
     ///
 
 
-    // My display is 1920 x 1080 but the following seems to work best to fill the screen.
-    //const int SCREEN_WIDTH = 1540;
-    //const int SCREEN_HEIGHT = 860;
-
-    // Use 1000x600 for less than full screen
-    const int SCREEN_WIDTH = 1366;
-    const int SCREEN_HEIGHT = 768;
-
     windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {
 		OnDestroy();
@@ -47,7 +39,7 @@ bool GameManager::OnCreate() {
 	}
 
     // select scene for specific assignment
-    currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
+    currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
 
     // create player
     float mass = 1.0f;

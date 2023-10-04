@@ -148,6 +148,8 @@ namespace menu {
 
     class MenuInterface {
     public:
+        MenuInterface(int screenWidth, int screenHeight);
+
 
         //  shouldn't need any private/protected members
 
@@ -156,44 +158,76 @@ namespace menu {
 
 class Button {
 public:
-    //  renderer, xPos, yPos, width, height, text
-    Button(SDL_Renderer* buttRenderer, int x, int y, int width, int height, const std::string& buttText);
-
-    void Render(SDL_Texture* textTexture, TTF_Font* font);  //  renders the 'beauton'
-    void HandleEvent(SDL_Event& event); //  handles events (mouse clicks)
-    void SetOnClick(std::function<void()> onClick); //  sets a callback function for when its clicked
-          //  to use this lambda function, do this (without comments): 
-          //     create myButton(*parameters*);
-          //     myButton.SetOnClick ([]) () 
-          //    {
-          // 
-          //         std::cout << "the code to execute goes here (not a cout but yknow)" << endl;
-          // 
-          //    }
-
-    bool isMouseOver(int mouseX, int mouseY);   //  is the mouse hovering over?
+        /// Constructor
+        //  renderer, x position, y position, button width, button height, text to display
+    Button(SDL_Renderer* buttRenderer, int x, int y, int width = 600, int height = 300, bool centered = true);
+    
+        /// Methods
+    //  renders the 'beauton'
+    void Render(SDL_Texture* textTexture, TTF_Font* font);
+    //  handles events (mouse clicks and hovering)
+    void HandleEvent(SDL_Event& event);
+    //  sets a callback function for when its clicked
+    void SetOnClick(std::function<void()> onClick);
+          //  to set this 'lambda function', do this:
+          //    *code making the button, aButton*
+         ///    aButton.SetOnClick ([]) () 
+         ///    {
+         /// 
+         ///                **code**
+         /// 
+         ///    }
+          //
 
 protected:
+    //  renderer
     SDL_Renderer* renderer;
+    //  a rectangle
     SDL_Rect rect;
+    //  button text
     std::string text;
 
-    std::function<void()> OnClick; //  holds a function to be executed when the button is clicked
-#pragma region style
-      ///  styling
+    //  holds a function to be executed when the button is clicked. A function as a variable
+    std::function<void()> OnClick;
+
+#pragma region styling [tw: aesthetic]
+protected:
+      ///  Variables
+    //  button's background colour
     SDL_Color backgroundColour;
+    //  button's text colour
     SDL_Color textColour;
-    SDL_Color borderColour;
-    bool roundedCorners;
+    //  centered text flag
     bool isTextCentered;
 
+    int screenWidth_b;
+    int screenHeight_b;
+
 public:
-    void setBackgroundColor(SDL_Color color); // Set background color
-    void setTextColor(SDL_Color color);       // Set text color
-    void setBorderColor(SDL_Color color);     // Set border color
-    void setBorderWidth(int width);           // Set border width
-    void setRoundedCorners(bool rounded);     // Enable or disable rounded corners
-    void setCentered(bool centered);          // Enable or disable centering
+    // set background color
+    void setBackgroundColor(SDL_Color color);
+    // set text color
+    void setTextColor(SDL_Color color);   
+    // enable or disable centering
+    void setCentered(bool centered);   
+    //  give it the screen dimensions
+    void setScreenDimensions(int screenWidth_, int screenHeight_, bool centered = true);
+#pragma endregion
+#pragma region other methods
+    //  is the mouse hovering over the button's dimensions? [true/false]
+    bool isMouseOver(int mouseX, int mouseY);
+
+
+    /// in progress
+    // set border color
+    void setBorderColor(SDL_Color color);
+    // enable or disable rounded corners
+    void setRoundedCorners(bool rounded);
+    //  button's boarder colour
+    SDL_Color borderColour;
+    //  rounded corners flag
+    bool roundedCorners;
+
 #pragma endregion
 };
 
@@ -202,10 +236,11 @@ struct Text {
 public:
     //  Constructor: renderer, text string, and the font
     Text(SDL_Renderer* renderer_, const std::string& text_, TTF_Font* font_);
-    void setText(const std::string& newText);
 
     //  render the text at the given position in the given colour
     void Render(int x, int y, SDL_Color textColour);
+
+    void setText(const std::string& newText);
 
 protected:
     SDL_Renderer* renderer;
