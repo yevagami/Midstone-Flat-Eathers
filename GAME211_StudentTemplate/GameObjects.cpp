@@ -1,31 +1,28 @@
 #include "GameObjects.h"
 
-GameObject::GameObject(const char* objectName, Vec3 position_) {
+GameObject::GameObject(const char* objectName) {
 	isSolid = true;
 	isActive = true;
 
 	name = objectName;
-	position = position_;
 	textureFile = "";
 	texture = nullptr;
 }
 
-GameObject::GameObject(const char* objectName, Vec3 position_, const char* textureFile_) {
+GameObject::GameObject(const char* objectName, const char* textureFile_) {
 	isSolid = true;
 	isActive = true;
 
 	name = objectName;
-	position = position_;
 	textureFile = textureFile_;
 	texture = nullptr;
 }
 
-GameObject::GameObject(const char* objectName, Vec3 position_, const char* textureFile_, bool isActive_, bool isSolid_) {
+GameObject::GameObject(const char* objectName, const char* textureFile_, bool isActive_, bool isSolid_) {
 	isSolid = isSolid_;
 	isActive = isActive_;
 
 	name = objectName;
-	position = position_;
 	textureFile = textureFile_;
 	texture = nullptr;
 }

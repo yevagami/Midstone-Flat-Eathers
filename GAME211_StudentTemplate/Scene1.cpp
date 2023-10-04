@@ -3,11 +3,17 @@
 
 #include "ConsistentConsole.h"
 ConsistentConsole cc;
+#include "PrettyPrinting.h"
+PrettyPrinting print;
 #include "FileManager.h"
 FileManager file;
-#include "LogManager.h"
 #include "SaveManager.h"
 SaveManager save;
+#include "EntityMap.h"
+EntityMap eMap;
+
+//#include "KeybindHandler.h"
+//keybinds::keys key;
 
 
 // See notes about this constructor in Scene1.h.
@@ -56,23 +62,25 @@ void Scene1::Render() {
 
 void Scene1::HandleEvents(const SDL_Event& event)
 {
-
-
-
-
-
-
+	/*key.HandleEvents(event);*/
 
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
 
+
 #pragma region debuggingKeys
 	//	debug keys (for debugging)
 	if (event.key.keysym.sym == SDLK_f && event.type == SDL_KEYDOWN) {
+		///	SAVE SYSTEM TESTING
 		if (file.fileCheck(save.getCurrentSaveFileDirectory())) {
 				
 			cc.consoleManager(update, "current save file directory created!");
-			save.addValueToCurrentSaveFile("animal", "dog");
+			save.addValueToCurrentSaveFile("animal", "dog1");	//	unique variables required or they wont store
+			save.addValueToCurrentSaveFile("animal", "dog2");	//	*only dog1 stores*
+			save.addValueToCurrentSaveFile("animal", "dog3");	//	
+
+			save.addValueToCurrentSaveFile("felines", "cat, 4 legs, 100 whiskers, 3200 toes, your social insurance number");
+			save.addValueToCurrentSaveFile("canines", "dog, 3 legs, rip last leg, this is soo sad, im gonna const bool myself-");
 
 		} else {
 			cc.consoleManager(error, "cannot create save file for some reason");
@@ -81,6 +89,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 
 	if (event.key.keysym.sym == SDLK_u && event.type == SDL_KEYDOWN) {
+		///	CONSOLE TESTING
 			//	console messages display: how to call the method
 		cc.consoleManager(error, "this is an error message");
 		cc.consoleManager(warning, "this is a warning message");
@@ -91,15 +100,38 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 	if (event.key.keysym.sym == SDLK_i && event.type == SDL_KEYDOWN) {
 
+		///	doesnt work rn >:(
+		save.clearBothSaves();
+	
 	}
 
 
 	if (event.key.keysym.sym == SDLK_o && event.type == SDL_KEYDOWN) {
+		eMap.insertEntity(string("test"), string("meowmeowmeow"));
 
 	}
 
 
-	if (event.key.keysym.sym == SDLK_p && event.type == SDL_KEYDOWN) {
+	if (event.key.keysym.sym == SDLK_n && event.type == SDL_KEYDOWN) {
+		print.printVS(eMap.findEntitiesByData(string("dog")));
+		print.printVS(eMap.findEntitiesByData(string("meow")));
+	}
+	
+
+	if (event.key.keysym.sym == SDLK_m && event.type == SDL_KEYDOWN) {
+		///	ENTITY MAP TESTING
+			//	to insert into an entit map...
+		eMap.insertEntity(string("rex"), string("is my dog"));
+		eMap.insertEntity(string("deedee"), string("was my dog ;-;"));
+		eMap.insertEntity(string("turnip"), string("is my cat"));
+		eMap.insertEntity(string("adriel"), string("is adriel"));
+			//	DELETING the test entity
+		eMap.removeEntity(string("test"));
+			//	printing...
+		print.printEM(eMap);
+			//	to serialize that entity map...
+		eMap.saveEntityMapToFile("SaveData/entitymap.txt");
+
 
 	}
 #pragma endregion

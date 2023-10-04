@@ -5,7 +5,7 @@
 #include <chrono>
 #include <sstream>
 
-const char* LogManager::createLogFile() {
+const char* LogManager::createLogFileDir() {
     string dateAndTime = giveDateTimeString();
     ostringstream formattedFileDir;
    
@@ -28,7 +28,7 @@ bool LogManager::logTo(string content, const char* fileDirectory) {
 }
 
 bool LogManager::logToFile(std::string content) {
-    if (logTo(content, createLogFile())) {
+    if (logTo(content, createLogFileDir())) {
         return true; }
 
     return false;

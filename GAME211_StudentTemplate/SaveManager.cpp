@@ -3,7 +3,7 @@
 #include "PrettyPrinting.h"
 
 //FileManager fmSave;
-ConsistentConsole ccSave(false);
+ConsistentConsole ccSave(true);
 SaveState ssSave;
 //PrettyPrinting ppSave; //	lol pp
 
@@ -54,16 +54,17 @@ bool SaveManager::writeSave() {
 
 	bool SaveManager::clearBothSaves() {
 		if (!clearOldSave() && !clearCurrentSave()) {
-			ccSave.consoleManager("error", "couldn't clear both the Saves");
+			ccSave.consoleManager(error, "couldn't clear both the Saves");
 			return false;
 		}
 
+		ccSave.consoleManager(update, "cleared both files");
 		return true;
 	}
 
 bool SaveManager::clearOldSave() {
 	if (!fileEmpty(getSaveFileDirectory())) {
-		ccSave.consoleManager("error", "couldn't clear the Old Save");
+		ccSave.consoleManager(error, "couldn't clear the Old Save");
 		return false;
 	}
 
@@ -72,7 +73,7 @@ bool SaveManager::clearOldSave() {
 
 bool SaveManager::clearCurrentSave() {
 	if (!fileEmpty(getCurrentSaveFileDirectory())) {
-		ccSave.consoleManager("error", "couldn't clear the Current Save");
+		ccSave.consoleManager(error, "couldn't clear the Current Save");
 		return false;
 	}
 

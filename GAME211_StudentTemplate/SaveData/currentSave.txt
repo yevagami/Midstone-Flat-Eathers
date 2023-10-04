@@ -1,1 +1,3 @@
-animal: [dog]
+animal: [dog1]
+felines: [cat, 4 legs, 100 whiskers, 3200 toes, your social insurance number]
+canines: [dog, 3 legs, rip last leg, this is soo sad, im gonna const bool myself-]

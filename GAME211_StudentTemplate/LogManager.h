@@ -7,9 +7,8 @@ public:
 	bool logToFile(std::string content);
 
 private:
-	const char* createLogFile();
+	const char* createLogFileDir();
 	bool logTo(string content, const char* fileDirectory);
-
 	string giveDateTimeString();
 
 protected:

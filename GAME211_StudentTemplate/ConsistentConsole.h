@@ -3,14 +3,13 @@
 /// <summary>
 /// The Console Message Management Class
 /// 
-///		Possible Constructors:
-/// - default | visibility = true, logging = false
-/// - visibility constructor | visibility = your choice, logging = false
-/// - visibility and logging constructor | visibility and logging = your choice
+///		Constructor:
+/// - visibility = true, logging = false
 /// 
 ///		Main Methods:
 /// - consoleManager
-/// - colour
+/// - colour (colour)
+/// - colour (colour, modifier)
 /// 
 ///		Goals:
 /// - cleaning up the console with consistency, colours, and confetti! (sans confetti)
@@ -21,18 +20,14 @@ class ConsistentConsole {
 	//	Console Consistency!!! oh, the beauty of cc...
 public:
 	//	visibility = true, logging = false
-	ConsistentConsole();
-	// visibility constructor
-	ConsistentConsole(bool visibility);
-	//	visibility and logging constructor
-	ConsistentConsole(bool visability, bool logToFile);
+	ConsistentConsole(bool visability = true, bool logToFile = false);
 
 	///	Methods
-	//	error, warning, safe, or update. Then a message for context. ez.
+	//	error, warning, safe, or update. then a message for context. ez.
 	bool consoleManager(const char* type, const char* MSG);
 	//	colour options: red, blue, green, purple, cyan, yellow, pink, clear
 	inline bool colour(const char* colour);
-	//	modifier options: clear, newline, indent
+	//	modifier options: clear, newline, indent, blink, bold, italic
 	inline bool colour(const char* colour, const char* modifier);
 
 	//	clears the console using system("cls"); (literally just system("cls");)
@@ -60,6 +55,7 @@ protected:
 extern const char* clear;
 extern const char* newline;
 extern const char* indent;
+
 extern const char* blue;
 extern const char* cyan;
 extern const char* green;
@@ -70,6 +66,7 @@ extern const char* red;
 
 extern const char* bold;
 extern const char* italic;
+extern const char* blink;
 
 extern const char* error;
 extern const char* update;

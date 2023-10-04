@@ -7,6 +7,9 @@
 #include <SDL_image.h>
 #include "Hitbox.h"
 
+
+#include "KeybindHandler.h"
+
 using namespace MATH;
 
 class Body {

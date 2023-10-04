@@ -35,8 +35,6 @@ using namespace std;
 	//	formatString (stringReformatForSerialization)
 	//	
 
-
-
 struct FileManager {
 private:
 	//	DO. NOT. USE. pls<3

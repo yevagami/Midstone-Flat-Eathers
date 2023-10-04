@@ -120,6 +120,12 @@
     <ClCompile Include="LogManager.cpp">
       <Filter>Source Files\Saving</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeybindHandler.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Weapons.h">
@@ -193,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="LogManager.h">
       <Filter>Header Files\Saving</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeybindHandler.h">
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

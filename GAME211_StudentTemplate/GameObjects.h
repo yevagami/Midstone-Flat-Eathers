@@ -4,7 +4,7 @@
 #include <SDL_image.h>
 
 //	steal the structure of gails body / playerbody classes >:)
-
+//or just migrate to it in entirely
 
 //	its so lonely in my mansion :(
 class GameObject {
@@ -21,15 +21,13 @@ protected:
 		*name;
 
 public:
-
-	Vec3 position;
 	 // Constructors
 	// given a name and a position
-	GameObject(const char* objectName, Vec3 position_); 
+	GameObject(const char* objectName); 
 	// given a name, a position, and a texture file
-	GameObject(const char* objectName, Vec3 position_, const char* textureFile_); 
+	GameObject(const char* objectName, const char* textureFile_); 
 	// given a name, position, textureFileDir, isActive bool, and an isSolid bool
-	GameObject(const char *objectName, Vec3 position_, const char* textureFile_, bool isActive_, bool isSolid_); 
+	GameObject(const char *objectName, const char* textureFile_, bool isActive_, bool isSolid_); 
 
 	~GameObject() {};
 
@@ -55,7 +53,7 @@ public:
 	const char* getName();
 	void setName(const char* newName);
 
-	//	SDL_Texture
+	//	Texture
 	SDL_Texture* getSDLTexture();
 	void setSDLTexture(SDL_Texture* newTexture);	
 	const char* getTextureFile();	
@@ -64,30 +62,28 @@ public:
 #pragma endregion
 
 protected:
-	Body body;		 //	physPos, screenPos, mass, vel, accel, 
+	//Body body;		 //	physPos, screenPos, mass, vel, accel, 
 	Hitbox hitbox;	 //	hitbox
 };
 
-
-
-class Entity : public GameObject {
-public:
-
-	//void Update();
-	//void HandleEvents(const SDL_Event* events);
-	//void OnCreate();
-	//void OnDestroy();
-
-protected: 
-	float 
-		maxHealth,
-		defaultHealth,
-		currentHealth;
-
-protected:
-	void setMaxHealth(float newMaxHealth);
-	void setDefaulyHealth(float newDefaultHealth);
-	void setCurrentHealth(float newCurrentHealth);
-
-
-};
+//class Entity : public GameObject {
+//public:
+//
+//	//void Update();
+//	//void HandleEvents(const SDL_Event* events);
+//	//void OnCreate();
+//	//void OnDestroy();
+//
+//protected: 
+//	float 
+//		maxHealth,
+//		defaultHealth,
+//		currentHealth;
+//
+//protected:
+//	void setMaxHealth(float newMaxHealth);
+//	void setDefaulyHealth(float newDefaultHealth);
+//	void setCurrentHealth(float newCurrentHealth);
+//
+//
+//};

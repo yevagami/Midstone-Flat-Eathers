@@ -1,7 +1,6 @@
 #include "Body.h"
 
-Body::Body()
-{
+Body::Body() {
     pos = Vec3();
     vel = Vec3();
     accel = Vec3();
@@ -14,7 +13,7 @@ Body::Body()
 	image = nullptr;
 }
 
-Body::Body(
+Body::Body (
     Vec3 pos_, Vec3 vel_, Vec3 accel_,
     float mass_,
     float radius_ = 0.0f,
@@ -35,22 +34,22 @@ Body::Body(
     image = nullptr;
 }
 
-void Body::LoadHitbox(float w_, float h_){
+void Body::LoadHitbox(float w_, float h_) {
     hitbox.w = w_;
     hitbox.h = h_;
     hitbox.x = pos.x;
     hitbox.y = pos.y;
 }
 
-Body::~Body(){
-}
+Body::~Body()
+{}
 
 void Body::ApplyForce( Vec3 force_ ) {
     accel = force_ / mass;
 }
 
 
-void Body::Update( float deltaTime ){
+void Body::Update( float deltaTime ) {
     vel = vel + accel * deltaTime;
     pos = pos + vel * deltaTime + accel * (0.5f * deltaTime * deltaTime);
     
@@ -64,11 +63,14 @@ void Body::Update( float deltaTime ){
 }
 
 
-void Body::HandleEvents( const SDL_Event& event ){
+void Body::HandleEvents( const SDL_Event& event ) {
+    
+    //  michael- i'm moving this stuff. imma make a keybinds class for global keybinds, then u can just do "keybindHandler.HandleEvents(event)"
+    //              - its mostly for stuff like escape = quit, mouse input tracking, etc. WE'LL SEE HOW IT GOES!
     if ( event.type == SDL_MOUSEBUTTONDOWN ){
         printf("Mousedown\n");
     }
-    else if ( event.type == SDL_KEYDOWN ){
+    if ( event.type == SDL_KEYDOWN ){
         if ( event.key.keysym.scancode == SDL_SCANCODE_SPACE){
             printf("Space\n");
         }

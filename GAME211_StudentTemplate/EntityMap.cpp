@@ -1,8 +1,6 @@
 #include "EntityMap.h"
 
 
-
-
 void EntityMap::insertEntity(const std::string& entityName, const std::string& entityData) {
 	entityMap[entityName] = entityData;
 }
@@ -64,6 +62,54 @@ bool EntityMap::loadEntityMapFromFile(const char* fileDirectory) {
 	inputFile.close();
 	return true;
 
+}
+
+bool EntityMap::hasEntity(const std::string& entityName) {
+	return entityMap.find(entityName) != entityMap.end();
+}
+
+bool EntityMap::entityHasData(const std::string& entityName, const std::string& searchData) {
+	auto it = entityMap.find(entityName);
+	if (it != entityMap.end()) {
+		return it->second == searchData;
+	}
+	return false;
+}
+
+void EntityMap::clearAllEntities() {
+	entityMap.clear(); }
+
+bool EntityMap::clearEntity(const std::string& entityName) {
+	auto it = entityMap.find(entityName);
+	if (it != entityMap.end()) {
+		entityMap.erase(it);
+		return true;
+	}
+	return false;
+}
+
+int EntityMap::getEntityCount() {
+	return static_cast<int>(entityMap.size());
+}
+
+bool EntityMap::updateEntityData(const std::string& entityName, const std::string newEntityData) {
+	auto it = entityMap.find(entityName);
+	if (it != entityMap.end()) {
+		it->second = newEntityData;
+		return true;
+	}
+	return false;
+}
+
+std::vector<std::string> EntityMap::findEntitiesByData(std::string searchData) {
+		//	by substring method, for more exact do the other one
+	std::vector<std::string> matchingEntities;
+	for (const auto& pair : entityMap) {
+		if (pair.second.find(searchData) != std::string::npos) {
+			matchingEntities.push_back(pair.first);
+		}
+	}
+	return matchingEntities;
 }
 
 

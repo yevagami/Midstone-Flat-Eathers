@@ -27,7 +27,7 @@
 /// 
 /// </summary>
 
-struct EntityMap : private FileManager {
+class EntityMap : private FileManager {
 public:
 	//	return a string containing the entity data for the given entity
 	std::string getEntityData(const std::string& entityName);
@@ -40,6 +40,21 @@ public:
 	bool saveEntityMapToFile(const char* fileDirectory);
 	//	loads the map from a provided file
 	bool loadEntityMapFromFile(const char* fileDirectory);
+
+
+	//	TO DO
+	bool hasEntity(const std::string& entityName);
+	bool entityHasData(const std::string& entityName, const std::string& searchData);
+
+	void clearAllEntities();
+	bool clearEntity(const std::string& entityName);
+	int getEntityCount();
+	bool updateEntityData(const std::string& entityName, const std::string newEntityData);
+	
+	std::vector<std::string> findEntitiesByData(std::string searchData);
+
+public:
+	std::unordered_map<std::string, std::string> getEntityMap() { return entityMap; }
 
 protected:
 	std::unordered_map <std::string, std::string> entityMap;		//	frick getters and setters. they're ugly. this variable is special.

@@ -88,10 +88,20 @@ bool FileManager::fileRead(vector<string>& savedData, const char* fileDirectory)
 
 
 bool FileManager::fileEmpty(const char* fileDirectory) {
+	///	doesnt work haha (idk)
 	ofstream file(fileDirectory, ios::trunc);
-		//opens the file in truncate (t r u n c) mode
+	//opens the file in truncate (t r u n c) mode
+	if (file.fail()) { 
+		ccFile.consoleManager(error, "no trunc :( (file didn't empty"); 
+		return false; 
+	}
+
+	file.close();
+	file.open(fileDirectory, ios::out | ios::trunc);  // reopen for writing and truncation
+
 	if (!file.is_open()) {
-		ccFile.consoleManager(error, "no trunc :( (file didn't empty");
+		ccFile.consoleManager(error, "no trunc");
+		return false;
 	}
 
 	file.close();
