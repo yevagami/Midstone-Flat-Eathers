@@ -141,8 +141,8 @@ SDL_Color SDL_COLOR_YELLOW_GREEN = { 154, 205, 50, 255 };
 #pragma endregion
 
 
-	menu::Button::Button(SDL_Renderer* buttRenderer, int x, int y, int width, int height, bool centered)
-		: renderer(buttRenderer), rect({ x, y, width, height }), isTextCentered(centered) {
+	menu::Button::Button(SDL_Renderer* buttRenderer, int width, int height, int x, int y, bool textCentered)
+		: renderer(buttRenderer), rect({ x, y, width, height }), isTextCentered(textCentered) {
 		backgroundColour = SDL_COLOR_GRAY;     // Default background color
 		textColour = SDL_COLOR_BLACK;              // Default text color
 		borderColour = SDL_COLOR_BLACK;          // Default border color
@@ -234,15 +234,45 @@ SDL_Color SDL_COLOR_YELLOW_GREEN = { 154, 205, 50, 255 };
 	}
 
 
-	void Button::setScreenDimensions(int screenWidth_, int screenHeight_, bool centered) {
+	void Button::SetScreenDimensions(int screenWidth_, int screenHeight_, bool buttonCentered) {
 		this->screenHeight_b = screenHeight_;
 		this->screenWidth_b = screenWidth_;
 
-		if (centered) {
+		if (buttonCentered) {
 			rect.x = (screenWidth_ - rect.w) / 2;
 			rect.y = (screenHeight_ - rect.h) / 2;
 		}
 
+	}
+
+
+	void Button::setRectX(int newRectX) {
+		rect.x = newRectX;
+	}
+
+
+	void Button::offsetRectX(int newRectXOffset){
+		rect.x =+ newRectXOffset;
+	}
+	
+
+	void Button::setRectY(int newRectY) {
+		rect.y = newRectY;
+	}
+	
+
+	void Button::offsetRectY(int newRectYOffset) {
+		rect.y =+ newRectYOffset;
+	}
+	
+
+	void Button::setRectWidth(int newRectWidth) {
+		rect.w = newRectWidth;
+	}
+	
+
+	void Button::setRectHeight(int newRectHeight) {
+		rect.h = newRectHeight;
 	}
 #pragma endregion
 

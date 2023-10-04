@@ -93,22 +93,36 @@ void Scene1::Render() {
 
 			SDL_Texture* text_ure;
 			text_ure = SDL_CreateTextureFromSurface(renderer, text);
+				//	Creating the button objects (low parameters)
+			menu::Button testButton(renderer);
+			menu::Button myAsson(renderer);
 
-			menu::Button testButton(renderer, 5.0, 5.0);
-			menu::Button myAsson(renderer, 5.0, 500.0);
+				//	setting button attributes manually
+			//	test button
 			testButton.setBackgroundColor(menu::SDL_COLOR_WHEAT);
-			myAsson.setScreenDimensions(SCREEN_WIDTH, SCREEN_HEIGHT);
+			testButton.setRectHeight(500);
+			testButton.setRectWidth(500);
+			//	other button
+			myAsson.setRectHeight(500);
+			myAsson.setRectWidth(500);
+			myAsson.SetScreenDimensions(SCREEN_WIDTH, SCREEN_HEIGHT, true);
+			myAsson.offsetRectY(500);
 
+
+				//	rendering buttons
 			testButton.Render(text_ure, font);
 			myAsson.Render(text_ure, font);
 
 
+
+
+
 			//	freeing stuff up
 			SDL_DestroyTexture(text_ure);
-			SDL_FreeSurface(text);
-
 		}
+		SDL_FreeSurface(text);
 	}
+
 
 
 

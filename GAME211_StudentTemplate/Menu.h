@@ -146,27 +146,20 @@ namespace menu {
 #pragma endregion
 
 
-    class MenuInterface {
-    public:
-        MenuInterface(int screenWidth, int screenHeight);
-
-
-        //  shouldn't need any private/protected members
-
-    };
-
 
 class Button {
 public:
         /// Constructor
         //  renderer, x position, y position, button width, button height, text to display
-    Button(SDL_Renderer* buttRenderer, int x, int y, int width = 600, int height = 300, bool centered = true);
+    Button(SDL_Renderer* buttRenderer, int width = 0, int height = 0, int x = 0, int y = 0, bool textCentered = true);
     
         /// Methods
     //  renders the 'beauton'
     void Render(SDL_Texture* textTexture, TTF_Font* font);
     //  handles events (mouse clicks and hovering)
     void HandleEvent(SDL_Event& event);
+    //  give it the screen dimensions
+    void SetScreenDimensions(int screenWidth_, int screenHeight_, bool buttonCentered = true);
     //  sets a callback function for when its clicked
     void SetOnClick(std::function<void()> onClick);
           //  to set this 'lambda function', do this:
@@ -199,6 +192,8 @@ protected:
     SDL_Color textColour;
     //  centered text flag
     bool isTextCentered;
+    //  centered text flag
+    bool isButtonCentered;
 
     int screenWidth_b;
     int screenHeight_b;
@@ -209,9 +204,14 @@ public:
     // set text color
     void setTextColor(SDL_Color color);   
     // enable or disable centering
-    void setCentered(bool centered);   
-    //  give it the screen dimensions
-    void setScreenDimensions(int screenWidth_, int screenHeight_, bool centered = true);
+    void setCentered(bool buttonCentered);
+
+    void setRectX(int newRectX);
+    void offsetRectX(int newRectXOffset);
+    void setRectY(int newRectY);
+    void offsetRectY(int newRectYOffset);
+    void setRectWidth(int newRectWidth);
+    void setRectHeight(int newRectHeight);
 #pragma endregion
 #pragma region other methods
     //  is the mouse hovering over the button's dimensions? [true/false]
