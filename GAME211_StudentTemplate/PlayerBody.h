@@ -52,12 +52,13 @@ public:
     void HandleEvents( const SDL_Event& event );
     void Update( float deltaTime );
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
+    void CollisionResponse(float deltaTime, Body* other);
     ~PlayerBody();
 
 private:
     //timers and cooldowns
-    Clock* dash_timer; //how long the player can dash for
-    Clock* dash_cooldown; //how long before the player can dash again
+    Clock* dash_timer = nullptr; //how long the player can dash for
+    Clock* dash_cooldown = nullptr; //how long before the player can dash again
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables
@@ -68,8 +69,8 @@ private:
     Vec3 movement;
     Vec3 playerDirection;
     bool canMove = true;
-    float walkSpeed = 10.0f;
-    float dashSpeed = 20.0f;
+    float walkSpeed = 100.0f;
+    float dashSpeed = 200.0f;
     float currentSpeed;
     float maxSpeed;
 

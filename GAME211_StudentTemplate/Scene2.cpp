@@ -4,8 +4,8 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
-	xAxis = 25.0f;
-	yAxis = 15.0f;
+	xAxis = 1600.0f;
+	yAxis = 900.0f;
 }
 
 Scene2::~Scene2(){}
@@ -24,19 +24,30 @@ bool Scene2::OnCreate(){
 	name = "scene2";
 	
 	block = new Body();
-	block->setPos(Vec3(xAxis * 0.5f + 5.0f, yAxis * 0.5f, 0.0f));
+	block->setPos(Vec3(xAxis * 0.5f + 200.0f, yAxis * 0.5f, 0.0f));
 	block->setImage(IMG_Load("Textures/blue_block.jpg"));
 	block->setTexture(SDL_CreateTextureFromSurface(renderer, block->getImage()));
-	block->LoadHitbox(225.0f, 225.0f);
+	block->LoadHitbox(
+		225.0f,
+		225.0f
+	);
 
-	game->getPlayer()->LoadHitbox(542.0f * 0.1f, 571.0f * 0.1f);
+	game->getPlayer()->LoadHitbox(
+		542.0f * 0.1f,
+		571.0f * 0.1f
+	);
+
 	return true;
 }
 
 void Scene2::OnDestroy(){}
 
 void Scene2::Update(const float time){
-	game->getPlayer()->getHitbox().collisionCheck(block->getHitbox());
+	if (game->getPlayer()->getHitbox().collisionCheck(block->getHitbox())) {
+		game->getPlayer()->CollisionResponse(time, block);
+		std::cout << "Collided\n";
+	};
+
 	block->Update(time);
 	game->getPlayer()->Update(time);
 }
@@ -48,13 +59,9 @@ void Scene2::Render(){
 	block->Render(renderer, projectionMatrix);
 	game->RenderPlayer(0.1f);
 
-	Hitbox playerHitbox = game->getPlayer()->getHitbox();
-	Vec3 hitboxPos = projectionMatrix * Vec3(playerHitbox.x, playerHitbox.y, 0.0f);
-
-	SDL_Rect box{ hitboxPos.x - 0.5f * playerHitbox.w, hitboxPos.y - 0.5f * playerHitbox.h, playerHitbox.w, playerHitbox.h };
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderDrawRect(renderer, &box);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	game->getPlayer()->RenderHitbox(renderer, projectionMatrix, 0.1f);
+	block->RenderHitbox(renderer, projectionMatrix, 1.0f);
+	
 	SDL_RenderPresent(renderer);
 }
 

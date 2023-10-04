@@ -137,6 +137,12 @@ void PlayerBody::Update( float deltaTime ){
 
 }
 
+void PlayerBody::CollisionResponse(float deltaTime, Body* other){
+	pos.x -= vel.x * deltaTime;
+	pos.y -= vel.y * deltaTime;
+	pos.z -= vel.z * deltaTime;
+}
+
 PlayerBody::~PlayerBody(){
     for (Clock* item : cooldowns) { delete item; }
     cooldowns.clear();

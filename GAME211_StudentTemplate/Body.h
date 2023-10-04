@@ -69,6 +69,7 @@ public:
     virtual void setPos( Vec3 pos );
 
     virtual void Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale = 1.0f);
+    void RenderHitbox(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale = 1.0f);
 };
 
 #endif /* BODY_H */

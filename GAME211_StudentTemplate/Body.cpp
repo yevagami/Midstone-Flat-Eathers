@@ -57,7 +57,6 @@ void Body::Update( float deltaTime ) {
     orientation += rotation * deltaTime;
     rotation += angular * deltaTime;
 
-    //Update hitbox position
     hitbox.x = pos.x;
     hitbox.y = pos.y;
 }
@@ -109,4 +108,21 @@ void Body::Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale)
 
     SDL_RenderCopyEx(renderer, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
+}
+
+void Body::RenderHitbox(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale){
+    //Vec3 hitboxCoords = projectionMatrix * Vec3(hitbox.x, hitbox.y, 0.0f);
+
+    SDL_Rect box;
+   // box.x = static_cast<int>(hitboxCoords.x);
+    //box.y = static_cast<int>(hitboxCoords.y);
+
+    box.x = static_cast<int>(hitbox.x);
+    box.y = static_cast<int>(hitbox.y);
+    box.w = static_cast<int>(hitbox.w);
+    box.h = static_cast<int>(hitbox.h);
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(renderer, &box);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
