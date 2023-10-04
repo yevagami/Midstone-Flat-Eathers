@@ -88,21 +88,15 @@ void Scene1::Render() {
 		if (!text) { cc.consoleManager(error, "failed to render text");
 		} else {
 
-
-
-
 			// 3. set up a texture for the surface
 			SDL_Texture* text_ure;
 			text_ure = SDL_CreateTextureFromSurface(renderer, text);
 
 
-			menu::Button testButton(renderer, 5.0, 2.0, 700.0, 300.0, string("meow"));
+			menu::Button testButton(renderer, 5.0, 2.0, 700.0, 300.0, string("ig this literally does not matter"));
+			testButton.setBackgroundColor(menu::SDL_COLOR_WHEAT);
+
 			testButton.Render(text_ure, font);
-
-
-			//SDL_Rect dest = { 0,0,text->w, text->h };
-
-			//SDL_RenderCopy(renderer, text_ure, NULL, &dest);
 
 
 			//	freeing stuff up
