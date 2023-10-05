@@ -19,8 +19,13 @@ private:
 public:
 
 	std::vector<ui::Button*> allButtons;
-
-
+	TTF_Font* font;
+	SDL_Texture* text_ure;
+	//ui::Button myAsson;
+	//ui::Button myBeuton;
+	//ui::Button myMegatron;
+	//ui::Button myNeutron;
+	//ui::Button myProton;
 
 
 	// This constructor may be different from what you've seen before

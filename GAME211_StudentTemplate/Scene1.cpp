@@ -37,6 +37,9 @@ bool Scene1::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
+
+
+
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
@@ -45,6 +48,7 @@ bool Scene1::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	name = "scene1";
+
 
 	return true;
 }
@@ -66,7 +70,6 @@ void Scene1::Render() {
 
 	///	::TEMP MENU STUFF::
 	//	1. Load a font
-	TTF_Font* font;
 	font = TTF_OpenFont("fonts/COMIC.TTF", 35);
 
 	if (!font) {
@@ -81,12 +84,11 @@ void Scene1::Render() {
 			cc.consoleManager(error, "failed to render text");
 		} else { 
 			// 3. set up a texture for the surface
-			SDL_Texture* text_ure;
 			text_ure = SDL_CreateTextureFromSurface(renderer, text);
 
 
 			//	Creating the button object (low parameter constructor edition)
-			ui::Button myAsson(renderer);
+			ui::Button myAsson(renderer, ui::SDL_Rectangle);
 			allButtons.push_back(&myAsson);
 			ui::Button myBeuton(renderer);
 			allButtons.push_back(&myBeuton);
@@ -95,22 +97,22 @@ void Scene1::Render() {
 			ui::Button myNeutron(renderer);
 			allButtons.push_back(&myNeutron);
 			//	Creating a button object (many parameters constructor edition)
-			ui::Button myProton(renderer, 3, 2, 0, 0,ui::SDL_COLOR_FOREST_GREEN, ui::SDL_COLOR_BLACK);
+			ui::Button myProton(renderer, 3, 2, 0, 0, ui::SDL_COLOR_FOREST_GREEN, ui::SDL_COLOR_BLACK);
 			allButtons.push_back(&myProton);
 
 			//	mass attribute changing
 			for (ui::Button* button : allButtons) {
 				button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-				button->setDimensions(75, 425);	//	default is 2 : 4
+				button->setDimensions(75, 425);
 				button->SetOnClick([] { cc.consoleManager(update, "button clicked"); });
 			}
 			//	single attribute changing
 			myAsson.offsetPosition(250);			myAsson.backgroundColour = ui::SDL_COLOR_POOPSTAIN;
 			myMegatron.offsetPosition(125);		myMegatron.backgroundColour = ui::SDL_COLOR_DARK_GREEN;
-			myProton.offsetPosition(0);				//	colour set in the constructor ;), we could change it here but we dont need to
+			myProton.offsetPosition(0);				//	colour set in the constructor, we could change it here but we dont need to
 			myNeutron.offsetPosition(-125);		myNeutron.backgroundColour = ui::SDL_COLOR_STARRY_NIGHT;
 			myBeuton.offsetPosition(-250);		myBeuton.backgroundColour = ui::SDL_COLOR_MARINE_BLUE;
-	
+
 			//	rendering buttons (not ideal cuz each button has a seperate font and text texture)
 			for (ui::Button* button : allButtons) {
 				button->Render(text_ure, font);
@@ -122,7 +124,7 @@ void Scene1::Render() {
 		}
 
 		SDL_FreeSurface(text);
-
+		
 	}
 
 	// render the player

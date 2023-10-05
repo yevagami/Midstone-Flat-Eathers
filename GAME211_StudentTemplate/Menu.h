@@ -6,8 +6,15 @@
 #include <functional>
 
 
+/// Constants 
 namespace ui {
-#pragma region constants
+
+    extern SDL_Rect SDL_Rectangle;
+    extern SDL_Rect SDL_Wide_Rectangle;
+    extern SDL_Rect SDL_Tall_Rectangle;
+    extern SDL_Rect SDL_Square;
+
+#pragma region colour constants
     extern SDL_Color SDL_COLOR_ALICE_BLUE;
     extern SDL_Color SDL_COLOR_AMETHYST;
     extern SDL_Color SDL_COLOR_ANTIQUE_WHITE;
@@ -230,10 +237,14 @@ namespace ui {
     extern SDL_Color SDL_COLOR_MYSTIC_PURPLE;
     extern SDL_Color SDL_COLOR_TEAL_BLUE;
     extern SDL_Color SDL_COLOR_BUBBLES;
-    extern SDL_Color SDL_COLOR_BUBBLEGUM; 
-    extern SDL_Color SDL_COLOR_POOPSTAIN; 
+    extern SDL_Color SDL_COLOR_BUBBLEGUM;
+    extern SDL_Color SDL_COLOR_POOPSTAIN;
 #pragma endregion
+}
 
+
+/// Main Classes
+namespace ui {
 class Button {
     //  to do:
     //  - visibility
@@ -257,23 +268,47 @@ class Button {
     // - !!attributes are public!!
     //  
 public:
-        /// Constructor
+        /// Constructors
     Button(
         SDL_Renderer* buttonRenderer_,
-
-        int width = 4,
-        int height = 2,
-        int x = 0,
-        int y = 0,
-
+        SDL_Rect rect_ = { 0, 0, 4, 2 },
         SDL_Color backgroundColour_ = SDL_COLOR_MYSTIC_PURPLE,
         SDL_Color borderColour_ = SDL_COLOR_BLACK,
+        const char* fontToDisplay = "COMIC.TTF",
+        int fontSize = 45
+    ) : 
+        buttonRenderer(buttonRenderer_), 
+        rect(rect_), 
+        backgroundColour(backgroundColour_), 
+        borderColour(borderColour_)
+    {
+        screenHeight_ref = 0;
+        screenWidth_ref = 0;
 
+        isTextCentered = true;
+        isButtonCentered = false;
+        useGradientBackground = false;
+        isGradientVertical = false;
+        gradientEnd = SDL_COLOR_MYSTIC_PURPLE;
+        gradientStart = SDL_COLOR_BLACK;
+    }
+        //  manual rect component entry
+    Button(
+        SDL_Renderer* buttonRenderer_,
+        int width,
+        int height,
+        int x,
+        int y,
+        SDL_Color backgroundColour_ = SDL_COLOR_MYSTIC_PURPLE,
+        SDL_Color borderColour_ = SDL_COLOR_BLACK,
         TTF_Font* buttonFont_ = nullptr,
         const char* fontToDisplay = "COMIC.TTF",
         int fontSize = 45
-
-    ) : buttonRenderer(buttonRenderer_), rect({ x, y, width, height }), backgroundColour(backgroundColour_), borderColour(borderColour_)
+    ) : 
+        buttonRenderer(buttonRenderer_), 
+        rect({ x, y, width, height }), 
+        backgroundColour(backgroundColour_), 
+        borderColour(borderColour_)
     {
         screenHeight_ref = 0;
         screenWidth_ref = 0;
@@ -359,7 +394,6 @@ public:
 #pragma endregion
 };
 
-
 struct Text {
 public:
     Text(SDL_Renderer* textRenderer, const std::string& textText, TTF_Font* textFont)
@@ -375,6 +409,5 @@ protected:
     SDL_Renderer* buttonRenderer;
     TTF_Font* font;
 };
-
 
 }
