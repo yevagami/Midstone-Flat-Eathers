@@ -233,17 +233,20 @@ namespace ui {
     extern SDL_Color SDL_COLOR_BUBBLEGUM; 
     extern SDL_Color SDL_COLOR_POOPSTAIN; 
 #pragma endregion
+
 class Button {
     //  to do:
     //  - visibility
     //  - background image support (uh oh)
     //  - gradients
+    //  - many colours
+    //  - colour map... (will break ui)
     //  - fonts other than... my beloved...
     //  - diff shaped buttons
     //  - text as a component, then icon support
-    // 
+    // [DONE] - rendering as a component
     //
-
+    //
     //class goals
     // - simple, but powerful.
     // - default values
@@ -263,7 +266,7 @@ public:
         int x = 0,
         int y = 0,
 
-        SDL_Color backgroundColour_ = SDL_COLOR_BLANCHED_ALMOND,
+        SDL_Color backgroundColour_ = SDL_COLOR_MYSTIC_PURPLE,
         SDL_Color borderColour_ = SDL_COLOR_BLACK,
 
         TTF_Font* buttonFont_ = nullptr,
@@ -279,7 +282,7 @@ public:
         isButtonCentered = false;
         useGradientBackground = false;
         isGradientVertical = false;
-        gradientEnd = SDL_COLOR_ANTIQUE_WHITE;
+        gradientEnd = SDL_COLOR_MYSTIC_PURPLE;
         gradientStart = SDL_COLOR_BLACK;
 
     }
@@ -287,16 +290,9 @@ public:
     ~Button() 
     {}
 
-        /// Methods
-    //  renders the 'beauton' components
+        /// Public Methods
+    //  renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
     void Render(SDL_Texture* textTexture, TTF_Font* font);
-    //  renders the background component
-    void RenderBackground();
-    //  renders the borders component
-    void RenderBorder();
-    //  renders the text component
-    void RenderText(SDL_Texture* textTexture, TTF_Font* font);
-
     //  handles events (mouse clicks and hovering)
     void HandleEvent(SDL_Event& event);
     //  for animations, hover effects, and live-things
@@ -304,58 +300,61 @@ public:
     //  sets a callback function for when its clicked
     void SetOnClick(std::function<void()> onClick);
 
-
 protected:
-    //  buttonRenderer
+        /// Private Methods
+    //  renders the background component
+    void RenderBackground();
+    //  renders the borders component
+    void RenderBorder();
+    //  renders the text component
+    void RenderText(SDL_Texture* textTexture, TTF_Font* font);
+
+        /// Private Variables
+        //  a "the renderer"(tm)
     SDL_Renderer* buttonRenderer;
-    //  a function as a variable
+       //  a function as a variable
     std::function<void()> OnClick;
-    //  a rectangle
+       //  a rectangle
     SDL_Rect rect;
 
-
 #pragma region styling [tw: aesthetic]
-
 protected:
-      ///  Variables
+      ///  Private Variables
     int screenWidth_ref;
     int screenHeight_ref;
 
 public:
-    //  button's background colour
+    /// Editable Attributes [ public variables lmao ]
+       //  button's background colour
     SDL_Color backgroundColour;
-    //  button's boarder colour
+       //  button's boarder colour
     SDL_Color borderColour;
-    //  centered text flag
+       //  centered text flag
     bool isTextCentered;
-    //  centered text flag
+       //  centered text flag
     bool isButtonCentered;
 
-    //  indev
+        //  indev stuff
     bool useGradientBackground;
     bool isGradientVertical;
     SDL_Color gradientStart;
     SDL_Color gradientEnd;
 
-    //// set background color
-    //void setBackgroundColor(SDL_Color color);
-    //// set text color
-    //void setTextColor(SDL_Color color);   
-    //// enable or disable centering
-    //void setCentered(bool buttonCentered);
-
-        //  absolute position
+        //  set position (absolutely transform)
     void setPosition(int newRectY = 0, int newRectX = 0);
-        //  relative position
+        //  offset position (relative transform)
     void offsetPosition(int newRectYOffset = 0, int newRectXOffset = 0);
-    //  give it the screen dimensions
-    void centerPosition(int screenWidth_, int screenHeight_);
-        //  dimensions
+        //  set the dimensions
     void setDimensions(int newRectHeight, int newRectWidth);
-    //  scale the dimensions
+        //  scale the dimensions
     void scaleDimensions(int newRectHeightScaler, int newRectWidthScaler);
+        //  scale the dimensions
     void scaleDimensions(int scaler);
-    //  is the mouse hovering over the button's dimensions? [true/false]
+        //  center to screen
+    void centerPosition(int screenWidth_, int screenHeight_);
+
+        /// Checks
+        //  is the mouse hovering over the button's dimensions? [true/false]
     bool isMouseOver(int mouseX, int mouseY);
 #pragma endregion
 };
@@ -375,13 +374,6 @@ public:
 protected:
     SDL_Renderer* buttonRenderer;
     TTF_Font* font;
-};
-
-
-//  there will be a string with the file directory location. 
-// so these are just the font file names
-enum class fonts {
-    COMIC,
 };
 
 
