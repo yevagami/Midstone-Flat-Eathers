@@ -4,7 +4,7 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
-	xAxis = 1600.0f;
+	xAxis = 2000.0f;
 	yAxis = 900.0f;
 }
 
@@ -43,10 +43,25 @@ bool Scene2::OnCreate(){
 void Scene2::OnDestroy(){}
 
 void Scene2::Update(const float time){
+	//camera position update
+	int w, h;
+	SDL_GetWindowSize(window, &w, &h);
+	Matrix4 ndc = MMath::viewportNDC(w, h);
+
+	float left = game->getPlayer()->getPos().x - xAxis / 2.0f;
+	float right = game->getPlayer()->getPos().x + xAxis / 2.0f;
+	float top = game->getPlayer()->getPos().y - yAxis / 2.0f;
+	float bottom = game->getPlayer()->getPos().y + yAxis / 2.0f;
+
+	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);
+	projectionMatrix = ndc * ortho;
+
+
 	if (game->getPlayer()->getHitbox().collisionCheck(block->getHitbox())) {
 		game->getPlayer()->CollisionResponse(time, block);
 		std::cout << "Collided\n";
 	};
+
 
 	block->Update(time);
 	game->getPlayer()->Update(time);

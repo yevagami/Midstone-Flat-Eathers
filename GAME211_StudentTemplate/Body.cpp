@@ -37,8 +37,8 @@ Body::Body (
 void Body::LoadHitbox(float w_, float h_) {
     hitbox.w = w_;
     hitbox.h = h_;
-    hitbox.x = pos.x;
-    hitbox.y = pos.y;
+    hitbox.x = pos.x - hitbox.w * 0.5f;
+    hitbox.y = pos.y - hitbox.h * 0.5f;
 }
 
 Body::~Body()
@@ -57,8 +57,8 @@ void Body::Update( float deltaTime ) {
     orientation += rotation * deltaTime;
     rotation += angular * deltaTime;
 
-    hitbox.x = pos.x;
-    hitbox.y = pos.y;
+    hitbox.x = pos.x - hitbox.w * 0.5f;
+    hitbox.y = pos.y - hitbox.h * 0.5f;
 }
 
 
