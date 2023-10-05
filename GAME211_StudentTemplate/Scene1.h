@@ -3,6 +3,8 @@
 
 #include <MMath.h>
 #include "Scene.h"
+#include <vector>
+#include "Menu.h"
 
 using namespace MATH;
 class Scene1 : public Scene {
@@ -15,6 +17,12 @@ private:
     Matrix4 inverseProjection;	// set in OnCreate()
 
 public:
+
+	std::vector<ui::Button*> allButtons;
+
+
+
+
 	// This constructor may be different from what you've seen before
 	// Notice the second parameter, and look in GameManager.cpp
 	// to see how this constructor is called.
