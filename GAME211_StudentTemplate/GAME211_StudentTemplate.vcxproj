@@ -27,7 +27,6 @@
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObjects.cpp" />
-    <ClCompile Include="Health.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="KeybindHandler.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -53,7 +52,6 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObjects.h" />
-    <ClInclude Include="Health.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="KeybindHandler.h" />
     <ClInclude Include="Level.h" />

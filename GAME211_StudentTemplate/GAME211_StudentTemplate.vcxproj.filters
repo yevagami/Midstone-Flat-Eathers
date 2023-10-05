@@ -99,9 +99,6 @@
     <ClCompile Include="Hitbox.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
-    <ClCompile Include="Health.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
     <ClCompile Include="PrettyPrinting.cpp">
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
@@ -181,9 +178,6 @@
     </ClInclude>
     <ClInclude Include="PrettyPrinting.h">
       <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
-      <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="Audio.h">
       <Filter>Header Files</Filter>

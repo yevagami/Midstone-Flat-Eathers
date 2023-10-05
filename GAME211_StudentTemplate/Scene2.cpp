@@ -4,7 +4,7 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
-	xAxis = 2000.0f;
+	xAxis = 1600.0f;
 	yAxis = 900.0f;
 }
 
@@ -65,6 +65,9 @@ void Scene2::Update(const float time){
 
 	block->Update(time);
 	game->getPlayer()->Update(time);
+
+	block->UpdateHitbox(projectionMatrix);
+	game->getPlayer()->UpdateHitbox(projectionMatrix);
 }
 
 void Scene2::Render(){
