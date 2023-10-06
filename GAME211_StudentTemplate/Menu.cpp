@@ -1,16 +1,15 @@
 #include "Menu.h"
-
 #include "ConsistentConsole.h"
-ConsistentConsole ccMenu;
+ConsistentConsole ccMenu(true);
 
-/// Button Class
+
 namespace ui {
-#pragma region main methods
+#pragma region Core Methods
+#pragma region Rendering
 	bool Button::Render() {
 		if (!RenderBackground() || !RenderBorder() || !RenderText()) {
-			return false;
+			return false; 
 		}
-
 		return true;
 	}
 
@@ -59,25 +58,25 @@ namespace ui {
 		}
 
 		SDL_Rect textRect = { x, y, textWidth, textHeight };
+		textRect.x += fontOffsetX;
+		textRect.y += fontOffsetY;
+
 		SDL_RenderCopy(buttonRenderer, buttonTextTexture, nullptr, &textRect);
 
 		return true;
 	}
-
+#pragma endregion
 
 	void Button::HandleEvent(SDL_Event& event) {
 		switch (event.type) {
 		case SDL_MOUSEBUTTONDOWN:
 			if (isMouseOver(event.button.x, event.button.y)) {
-				if (OnClick) {
-					ccMenu.consoleManager(safe, "button clicked");  OnClick();
-				}
-			}
+				if (OnClick) { ccMenu.consoleManager(safe, "button clicked"); 
+				OnClick(); } }
 			break;
 
 
 		}
-
 	}
 
 	void Button::Update(float deltaTime) {
@@ -125,7 +124,7 @@ namespace ui {
 	}
 
 
-	void Button::scaleDimensions(int newRectHeightScaler, int newRectWidthScaler) {
+	void Button::scaleDimensionsIndividually(int newRectHeightScaler, int newRectWidthScaler) {
 		rect.h = rect.h * newRectHeightScaler;
 		rect.w = rect.w * newRectWidthScaler;
 	}
@@ -136,6 +135,15 @@ namespace ui {
 		rect.h = rect.h * scaler;
 	}
 #pragma endregion
+	Uint8* SDLColorToUint8(SDL_Color color) {
+		static Uint8 rgba[4];
+		rgba[0] = color.r;
+		rgba[1] = color.g;
+		rgba[2] = color.b;
+		rgba[3] = color.a;
+		return rgba;
+	}
+
 }
 
 /// Text Struct
@@ -165,44 +173,17 @@ namespace ui {
 
 //  Constants
 namespace ui {
-
+#pragma region shapes
 	SDL_Rect SDL_Rectangle = { 0,0,400,200 };
 	SDL_Rect SDL_Testangle = { 0,0,425,75 };
 	SDL_Rect SDL_Wide_Rectangle = { 0,0,8,2 };
 	SDL_Rect SDL_Tall_Rectangle = { 0,0,2,4 };
 	SDL_Rect SDL_Square = { 0,0,2,2 };
+#pragma endregion
 
+	//273 preset colour variables - fri 6 2023
 #pragma region pride
-	SDL_Color SDL_COLOR_MUG = { 139, 69, 19, 255 };
-	SDL_Color SDL_COLOR_TOASTER = { 255, 140, 0, 255 };
-	SDL_Color SDL_COLOR_SOFA = { 255, 228, 181, 255 };
-	SDL_Color SDL_COLOR_BOOKSHELF = { 139, 69, 19, 255 };
-	SDL_Color SDL_COLOR_TELEVISION = { 0, 0, 128, 255 };
-	SDL_Color SDL_COLOR_PLANT_POT = { 0, 128, 0, 255 };
-	SDL_Color SDL_COLOR_LAMP = { 255, 255, 0, 255 };
-	SDL_Color SDL_COLOR_COMPUTER = { 0, 102, 204, 255 };
-	SDL_Color SDL_COLOR_BED = { 128, 0, 0, 255 };
-	SDL_Color SDL_COLOR_WARDROBE = { 128, 0, 128, 255 };
-	SDL_Color SDL_COLOR_CHAIR = { 255, 0, 0, 255 };
-	SDL_Color SDL_COLOR_FRIDGE = { 173, 216, 230, 255 };
-	SDL_Color SDL_COLOR_OVEN = { 210, 105, 30, 255 };
-	SDL_Color SDL_COLOR_MICROWAVE = { 255, 223, 186, 255 };
-	SDL_Color SDL_COLOR_CUTLERY = { 192, 192, 192, 255 };
-	SDL_Color SDL_COLOR_PLATE = { 255, 255, 0, 255 };
-	SDL_Color SDL_COLOR_GLASS = { 0, 255, 255, 255 };
-	SDL_Color SDL_COLOR_CANDLE = { 255, 0, 0, 255 };
-	SDL_Color SDL_COLOR_VASE = { 0, 128, 128, 255 };
-	SDL_Color SDL_COLOR_BLINDS = { 255, 255, 224, 255 };
-	SDL_Color SDL_COLOR_CARPET = { 128, 0, 0, 255 };
-	SDL_Color SDL_COLOR_SHOES = { 0, 0, 0, 255 };
-	SDL_Color SDL_COLOR_FRAME = { 255, 215, 0, 255 };
-	SDL_Color SDL_COLOR_RADIO = { 255, 99, 71, 255 };
-	SDL_Color SDL_COLOR_HEADPHONES = { 0, 0, 128, 255 };
-	SDL_Color SDL_COLOR_BRUSH = { 160, 82, 45, 255 };
-	SDL_Color SDL_COLOR_HAIR_DRYER = { 255, 105, 180, 255 };
-	SDL_Color SDL_COLOR_TOOTHBRUSH = { 0, 255, 0, 255 };
-	SDL_Color SDL_COLOR_WASHING_MACHINE = { 173, 216, 230, 255 };
-
+#pragma region colours
 	SDL_Color SDL_COLOR_ALICE_BLUE = { 240, 248, 255, 255 };
 	SDL_Color SDL_COLOR_ANTIQUE_WHITE = { 250, 235, 215, 255 };
 	SDL_Color SDL_COLOR_AQUA = { 0, 255, 255, 255 };
@@ -398,7 +379,6 @@ namespace ui {
 	SDL_Color SDL_COLOR_ROBIN_EGG_BLUE = { 0, 204, 204, 255 };
 	SDL_Color SDL_COLOR_RUST_BROWN = { 139, 37, 0, 255 };
 	SDL_Color SDL_COLOR_SALAMANDER = { 0, 113, 115, 255 };
-	SDL_Color SDL_COLOR_SANDSTONE = { 203, 182, 119, 255 };
 	SDL_Color SDL_COLOR_SAPPHIRE_BLUE = { 8, 37, 103, 255 };
 	SDL_Color SDL_COLOR_SCARLET_RED = { 255, 36, 0, 255 };
 	SDL_Color SDL_COLOR_SEAFOAM_GREEN = { 120, 212, 168, 255 };
@@ -443,6 +423,142 @@ namespace ui {
 	SDL_Color SDL_COLOR_MYSTIC_PURPLE = { 128, 0, 128, 255 };
 	SDL_Color SDL_COLOR_TEAL_BLUE = { 0, 128, 128, 255 };
 	SDL_Color SDL_COLOR_POOPSTAIN = { 139, 69, 19, 255 };
+#pragma endregion
+#pragma region appliances dlc
+	SDL_Color SDL_COLOR_MUG = { 139, 69, 19, 255 };
+	SDL_Color SDL_COLOR_TOASTER = { 255, 140, 0, 255 };
+	SDL_Color SDL_COLOR_SOFA = { 255, 228, 181, 255 };
+	SDL_Color SDL_COLOR_BOOKSHELF = { 139, 69, 19, 255 };
+	SDL_Color SDL_COLOR_TELEVISION = { 0, 0, 128, 255 };
+	SDL_Color SDL_COLOR_PLANT_POT = { 0, 128, 0, 255 };
+	SDL_Color SDL_COLOR_LAMP = { 255, 255, 0, 255 };
+	SDL_Color SDL_COLOR_COMPUTER = { 0, 102, 204, 255 };
+	SDL_Color SDL_COLOR_BED = { 128, 0, 0, 255 };
+	SDL_Color SDL_COLOR_WARDROBE = { 128, 0, 128, 255 };
+	SDL_Color SDL_COLOR_CHAIR = { 255, 0, 0, 255 };
+	SDL_Color SDL_COLOR_FRIDGE = { 173, 216, 230, 255 };
+	SDL_Color SDL_COLOR_OVEN = { 210, 105, 30, 255 };
+	SDL_Color SDL_COLOR_MICROWAVE = { 255, 223, 186, 255 };
+	SDL_Color SDL_COLOR_CUTLERY = { 192, 192, 192, 255 };
+	SDL_Color SDL_COLOR_PLATE = { 255, 255, 0, 255 };
+	SDL_Color SDL_COLOR_CANDLE = { 255, 0, 0, 255 };
+	SDL_Color SDL_COLOR_VASE = { 0, 128, 128, 255 };
+	SDL_Color SDL_COLOR_BLINDS = { 255, 255, 224, 255 };
+	SDL_Color SDL_COLOR_CARPET = { 128, 0, 0, 255 };
+	SDL_Color SDL_COLOR_SHOES = { 0, 0, 0, 255 };
+	SDL_Color SDL_COLOR_FRAME = { 255, 215, 0, 255 };
+	SDL_Color SDL_COLOR_RADIO = { 255, 99, 71, 255 };
+	SDL_Color SDL_COLOR_HEADPHONES = { 0, 0, 128, 255 };
+	SDL_Color SDL_COLOR_BRUSH = { 160, 82, 45, 255 };
+	SDL_Color SDL_COLOR_HAIR_DRYER = { 255, 105, 180, 255 };
+	SDL_Color SDL_COLOR_TOOTHBRUSH = { 0, 255, 0, 255 };
+	SDL_Color SDL_COLOR_WASHING_MACHINE = { 173, 216, 230, 255 };
+#pragma endregion
+#pragma region minecraft blocks dlc
+	SDL_Color SDL_COLOR_ANVIL = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_BARREL = { 107, 67, 35, 255 };
+	SDL_Color SDL_COLOR_BAMBOO = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_BEDROCK = { 68, 68, 68, 255 };
+	SDL_Color SDL_COLOR_BEEHIVE = { 170, 85, 0, 255 };
+	SDL_Color SDL_COLOR_BEE_NEST = { 170, 85, 0, 255 };
+	SDL_Color SDL_COLOR_BELL = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_BLAST_FURNACE = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_CAMPFIRE = { 170, 85, 0, 255 };
+	SDL_Color SDL_COLOR_CHEST = { 127, 89, 62, 255 };
+	SDL_Color SDL_COLOR_COAL_ORE = { 35, 35, 35, 255 };
+	SDL_Color SDL_COLOR_COBBLESTONE = { 105, 105, 105, 255 };
+	SDL_Color SDL_COLOR_COMPOSTER = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_CRAFTING_TABLE = { 170, 85, 0, 255 };
+	SDL_Color SDL_COLOR_DIRT = { 134, 96, 67, 255 };
+	SDL_Color SDL_COLOR_DISPENSER = { 80, 80, 80, 255 };
+	SDL_Color SDL_COLOR_ENCHANTING_TABLE = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_END_PORTAL_FRAME = { 38, 23, 34, 255 };
+	SDL_Color SDL_COLOR_FLETCHING_TABLE = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_FURNACE = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_GOLD_ORE = { 229, 188, 0, 255 };
+	SDL_Color SDL_COLOR_GLASS = { 186, 210, 214, 128 };
+	SDL_Color SDL_COLOR_GRAVEL = { 136, 126, 126, 255 };
+	SDL_Color SDL_COLOR_GRASS_BLOCK = { 96, 128, 24, 255 };
+	SDL_Color SDL_COLOR_GRASS_PATH = { 170, 191, 100, 255 };
+	SDL_Color SDL_COLOR_GRINDSTONE = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_IRON_ORE = { 136, 136, 136, 255 };
+	SDL_Color SDL_COLOR_ICE = { 125, 202, 239, 128 };
+	SDL_Color SDL_COLOR_JUKEBOX = { 85, 45, 45, 255 };
+	SDL_Color SDL_COLOR_LADDER = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_LAPIS_LAZULI_ORE = { 37, 79, 161, 255 };
+	SDL_Color SDL_COLOR_LAVA = { 255, 50, 0, 255 };
+	SDL_Color SDL_COLOR_LILAC = { 194, 117, 194, 255 };
+	SDL_Color SDL_COLOR_LOOM = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_NOTEBLOCK = { 166, 113, 60, 255 };
+	SDL_Color SDL_COLOR_OAK_LEAVES = { 81, 179, 80, 255 };
+	SDL_Color SDL_COLOR_OAK_LOG = { 85, 64, 14, 255 };
+	SDL_Color SDL_COLOR_OBSIDIAN = { 8, 0, 29, 255 };
+	SDL_Color SDL_COLOR_PACKED_ICE = { 148, 203, 234, 255 };
+	SDL_Color SDL_COLOR_PEONY = { 238, 149, 167, 255 };
+	SDL_Color SDL_COLOR_RED_TULIP = { 245, 63, 47, 255 };
+	SDL_Color SDL_COLOR_ROSE_BUSH = { 255, 0, 0, 255 };
+	SDL_Color SDL_COLOR_SAND = { 219, 190, 116, 255 };
+	SDL_Color SDL_COLOR_SANDSTONE = { 218, 211, 169, 255 };
+	SDL_Color SDL_COLOR_SCAFFOLDING = { 85, 85, 85, 128 };
+	SDL_Color SDL_COLOR_SEAGRASS = { 48, 171, 0, 128 };
+	SDL_Color SDL_COLOR_SMITHING_TABLE = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_SOUL_CAMPFIRE = { 85, 0, 170, 255 };
+	SDL_Color SDL_COLOR_STONE = { 125, 125, 125, 255 };
+	SDL_Color SDL_COLOR_STONECUTTER = { 85, 85, 85, 255 };
+	SDL_Color SDL_COLOR_TALL_GRASS = { 170, 191, 100, 255 };
+	SDL_Color SDL_COLOR_TALL_SEAGRASS = { 48, 171, 0, 255 };
+	SDL_Color SDL_COLOR_TORCH = { 255, 236, 85, 255 };
+	SDL_Color SDL_COLOR_WATER = { 40, 40, 170, 255 };
+	SDL_Color SDL_COLOR_WET_SPONGE = { 133, 133, 133, 255 };
+#pragma endregion
+#pragma region overwat dlc
+	// Tank Heroes
+	SDL_Color SDL_COLOR_DVA = { 255, 0, 255, 255 };          // D.Va (Magenta)
+	SDL_Color SDL_COLOR_DOOMFIST = { 128, 64, 0, 255 };      // Doomfist (Brown)
+	SDL_Color SDL_COLOR_JUNKER_QUEEN = { 255, 128, 0, 255 }; // Junker Queen (Orange)
+	SDL_Color SDL_COLOR_ORISA = { 0, 255, 0, 255 };          // Orisa (Green)
+	SDL_Color SDL_COLOR_RAMATTRA = { 128, 0, 128, 255 };     // Ramattra (Purple)
+	SDL_Color SDL_COLOR_REINHARDT = { 77, 85, 86, 255 };      // Reinhardt
+	SDL_Color SDL_COLOR_ROADHOG = { 128, 64, 64, 255 };      // Roadhog (Dark Red)
+	SDL_Color SDL_COLOR_SIGMA = { 128, 128, 128, 255 };      // Sigma (Gray)
+	SDL_Color SDL_COLOR_WINSTON = { 0, 0, 255, 255 };        // Winston (Blue)
+	SDL_Color SDL_COLOR_WRECKING_BALL = { 255, 192, 0, 255 }; // Wrecking Ball (Gold)
+	SDL_Color SDL_COLOR_ZARYA = { 255, 192, 192, 255 };      // Zarya (Light Pink)
 
+	// Damage Heroes
+	SDL_Color SDL_COLOR_ASHE = { 192, 192, 192, 255 };       // Ashe (Silver)
+	SDL_Color SDL_COLOR_BASTION = { 0, 128, 0, 255 };        // Bastion (Dark Green)
+	SDL_Color SDL_COLOR_CASSIDY = { 192, 64, 0, 255 };       // Cassidy (Rust)
+	SDL_Color SDL_COLOR_ECHO = { 0, 192, 192, 255 };         // Echo (Turquoise)
+	SDL_Color SDL_COLOR_GENJI = { 0, 192, 0, 255 };          // Genji (Lime)
+	SDL_Color SDL_COLOR_HANZO = { 64, 64, 64 ,255 };         // Hanzo (Black)
+	SDL_Color SDL_COLOR_JUNKRAT = { 192 ,192 ,0 ,255 };        // Junkrat (Yellow)
+	SDL_Color SDL_COLOR_MEI = { 128 ,128 ,255 ,255 };          // Mei (Light Blue)
+	SDL_Color SDL_COLOR_PHARAH = { 64 ,64 ,192 ,255 };         // Pharah (Indigo)
+	SDL_Color SDL_COLOR_REAPER = { 128 ,0 ,0 ,255 };           // Reaper (Maroon)
+	SDL_Color SDL_COLOR_SOJOURN = { 128 ,128 ,128 ,255 };      // Sojourn (Gray)
+	SDL_Color SDL_COLOR_SOLDIER_76 = { 192 ,192 ,192 ,255 };   // Soldier:76 (Silver)
+	SDL_Color SDL_COLOR_SOMBRA = { 128 ,0 ,128 ,255 };         // Sombra (Purple)
+	SDL_Color SDL_COLOR_SYMMETRA = { 64 ,64 ,192 ,255 };       // Symmetra (Indigo)
+	SDL_Color SDL_COLOR_TORBJORN = { 192 ,64 ,0 ,255 };        // Torbjörn (Rust)
+	SDL_Color SDL_COLOR_TRACER = { 227, 105, 7, 255 };         // Tracer
+	SDL_Color SDL_COLOR_WIDOWMAKER = { 64 ,0 ,128 ,255 };      // Widowmaker (Violet)
+
+	// Support Heroes
+	SDL_Color SDL_COLOR_ANA = { 100, 162, 216, 255 };             // Ana 
+	SDL_Color SDL_COLOR_BAPTISTE = { 42, 139, 141, 255 };        // Baptiste 
+	SDL_Color SDL_COLOR_BRIGITTE = { 192 ,96 ,96 ,255 };       // Brigitte (Salmon)
+	SDL_Color SDL_COLOR_ILLARI = { 254, 225, 65, 255 };         // Illari 
+	SDL_Color SDL_COLOR_KIRIKO = { 177, 58, 69, 255 };         // Kiriko
+	SDL_Color SDL_COLOR_LIFEWEAVER = { 0 ,192 ,0 ,255 };       // Lifeweaver (Lime)
+	SDL_Color SDL_COLOR_LUCIO = { 119, 190, 9 ,255 };          // Lúcio
+	SDL_Color SDL_COLOR_MERCY = { 255 ,255 ,0 ,255 };          // Mercy (Yellow)
+	SDL_Color SDL_COLOR_MOIRA = { 128 ,0 ,128 ,255 };          // Moira (Purple)
+	SDL_Color SDL_COLOR_ZENYATTA = { 192 ,192 ,0 ,255 };       // Zenyatta (Yellow)
+#pragma endregion
+#pragma region jail dlc
+	SDL_Color SDL_COLOR_ROSE_TOY = { 213, 45, 78, 255 };
+	SDL_Color SDL_COLOR_BAD_DRAGON = { 199, 54, 62, 255 };
+#pragma endregion
 #pragma endregion
 }

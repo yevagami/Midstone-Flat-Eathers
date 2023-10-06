@@ -63,49 +63,44 @@ void Scene1::Update(const float deltaTime) {
 }
 
 void Scene1::Render() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	
+	//	Creating the button objects 
+	ui::Button myButton(renderer, "my button", ui::SDL_Testangle, ui::SDL_COLOR_WASHING_MACHINE, ui::fontMap.at("comic sans"));
+	ui::Button myAsson(renderer, "ass", ui::SDL_Testangle, ui::SDL_COLOR_MOIRA, ui::fontMap.at("heebo"));
+	ui::Button myBeuton(renderer, "beu", ui::SDL_Testangle, ui::SDL_COLOR_REINHARDT, ui::fontMap.at("open sans"));
+	ui::Button myJimmy(renderer, "meg", ui::SDL_Testangle, ui::SDL_COLOR_CASSIDY, ui::fontMap.at("roboto"));
+	ui::Button myNeutron(renderer, "neu", ui::SDL_Testangle, ui::SDL_COLOR_ROADHOG);
+	ui::Button myProton(renderer, "BOO!!!", ui::SDL_Testangle, ui::SDL_COLOR_MEI, ui::fontMap.at("gothic"), {100}, ui::SDL_COLOR_ROSE_TOY);
 
-
-	//	Creating the button object (low parameter constructor edition)
-	ui::Button myAsson(renderer, "ass", ui::SDL_Testangle);
+	allButtons.push_back(&myButton);
 	allButtons.push_back(&myAsson);
-	ui::Button myBeuton(renderer, "beu", ui::SDL_Testangle);
 	allButtons.push_back(&myBeuton);
-	ui::Button myMegatron(renderer, "meg", ui::SDL_Testangle);
-	allButtons.push_back(&myMegatron);
-	ui::Button myNeutron(renderer, "neu", ui::SDL_Testangle);
+	allButtons.push_back(&myJimmy);
 	allButtons.push_back(&myNeutron);
-	//	Creating a button object (high parameter constructor edition)
-	ui::Button myProton(renderer, "pro", ui::SDL_Testangle, ui::SDL_COLOR_POOPSTAIN, "COMIC.TTF", 45);
 	allButtons.push_back(&myProton);
-
 
 	//	mass attribute changing
 	for (ui::Button* button : allButtons) {
 		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-		button->SetOnClick([] {
-			cc.consoleManager(update, "button clicked");
-			});
+		button->SetOnClick([] { cc.consoleManager(update, "button clicked"); });
 	}
+
 	//	single attribute changing
-	myAsson.offsetPosition(250);			myAsson.backgroundColour = ui::SDL_COLOR_WARM_STREAM;
-	myMegatron.offsetPosition(125);		myMegatron.backgroundColour = ui::SDL_COLOR_COOL_STREAM;
-	myProton.offsetPosition(0);				//	colour set in the constructor, we could change it here but we dont need to
-	myNeutron.offsetPosition(-125);		myNeutron.backgroundColour = ui::SDL_COLOR_AMBER_STREAM;
-	myBeuton.offsetPosition(-250);		myBeuton.backgroundColour = ui::SDL_COLOR_GOLDEN_STREAM;
+	myButton.offsetPosition(-250, -250);
+	myAsson.offsetPosition(250, -250);
+	myJimmy.offsetPosition(125, -125);
+	myProton.offsetPosition(0);
+	myNeutron.offsetPosition(-125, 125);
+	myBeuton.offsetPosition(-250, 250);
 
 
 	//	render the buttons
 	for (ui::Button* button : allButtons) {
-		button->Render();
-	}
-
-
+		if (button->Render()) { button->setPosition(); } }
 	//	clear the allButtons vector
-	for (auto button : allButtons) {
-		button->setPosition();
-	} allButtons.clear();
+	allButtons.clear();
 
 
 	// render the player

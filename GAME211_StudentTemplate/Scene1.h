@@ -8,6 +8,8 @@
 #include "UIManager.h"
 
 using namespace MATH;
+
+
 class Scene1 : public Scene {
 private:
 	float xAxis;	// scene width, in game coords, set in constructor
