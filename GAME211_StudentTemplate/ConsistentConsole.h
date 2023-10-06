@@ -20,35 +20,34 @@ class ConsistentConsole {
 	//	Console Consistency!!! oh, the beauty of cc...
 public:
 	//	visibility = true, logging = false
-	ConsistentConsole(bool visability = true, bool logToFile = false);
+	ConsistentConsole(bool visability_ = true, bool logToFile_ = false);  // NOLINT(readability-inconsistent-declaration-parameter-name)
 
 	///	Methods
 	//	error, warning, safe, or update. then a message for context. ez.
-	bool consoleManager(const char* type, const char* MSG);
+	bool consoleManager(const char* type_, const char* msg_);
 	//	colour options: red, blue, green, purple, cyan, yellow, pink, clear
-	inline bool colour(const char* colour);
+	inline bool colour(const char* colour_);
 	//	modifier options: clear, newline, indent, blink, bold, italic
-	inline bool colour(const char* colour, const char* modifier);
+	inline bool colour(const char* colour_, const char* modifier_);
 
 	//	clears the console using system("cls"); (literally just system("cls");)
 	void clearConsole();
 
 #pragma region getters / setters
 	//	sets the console text state to the provided bool
-	void setConsoleState(bool state) { isConsoleTextEnabled = state; }
+	void setConsoleState(const bool state_) { isConsoleTextEnabled = state_; }
 	//	returns the consoleText boolean state
-	bool getConsoleState() { return isConsoleTextEnabled; }	
+	[[nodiscard]] bool getConsoleState() const { return isConsoleTextEnabled; }	
 	
 	//	sets the logging state to the provided bool
-	void setLogState(bool state) { isLogging = state; }
+	void setLogState(const bool state_) { isLogging = state_; }
 	//	returns the log boolean state
-	bool getLogState() { return isLogging; }
+	[[nodiscard]] bool getLogState() const { return isLogging; }
 #pragma endregion
 protected:
 	///	Variables
 	bool isConsoleTextEnabled;
 	bool isLogging;
-	//static std::map<std::string, std::string> types;
 };
 
 #pragma region constants
@@ -69,7 +68,7 @@ extern const char* italic;
 extern const char* blink;
 
 extern const char* error;
+extern const char* not_error;
 extern const char* update;
-extern const char* safe;
 extern const char* warning;
 #pragma endregion

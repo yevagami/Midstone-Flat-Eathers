@@ -14,37 +14,37 @@
 
 	///	Console Functions
 #pragma region constructor
-ConsistentConsole::ConsistentConsole(bool visibility, bool logToFile) {
+ConsistentConsole::ConsistentConsole(bool visibility, bool logToFile_) {
 	isConsoleTextEnabled = visibility;
-	isLogging = logToFile;
+	isLogging = logToFile_;
 }
 #pragma endregion
 
-bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
+bool ConsistentConsole::consoleManager(const char* type_, const char* msg_) {
 	if (!isConsoleTextEnabled) { return false; }
 
 	static std::unordered_map<const char*, const char*> types = {
 		{error, red},
 		{update, green},
 		{warning, yellow},
-		{safe, purple},
-	}; if (types.find(type) == types.end()) { return false; }
+		{not_error, purple},
+	}; if (types.find(type_) == types.end()) { return false; }
 
-	colour(types.at(type));
+	colour(types.at(type_));
 
 	ostringstream formattedString; const char* specialMessage = "";
-	if (strcmp(type, "error") == 0) {
+	if (strcmp(type_, "error") == 0) {
 		specialMessage = "[error] "; }
-	else if (strcmp(type, "update") == 0) {
+	else if (strcmp(type_, "update") == 0) {
 		specialMessage = "[update] "; }
-	else if (strcmp(type, "warning") == 0) {
+	else if (strcmp(type_, "warning") == 0) {
 		specialMessage = "[uh oh] "; }
-	else if (strcmp(type, "safe") == 0) {
+	else if (strcmp(type_, "not error") == 0) {
 		specialMessage = ""; }
 
 	formattedString
 		<< specialMessage
-		<< "[" << MSG << "]";
+		<< "[" << msg_ << "]";
 
 	cout << formattedString.str() << endl;
 	
@@ -53,7 +53,7 @@ bool ConsistentConsole::consoleManager(const char* type, const char* MSG) {
 }
 
 #pragma region formatting
-inline bool ConsistentConsole::colour(const char* colour) {
+inline bool ConsistentConsole::colour(const char* colour_) {
 	static unordered_map<const char*, const char*> colours = {
 	{clear, "\033[0m"},
 	{red, "\033[31m"},
@@ -63,15 +63,15 @@ inline bool ConsistentConsole::colour(const char* colour) {
 	{cyan, "\033[36m"},
 	{yellow, "\033[33m"},
 	{pink, "\033[95m"}
-	}; if (colours.find(colour) == colours.end()) { return false; }
+	}; if (colours.find(colour_) == colours.end()) { return false; }
 
 	cout 
-		<< colours.at(colour);	 
+		<< colours.at(colour_);	 
 
 	return true;
 }
 
-inline bool ConsistentConsole::colour(const char* colour, const char* modifier) {
+inline bool ConsistentConsole::colour(const char* colour_, const char* modifier_) {
 	static unordered_map<const char*, const char*> colours = {
 		{clear, "\033[0m"},
 		{red, "\033[31m"},
@@ -81,7 +81,7 @@ inline bool ConsistentConsole::colour(const char* colour, const char* modifier) 
 		{cyan, "\033[36m"},
 		{yellow, "\033[33m"},
 		{pink, "\033[95m"}
-	}; if (colours.find(colour) == colours.end()) { return false; }
+	}; if (colours.find(colour_) == colours.end()) { return false; }
 
 	static unordered_map<const char*, const char*> modifiers = {
 		{clear, "\033[0m"},
@@ -90,11 +90,11 @@ inline bool ConsistentConsole::colour(const char* colour, const char* modifier) 
 		{blink, "\033[6m"},
 		{italic, "\033[3m"},
 		{bold, "\033[1m"},
-	}; if (modifiers.find(modifier) == modifiers.end()) { return false; }
+	}; if (modifiers.find(modifier_) == modifiers.end()) { return false; }
 
 	cout
-		<< colours.at(colour)
-		<< modifiers.at(modifier);
+		<< colours.at(colour_)
+		<< modifiers.at(modifier_);
 
 	return true;
 }
@@ -119,7 +119,7 @@ const char* yellow = "yellow";
 const char* red = "red";
 
 const char* error = "error";
+const char* not_error = "not error";
 const char* update = "update";
 const char* warning = "warning";
-const char* safe = "safe";
 #pragma endregion

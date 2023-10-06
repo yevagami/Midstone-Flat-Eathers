@@ -1,5 +1,4 @@
 #include "LogManager.h"
-#include <cstdio> // for sprintf
 #include <ctime>  // for time_t, struct tm
 #include <iomanip>
 #include <chrono>

@@ -1,5 +1,6 @@
 #pragma once
 #include "FileManager.h"
+#include <unordered_map>
 
 /// <summary>
 /// Entity Maps Class
@@ -37,21 +38,21 @@ public:
 	bool removeEntity(const std::string& entityName);
 
 	//	saves the map to a provided file
-	bool saveEntityMapToFile(const char* fileDirectory);
+	bool saveEntityMapToFile(const char* fileDirectory_) const;
 	//	loads the map from a provided file
-	bool loadEntityMapFromFile(const char* fileDirectory);
+	bool loadEntityMapFromFile(const char* fileDirectory_);
 
 
 	//	TO DO
-	bool hasEntity(const std::string& entityName);
-	bool entityHasData(const std::string& entityName, const std::string& searchData);
+	bool hasEntity(const std::string& entityName_);
+	bool entityHasData(const std::string& entityName_, const std::string& searchData_);
 
 	void clearAllEntities();
-	bool clearEntity(const std::string& entityName);
-	int getEntityCount();
-	bool updateEntityData(const std::string& entityName, const std::string newEntityData);
+	bool clearEntity(const std::string& entityName_);
+	int getEntityCount() const;
+	bool updateEntityData(const std::string& entityName_, const std::string& newEntityData_);
 	
-	std::vector<std::string> findEntitiesByData(std::string searchData);
+	std::vector<std::string> findEntitiesByData(const std::string& searchData_) const;
 
 public:
 	std::unordered_map<std::string, std::string> getEntityMap() { return entityMap; }

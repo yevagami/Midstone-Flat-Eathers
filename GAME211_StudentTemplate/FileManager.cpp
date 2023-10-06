@@ -1,5 +1,6 @@
 #include "FileManager.h"
 #include "ConsistentConsole.h"
+#include <fstream>
 
 //#include <unordered_map>
 

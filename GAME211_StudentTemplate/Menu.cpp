@@ -33,7 +33,7 @@ namespace ui {
 
 	bool Button::RenderText() {
 		//	1. set up a font
-		buttonTextFont = TTF_OpenFont(font, fontSize);
+		buttonTextFont = TTF_OpenFont(fontItself, fontSize);
 		if (!buttonTextFont) { return false; }
 
 		//	2. set up a surface image with some text
@@ -71,7 +71,7 @@ namespace ui {
 		switch (event.type) {
 		case SDL_MOUSEBUTTONDOWN:
 			if (isMouseOver(event.button.x, event.button.y)) {
-				if (OnClick) { ccMenu.consoleManager(safe, "button clicked"); 
+				if (OnClick) { ccMenu.consoleManager(not_error, "button clicked"); 
 				OnClick(); } }
 			break;
 
@@ -87,14 +87,14 @@ namespace ui {
 #pragma endregion
 
 #pragma region aesthetics
-	bool Button::isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= rect.x && mouseX <= (rect.x + rect.w) &&
-			mouseY >= rect.y && mouseY <= (rect.y + rect.h);
+	bool Button::isMouseOver(int mouseX_, int mouseY_) const {
+		return mouseX_ >= rect.x && mouseX_ <= (rect.x + rect.w) &&
+			mouseY_ >= rect.y && mouseY_ <= (rect.y + rect.h);
 	}
 
 
-	void Button::SetOnClick(std::function<void()> onClick) {
-		OnClick = onClick;
+	void Button::SetOnClick(std::function<void()> onClick_) {
+		OnClick = onClick_;
 	}
 
 
@@ -105,34 +105,34 @@ namespace ui {
 	}
 
 
-	void Button::setPosition(int newRectY, int newRectX) {
-		rect.x = newRectX;
-		rect.y = newRectY;
+	void Button::setPosition(int newRectY_, int newRectX_) {
+		rect.x = newRectX_;
+		rect.y = newRectY_;
 
 	}
 
 
-	void Button::offsetPosition(int newRectYOffset, int newRectXOffset) {
-		rect.x += newRectXOffset;
-		rect.y += newRectYOffset;
+	void Button::offsetPosition(int newRectYOffset_, int newRectXOffset_) {
+		rect.x += newRectXOffset_;
+		rect.y += newRectYOffset_;
 	}
 
 
-	void Button::setDimensions(int newRectWidth, int newRectHeight) {
-		rect.w = newRectWidth;
-		rect.h = newRectHeight;
+	void Button::setDimensions(int newRectHeight_, int newRectWidth_) {
+		rect.w = newRectWidth_;
+		rect.h = newRectHeight_;
 	}
 
 
-	void Button::scaleDimensionsIndividually(int newRectHeightScaler, int newRectWidthScaler) {
-		rect.h = rect.h * newRectHeightScaler;
-		rect.w = rect.w * newRectWidthScaler;
+	void Button::scaleDimensionsIndividually(int newRectHeightScaler_, int newRectWidthScaler_) {
+		rect.h = rect.h * newRectHeightScaler_;
+		rect.w = rect.w * newRectWidthScaler_;
 	}
 
 
-	void Button::scaleDimensions(int scaler) {
-		rect.w = rect.w * scaler;
-		rect.h = rect.h * scaler;
+	void Button::scaleDimensions(int scaler_) {
+		rect.w = rect.w * scaler_;
+		rect.h = rect.h * scaler_;
 	}
 #pragma endregion
 	Uint8* SDLColorToUint8(SDL_Color color) {
