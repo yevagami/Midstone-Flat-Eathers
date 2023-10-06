@@ -41,8 +41,13 @@ void Body::LoadHitbox(float w_, float h_) {
     hitbox.y = pos.y - hitbox.h * 0.5f;
 }
 
-Body::~Body()
-{}
+void Body::UpdateHitbox(Matrix4 projectionMat){
+    Vec3 hitboxPos = projectionMat * pos;
+    hitbox.x = hitboxPos.x - hitbox.w * 0.5f;
+    hitbox.y = hitboxPos.y - hitbox.h * 0.5f;
+}
+
+Body::~Body(){}
 
 void Body::ApplyForce( Vec3 force_ ) {
     accel = force_ / mass;
@@ -56,9 +61,6 @@ void Body::Update( float deltaTime ) {
     // Update orientation
     orientation += rotation * deltaTime;
     rotation += angular * deltaTime;
-
-    hitbox.x = pos.x - hitbox.w * 0.5f;
-    hitbox.y = pos.y - hitbox.h * 0.5f;
 }
 
 
@@ -100,6 +102,8 @@ void Body::Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale)
     // (Note the y axis for screen coords points downward, hence subtraction!!!!)
     square.x = static_cast<int>(screenCoords.x - 0.5f * w);
     square.y = static_cast<int>(screenCoords.y - 0.5f * h);
+    //square.x = static_cast<int>(pos.x - 0.5f * w);
+    //square.y = static_cast<int>(pos.y - 0.5f * h);
     square.w = static_cast<int>(w);
     square.h = static_cast<int>(h);
 

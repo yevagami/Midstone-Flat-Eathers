@@ -40,6 +40,7 @@ public:
         float angular_
     );
     void LoadHitbox(float w_, float h_);
+    void UpdateHitbox(Matrix4 projectionMat);
     Hitbox getHitbox() { return hitbox; }
 	virtual ~Body();
     virtual void Update(float deltaTime);
