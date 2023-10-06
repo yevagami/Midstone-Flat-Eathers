@@ -37,9 +37,6 @@ bool Scene1::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
-
-
-
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
@@ -59,7 +56,9 @@ void Scene1::Update(const float deltaTime) {
 	// Update player
 	game->getPlayer()->Update(deltaTime);
 
-
+	//for (ui::Button* button : allButtons) {
+	//	button->Update(deltaTime);
+	//}
 
 }
 
@@ -68,64 +67,46 @@ void Scene1::Render() {
 	SDL_RenderClear(renderer);
 
 
-	///	::TEMP MENU STUFF::
-	//	1. Load a font
-	font = TTF_OpenFont("fonts/COMIC.TTF", 35);
-
-	if (!font) {
-		cc.consoleManager(error, "failed to load font | scene1 render");
-	} else {
-
-		//	2. set up a surface image with some text
-		SDL_Surface* text;
-		text = TTF_RenderText_Solid(font, "RAAAAAAA (centered)", ui::SDL_COLOR_BANANA_YELLOW);
-
-		if (!text) {
-			cc.consoleManager(error, "failed to render text");
-		} else { 
-			// 3. set up a texture for the surface
-			text_ure = SDL_CreateTextureFromSurface(renderer, text);
+	//	Creating the button object (low parameter constructor edition)
+	ui::Button myAsson(renderer, "ass", ui::SDL_Testangle);
+	allButtons.push_back(&myAsson);
+	ui::Button myBeuton(renderer, "beu", ui::SDL_Testangle);
+	allButtons.push_back(&myBeuton);
+	ui::Button myMegatron(renderer, "meg", ui::SDL_Testangle);
+	allButtons.push_back(&myMegatron);
+	ui::Button myNeutron(renderer, "neu", ui::SDL_Testangle);
+	allButtons.push_back(&myNeutron);
+	//	Creating a button object (high parameter constructor edition)
+	ui::Button myProton(renderer, "pro", ui::SDL_Testangle, ui::SDL_COLOR_POOPSTAIN, "COMIC.TTF", 45);
+	allButtons.push_back(&myProton);
 
 
-			//	Creating the button object (low parameter constructor edition)
-			ui::Button myAsson(renderer, ui::SDL_Rectangle);
-			allButtons.push_back(&myAsson);
-			ui::Button myBeuton(renderer);
-			allButtons.push_back(&myBeuton);
-			ui::Button myMegatron(renderer);
-			allButtons.push_back(&myMegatron);
-			ui::Button myNeutron(renderer);
-			allButtons.push_back(&myNeutron);
-			//	Creating a button object (many parameters constructor edition)
-			ui::Button myProton(renderer, 3, 2, 0, 0, ui::SDL_COLOR_FOREST_GREEN, ui::SDL_COLOR_BLACK);
-			allButtons.push_back(&myProton);
-
-			//	mass attribute changing
-			for (ui::Button* button : allButtons) {
-				button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-				button->setDimensions(75, 425);
-				button->SetOnClick([] { cc.consoleManager(update, "button clicked"); });
-			}
-			//	single attribute changing
-			myAsson.offsetPosition(250);			myAsson.backgroundColour = ui::SDL_COLOR_POOPSTAIN;
-			myMegatron.offsetPosition(125);		myMegatron.backgroundColour = ui::SDL_COLOR_DARK_GREEN;
-			myProton.offsetPosition(0);				//	colour set in the constructor, we could change it here but we dont need to
-			myNeutron.offsetPosition(-125);		myNeutron.backgroundColour = ui::SDL_COLOR_STARRY_NIGHT;
-			myBeuton.offsetPosition(-250);		myBeuton.backgroundColour = ui::SDL_COLOR_MARINE_BLUE;
-
-			//	rendering buttons (not ideal cuz each button has a seperate font and text texture)
-			for (ui::Button* button : allButtons) {
-				button->Render(text_ure, font);
-			}
-
-			//	freeing stuff up
-			SDL_DestroyTexture(text_ure);
-
-		}
-
-		SDL_FreeSurface(text);
-		
+	//	mass attribute changing
+	for (ui::Button* button : allButtons) {
+		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		button->SetOnClick([] {
+			cc.consoleManager(update, "button clicked");
+			});
 	}
+	//	single attribute changing
+	myAsson.offsetPosition(250);			myAsson.backgroundColour = ui::SDL_COLOR_WARM_STREAM;
+	myMegatron.offsetPosition(125);		myMegatron.backgroundColour = ui::SDL_COLOR_COOL_STREAM;
+	myProton.offsetPosition(0);				//	colour set in the constructor, we could change it here but we dont need to
+	myNeutron.offsetPosition(-125);		myNeutron.backgroundColour = ui::SDL_COLOR_AMBER_STREAM;
+	myBeuton.offsetPosition(-250);		myBeuton.backgroundColour = ui::SDL_COLOR_GOLDEN_STREAM;
+
+
+	//	render the buttons
+	for (ui::Button* button : allButtons) {
+		button->Render();
+	}
+
+
+	//	clear the allButtons vector
+	for (auto button : allButtons) {
+		button->setPosition();
+	} allButtons.clear();
+
 
 	// render the player
 	game->RenderPlayer(0.1f);

@@ -41,6 +41,7 @@
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Weapons.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -68,6 +69,7 @@
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Weapons.h" />
     <ClInclude Include="Window.h" />
