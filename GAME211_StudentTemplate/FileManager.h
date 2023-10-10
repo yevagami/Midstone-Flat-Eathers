@@ -46,7 +46,7 @@ public:
 	//	checks if the file at the given directory exists
 	bool fileCheck(const char* fileDirectory);
 	//	load the provided vector<string> with the provided file contents
-	bool fileRead(vector<string>& savedData, const char* fileDirectory);
+	bool fileLoadToVector(vector<string>& savedData, const char* fileDirectory);
 	//	write the provided vector<string> to the provided file
 	bool fileWrite(vector<string>& savedData, const char* fileDirectory);
 	// clears the given file

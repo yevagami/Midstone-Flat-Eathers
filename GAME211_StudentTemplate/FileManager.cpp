@@ -70,11 +70,12 @@ bool FileManager::fileWrite(vector<string>& savedData, const char* fileDirectory
 }
 
 
-bool FileManager::fileRead(vector<string>& savedData, const char* fileDirectory) {
+bool FileManager::fileLoadToVector(vector<string>& savedData, const char* fileDirectory) {
 	if (!fileCheck(fileDirectory)) {
 		ccFile.consoleManager("error", "uh oh... file loadn't");
 		return false;
 	}
+
 	if (!fileWrite(savedData, fileDirectory)) {
 		ccFile.consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
 		return false;

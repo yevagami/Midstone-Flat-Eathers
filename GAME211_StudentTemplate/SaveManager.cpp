@@ -88,7 +88,7 @@ bool SaveManager::readSave() {
 	}
 
 	vector<string> saveDataCurrentTemp = getCurrentSaveData();
-	fileRead(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
+	fileLoadToVector(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
 	ccSave.consoleManager("update", "save loaded");
 	return true;
 

@@ -67,10 +67,10 @@ namespace ui {
 	}
 #pragma endregion
 
-	void Button::HandleEvent(SDL_Event& event) {
-		switch (event.type) {
+	void Button::HandleEvent(SDL_Event& event_) {
+		switch (event_.type) {
 		case SDL_MOUSEBUTTONDOWN:
-			if (isMouseOver(event.button.x, event.button.y)) {
+			if (isMouseOver(event_.button.x, event_.button.y)) {
 				if (OnClick) { ccMenu.consoleManager(not_error, "button clicked"); 
 				OnClick(); } }
 			break;
@@ -79,10 +79,16 @@ namespace ui {
 		}
 	}
 
-	void Button::Update(float deltaTime) {
+	void Button::Update(float deltaTime_) {
 
 
 	}
+
+
+	void Button::SetOnClick(const std::function<void()>& onClick_) {
+		OnClick = onClick_;
+	}
+
 
 #pragma endregion
 
@@ -90,11 +96,6 @@ namespace ui {
 	bool Button::isMouseOver(int mouseX_, int mouseY_) const {
 		return mouseX_ >= rect.x && mouseX_ <= (rect.x + rect.w) &&
 			mouseY_ >= rect.y && mouseY_ <= (rect.y + rect.h);
-	}
-
-
-	void Button::SetOnClick(std::function<void()> onClick_) {
-		OnClick = onClick_;
 	}
 
 
@@ -135,14 +136,67 @@ namespace ui {
 		rect.h = rect.h * scaler_;
 	}
 #pragma endregion
-	Uint8* SDLColorToUint8(SDL_Color color) {
+	Uint8* SDLColorToUint8(SDL_Color color_) {
 		static Uint8 rgba[4];
-		rgba[0] = color.r;
-		rgba[1] = color.g;
-		rgba[2] = color.b;
-		rgba[3] = color.a;
+		rgba[0] = color_.r;
+		rgba[1] = color_.g;
+		rgba[2] = color_.b;
+		rgba[3] = color_.a;
 		return rgba;
 	}
+
+	Uint8 Clamp(const Uint8 value_, const Uint8 min_, const Uint8 max_) {
+		if(value_ < min_) {
+			return min_;
+		} else if (value_ < max_) {
+			return max_;
+		} else {
+			return value_;
+		}
+	}
+
+	SDL_Color operator+(const SDL_Color& colourA_, const SDL_Color& colourB_) {
+		SDL_Color result;
+		result.r = Clamp(colourA_.r + colourB_.r, 0, 255);
+		result.g = Clamp(colourA_.g + colourB_.g, 0, 255);
+		result.b = Clamp(colourA_.b + colourB_.b, 0, 255);
+		result.a = Clamp(colourA_.a + colourB_.a, 0, 255);
+
+		SDL_Color colourA(colourA_);
+		return result;
+	}
+
+	SDL_Color operator-(const SDL_Color& colourA_, const SDL_Color& colourB_) {
+		SDL_Color result;
+		result.r = Clamp(colourA_.r - colourB_.r, 0, 255);
+		result.g = Clamp(colourA_.g - colourB_.g, 0, 255);
+		result.b = Clamp(colourA_.b - colourB_.b, 0, 255);
+		result.a = Clamp(colourA_.a - colourB_.a, 0, 255);
+		return result;
+	}
+
+	SDL_Color operator*(const SDL_Color& colour_, float scalar) {
+		SDL_Color result;
+		result.r = Clamp(static_cast<Uint8>(static_cast<float>(colour_.r) * scalar), 0, 255);
+		result.g = Clamp(static_cast<Uint8>(static_cast<float>(colour_.g) * scalar), 0, 255);
+		result.b = Clamp(static_cast<Uint8>(static_cast<float>(colour_.b) * scalar), 0, 255);
+		result.a = Clamp(static_cast<Uint8>(static_cast<float>(colour_.a) * scalar), 0, 255);
+		return result;
+	}
+
+	SDL_Color operator/(const SDL_Color& colour_, float divisor) {
+		if (divisor == 0.0f) {
+			// Handle division by zero
+			return colour_;
+		}
+
+		SDL_Color result;
+		result.r = Clamp(static_cast<Uint8>(static_cast<float>(colour_.r) / divisor), 0, 255);
+		result.g = Clamp(static_cast<Uint8>(static_cast<float>(colour_.g) / divisor), 0, 255);
+		result.b = Clamp(static_cast<Uint8>(static_cast<float>(colour_.b) / divisor), 0, 255);
+		result.a = Clamp(static_cast<Uint8>(static_cast<float>(colour_.a) / divisor), 0, 255);
+		return result;
+
 
 }
 
@@ -173,6 +227,7 @@ namespace ui {
 
 //  Constants
 namespace ui {
+
 #pragma region shapes
 	SDL_Rect SDL_Rectangle = { 0,0,400,200 };
 	SDL_Rect SDL_Testangle = { 0,0,425,75 };
@@ -180,9 +235,15 @@ namespace ui {
 	SDL_Rect SDL_Tall_Rectangle = { 0,0,2,4 };
 	SDL_Rect SDL_Square = { 0,0,2,2 };
 #pragma endregion
-
 	//273 preset colour variables - fri 6 2023
 #pragma region pride
+#pragma region transparency
+	SDL_Color white100 = { 255, 255, 255, 255 };
+	SDL_Color white75 = { 255, 255, 255, 191 };
+	SDL_Color white50 = { 255, 255, 255, 128 };
+	SDL_Color white25 = { 255, 255, 255, 64 };
+	SDL_Color white10 = { 255, 255, 255, 26 };
+#pragma endregion
 #pragma region colours
 	SDL_Color SDL_COLOR_ALICE_BLUE = { 240, 248, 255, 255 };
 	SDL_Color SDL_COLOR_ANTIQUE_WHITE = { 250, 235, 215, 255 };

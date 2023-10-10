@@ -29,7 +29,9 @@ public:
 	vector<string> getCurrentSaveData();
 	const char* getSaveFileDirectory();
 	const char* getCurrentSaveFileDirectory();
+	//unused
 	const char* getDefaultSaveFileDirectory();
+
 	void toggleSafeToSave();
 
 

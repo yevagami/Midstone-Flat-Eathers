@@ -11,7 +11,13 @@
 namespace ui
 {
 	//  converter
-	Uint8* SDLColorToUint8(SDL_Color color);
+	Uint8* SDLColorToUint8(SDL_Color color_);
+	Uint8 Clamp(Uint8 value_, Uint8 min_, Uint8 max_);
+
+	SDL_Color operator+(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	SDL_Color operator-(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	SDL_Color operator*(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	SDL_Color operator/(const SDL_Color& colourA_, const SDL_Color& colourB_);
 
 #pragma region shapes
 	extern SDL_Rect SDL_Rectangle;
@@ -21,6 +27,13 @@ namespace ui
 	extern SDL_Rect SDL_Square;
 #pragma endregion
 #pragma region colour constants
+#pragma region transparency
+	extern SDL_Color SDL_White100;
+	extern SDL_Color SDL_White75;
+	extern SDL_Color SDL_White50;
+	extern SDL_Color SDL_White25;
+	extern SDL_Color SDL_White10;
+#pragma endregion
 #pragma region colours
 	extern SDL_Color SDL_COLOR_ALICE_BLUE;
 	extern SDL_Color SDL_COLOR_AMETHYST;
@@ -510,11 +523,11 @@ namespace ui
 		//  renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
 		bool Render();
 		//  handles events (mouse clicks and hovering)
-		void HandleEvent(SDL_Event& event);
+		void HandleEvent(SDL_Event& event_);
 		//  for animations, hover effects, and live-things
-		void Update(float deltaTime);
+		void Update(float deltaTime_);
 		//  sets a callback function for when its clicked
-		void SetOnClick(std::function<void()> onClick_);
+		void SetOnClick(const std::function<void()>& onClick_);
 		//  is the mouse hovering over the button's dimensions? [true/false]
 		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
 
@@ -544,7 +557,6 @@ namespace ui
 
 
 #pragma region styling [tw: aesthetic]
-
 	public:
 		/// Editable Attributes [ public variables lmao ]
 		//  button's text
