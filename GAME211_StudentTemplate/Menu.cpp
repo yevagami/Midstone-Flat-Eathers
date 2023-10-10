@@ -8,7 +8,7 @@ namespace ui {
 #pragma region Rendering
 	bool Button::Render() {
 		if (!RenderBackground() || !RenderBorder() || !RenderText()) {
-			return false; 
+			return false;
 		}
 		return true;
 	}
@@ -52,7 +52,8 @@ namespace ui {
 		if (isTextCentered) {
 			x = rect.x + (rect.w - textWidth) / 2;
 			y = rect.y + (rect.h - textHeight) / 2;
-		} else {
+		}
+		else {
 			x = rect.x;
 			y = rect.y;
 		}
@@ -71,8 +72,11 @@ namespace ui {
 		switch (event_.type) {
 		case SDL_MOUSEBUTTONDOWN:
 			if (isMouseOver(event_.button.x, event_.button.y)) {
-				if (OnClick) { ccMenu.consoleManager(not_error, "button clicked"); 
-				OnClick(); } }
+				if (OnClick) {
+					ccMenu.consoleManager(not_error, "button clicked");
+					OnClick();
+				}
+			}
 			break;
 
 
@@ -146,11 +150,13 @@ namespace ui {
 	}
 
 	Uint8 Clamp(const Uint8 value_, const Uint8 min_, const Uint8 max_) {
-		if(value_ < min_) {
+		if (value_ < min_) {
 			return min_;
-		} else if (value_ < max_) {
+		}
+		else if (value_ < max_) {
 			return max_;
-		} else {
+		}
+		else {
 			return value_;
 		}
 	}
@@ -198,6 +204,7 @@ namespace ui {
 		return result;
 
 
+	}
 }
 
 /// Text Struct
@@ -221,8 +228,6 @@ namespace ui {
 
 	}
 
-
-	//	ew the nesting...
 }
 
 //  Constants
