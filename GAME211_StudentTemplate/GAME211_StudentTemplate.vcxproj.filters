@@ -126,6 +126,9 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene3.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Weapons.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene3.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

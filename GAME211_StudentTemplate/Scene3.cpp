@@ -1,18 +1,16 @@
-#include "Scene1.h"
+#include "Scene3.h"
 #include <VMath.h>
 #include <SDL_ttf.h>
 
 #include "PrettyPrinting.h"
 #include "ConsistentConsole.h"
-//a global var. My problem was that i defined it in the Scene 3 again, that made a linking error.
-//IMPORTANT!!!
-ConsistentConsole cc; //not member of scene1 class. Define somewhere else 
-//#include "FileManager.h"
+//ConsistentConsole cc;
+#include "FileManager.h"
 //FileManager file;
 #include "SaveManager.h"
-SaveManager save;//not member of scene1 class
+//SaveManager save;
 #include "EntityMap.h"
-EntityMap eMap;//not member of scene1 class
+//EntityMap eMap;
 
 //#include "KeybindHandler.h"
 //keybinds::keys key;
@@ -23,7 +21,7 @@ EntityMap eMap;//not member of scene1 class
 
 
 // See notes about this constructor in Scene1.h.
-Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
+Scene3::Scene3(SDL_Window* sdlWindow_, GameManager* game_) {
 
 	window = sdlWindow_;
 	game = game_;
@@ -32,10 +30,9 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
 	yAxis = 15.0f;
 }
 
-Scene1::~Scene1() = default;
+Scene3::~Scene3() = default;
 
-bool Scene1::OnCreate()//??
-{
+bool Scene3::OnCreate() {
 #pragma region SDL Window Stuff
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
@@ -47,16 +44,16 @@ bool Scene1::OnCreate()//??
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 #pragma endregion
-	name = "scene1"; // we dont need that 
+	name = "scene3";
 
 
 
 	return true;
 }
 
-void Scene1::OnDestroy() {}
+void Scene3::OnDestroy() {}
 
-void Scene1::Update(const float deltaTime) {
+void Scene3::Update(const float deltaTime) {
 	// Update player
 	game->getPlayer()->Update(deltaTime);
 
@@ -66,7 +63,7 @@ void Scene1::Update(const float deltaTime) {
 
 }
 
-void Scene1::Render() {
+void Scene3::Render() {
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	using namespace ui;
@@ -74,12 +71,12 @@ void Scene1::Render() {
 	//	Creating the button objects 
 	ui::Button myButton(renderer, "my button", ui::SDL_Testangle, ui::SDL_COLOR_WASHING_MACHINE);
 	ui::Button myAsson(renderer, "ass", ui::SDL_Testangle, ui::SDL_COLOR_TOOTHBRUSH,
-	                   ui::Font({55, ui::fontMap.at("heebo")}));
+		ui::Font({ 55, ui::fontMap.at("heebo") }));
 	ui::Button myBeuton(renderer, "beu", ui::SDL_Testangle, ui::SDL_COLOR_REINHARDT); //, ui::fontMap.at("open sans")
 	ui::Button myJimmy(renderer, "jilly", ui::SDL_Testangle, ui::SDL_COLOR_CASSIDY); //ui::fontMap.at("roboto")
 	ui::Button myNeutron(renderer, "niltril", ui::SDL_Testangle, ui::SDL_COLOR_CRIMSON_RED);
 	ui::Button myProton(renderer, "BOO!!!", ui::SDL_Testangle, ui::SDL_COLOR_SCARLET_RED,
-	                    ui::Font({100, ui::fontMap.at("gothic")}));
+		ui::Font({ 100, ui::fontMap.at("gothic") }));
 
 	allButtons.push_back(&myButton);
 	allButtons.push_back(&myAsson);
@@ -91,7 +88,7 @@ void Scene1::Render() {
 	//	mass attribute changing
 	for (ui::Button* button : allButtons) {
 		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-		button->SetOnClick([] { cc.consoleManager(update, "button clicked"); });
+		//button->SetOnClick([] { cc.consoleManager(update, "button clicked"); });
 	}
 
 	//	single attribute changing
@@ -106,7 +103,8 @@ void Scene1::Render() {
 
 	//	render the buttons
 	for (ui::Button* button : allButtons) {
-		if (button->Render()) { button->setPosition(); } }
+		if (button->Render()) { button->setPosition(); }
+	}
 	//	clear the allButtons vector
 	allButtons.clear();
 
@@ -117,7 +115,7 @@ void Scene1::Render() {
 	SDL_RenderPresent(renderer);
 }
 
-void Scene1::HandleEvents(const SDL_Event& event)
+void Scene3::HandleEvents(const SDL_Event& event)
 {
 	/*key.HandleEvents(event);*/
 
@@ -127,7 +125,7 @@ void Scene1::HandleEvents(const SDL_Event& event)
 
 #pragma region debuggingKeys
 	//	debug keys (for debugging)
-	//if (event.key.keysym.sym == SDLK_f && event.type == SDL_KEYDOWN)
+	if (event.key.keysym.sym == SDLK_f && event.type == SDL_KEYDOWN)
 	{
 		///	SAVE SYSTEM TESTING
 		/*if (file.fileCheck(save.getCurrentSaveFileDirectory()))
@@ -155,30 +153,30 @@ void Scene1::HandleEvents(const SDL_Event& event)
 	{
 		///	CONSOLE TESTING
 		//	console messages display: how to call the method
-		cc.consoleManager(error, "error: this is an error message");
-		cc.consoleManager(warning, "warning: this is a warning message");
-		cc.consoleManager(update, "update: this is an update message");
-		cc.consoleManager(not_error, "this is not an error");
+		//cc.consoleManager(error, "error: this is an error message");
+		//cc.consoleManager(warning, "warning: this is a warning message");
+		//cc.consoleManager(update, "update: this is an update message");
+		//cc.consoleManager(not_error, "this is not an error");
 	}
 
 
 	if (event.key.keysym.sym == SDLK_i && event.type == SDL_KEYDOWN)
 	{
 		///	doesnt work rn >:(
-		save.clearBothSaves();
+		//save.clearBothSaves();
 	}
 
 
 	if (event.key.keysym.sym == SDLK_o && event.type == SDL_KEYDOWN)
 	{
-		eMap.insertEntity(string("test"), string("meowmeowmeow"));
+		//eMap.insertEntity(string("test"), string("meowmeowmeow"));
 	}
 
 
 	if (event.key.keysym.sym == SDLK_n && event.type == SDL_KEYDOWN)
 	{
-		PrettyPrinting::printVS(eMap.findEntitiesByData(string("dog")));
-		PrettyPrinting::printVS(eMap.findEntitiesByData(string("meow")));
+		//PrettyPrinting::printVS(eMap.findEntitiesByData(string("dog")));
+		//PrettyPrinting::printVS(eMap.findEntitiesByData(string("meow")));
 	}
 
 
@@ -186,16 +184,16 @@ void Scene1::HandleEvents(const SDL_Event& event)
 	{
 		///	ENTITY MAP TESTING
 		//	to insert into an entit map...
-		eMap.insertEntity(string("rex"), string("is my dog"));
+		/*eMap.insertEntity(string("rex"), string("is my dog"));
 		eMap.insertEntity(string("deedee"), string("was my dog ;-;"));
 		eMap.insertEntity(string("turnip"), string("is my cat"));
-		eMap.insertEntity(string("adriel"), string("is adriel"));
+		eMap.insertEntity(string("adriel"), string("is adriel"));*/
 		//	DELETING the test entity
-		eMap.removeEntity(string("test"));
+		//eMap.removeEntity(string("test"));
 		//	printing...
-		PrettyPrinting::printEM(eMap);
+		//PrettyPrinting::printEM(eMap);
 		//	to serialize that entity map...
-		eMap.saveEntityMapToFile("SaveData/entitymap.txt");
+		//eMap.saveEntityMapToFile("SaveData/entitymap.txt");
 	}
 #pragma endregion
 }
