@@ -14,7 +14,7 @@ bool Hitbox::generateHitbox(const SDL_Rect& rectangle_) {
     return false;
 }
 
-bool Hitbox::collisionCheck(Hitbox other){
+bool Hitbox::collisionCheck(const Hitbox& other){
     bool collisionX = x + w >= other.x &&
         other.x + other.w >= x;
 

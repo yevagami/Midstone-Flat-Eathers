@@ -12,6 +12,7 @@ SaveManager save; //not member of scene1 class
 EntityMap eMap; //not member of scene1 class
 
 #include "GameObjects.h"
+
 //#include <VMath.h>
 //#include <SDL_ttf.h>
 
@@ -44,36 +45,62 @@ bool Scene1::OnCreate() {
 	name = "scene1"; // we dont need that 
 	using namespace ui;
 
-	ui::Button* myDefaultButton = new ui::Button;
 
-	auto* myCustomButton = new Button(	//	_debugbutton
-		Font{"cool words", 90, fontMap.at("gothic"),0,0,-45 }, 
-		SDL_Square, 
+	auto* myStartButton = new Button(	//	_debugbutton
+		Font{"start button", 50, fontMap.at("gothic")}, 
+		SDL_Testangle, 
 		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
 
-	myDefaultButton->text = "my default text";
-	myDefaultButton->setDimensions(SDL_Rectangle);
-	allButtons.emplace_back(myDefaultButton);
-	allButtons.emplace_back(myCustomButton);
+	auto* myOptionsButton = new Button(	//	_debugbutton
+		Font{ "options button", 50, fontMap.at("ransom") },
+		SDL_Testangle,
+		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+
+	auto* myExitButton = new Button(	//	_debugbutton
+		Font{ "exit button", 50, fontMap.at("gothic") },
+		SDL_Testangle,
+		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+
+	auto* mySmallButton = new Button(	//_debugbutton
+		Font{""}, SDL_Square,
+		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+
+	mySmallButton->scaleDimensions(50);
+
+	allButtons.emplace_back(myStartButton);
+	allButtons.emplace_back(myOptionsButton);
+	allButtons.emplace_back(myExitButton);
+	allButtons.emplace_back(mySmallButton);
+
 
 	for (auto* button : allButtons) {
-		button->scaleDimensions(120);
-		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-	}
-	myDefaultButton->offsetPosition(200);
-	myCustomButton->offsetPosition(-100);
+		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); }
+
+	myStartButton->offsetPosition(-150);
+	myOptionsButton->offsetPosition();
+	myExitButton->offsetPosition(+150);
+	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW());
+
+
+	for (auto* button : allButtons) {
+		button->SetOnClick([&] { cc.consoleManager(not_error, "the click of '87"); });
+		button->generateHitbox(); }
+
+	myStartButton->onHoveringBackgroundColour = SDL_COLOR_ROSE_TOY;
+	myStartButton->onHoveringTextColour = SDL_COLOR_BAD_DRAGON;
 
 	return true;
 }
 
 void Scene1::OnDestroy() {
-	//for (auto button : allButtons) { delete button; }
+	for (auto* button : allButtons) { delete button; }
 	
 }
 
 void Scene1::Update(const float deltaTime) {
 	// Update player
 	game->getPlayer()->Update(deltaTime);
+
 }
 
 void Scene1::Render() {

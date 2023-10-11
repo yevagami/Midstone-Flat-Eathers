@@ -421,6 +421,7 @@ namespace ui {
 			{"verdana", "fonts/verdana.ttf"},
 			{"wingdings", "fonts/Wingdings-Regular-Font.ttf"},
 			{"lobster", "fonts/Lobster-Regular.ttf"},
+			{"ransom", "fonts/ransom.ttf"},
 			{"", ""},
 	};
 
@@ -527,9 +528,9 @@ namespace ui {
 	protected:
 		/// Private Methods
 		//  renders the background component
-		bool RenderBackground(SDL_Renderer* renderer_);
+		bool RenderBackground(SDL_Renderer* renderer_) const;
 		//  renders the borders component
-		bool RenderBorder(SDL_Renderer* renderer_);
+		bool RenderBorder(SDL_Renderer* renderer_) const;
 		//  renders the text component
 		bool RenderText(SDL_Renderer* renderer_);
 

@@ -1,8 +1,7 @@
 #include "Scene3.h"
-#include <SDL_ttf.h>
 #include "PrettyPrinting.h"
-#include "ConsistentConsole.h"
 
+using namespace ui;
 
 
 
@@ -33,15 +32,18 @@ bool Scene3::OnCreate() {
 #pragma endregion
 	name = "scene3";
 
+	Button* scene3Button = new _debugbutton; // m a c r o
 
+
+	allButtons.emplace_back(scene3Button);
 
 	return true;
 }
 
 void Scene3::OnDestroy() {
-	//for (auto* button : allButtons) {
-	//	delete button;
-	//}
+	for (auto* button : allButtons) {
+		delete button;
+	}
 }
 
 void Scene3::Update(const float deltaTime) {
@@ -56,7 +58,7 @@ void Scene3::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 
 
-	//for(auto* button : allButtons) { button->Render(renderer); }
+	for(auto* button : allButtons) { button->Render(renderer); }
 
 
 	// render the player
