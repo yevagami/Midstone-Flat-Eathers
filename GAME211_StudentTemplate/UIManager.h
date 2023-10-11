@@ -1,4 +1,5 @@
 #pragma once
+#include "GameManager.h"
 #include "Menu.h"
 using namespace ui;
 
@@ -12,18 +13,50 @@ namespace menu {
 	class UIManager : private Button {
 	public:
 			///	Constructor
-		//UIManager
-		//(SDL_Renderer* buttonRenderer) : buttonRenderer(buttonRenderer) { }
+		//UIManager(SDL_Renderer* buttonRenderer_) : buttonRenderer(buttonRenderer_) {}
+
+		~UIManager() { DeleteAllButtons(); }
+
+		void buttonPreset1() {
+			//Button* button1 = new Button(buttonRenderer, Font{ "testing", 45, fontMap.at("comic sans") });
+			//Button* button2 = new Button(buttonRenderer, Font{ "my testing <3", 45, fontMap.at("comic sans") });
+
+			/*AddButtonToScene(*button1);
+			AddButtonToScene(*button2);*/
+
+			for(auto button : buttons) {
+				button->generateHitbox();
+				button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+				button->offsetPosition(-300);
+
+			}
 
 
-		void AddButton(Button &button) {
-			buttons.push_back(&button);
 		}
 
 
-		void HandleButtonEvents(SDL_Event& event) {
+		//void AddButtonsToScene(const vector<Button*>& listOfButtons_) {
+		//	for (Button* &button : listOfButtons_) {
+		//		buttons.emplace_back(button);
+		//	}
+		//}
+
+
+		void AddButtonToScene(Button &button_) {
+			buttons.emplace_back(&button_);
+		}
+
+		void DeleteAllButtons() {
+			for (auto* button : buttons) {
+				delete button;
+			}
+
+		}
+
+
+		void HandleButtonEvents(const SDL_Event& event_) const {
 			for (Button* button : buttons) {
-				button->HandleEvents(event);
+				button->HandleEvents(event_);
 			}
 		}
 
@@ -35,16 +68,11 @@ namespace menu {
 		}
 
 
-		bool RenderMenu(bool render) {
-			if (!render) { return false; }
-	
-			for (Button* button : buttons) {
-				if (button->Render(buttonRenderer)) { button->setPosition(); }
-			} buttons.clear();
+		bool RenderMenu(SDL_Renderer* renderer_, bool render_ = true) {
+			if (!render_) { return false; }
 
-
-
-
+			for (Button* button : buttons) {button->Render(renderer_);}
+			return true;
 
 		}
 

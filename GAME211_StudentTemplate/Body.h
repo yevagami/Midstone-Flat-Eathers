@@ -15,7 +15,7 @@ public:
     Body();
 
 	Body(
-        Vec3 pos_, Vec3 vel_, Vec3 accel_,
+        Vec3 pos_, Vec3 vel_ = Vec3(0,0,0), Vec3 accel_ = Vec3(0, 0, 0),
         float mass_ = 1.0f,
         float radius_ = 0.0f,
         float orientation_ = 0.0f,
