@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include "Hitbox.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -417,6 +418,9 @@ namespace ui
 		{"heebo", "fonts/Heebo-Regular.ttf"},
 		{"roboto", "fonts/Roboto-Regular.ttf"},
 		{"ubuntu", "fonts/Ubuntu-Regular.ttf"},
+		{"verdana", "fonts/verdana.ttf"},
+		{"wingdings", "fonts/Wingdings-Regular-Font.ttf"},
+		{"lobster", "fonts/Lobster-Regular.ttf"},
 		{"", ""},
 	};
 
@@ -431,8 +435,8 @@ namespace ui
 
 		// ReSharper disable once CppParameterMayBeConst
 		// ReSharper disable once CppNonExplicitConvertingConstructor
-		Font(int size_ = 45, const char* font_ = fontMap.at("comic sans"), int x = 0, int y = 0, double rot = 0.0)
-			: size(size_), font(font_), offsetX(x), offsetY(y), rotation(rot)
+		Font(int size_ = 45, const char* font_ = fontMap.at("comic sans"), int x_ = 0, int y_ = 0, double rot_ = 0.0)
+			: size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_)
 		{
 		}
 	};
@@ -446,11 +450,10 @@ namespace ui
 		Button() = default;
 
 		Button(const Button& otherButton_) = default;
-		Button& operator=(const Button& otherButton_)
-		{
+		Button& operator=(const Button& otherButton_) {
 			if(this != &otherButton_)
 			{
-				buttonRenderer = otherButton_.buttonRenderer;
+				//buttonRenderer = otherButton_.buttonRenderer;
 				rect = otherButton_.rect;
 				font = otherButton_.font;
 				text = otherButton_.text;
@@ -458,21 +461,17 @@ namespace ui
 				textColour = otherButton_.textColour;
 
 				//	releasing old fonts
-				if(buttonTextFont)
-				{
-					TTF_CloseFont(buttonTextFont);
-				}
-				// create a new TTF_Font by opening the font file with the same settings as the source -- [ chat gpt ] --
-				buttonTextFont = TTF_OpenFont(otherButton_.fontItself, otherButton_.fontSize);
-				if (!buttonTextFont) {}
+				if(buttonTextFont) { TTF_CloseFont(buttonTextFont); }
 
+				// create a new TTF_Font by opening the font file with the same settings as the source
+				// -- [ chat gpt ] --
+				buttonTextFont = TTF_OpenFont(otherButton_.fontItself, otherButton_.fontSize);
 			}
 
 			return *this;
 		}
 
 		//  main constructor
-		// ReSharper disable once CppNonExplicitConvertingConstructor
 		Button(
 			SDL_Renderer* buttonRenderer_,
 			const char* text_ = "sad button",
@@ -488,26 +487,28 @@ namespace ui
 			//useGradientBackground = false; isGradientVertical = false; gradientEnd = SDL_COLOR_MYSTIC_PURPLE; gradientStart = SDL_COLOR_BLACK;
 			borderColour = SDL_COLOR_BLACK;
 
+			hitbox.generateHitbox(rect_); //	generates the hitbox
+
+			//	font shenegans
 			fontSize = font_.size;
 			fontItself = font_.font;
 			fontOffsetX = font_.offsetX;
 			fontOffsetY = font_.offsetY;
 			fontRotation = font_.rotation;
 
-			buttonTextFont = nullptr;
+			//	SDL-grossness
+			buttonTextFont = TTF_OpenFont(font_.font, font_.size);
 			buttonTextTexture = nullptr;
 			buttonTextSurface = nullptr;
 		}
 
 		~Button()
 		{
-			if (buttonTextFont)
-			{
+			if (buttonTextFont) {
 				TTF_CloseFont(buttonTextFont);
 				buttonTextFont = nullptr;
 			}
-			if (buttonTextTexture)
-			{
+			if (buttonTextTexture) {
 				SDL_DestroyTexture(buttonTextTexture);
 				buttonTextTexture = nullptr;
 			}
@@ -521,9 +522,9 @@ namespace ui
 
 		/// Public Methods
 		//  renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
-		bool Render();
+		bool Render(SDL_Renderer* renderer_);
 		//  handles events (mouse clicks and hovering)
-		void HandleEvent(SDL_Event& event_);
+		void HandleEvents(const SDL_Event& event_);
 		//  for animations, hover effects, and live-things
 		void Update(float deltaTime_);
 		//  sets a callback function for when its clicked
@@ -531,20 +532,23 @@ namespace ui
 		//  is the mouse hovering over the button's dimensions? [true/false]
 		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
 
+
 	protected:
 		/// Private Methods
 		//  renders the background component
-		bool RenderBackground();
+		bool RenderBackground(SDL_Renderer* renderer_);
 		//  renders the borders component
-		bool RenderBorder();
+		bool RenderBorder(SDL_Renderer* renderer_);
 		//  renders the text component
-		bool RenderText();
+		bool RenderText(SDL_Renderer* renderer_);
 
 		/// Private Variables
 		//  a "the renderer"(tm)
 		SDL_Renderer* buttonRenderer;
 		//  a rectangle
 		SDL_Rect rect;
+		//	a hitbox
+		Hitbox hitbox;
 		//  Font Container
 		Font font;
 
@@ -580,6 +584,10 @@ namespace ui
 		[[nodiscard]] int getY() const { return rect.y; }
 		[[nodiscard]] int getH() const { return rect.h; }
 		[[nodiscard]] int getW() const { return rect.w; }
+
+		void generateHitbox() {
+			hitbox.generateHitbox(rect);
+		}
 
 		//  set position (absolutely transform)
 		void setPosition(int newRectY_ = 0, int newRectX_ = 0);

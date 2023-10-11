@@ -1,4 +1,6 @@
 #pragma once
+#include <SDL_events.h>
+#include <SDL_mouse.h>
 #include <string>
 #include <vector>
 #include "Vector.h"
@@ -20,6 +22,8 @@ public:
 	static void printCC(const char* constChar);
 
 	static void printEM(EntityMap& entityMap);
+
+	static void printMouseCoords(const SDL_Event& event_);
 
 private:
 	class EntityMap* eMap;

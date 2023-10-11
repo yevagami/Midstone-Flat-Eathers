@@ -7,41 +7,25 @@
 #include <SDL_image.h>
 #include "Hitbox.h"
 
-
-#include "KeybindHandler.h"
-
 using namespace MATH;
 
+
 class Body {
-protected:
-	// inherited classes can access this
-	Vec3 pos;
-	Vec3 vel;
-	Vec3 accel;
-    Hitbox hitbox;
-	float mass;
-    float orientation;		// facing this direction
-    float rotation;			// rotating at this speed (radians per second?)
-    float angular;          // angular acceleration
-    float radius;           // for getting near walls
-
-	Vec3 imageSizeWorldCoords;
-    SDL_Surface* image;
-    SDL_Texture* texture;
-
 public:
     Body();
+
 	Body(
         Vec3 pos_, Vec3 vel_, Vec3 accel_,
-        float mass_,
-        float radius_,
-        float orientation_,
-        float rotation_,
-        float angular_
+        float mass_ = 1.0f,
+        float radius_ = 0.0f,
+        float orientation_ = 0.0f,
+        float rotation_ = 0.0f,
+        float angular_ = 0.0f
     );
+
     void LoadHitbox(float w_, float h_);
     void UpdateHitbox(Matrix4 projectionMat);
-    Hitbox getHitbox() { return hitbox; }
+	[[nodiscard]] Hitbox getHitbox() const { return hitbox; }
 	virtual ~Body();
     virtual void Update(float deltaTime);
     virtual void ApplyForce(Vec3 force_);
@@ -56,9 +40,7 @@ public:
     virtual void setImage(SDL_Surface* image_) { image = image_; }
     virtual SDL_Surface* getImage() { return image; }
 
-    virtual void setImageSizeWorldCoords(Vec3 imageSizeWorldCoords_){
-        imageSizeWorldCoords = imageSizeWorldCoords_;
-	}
+    virtual void setImageSizeWorldCoords(Vec3 imageSizeWorldCoords_){ imageSizeWorldCoords = imageSizeWorldCoords_; }
 
     virtual void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
     virtual SDL_Texture* getTexture() { return texture; }
@@ -71,6 +53,25 @@ public:
 
     virtual void Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale = 1.0f);
     void RenderHitbox(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale = 1.0f);
+
+
+protected:
+    // inherited classes can access this
+    Vec3 pos;
+    Vec3 vel;
+    Vec3 accel;
+    float mass;
+    float radius;           // for getting near walls
+    float orientation;		// facing this direction
+    float rotation;			// rotating at this speed (radians per second?)
+    float angular;          // angular acceleration
+
+    Hitbox hitbox;
+
+    Vec3 imageSizeWorldCoords;
+    SDL_Surface* image;
+    SDL_Texture* texture;
 };
+
 
 #endif /* BODY_H */

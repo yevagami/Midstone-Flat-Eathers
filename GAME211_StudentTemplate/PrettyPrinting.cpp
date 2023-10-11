@@ -137,6 +137,18 @@ void PrettyPrinting::printEM(EntityMap& entityMap) {
 
 }
 
+void PrettyPrinting::printMouseCoords(const SDL_Event& event_) {
+	if (event_.type == SDL_MOUSEBUTTONDOWN) {
+		if (event_.button.button == SDL_BUTTON_LEFT) {
+			int mx = event_.button.x;
+			int my = event_.button.y;
+			ccPrint.colour(pink);
+			std::cout << mx << ", " << my << std::endl;
+			ccPrint.colour(clear);
+		}
+	}
+}
+
 #pragma region constants
 const char* themePrimary = "";
 const char* themeSecondary = "";

@@ -1,8 +1,7 @@
 #include "Scene1.h"
-#include <VMath.h>
-#include <SDL_ttf.h>
 
 #include "PrettyPrinting.h"
+
 #include "ConsistentConsole.h"
 //a global var. My problem was that i defined it in the Scene 3 again, that made a linking error.
 //IMPORTANT!!!
@@ -13,6 +12,10 @@ ConsistentConsole cc; //not member of scene1 class. Define somewhere else
 SaveManager save;//not member of scene1 class
 #include "EntityMap.h"
 EntityMap eMap;//not member of scene1 class
+
+
+//#include <VMath.h>
+//#include <SDL_ttf.h>
 
 //#include "KeybindHandler.h"
 //keybinds::keys key;
@@ -49,77 +52,65 @@ bool Scene1::OnCreate()//??
 #pragma endregion
 	name = "scene1"; // we dont need that 
 
+	auto* myButton  = new ui::Button(renderer, "my butt(on)", SDL_Testangle, ui::SDL_COLOR_WASHING_MACHINE, 
+		ui::Font{45, ui::fontMap.at("wingdings")}, SDL_COLOR_SOUL_CAMPFIRE);
 
+	allButtons.emplace_back(myButton);
+
+	for (auto* button : allButtons) {
+		button->scaleDimensions(2);
+		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		button->generateHitbox();
+		button->SetOnClick([&]() {
+			cc.consoleManager(not_error, "the click of 87");
+			});
+	}
 
 	return true;
 }
 
-void Scene1::OnDestroy() {}
+void Scene1::OnDestroy() {
+	for (auto button : allButtons) {
+		delete button;
+	}
+
+
+}
 
 void Scene1::Update(const float deltaTime) {
 	// Update player
 	game->getPlayer()->Update(deltaTime);
 
-	//for (ui::Button* button : allButtons) {
-	//	button->Update(deltaTime);
-	//}
+
 
 }
 
 void Scene1::Render() {
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	using namespace ui;
-
-	//	Creating the button objects 
-	ui::Button myButton(renderer, "my button", ui::SDL_Testangle, ui::SDL_COLOR_WASHING_MACHINE);
-	ui::Button myAsson(renderer, "ass", ui::SDL_Testangle, ui::SDL_COLOR_TOOTHBRUSH,
-	                   ui::Font({55, ui::fontMap.at("heebo")}));
-	ui::Button myBeuton(renderer, "beu", ui::SDL_Testangle, ui::SDL_COLOR_REINHARDT); //, ui::fontMap.at("open sans")
-	ui::Button myJimmy(renderer, "jilly", ui::SDL_Testangle, ui::SDL_COLOR_CASSIDY); //ui::fontMap.at("roboto")
-	ui::Button myNeutron(renderer, "niltril", ui::SDL_Testangle, ui::SDL_COLOR_CRIMSON_RED);
-	ui::Button myProton(renderer, "BOO!!!", ui::SDL_Testangle, ui::SDL_COLOR_SCARLET_RED,
-	                    ui::Font({100, ui::fontMap.at("gothic")}));
-
-	allButtons.push_back(&myButton);
-	allButtons.push_back(&myAsson);
-	allButtons.push_back(&myBeuton);
-	allButtons.push_back(&myJimmy);
-	allButtons.push_back(&myNeutron);
-	allButtons.push_back(&myProton);
-
-	//	mass attribute changing
-	for (ui::Button* button : allButtons) {
-		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-		button->SetOnClick([] { cc.consoleManager(update, "button clicked"); });
-	}
-
-	//	single attribute changing
-	myButton.offsetPosition(-250, -250);
-
-	myAsson.offsetPosition(250, -250);
-	myJimmy.offsetPosition(125, -125);
-	myProton.offsetPosition(0);
-	myNeutron.offsetPosition(-125, 125);
-	myBeuton.offsetPosition(-250, 250);
 
 
 	//	render the buttons
-	for (ui::Button* button : allButtons) {
-		if (button->Render()) { button->setPosition(); } }
+	for (auto* button : allButtons) {
+		button->Render(renderer);
+	}
 	//	clear the allButtons vector
-	allButtons.clear();
 
 
 	// render the player
 	game->RenderPlayer(0.1f);
 
+
 	SDL_RenderPresent(renderer);
 }
 
-void Scene1::HandleEvents(const SDL_Event& event)
-{
-	/*key.HandleEvents(event);*/
+void Scene1::HandleEvents(const SDL_Event& event) {
+	PrettyPrinting::printMouseCoords(event);
+
+	for (const auto button : allButtons) {
+		button->HandleEvents(event);
+	}
+
 
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
@@ -166,6 +157,9 @@ void Scene1::HandleEvents(const SDL_Event& event)
 	{
 		///	doesnt work rn >:(
 		save.clearBothSaves();
+
+		
+
 	}
 
 

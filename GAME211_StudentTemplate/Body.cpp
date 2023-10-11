@@ -16,10 +16,10 @@ Body::Body() {
 Body::Body (
     Vec3 pos_, Vec3 vel_, Vec3 accel_,
     float mass_,
-    float radius_ = 0.0f,
-    float orientation_ = 0.0f,
-    float rotation_ = 0.0f,
-    float angular_ = 0.0f
+    float radius_,
+    float orientation_,
+    float rotation_,
+    float angular_
 )
 {
     pos = pos_;

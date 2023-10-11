@@ -12,8 +12,8 @@ namespace menu {
 	class UIManager : private Button {
 	public:
 			///	Constructor
-		UIManager
-		(SDL_Renderer* buttonRenderer) : buttonRenderer(buttonRenderer) { }
+		//UIManager
+		//(SDL_Renderer* buttonRenderer) : buttonRenderer(buttonRenderer) { }
 
 
 		void AddButton(Button &button) {
@@ -23,7 +23,7 @@ namespace menu {
 
 		void HandleButtonEvents(SDL_Event& event) {
 			for (Button* button : buttons) {
-				button->HandleEvent(event);
+				button->HandleEvents(event);
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace menu {
 			if (!render) { return false; }
 	
 			for (Button* button : buttons) {
-				if (button->Render()) { button->setPosition(); }
+				if (button->Render(buttonRenderer)) { button->setPosition(); }
 			} buttons.clear();
 
 

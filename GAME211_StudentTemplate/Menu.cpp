@@ -6,20 +6,20 @@ ConsistentConsole ccMenu(true);
 namespace ui {
 #pragma region Core Methods
 #pragma region Rendering
-	bool Button::Render() {
-		if (!RenderBackground() || !RenderBorder() || !RenderText()) {
+	bool Button::Render(SDL_Renderer* buttonRenderer_) {
+		if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {
 			return false;
 		}
 		return true;
 	}
 
-	bool Button::RenderBackground() {
+	bool Button::RenderBackground(SDL_Renderer* buttonRenderer_) {
 		SDL_SetRenderDrawColor(buttonRenderer, backgroundColour.r, backgroundColour.g, backgroundColour.b, backgroundColour.a);
 		SDL_RenderFillRect(buttonRenderer, &rect);
 		return true;
 	}
 
-	bool Button::RenderBorder() {
+	bool Button::RenderBorder(SDL_Renderer* buttonRenderer_) {
 		SDL_Rect paddedRect = {
 		rect.x,
 		rect.y,
@@ -31,7 +31,7 @@ namespace ui {
 		return true;
 	}
 
-	bool Button::RenderText() {
+	bool Button::RenderText(SDL_Renderer* buttonRenderer_) {
 		//	1. set up a font
 		buttonTextFont = TTF_OpenFont(fontItself, fontSize);
 		if (!buttonTextFont) { return false; }
@@ -68,18 +68,22 @@ namespace ui {
 	}
 #pragma endregion
 
-	void Button::HandleEvent(SDL_Event& event_) {
+	void Button::HandleEvents(const SDL_Event& event_) {
+		//	click hitbox
 		switch (event_.type) {
 		case SDL_MOUSEBUTTONDOWN:
-			if (isMouseOver(event_.button.x, event_.button.y)) {
-				if (OnClick) {
+			if(event_.button.button == SDL_BUTTON_LEFT) {
+				if(OnClick && hitbox.collisionClickCheck(event_.button.x, event_.button.y))  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions, clang-diagnostic-implicit-int-float-conversion)
+				{
 					ccMenu.consoleManager(not_error, "button clicked");
 					OnClick();
 				}
 			}
 			break;
 
+		default:
 
+			break;
 		}
 	}
 

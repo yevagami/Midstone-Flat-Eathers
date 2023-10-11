@@ -12,12 +12,14 @@ class Scene {
 public:
 	const char* name;
     class GameManager* game = NULL;
+	virtual ~Scene() {};
+
 	virtual bool OnCreate() = 0;
 	virtual void OnDestroy() = 0;
 	virtual void Update(const float time) = 0;
 	virtual void Render() = 0;
     virtual void HandleEvents(const SDL_Event& event) = 0;
-    virtual ~Scene(){};
+
 	virtual float getxAxis() = 0;
 	virtual float getyAxis() = 0;
 	virtual SDL_Window* getWindow() = 0;
