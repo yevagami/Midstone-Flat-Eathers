@@ -32,10 +32,12 @@ bool Scene3::OnCreate() {
 #pragma endregion
 	name = "scene3";
 
-	Button* scene3Button = new _debugbutton; // m a c r o
-
-
+	auto* scene3Button = new Button(Font{ "diana land", 100 });
+	scene3Button->textColour = SDL_COLOR_EMERALD_GREEN;
+	scene3Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene3Button->offsetPosition(-300);
 	allButtons.emplace_back(scene3Button);
+	
+
 
 	return true;
 }
@@ -69,7 +71,7 @@ void Scene3::Render() {
 
 void Scene3::HandleEvents(const SDL_Event& event)
 {
-	//for (auto* button : allButtons) { button->HandleEvents(event); }
+	for (auto* button : allButtons) { button->HandleEvents(event); }
 
 
 	// send events to player as needed

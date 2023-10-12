@@ -5,21 +5,61 @@ ConsistentConsole ccMenu(true);
 
 namespace ui {
 #pragma region Core Methods
+	void Button::HandleEvents(const SDL_Event& event_) {
+		if (isActive) {
+			switch (event_.type) {
+				//	hovering
+			case SDL_MOUSEMOTION:
+				if (isMouseOver(event_.motion.x, event_.motion.y)) {
+					isHovering = true;
+				}
+				else { isHovering = false; }
+				break;
+
+				//	clicking
+			case SDL_MOUSEBUTTONDOWN:
+				if (event_.button.button == SDL_BUTTON_LEFT) {
+					if (OnClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
+						OnClick();
+					}
+				}
+				break;
+
+				//	default
+			default:
+				break;
+			}
+		}
+	}
+
+
+	void Button::Update(float deltaTime_) { }
+
+
+	void Button::SetOnClick(const std::function<void()>& onClick_) { OnClick = onClick_; }
+
+
 #pragma region Rendering
 	bool Button::Render(SDL_Renderer* buttonRenderer_) {
-		if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {
-			return false;
+		if (isActive) {
+			if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {
+				return false;
+			} ClearSDLStuff();
+
+
+			return true;
 		}
 
-		ClearSDLStuff();
 
-		return true;
+		return true;		//	true cuz no error, just didnt render (peep is "if isActive"). (can change)
 	}
 
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
-		const SDL_Color renderColour = isHovering ? onHoveringBackgroundColour : backgroundColour;
-		SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b,
-			renderColour.a);
+		//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
+		const SDL_Color renderColour =
+			isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour;
+
+		SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
 		SDL_RenderFillRect(renderer_, &rect);
 		return true;
 	}
@@ -39,11 +79,13 @@ namespace ui {
 	bool Button::RenderText(SDL_Renderer* renderer_) {
 		if (text == nullptr || strlen(text) == 0) { return false; }
 
-		const SDL_Color renderColour = isHovering ? onHoveringTextColour : textColour;
-
 		//	1. set up a font
 		buttonTextFont = TTF_OpenFont(fontItself, fontSize);
 		if (!buttonTextFont) { return false; }
+
+		//	if isHovering, textColour becomes inverted
+		const SDL_Color renderColour =
+			isHovering ? (textColour * onHoveringTextColour) : textColour;
 
 		//	2. set up a surface image with some text
 		buttonTextSurface = TTF_RenderText_Solid(buttonTextFont, text, renderColour);
@@ -60,7 +102,8 @@ namespace ui {
 		if (isTextCentered) {
 			x = rect.x + (rect.w - textWidth) / 2;
 			y = rect.y + (rect.h - textHeight) / 2;
-		} else {
+		}
+		else {
 			x = rect.x;
 			y = rect.y;
 		}
@@ -74,40 +117,7 @@ namespace ui {
 		return true;
 	}
 #pragma endregion
-
-	void Button::HandleEvents(const SDL_Event& event_) {
-		switch (event_.type) {
-			//	hovering
-		case SDL_MOUSEMOTION:
-			if (isMouseOver(event_.motion.x, event_.motion.y)) {
-				isHovering = true;
-			}
-			else { isHovering = false; }
-			break;
-
-			//	clicking
-		case SDL_MOUSEBUTTONDOWN:
-			if (event_.button.button == SDL_BUTTON_LEFT) {
-				if (OnClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
-					OnClick();
-				}
-			}
-			break;
-
-			//	default
-		default:
-			break;
-		}
-	}
-
-	void Button::Update(float deltaTime_) { }
-
-
-	void Button::SetOnClick(const std::function<void()>& onClick_) { OnClick = onClick_; }
-
-
 #pragma endregion
-
 #pragma region aesthetics
 	bool Button::isMouseOver(int mouseX_, int mouseY_) const {
 		return mouseX_ >= rect.x && mouseX_ <= (rect.x + rect.w) &&
@@ -115,28 +125,36 @@ namespace ui {
 	}
 
 
-	void Button::centerPosition(int screenWidth_, int screenHeight_) {
+	void Button::centerPosition(const int screenWidth_, const int screenHeight_) {
 		rect.x = (screenWidth_ - rect.w) / 2;
 		rect.y = (screenHeight_ - rect.h) / 2;
 	}
 
 
-	void Button::setPosition(int newRectY_, int newRectX_) {
+	void Button::setPosition(const int newRectY_, const int newRectX_) {
 		rect.x = newRectX_;
 		rect.y = newRectY_;
 	}
 
+	void Button::setPositionRelativeTo(const Button& papaButton_, const int yOffset_, const int xOffset_) {
+		const int newY = papaButton_.getY() + yOffset_;
+		const int newX = papaButton_.getX() + xOffset_;
 
-	void Button::offsetPosition(int newRectYOffset_, int newRectXOffset_) {
+		setPosition(newY, newX);
+	}
+
+
+	void Button::offsetPosition(const int newRectYOffset_, const int newRectXOffset_) {
 		rect.x += newRectXOffset_;
 		rect.y += newRectYOffset_;
 	}
 
 
-	void Button::setDimensions(int newRectHeight_, int newRectWidth_) {
+	void Button::setDimensions(const int newRectHeight_, const int newRectWidth_) {
 		rect.w = newRectWidth_;
 		rect.h = newRectHeight_;
 	}
+
 
 	void Button::setDimensions(const SDL_Rect& rect_) {
 		rect.w = rect_.w;
@@ -146,17 +164,21 @@ namespace ui {
 	}
 
 
-	void Button::scaleDimensionsIndividually(int newRectHeightScaler_, int newRectWidthScaler_) {
+	void Button::scaleDimensionsIndividually(const int newRectHeightScaler_, const int newRectWidthScaler_) {
 		rect.h = rect.h * newRectHeightScaler_;
 		rect.w = rect.w * newRectWidthScaler_;
 	}
 
 
-	void Button::scaleDimensions(int scaler_) {
+	void Button::scaleDimensions(const int scaler_) {
 		rect.w = rect.w * scaler_;
 		rect.h = rect.h * scaler_;
 	}
 #pragma endregion
+}
+
+//  Constants
+namespace ui {
 	Uint8* SDLColorToUint8(SDL_Color color_) {
 		static Uint8 rgba[4];
 		rgba[0] = color_.r;
@@ -166,11 +188,13 @@ namespace ui {
 		return rgba;
 	}
 
+
 	Uint8 Clamp(const Uint8 value_, const Uint8 min_, const Uint8 max_) {
 		if (value_ < min_) { return min_; }
 		if (value_ < max_) { return max_; }
 		return value_;
 	}
+
 
 	SDL_Color operator+(const SDL_Color& colourA_, const SDL_Color& colourB_) {
 		SDL_Color result;
@@ -178,10 +202,9 @@ namespace ui {
 		result.g = Clamp(colourA_.g + colourB_.g, 0, 255);
 		result.b = Clamp(colourA_.b + colourB_.b, 0, 255);
 		result.a = Clamp(colourA_.a + colourB_.a, 0, 255);
-
-		SDL_Color colourA(colourA_);
 		return result;
 	}
+
 
 	SDL_Color operator-(const SDL_Color& colourA_, const SDL_Color& colourB_) {
 		SDL_Color result;
@@ -192,53 +215,53 @@ namespace ui {
 		return result;
 	}
 
-	SDL_Color operator*(const SDL_Color& colour_, float scalar) {
+
+	SDL_Color operator*(const SDL_Color& colourA_, const SDL_Color& colourB_) {
 		SDL_Color result;
-		result.r = Clamp(static_cast<Uint8>(static_cast<float>(colour_.r) * scalar), 0, 255);
-		result.g = Clamp(static_cast<Uint8>(static_cast<float>(colour_.g) * scalar), 0, 255);
-		result.b = Clamp(static_cast<Uint8>(static_cast<float>(colour_.b) * scalar), 0, 255);
-		result.a = Clamp(static_cast<Uint8>(static_cast<float>(colour_.a) * scalar), 0, 255);
+
+		result.r = (colourA_.r * colourB_.r) / 255;
+		result.g = (colourA_.g * colourB_.g) / 255;
+		result.b = (colourA_.b * colourB_.b) / 255;
+		result.a = (colourA_.a * colourB_.a) / 255;
+
 		return result;
 	}
 
-	SDL_Color operator/(const SDL_Color& colour_, float divisor) {
-		if (divisor == 0.0f) {
-			// Handle division by zero
-			return colour_;
-		}
 
+	SDL_Color operator/(const SDL_Color& colourA_, const SDL_Color& colourB_) {
 		SDL_Color result;
-		result.r = Clamp(static_cast<Uint8>(static_cast<float>(colour_.r) / divisor), 0, 255);
-		result.g = Clamp(static_cast<Uint8>(static_cast<float>(colour_.g) / divisor), 0, 255);
-		result.b = Clamp(static_cast<Uint8>(static_cast<float>(colour_.b) / divisor), 0, 255);
-		result.a = Clamp(static_cast<Uint8>(static_cast<float>(colour_.a) / divisor), 0, 255);
+
+		result.r = (colourA_.r / 2 + colourB_.r / 2) < 255 ? (colourA_.r / 2 + colourB_.r / 2) : 255;
+		result.g = (colourA_.g / 2 + colourB_.g / 2) < 255 ? (colourA_.g / 2 + colourB_.g / 2) : 255;
+		result.b = (colourA_.b / 2 + colourB_.b / 2) < 255 ? (colourA_.b / 2 + colourB_.b / 2) : 255;
+		result.a = (colourA_.a / 2 + colourB_.a / 2) < 255 ? (colourA_.a / 2 + colourB_.a / 2) : 255;
+
 		return result;
 	}
-}
 
-///// Text Struct
-//namespace ui {
-//	void Text::Render(int x, int y, SDL_Color textColour) {
-//		if (font) {
-//			SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColour);
-//			if (textSurface) {
-//				SDL_Texture* textTexture = SDL_CreateTextureFromSurface(buttonRenderer, textSurface);
-//				if (textTexture) {
-//
-//					SDL_Rect textRect = { x, y, textSurface->w, textSurface->h };
-//					SDL_RenderCopy(buttonRenderer, textTexture, nullptr, &textRect);
-//
-//					SDL_DestroyTexture(textTexture);
-//				}
-//
-//				SDL_FreeSurface(textSurface);
-//			}
-//		}
-//
-//	}
 
-//  Constants
-namespace ui {
+	SDL_Color operator!(const SDL_Color& colour_) {
+		SDL_Color contrastingColor;
+
+		contrastingColor.r = 255 - colour_.r;
+		contrastingColor.g = 255 - colour_.g;
+		contrastingColor.b = 255 - colour_.b;
+		contrastingColor.a = colour_.a;
+
+		return contrastingColor;
+	}
+
+	SDL_Color operator%(const SDL_Color& colourA_, const SDL_Color& colourB_) {
+		SDL_Color result;
+		result.r = colourA_.r;
+		result.g = colourA_.g;
+		result.b = colourA_.b;
+		result.a = colourB_.a;  // use the alpha value from colourB
+		return result;
+	}
+
+
+
 #pragma region shapes
 	SDL_Rect SDL_Testangle = { 0, 0, 425, 75 };
 
@@ -250,11 +273,11 @@ namespace ui {
 	//273 preset colour variables - fri 6 2023
 #pragma region pride
 #pragma region transparency
-	SDL_Color white100 = { 255, 255, 255, 255 };
-	SDL_Color white75 = { 255, 255, 255, 191 };
-	SDL_Color white50 = { 255, 255, 255, 128 };
-	SDL_Color white25 = { 255, 255, 255, 64 };
-	SDL_Color white10 = { 255, 255, 255, 26 };
+	SDL_Color SDL_White100 = { 255, 255, 255, 255 };
+	SDL_Color SDL_White75 = { 255, 255, 255, 191 };
+	SDL_Color SDL_White50 = { 255, 255, 255, 128 };
+	SDL_Color SDL_White25 = { 255, 255, 255, 64 };
+	SDL_Color SDL_White10 = { 255, 255, 255, 26 };
 #pragma endregion
 #pragma region colours
 	SDL_Color SDL_COLOR_ALICE_BLUE = { 240, 248, 255, 255 };

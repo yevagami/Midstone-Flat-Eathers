@@ -13,8 +13,6 @@ EntityMap eMap; //not member of scene1 class
 
 #include "GameObjects.h"
 
-//#include <VMath.h>
-//#include <SDL_ttf.h>
 
 
 // See notes about this constructor in Scene1.h.
@@ -28,7 +26,9 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
 
 }
 
+
 Scene1::~Scene1() = default;
+
 
 bool Scene1::OnCreate() {
 #pragma region SDL Window Stuff
@@ -43,59 +43,81 @@ bool Scene1::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 #pragma endregion
 	name = "scene1"; // we dont need that 
-	using namespace ui;
+				//	ew^
 
+	//	button showcase
+	using namespace ui;	auto BUTTON_BACKGROUND = SDL_COLOR_SOUL_CAMPFIRE; auto BUTTON_TEXT = SDL_COLOR_BLACK; auto rectangle = SDL_Testangle; auto square = SDL_Square;
+
+	///	Step 1: Create the Buttons with Default Values
+
+	auto* myJankyText = new Button(Font{"ur amazing<3", 100});
+	auto* myJankySubText = new Button(Font{"with rizz", 25, fontMap.at("comic sans"),0,0,-45.0});
 
 	auto* myStartButton = new Button(	//	_debugbutton
-		Font{"start button", 50, fontMap.at("gothic")}, 
-		SDL_Testangle, 
-		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+		Font{"start button", 50, fontMap.at("ransom")}, 
+		rectangle,
+		BUTTON_BACKGROUND, BUTTON_TEXT);
 
-	auto* myOptionsButton = new Button(	//	_debugbutton
-		Font{ "options button", 50, fontMap.at("ransom") },
-		SDL_Testangle,
-		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+	auto* myOptionsButton = new Button(	//	
+		Font{ "options button", 50, fontMap.at("lobster") },
+		rectangle,
+		BUTTON_BACKGROUND, BUTTON_TEXT);
 
-	auto* myExitButton = new Button(	//	_debugbutton
-		Font{ "exit button", 50, fontMap.at("gothic") },
-		SDL_Testangle,
-		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+	auto* myExitButton = new Button(	//	
+		Font{ "exit button", 50, fontMap.at("verdana") },
+		rectangle,
+		BUTTON_BACKGROUND, BUTTON_TEXT);
 
-	auto* mySmallButton = new Button(	//_debugbutton
-		Font{""}, SDL_Square,
-		SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM);
+	auto* mySmallButton = new Button(	//
+		Font{":)", 55, fontMap.at("ransom"),0,0,90},
+		square,
+		BUTTON_BACKGROUND, BUTTON_TEXT);
 
-	mySmallButton->scaleDimensions(50);
+	auto* myDebugButton = new _debugbutton;
 
+	//1.1 aesthetics before grouping
+	mySmallButton->scaleDimensions(50); myDebugButton->scaleDimensions(80); myStartButton->backgroundColour = SDL_COLOR_BAD_DRAGON;
+	myJankyText->textColour = SDL_COLOR_ROSE_TOY;
+	myJankySubText->textColour = SDL_COLOR_ROSE_TOY % SDL_White50;
+	//1.2 grouping
+	allButtons.emplace_back(myJankyText);	allButtons.emplace_back(myJankySubText);
 	allButtons.emplace_back(myStartButton);
-	allButtons.emplace_back(myOptionsButton);
+	allButtons.emplace_back(myOptionsButton); //	lowkey the layering (who's on top)
 	allButtons.emplace_back(myExitButton);
 	allButtons.emplace_back(mySmallButton);
+	allButtons.emplace_back(myDebugButton);
 
+	///	Step 2: Aesthetics
 
-	for (auto* button : allButtons) {
-		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); }
+	for (auto* button : allButtons) { button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); }
+	myJankyText->offsetPosition(-300);	//	offsets the text up
+	myJankySubText->setPositionRelativeTo(*myJankyText, 50, 300);
 
-	myStartButton->offsetPosition(-150);
-	myOptionsButton->offsetPosition();
-	myExitButton->offsetPosition(+150);
-	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW());
+	myStartButton->offsetPosition(-150);	//	offsets the start button 150 units vertically (up)
+	myOptionsButton->offsetPosition(); //	not needed, purely for visuals
+	myExitButton->offsetPosition(+150);	//	offsets the exit button 150 units vertically (down)
 
+	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW()); //	places the square button into the top corner
+	myDebugButton->setPosition(0 /*+ myDebugButton->getH()*/, SCREEN_WIDTH - myDebugButton->getW()); //	places the square button into the bottom corner
 
-	for (auto* button : allButtons) {
-		button->SetOnClick([&] { cc.consoleManager(not_error, "the click of '87"); });
-		button->generateHitbox(); }
+	///	step 3: Hitbox and OnClick
 
-	myStartButton->onHoveringBackgroundColour = SDL_COLOR_ROSE_TOY;
-	myStartButton->onHoveringTextColour = SDL_COLOR_BAD_DRAGON;
+	for (auto* button : allButtons) { button->generateHitbox(); } //	<-- DO AFTER RE-POSITIONING!!!!!!!!!!!!!! [this generates the Clickbox]
+
+	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); });
+	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); });
+	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); });
+	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); });
 
 	return true;
 }
+
 
 void Scene1::OnDestroy() {
 	for (auto* button : allButtons) { delete button; }
 	
 }
+
 
 void Scene1::Update(const float deltaTime) {
 	// Update player
@@ -103,11 +125,13 @@ void Scene1::Update(const float deltaTime) {
 
 }
 
+
 void Scene1::Render() {
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 
 
+	
 	//	render the buttons
 	for (auto* button : allButtons) { button->Render(renderer); }
 	
@@ -116,17 +140,17 @@ void Scene1::Render() {
 	game->RenderPlayer(0.1f);
 
 
-	SDL_RenderPresent(renderer);
-}
+	SDL_RenderPresent(renderer); }
+
 
 void Scene1::HandleEvents(const SDL_Event& event) {
 	PrettyPrinting::printMouseCoords(event);
-
 	for (const auto button : allButtons) { button->HandleEvents(event); }
+
+
 
 	// send events to player as needed
 	game->getPlayer()->HandleEvents(event);
-
 
 #pragma region debuggingKeys
 	if (event.key.keysym.sym == SDLK_u && event.type == SDL_KEYDOWN) {

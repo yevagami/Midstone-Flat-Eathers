@@ -13,12 +13,20 @@ namespace ui {
 	Uint8* SDLColorToUint8(SDL_Color color_);
 	Uint8 Clamp(Uint8 value_, Uint8 min_, Uint8 max_);
 
+	//	add 2 colours (use *, it blends)
 	SDL_Color operator+(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	//	subtracts 2 colours
 	SDL_Color operator-(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	//	blends 2 colours
 	SDL_Color operator*(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	//	blends and darkens 2 colours
 	SDL_Color operator/(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	//	inverts the colour
+	SDL_Color operator!(const SDL_Color& colour_);
+	//	steals the transparency from the second colour
+	SDL_Color operator%(const SDL_Color& colourA_, const SDL_Color& colourB_);
 
-#define _debugbutton Button( Font{ "cool words", 90, fontMap.at("gothic"),0,0,-45 }, SDL_Square, SDL_COLOR_POOPSTAIN, SDL_COLOR_WARM_STREAM)
+#define _debugbutton Button( Font{ "sans", 55, fontMap.at("comic sans"),0,0,55 }, SDL_Square, SDL_COLOR_DEEP_PINK, SDL_COLOR_CANDY_PINK)
 
 #pragma region shapes
 	extern SDL_Rect SDL_Testangle;
@@ -187,6 +195,7 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_PEACH_PUFF;
 	extern SDL_Color SDL_COLOR_PEACHY_PINK;
 	extern SDL_Color SDL_COLOR_PERU;
+	extern SDL_Color SDL_COLOR_PINK;
 	extern SDL_Color SDL_COLOR_PERSIMMON;
 	extern SDL_Color SDL_COLOR_PINE_GREEN;
 	extern SDL_Color SDL_COLOR_PINEAPPLE_YELLOW;
@@ -410,7 +419,7 @@ namespace ui {
 
 /// Main Classes
 namespace ui {
-	/// Font Map
+	/// comic sans, open sans, gothic, heebo, roboto, ubuntu, verdana, wingdings, lobster, ransom
 	static const std::unordered_map<const char*, const char*> fontMap = {
 			{"comic sans", "fonts/COMIC.TTF"},
 			{"open sans", "fonts/OpenSans-Regular.ttf"},
@@ -436,8 +445,8 @@ namespace ui {
 
 		// ReSharper disable once CppParameterMayBeConst
 		// ReSharper disable once CppNonExplicitConvertingConstructor
-		Font(const char* fontText_ = "", int size_ = 45, 
-			const char* font_ = fontMap.at("comic sans"), int x_ = 0, int y_ = 0, double rot_ = 0.0)
+		Font(const char* fontText_ = "", int size_ = 45,
+			const char* font_ = fontMap.at("comic sans"), const int x_ = 0, const int y_ = 0, const double rot_ = 0.0)
 			: fontText(fontText_), size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_) { }
 	};
 
@@ -445,19 +454,18 @@ namespace ui {
 	class Button {
 	public:
 		/// Constructors
-		//  default constructor
 		//Button() = default;
-
 		Button(const Button& otherButton_) = default;
-
 		Button& operator=(const Button& otherButton_) {
 			if (this != &otherButton_) {
-				//buttonRenderer = otherButton_.buttonRenderer;
-
 				rect = otherButton_.rect;
 				font = otherButton_.font;
 				text = otherButton_.text;
 				hitbox = otherButton_.hitbox;
+
+				isTextCentered = otherButton_.isTextCentered;
+				isHovering = otherButton_.isHovering;
+				isActive = otherButton_.isActive;
 
 				backgroundColour = otherButton_.backgroundColour;
 				onHoveringBackgroundColour = otherButton_.onHoveringBackgroundColour;
@@ -475,24 +483,22 @@ namespace ui {
 
 			return *this;
 		}
-
 		//  main constructor
 		Button(
-			//SDL_Renderer* buttonRenderer_,
 			const Font& font_ = Font{},
 			SDL_Rect rect_ = { 0, 0, 0, 0 },
-			SDL_Color backgroundColour_ = SDL_COLOR_CAMPFIRE,
-			SDL_Color textColour_ = SDL_COLOR_SOUL_CAMPFIRE
+			SDL_Color backgroundColour_ = SDL_COLOR_SOUL_CAMPFIRE,
+			SDL_Color textColour_ = SDL_COLOR_BLACK
 		) :
-			/*buttonRenderer(buttonRenderer_),*/ rect(rect_), font(font_), backgroundColour(backgroundColour_), textColour(textColour_) {
+			rect(rect_), font(font_), backgroundColour(backgroundColour_), textColour(textColour_) {
 			isTextCentered = true;
+			isActive = true;
 			isHovering = false;
-			//useGradientBackground = false; isGradientVertical = false; gradientEnd = SDL_COLOR_MYSTIC_PURPLE; gradientStart = SDL_COLOR_BLACK;
 			borderColour = SDL_COLOR_BLACK;
-			onHoveringBackgroundColour = SDL_COLOR_SOUL_CAMPFIRE;
-			onHoveringTextColour = SDL_COLOR_CAMPFIRE;
+			onHoveringBackgroundColour = SDL_COLOR_ROSE_TOY;
+			onHoveringTextColour = SDL_COLOR_ROSE_TOY;
 
-			hitbox.generateHitbox(rect_); // generates the hitbox based off initial pos (if you transform the box before rendering, regenerate.
+			hitbox.generateHitbox(rect_); // generates the hitbox based off initial pos (if you transform the box before rendering, regenerate).
 
 			//	font shenegans
 			text = font_.fontText;
@@ -508,50 +514,29 @@ namespace ui {
 			buttonTextSurface = nullptr;
 		}
 
-		~Button() {
-			ClearSDLStuff();
-		}
-
+		~Button() { ClearSDLStuff(); }
 
 		/// Public Methods
-		//  renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
-		bool Render(SDL_Renderer* renderer_);
-		//  handles events (mouse clicks and hovering)
+		 //	handles events (mouse clicks and hovering)
 		void HandleEvents(const SDL_Event& event_);
-		//  for animations, hover effects, and live-things
+		//		for animations, hover effects, and live-things
 		void Update(float deltaTime_);
-		//  sets a callback function for when its clicked
+		//		sets a callback function for when its clicked
 		void SetOnClick(const std::function<void()>& onClick_);
-		//  is the mouse hovering over the button's dimensions? [true/false]
-		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
+		//		renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
+		bool Render(SDL_Renderer* renderer_);
 
 	protected:
 		/// Private Methods
-		//  renders the background component
+		//		renders the background component
 		bool RenderBackground(SDL_Renderer* renderer_) const;
-		//  renders the borders component
+		//		renders the borders component
 		bool RenderBorder(SDL_Renderer* renderer_) const;
-		//  renders the text component
+		//		renders the text component
 		bool RenderText(SDL_Renderer* renderer_);
 
-		void ClearSDLStuff() {
-			if (buttonTextFont) {
-				TTF_CloseFont(buttonTextFont);
-				buttonTextFont = nullptr;
-			}
-			if (buttonTextTexture) {
-				SDL_DestroyTexture(buttonTextTexture);
-				buttonTextTexture = nullptr;
-			}
-			if (buttonTextSurface) {
-				SDL_FreeSurface(buttonTextSurface);
-				buttonTextSurface = nullptr;
-			}
-		}
 
 		/// Private Variables
-		//  a "the renderer"(tm)
-		//SDL_Renderer* buttonRenderer;
 		//  a rectangle
 		SDL_Rect rect;
 		//	a hitbox
@@ -566,20 +551,17 @@ namespace ui {
 		//  a function as a variable
 		std::function<void()> OnClick;
 
-
 #pragma region styling [tw: aesthetic]
 	public:
 		/// Editable Attributes [ public variables lmao ]
-		//  button's text
-		const char* text;
-		//  button's font
-		const char* fontItself;
-		//	button's font size
-		int fontSize;
-		bool isTextCentered; //  centered text flag
+		const char* text;		//  button's text
+		const char* fontItself;		//  button's font
+		int fontSize;		//	button's font size
+		bool isTextCentered; //  is text centered flag
+		bool isActive; //	is button active flag
+		SDL_Color borderColour; //  button's boarder colour
 		SDL_Color backgroundColour; //  button's background colour
 		SDL_Color onHoveringBackgroundColour; //  button's hover background colour
-		SDL_Color borderColour; //  button's boarder colour
 		SDL_Color textColour; //  button's text colour
 		SDL_Color onHoveringTextColour; //  button's hovering text colour
 	protected:
@@ -601,35 +583,36 @@ namespace ui {
 		[[nodiscard]] int getW() const { return rect.w; }
 
 		void generateHitbox() { hitbox.generateHitbox(rect); }
-		//  set position (absolutely transform)
 		void setPosition(int newRectY_ = 0, int newRectX_ = 0);
-		//  offset position (relative transform)
+		void setPositionRelativeTo(const Button& papaButton_, int yOffset_ = 0, int xOffset_ = 0);
 		void offsetPosition(int newRectYOffset_ = 0, int newRectXOffset_ = 0);
-		//  set the dimensions
 		void setDimensions(int newRectHeight_, int newRectWidth_);
 		void setDimensions(const SDL_Rect& rect_);
-		//  scale the dimensions
 		void scaleDimensionsIndividually(int newRectHeightScaler_ = 1, int newRectWidthScaler_ = 1);
-		//  scale the dimensions
 		void scaleDimensions(int scaler_ = 1);
-		//  center to screen
 		void centerPosition(int screenWidth_, int screenHeight_);
 #pragma endregion
+#pragma region utility
+	protected:
+		// ReSharper disable once CppInconsistentNaming
+		void ClearSDLStuff() {
+			if (buttonTextFont) {
+				TTF_CloseFont(buttonTextFont);
+				buttonTextFont = nullptr;
+			}
+			if (buttonTextTexture) {
+				SDL_DestroyTexture(buttonTextTexture);
+				buttonTextTexture = nullptr;
+			}
+			if (buttonTextSurface) {
+				SDL_FreeSurface(buttonTextSurface);
+				buttonTextSurface = nullptr;
+			}
+		}
+	public:
+		//  is the mouse hovering over the button's dimensions? [true/false]
+		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
+#pragma endregion
 	};
-}
 
-//	struct Text {
-//	public:
-//		Text(SDL_Renderer* textRenderer, std::string textText, TTF_Font* textFont)
-//			: text(std::move(textText)), buttonRenderer(textRenderer), font(textFont) { }
-//
-//		//  render the text at the given position in the given colour
-//		void Render(int x, int y, SDL_Color textColour);
-//
-//		std::string text;
-//
-//	protected:
-//		SDL_Renderer* buttonRenderer;
-//		TTF_Font* font;
-//	};
-//}
+}
