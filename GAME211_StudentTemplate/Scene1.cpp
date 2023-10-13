@@ -44,6 +44,14 @@ bool Scene1::OnCreate() {
 	name = "scene1"; // we dont need that 
 				//	ew^
 
+	//	audio testing:
+	//	loading audio to the MAP!
+	sound.loadSound("blipblip", "sound/blipblip.wav");
+	sound.loadSound("bip", "sound/bip.wav");
+	sound.loadSound("boomp", "sound/boomp.wav");
+	//its now loaded...
+
+
 	//	button showcase
 	using namespace ui;	auto BUTTON_BACKGROUND = SDL_COLOR_SOUL_CAMPFIRE; auto BUTTON_TEXT = SDL_COLOR_BLACK; auto rectangle = SDL_Testangle; auto square = SDL_Square;
 	auto BUTTON_HOVERBACKGROUND = SDL_COLOR_ROSE_TOY;
@@ -119,11 +127,11 @@ bool Scene1::OnCreate() {
 
 	for (auto* button : allButtons) { button->generateHitbox(); } //	<-- DO AFTER RE-POSITIONING!!!!!!!!!!!!!! [this generates the Clickbox]
 	//	what happens when each button is clicked?
-	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("sound/blipblip.wav"); });
-	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); });
-	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); });
-	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); });	
-	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); for(auto const button : allButtons) { button->isActive = true; }});
+	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("boomp"); });
+	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("boomp"); });
+	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("boomp"); });
+	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("bip"); });
+	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("bip"); for (auto const button : allButtons) { button->isActive = true; }});
 
 
 
