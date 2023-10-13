@@ -1,4 +1,5 @@
 #pragma once
+#include "Menu.h"
 #include "Scene.h"
 
 class Scene2 : public Scene{
@@ -13,6 +14,10 @@ private:
 	Matrix4 inverseProjection;	
 
 public:
+
+	std::vector<ui::Button*> allButtons; // for making buttons using "Menu.h" **NOT UIMANAGER**
+
+
 	Scene2(SDL_Window* sdlWindow_, GameManager* game_);
 	~Scene2();
 	bool OnCreate();

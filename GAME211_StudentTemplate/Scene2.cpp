@@ -1,4 +1,6 @@
 #include "Scene2.h"
+using namespace ui;
+
 
 Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -22,6 +24,8 @@ bool Scene2::OnCreate(){
 	IMG_Init(IMG_INIT_PNG);
 
 	name = "scene2";
+
+
 	
 	block = new Body();
 	block->setPos(Vec3(xAxis * 0.5f + 200.0f, yAxis * 0.5f, 0.0f));
@@ -37,10 +41,19 @@ bool Scene2::OnCreate(){
 		571.0f * 0.1f
 	);
 
+	auto* scene2Button = new Button(Font{ "Adriel World", 100 });
+	scene2Button->textColour = SDL_COLOR_DEEP_PINK << SDL_White50;
+	scene2Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene2Button->offsetPosition(-300);
+	allButtons.emplace_back(scene2Button);
+
 	return true;
 }
 
-void Scene2::OnDestroy(){}
+void Scene2::OnDestroy() {
+	for (auto* button : allButtons) {
+		delete button;
+	}
+}
 
 void Scene2::Update(const float time){
 	//camera position update
@@ -79,7 +92,13 @@ void Scene2::Render(){
 
 	game->getPlayer()->RenderHitbox(renderer, projectionMatrix, 0.1f);
 	block->RenderHitbox(renderer, projectionMatrix, 1.0f);
-	
+
+
+	for(auto* button : allButtons) {
+		button->Render(renderer);
+	}
+
+
 	SDL_RenderPresent(renderer);
 }
 

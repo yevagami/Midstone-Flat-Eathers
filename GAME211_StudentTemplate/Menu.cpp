@@ -1,5 +1,7 @@
 #include "Menu.h"
+#include <random>
 #include "ConsistentConsole.h"
+
 ConsistentConsole ccMenu(true);
 
 
@@ -21,11 +23,14 @@ namespace ui {
 				if (event_.button.button == SDL_BUTTON_LEFT) {
 					if (OnClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
 						OnClick();
+						if (isTogglable) { isOn = !isOn; backgroundColour = !backgroundColour;  ccMenu.consoleManager(not_error, "button toggled"); std::cout << isOn << std::endl; }
+						if (isPrideful) { backgroundColour = ~backgroundColour; textColour = !textColour; ccMenu.consoleManager(not_error, "button colour change"); }
+						if (isEasilyScared) { isActive = !isActive; }
 					}
 				}
 				break;
 
-				//	default
+				//	default;
 			default:
 				break;
 			}
@@ -55,12 +60,15 @@ namespace ui {
 	}
 
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
-		//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
-		const SDL_Color renderColour =
-			isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour;
+		if(rect.w != 0 && rect.h != 0) {
+			//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
+			const SDL_Color renderColour =
+				isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour;
 
-		SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
-		SDL_RenderFillRect(renderer_, &rect);
+			SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
+			SDL_RenderFillRect(renderer_, &rect);
+			return true;
+		}
 		return true;
 	}
 
@@ -179,17 +187,8 @@ namespace ui {
 
 //  Constants
 namespace ui {
-	Uint8* SDLColorToUint8(SDL_Color color_) {
-		static Uint8 rgba[4];
-		rgba[0] = color_.r;
-		rgba[1] = color_.g;
-		rgba[2] = color_.b;
-		rgba[3] = color_.a;
-		return rgba;
-	}
-
-
-	Uint8 Clamp(const Uint8 value_, const Uint8 min_, const Uint8 max_) {
+	template <typename  T>
+	T Clamp(const T value_, const T min_, const T max_) {
 		if (value_ < min_) { return min_; }
 		if (value_ < max_) { return max_; }
 		return value_;
@@ -251,20 +250,26 @@ namespace ui {
 		return contrastingColor;
 	}
 
-	SDL_Color operator%(const SDL_Color& colourA_, const SDL_Color& colourB_) {
-		SDL_Color result;
-		result.r = colourA_.r;
-		result.g = colourA_.g;
-		result.b = colourA_.b;
-		result.a = colourB_.a;  // use the alpha value from colourB
-		return result;
+
+	SDL_Color operator~(const SDL_Color& colour_) {
+		std::random_device randDev;
+		std::mt19937 randGen(randDev());
+		std::uniform_int_distribution<int> dis(0, 255);
+
+		return {
+			static_cast<Uint8>(colour_.r + dis(randGen) % 256),
+			static_cast<Uint8>(colour_.g + dis(randGen) % 256),
+			static_cast<Uint8>(colour_.b + dis(randGen) % 256),
+			colour_.a
+		};
 	}
 
 
-
+	SDL_Color operator<<(const SDL_Color& colourA_, const SDL_Color& colourB_) {
+		return {colourA_.r, colourA_.g, colourA_.b, colourB_.a};
+	}
 #pragma region shapes
 	SDL_Rect SDL_Testangle = { 0, 0, 425, 75 };
-
 	SDL_Rect SDL_Rectangle = { 0, 0, 3, 1 };
 	SDL_Rect SDL_Wide_Rectangle = { 0, 0, 6, 1 };
 	SDL_Rect SDL_Tall_Rectangle = { 0, 0, 1, 3 };
@@ -274,6 +279,7 @@ namespace ui {
 #pragma region pride
 #pragma region transparency
 	SDL_Color SDL_White100 = { 255, 255, 255, 255 };
+	SDL_Color SDL_White90 = { 255, 255, 255, 230 };
 	SDL_Color SDL_White75 = { 255, 255, 255, 191 };
 	SDL_Color SDL_White50 = { 255, 255, 255, 128 };
 	SDL_Color SDL_White25 = { 255, 255, 255, 64 };

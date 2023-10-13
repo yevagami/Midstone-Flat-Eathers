@@ -1,17 +1,17 @@
 #include "Body.h"
 
-Body::Body() {
-    pos = Vec3();
-    vel = Vec3();
-    accel = Vec3();
-	mass = 1.0f;
-    radius = 0.0f;
-    orientation = 0.0f;
-    rotation = 0.0f;
-    angular = 0.0f;
-
-	image = nullptr;
-}
+//Body::Body() {
+//    pos = Vec3();
+//    vel = Vec3();
+//    accel = Vec3();
+//	mass = 1.0f;
+//    radius = 0.0f;
+//    orientation = 0.0f;
+//    rotation = 0.0f;
+//    angular = 0.0f;
+//
+//	image = nullptr;
+//}
 
 Body::Body (
     Vec3 pos_, Vec3 vel_, Vec3 accel_,
@@ -64,15 +64,15 @@ void Body::Update( float deltaTime ) {
 }
 
 
-void Body::HandleEvents( const SDL_Event& event ) {
+void Body::HandleEvents( const SDL_Event& event_ ) {
     
     //  michael- i'm moving this stuff. imma make a keybinds class for global keybinds, then u can just do "keybindHandler.HandleEvents(event)"
     //              - its mostly for stuff like escape = quit, mouse input tracking, etc. WE'LL SEE HOW IT GOES!
-    if ( event.type == SDL_MOUSEBUTTONDOWN ){
+    if ( event_.type == SDL_MOUSEBUTTONDOWN ){
         printf("Mousedown\n");
     }
-    if ( event.type == SDL_KEYDOWN ){
-        if ( event.key.keysym.scancode == SDL_SCANCODE_SPACE){
+    if ( event_.type == SDL_KEYDOWN ){
+        if ( event_.key.keysym.scancode == SDL_SCANCODE_SPACE){
             printf("Space\n");
         }
     }
@@ -84,17 +84,17 @@ void Body::setPos( Vec3 pos_ ){
 }
 
 
-void Body::Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale){
+void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scale_){
     SDL_Rect square;
     Vec3 screenCoords;
     float w, h;
 
     // convert the position from game coords to screen coords.
-    screenCoords = projectionMatrix * pos;
+    screenCoords = projectionMatrix_ * pos;
 
     // Scale the image, in case the .png file is too big or small
-    w = image->w * scale;
-    h = image->h * scale;
+    w = image->w * scale_;
+    h = image->h * scale_;
 
     // The square's x and y values represent the top left corner of 
     // where SDL will draw the .png image.
@@ -110,11 +110,11 @@ void Body::Render(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale)
     // Convert character orientation from radians to degrees.
     float orientationDegrees = orientation * 180.0f / M_PI;
 
-    SDL_RenderCopyEx(renderer, texture, nullptr, &square,
+    SDL_RenderCopyEx(renderer_, texture, nullptr, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
 }
 
-void Body::RenderHitbox(SDL_Renderer* renderer, Matrix4 projectionMatrix, float scale){
+void Body::RenderHitbox(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scale_){
     //Vec3 hitboxCoords = projectionMatrix * Vec3(hitbox.x, hitbox.y, 0.0f);
 
     SDL_Rect box;
@@ -126,7 +126,7 @@ void Body::RenderHitbox(SDL_Renderer* renderer, Matrix4 projectionMatrix, float 
     box.w = static_cast<int>(hitbox.w);
     box.h = static_cast<int>(hitbox.h);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(renderer, &box);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
+    SDL_RenderDrawRect(renderer_, &box);
+    SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
 }

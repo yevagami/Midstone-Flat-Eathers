@@ -33,7 +33,7 @@ bool Scene3::OnCreate() {
 	name = "scene3";
 
 	auto* scene3Button = new Button(Font{ "diana land", 100 });
-	scene3Button->textColour = SDL_COLOR_EMERALD_GREEN;
+	scene3Button->textColour = SDL_COLOR_EMERALD_GREEN << SDL_White50;
 	scene3Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene3Button->offsetPosition(-300);
 	allButtons.emplace_back(scene3Button);
 	

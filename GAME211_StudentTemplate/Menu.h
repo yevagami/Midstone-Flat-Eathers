@@ -1,21 +1,21 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include "audio.h"
 #include "Hitbox.h"
-#include <vector>
 #include <unordered_map>
 #include <functional>
 
 
 /// Constants 
 namespace ui {
-	//  converter
-	Uint8* SDLColorToUint8(SDL_Color color_);
-	Uint8 Clamp(Uint8 value_, Uint8 min_, Uint8 max_);
+	//	general clamping
+	template <typename T>
+	T Clamp(T value_, T min_, T max_);
 
-	//	add 2 colours (use *, it blends)
+	//	add 2 colours (straight up adds the components)
 	SDL_Color operator+(const SDL_Color& colourA_, const SDL_Color& colourB_);
-	//	subtracts 2 colours
+	//	subtracts 2 colours (straight up subtracts the components)
 	SDL_Color operator-(const SDL_Color& colourA_, const SDL_Color& colourB_);
 	//	blends 2 colours
 	SDL_Color operator*(const SDL_Color& colourA_, const SDL_Color& colourB_);
@@ -23,8 +23,10 @@ namespace ui {
 	SDL_Color operator/(const SDL_Color& colourA_, const SDL_Color& colourB_);
 	//	inverts the colour
 	SDL_Color operator!(const SDL_Color& colour_);
+	//	randomizes the r,g,b values relative to the starting colour
+	SDL_Color operator~(const SDL_Color& colour_);
 	//	steals the transparency from the second colour
-	SDL_Color operator%(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	SDL_Color operator<<(const SDL_Color& colourA_, const SDL_Color& colourB_);
 
 #define _debugbutton Button( Font{ "sans", 55, fontMap.at("comic sans"),0,0,55 }, SDL_Square, SDL_COLOR_DEEP_PINK, SDL_COLOR_CANDY_PINK)
 
@@ -39,6 +41,7 @@ namespace ui {
 #pragma region colour constants
 #pragma region transparency
 	extern SDL_Color SDL_White100;
+	extern SDL_Color SDL_White90;
 	extern SDL_Color SDL_White75;
 	extern SDL_Color SDL_White50;
 	extern SDL_Color SDL_White25;
@@ -431,7 +434,9 @@ namespace ui {
 			{"wingdings", "fonts/Wingdings-Regular-Font.ttf"},
 			{"lobster", "fonts/Lobster-Regular.ttf"},
 			{"ransom", "fonts/ransom.ttf"},
+			{"comic serif", "fonts/Comic_Serif_Pro.otf"},
 			{"", ""},
+
 	};
 
 	/// Font Modifier Object
@@ -476,8 +481,7 @@ namespace ui {
 				//	releasing old fonts
 				if (buttonTextFont) { TTF_CloseFont(buttonTextFont); }
 
-				// create a new TTF_Font by opening the font file with the same settings as the source
-				// -- [ chat gpt ] --
+				// create a new TTF_Font by opening the font file with the same settings as the source  -- [ chat gpt ] --
 				buttonTextFont = TTF_OpenFont(otherButton_.fontItself, otherButton_.fontSize);
 			}
 
@@ -493,7 +497,11 @@ namespace ui {
 			rect(rect_), font(font_), backgroundColour(backgroundColour_), textColour(textColour_) {
 			isTextCentered = true;
 			isActive = true;
+			isEasilyScared = false;
+			isTogglable = false;
+			isOn = false;
 			isHovering = false;
+			isPrideful = false;
 			borderColour = SDL_COLOR_BLACK;
 			onHoveringBackgroundColour = SDL_COLOR_ROSE_TOY;
 			onHoveringTextColour = SDL_COLOR_ROSE_TOY;
@@ -559,6 +567,10 @@ namespace ui {
 		int fontSize;		//	button's font size
 		bool isTextCentered; //  is text centered flag
 		bool isActive; //	is button active flag
+		bool isEasilyScared;
+		bool isTogglable; //	change to be a switch-style button
+		bool isOn;	//	when togglable, this is true when toggled
+		bool isPrideful;	//	change colour on click
 		SDL_Color borderColour; //  button's boarder colour
 		SDL_Color backgroundColour; //  button's background colour
 		SDL_Color onHoveringBackgroundColour; //  button's hover background colour
