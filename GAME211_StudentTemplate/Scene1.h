@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include <vector>
 #include "Menu.h"
+
 #include "Audio.h"
 
 using namespace MATH;
@@ -19,11 +20,14 @@ private:
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4 inverseProjection;	// set in OnCreate()
 
-	std::shared_ptr<Audio> audio = std::make_shared<Audio>();
 
 
 
 public:
+
+	Sound sound;
+
+
 	//	soon will just be the UIManager
 	std::vector<ui::Button*> allButtons; // for making buttons using "Menu.h" **NOT UIMANAGER**
 

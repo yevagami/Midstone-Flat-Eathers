@@ -116,12 +116,10 @@ bool Scene1::OnCreate() {
 
 	///	step 3: Hitbox and OnClick
 
-	audio->soundFinishedCallback = [&](int channel) { audio->stopSound(); };
-
 
 	for (auto* button : allButtons) { button->generateHitbox(); } //	<-- DO AFTER RE-POSITIONING!!!!!!!!!!!!!! [this generates the Clickbox]
 	//	what happens when each button is clicked?
-	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); });
+	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("sound/blipblip.wav"); });
 	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); });
 	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); });
 	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); });	
@@ -198,7 +196,6 @@ void Scene1::HandleEvents(const SDL_Event& event) {
 
 
 	if (event.key.keysym.sym == SDLK_i && event.type == SDL_KEYDOWN) {
-		audio->playSound("sound/blipblip.wav");
 		using namespace ui;
 
 		cc.consoleManager(update, "toggling all button visibility");
@@ -210,7 +207,6 @@ void Scene1::HandleEvents(const SDL_Event& event) {
 
 
 	if (event.key.keysym.sym == SDLK_o && event.type == SDL_KEYDOWN) {
-		audio->stopSound();
 	}
 
 
