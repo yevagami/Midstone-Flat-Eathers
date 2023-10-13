@@ -286,6 +286,7 @@ namespace ui {
 	SDL_Color SDL_White10 = { 255, 255, 255, 26 };
 #pragma endregion
 #pragma region colours
+	SDL_Color SDL_COLOR_NULL = {0,0,0,0};
 	SDL_Color SDL_COLOR_ALICE_BLUE = { 240, 248, 255, 255 };
 	SDL_Color SDL_COLOR_ANTIQUE_WHITE = { 250, 235, 215, 255 };
 	SDL_Color SDL_COLOR_AQUA = { 0, 255, 255, 255 };

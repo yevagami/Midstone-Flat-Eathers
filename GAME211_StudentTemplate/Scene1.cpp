@@ -44,23 +44,49 @@ bool Scene1::OnCreate() {
 	name = "scene1"; // we dont need that 
 				//	ew^
 
-	//	audio testing:
-	//	loading audio to the MAP!
+	///	audio testing:
+	constexpr float blipsVolume = 1.0f;
+	constexpr float loudVolume = 0.5f;
+	constexpr float mybikeVolume = 1.0f;
+	//	loading audio to the MAP! this is indeed done in-scene
+	sound.loadSound("wong", "sound/wooooooooooooong.wav");
+	sound.loadSound("flame", "sound/flame.wav");
+	sound.loadSound("space boing", "sound/space boing.wav");
+	sound.loadSound("big powerup", "sound/big powerup.wav");
 	sound.loadSound("blipblip", "sound/blipblip.wav");
 	sound.loadSound("bip", "sound/bip.wav");
+	sound.loadSound("ting", "sound/ting.wav");
 	sound.loadSound("boomp", "sound/boomp.wav");
+	sound.loadSound("mybike", "sound/wait till you see me on my bike.wav");
 	//its now loaded...
+
+	sound.createSoundGroup("blips");
+	sound.addToSoundGroup("blipblip", "blips");
+	sound.addToSoundGroup("bip", "blips");
+	sound.addToSoundGroup("ting", "blips");
+	sound.addToSoundGroup("flame", "blips");
+	sound.addToSoundGroup("boomp", "blips");
+	sound.setGroupVolume("blips", blipsVolume);
+
+	sound.createSoundGroup("loud");
+	sound.addToSoundGroup("big powerup", "loud");
+	sound.addToSoundGroup("wong", "loud");
+	sound.setGroupVolume("loud", loudVolume);
+
+	sound.createSoundGroup("kiriko");
+	sound.addToSoundGroup("mybike", "kiriko");
+	sound.setGroupVolume("kiriko", mybikeVolume);
 
 
 	//	button showcase
 	using namespace ui;	auto BUTTON_BACKGROUND = SDL_COLOR_SOUL_CAMPFIRE; auto BUTTON_TEXT = SDL_COLOR_BLACK; auto rectangle = SDL_Testangle; auto square = SDL_Square;
 	auto BUTTON_HOVERBACKGROUND = SDL_COLOR_ROSE_TOY;
 
-	///	Step 1: Create the Buttons with Default Values
+	///	Step 1: Create the Buttons with Initial Values
 
-	auto* myJankyText = new Button(Font{"ur amazing<3", 100, fontMap.at("comic serif")});
-	auto* myJankySubText = new Button(Font{"with rizz", 25, fontMap.at("comic serif"),0,0,-45.0});
-	auto* myCreditingText = new Button(Font{ "Adriel, Michael, Diana, and Helen", 25, fontMap.at("comic serif")});
+	auto* myJankyText = new Button(Font{"ur amazing<3", 100, fontMap.at("lobster")}, {}, SDL_COLOR_NULL, SDL_COLOR_ROSE_TOY);
+	auto* myJankySubText = new Button(Font{"with rizz", 25, fontMap.at("comic serif"),0,0,-45.0}, {}, SDL_COLOR_NULL, SDL_COLOR_ROSE_TOY);
+	auto* myCreditingText = new Button(Font{ "Adriel, Michael, Diana, and Helen", 25, fontMap.at("comic serif")}, {}, SDL_COLOR_NULL, SDL_COLOR_ROSE_TOY);
 
 	auto* myStartButton = new Button(	//	
 		Font{ "start button", 50, fontMap.at("comic serif") },
@@ -88,13 +114,13 @@ bool Scene1::OnCreate() {
 	//1.1 individial changes before grouping
 	mySmallButton->scaleDimensions(50); myDebugButton->scaleDimensions(80);
 	mySmallButton->isPrideful = true;		//	changes colour on click
-	myStartButton->isEasilyScared = true;//hides on click
+	myStartButton->isEasilyScared = true;//becomes inactive on click
 	myExitButton->isEasilyScared = true;
-	myOptionsButton->isTogglable = true;	//	becomes togglablable (use button->isOn for the state)		
+	myOptionsButton->isTogglable = true;	//	becomes togglablable (use button->isOn for the state)
 
-	myJankyText->textColour = SDL_COLOR_ROSE_TOY << SDL_White90;
-	myJankySubText->textColour = SDL_COLOR_ROSE_TOY << SDL_White50; //	applying the transparency onto the colour
-	myCreditingText->textColour = SDL_COLOR_ROSE_TOY << SDL_White25;
+	myJankyText->textColour = myJankyText->textColour << SDL_White75;
+	myJankySubText->textColour = myJankySubText->textColour << SDL_White50; //	applying the transparency onto the colour
+	myCreditingText->textColour = myCreditingText->textColour << SDL_White10;
 
 	//1.2 grouping (for mass attrbute changing, deleting and rendering)
 	allButtons.emplace_back(myJankyText);	allButtons.emplace_back(myJankySubText); allButtons.emplace_back(myCreditingText); //	text
@@ -111,7 +137,7 @@ bool Scene1::OnCreate() {
 		button->onHoveringBackgroundColour = BUTTON_HOVERBACKGROUND; }
 
 	myJankyText->offsetPosition(-300);	//	offsets the text up
-	myJankySubText->setPositionRelativeTo(*myJankyText, 50, 375);
+	myJankySubText->setPositionRelativeTo(*myJankyText, 50, 280);
 	myCreditingText->setPosition(20, 230);
 
 	myStartButton->offsetPosition(-150);	//	offsets the start button 150 units vertically (up)
@@ -127,11 +153,11 @@ bool Scene1::OnCreate() {
 
 	for (auto* button : allButtons) { button->generateHitbox(); } //	<-- DO AFTER RE-POSITIONING!!!!!!!!!!!!!! [this generates the Clickbox]
 	//	what happens when each button is clicked?
-	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("boomp"); });
-	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("boomp"); });
-	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("boomp"); });
-	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("bip"); });
-	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("bip"); for (auto const button : allButtons) { button->isActive = true; }});
+	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("flame"); });
+	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("flame"); });
+	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("big powerup"); });
+	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("mybike", true); });
+	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("space boing"); for (auto const button : allButtons) { button->isActive = true; }});
 
 
 

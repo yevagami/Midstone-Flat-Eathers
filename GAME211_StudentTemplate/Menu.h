@@ -1,7 +1,6 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "audio.h"
 #include "Hitbox.h"
 #include <unordered_map>
 #include <functional>
@@ -27,6 +26,7 @@ namespace ui {
 	SDL_Color operator~(const SDL_Color& colour_);
 	//	steals the transparency from the second colour
 	SDL_Color operator<<(const SDL_Color& colourA_, const SDL_Color& colourB_);
+	//SDL_Color operator|(const SDL_Color& colourA_, const SDL_Color& colourB_);
 
 #define _debugbutton Button( Font{ "sans", 55, fontMap.at("comic sans"),0,0,55 }, SDL_Square, SDL_COLOR_DEEP_PINK, SDL_COLOR_CANDY_PINK)
 
@@ -48,6 +48,7 @@ namespace ui {
 	extern SDL_Color SDL_White10;
 #pragma endregion
 #pragma region colours
+	extern SDL_Color SDL_COLOR_NULL;
 	extern SDL_Color SDL_COLOR_ALICE_BLUE;
 	extern SDL_Color SDL_COLOR_AMETHYST;
 	extern SDL_Color SDL_COLOR_ANTIQUE_WHITE;
@@ -562,30 +563,28 @@ namespace ui {
 #pragma region styling [tw: aesthetic]
 	public:
 		/// Editable Attributes [ public variables lmao ]
-		const char* text;		//  button's text
-		const char* fontItself;		//  button's font
-		int fontSize;		//	button's font size
-		bool isTextCentered; //  is text centered flag
-		bool isActive; //	is button active flag
-		bool isEasilyScared;
-		bool isTogglable; //	change to be a switch-style button
-		bool isOn;	//	when togglable, this is true when toggled
-		bool isPrideful;	//	change colour on click
-		SDL_Color borderColour; //  button's boarder colour
-		SDL_Color backgroundColour; //  button's background colour
-		SDL_Color onHoveringBackgroundColour; //  button's hover background colour
-		SDL_Color textColour; //  button's text colour
-		SDL_Color onHoveringTextColour; //  button's hovering text colour
+		SDL_Color borderColour;									//  button's boarder colour
+		SDL_Color backgroundColour;							//  button's background colour
+		SDL_Color onHoveringBackgroundColour;			//  button's hover background colour
+		SDL_Color textColour;										//  button's text colour
+		SDL_Color onHoveringTextColour;					//  button's hovering text colour
+
+		int fontSize;														//	button's font size
+		double fontRotation;										//	font rotation
+		int fontOffsetX;												//	offset x
+		int fontOffsetY;												//	offset y
+		const char* text;												// button's text
+		const char* fontItself;									// button's font
+
+		bool isActive;													//	is button active flag
+		bool isTogglable;												//	change to be a switch-style button
+		bool isOn;															//	when togglable, this is true when toggled
+		bool isTextCentered;										//  is text centered flag
+		bool isPrideful;													//	change colour on click
+		bool isEasilyScared;											//	causes the button to become inactive on click
 	protected:
 		///	Uneditable Attributes
-		//font rotation
-		double fontRotation;
-		//offset x
-		int fontOffsetX;
-		//offset y
-		int fontOffsetY;
-		//	is hovering
-		bool isHovering;
+		bool isHovering;												//	is the mouse hovering over the button
 
 	public:
 		/// Modifier Methods 
