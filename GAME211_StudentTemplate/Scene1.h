@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include <vector>
 #include "Menu.h"
-#include "UIManager.h"
+#include "Audio.h"
 
 using namespace MATH;
 
@@ -18,6 +18,10 @@ private:
 	SDL_Renderer* renderer;	// the renderer associated with SDL window
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4 inverseProjection;	// set in OnCreate()
+
+	std::shared_ptr<Audio> audio = std::make_shared<Audio>();
+
+
 
 public:
 	//	soon will just be the UIManager

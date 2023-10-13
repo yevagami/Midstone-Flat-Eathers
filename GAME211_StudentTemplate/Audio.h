@@ -1,70 +1,170 @@
 #pragma once
-#include "SDL_mixer.h"
+#include "SDL.h"
 
 #include <vector>
+#include <string>
+#include <functional>
+#include <memory>
 
-//  constructor initiatizer list (in progress, not implemented)
-struct Volume {
-    int activeMusicVolume;
-    int activeSoundEffectVolume;
 
-    Volume(const int musicVolume_ = 0, const int soundVolume_ = 0)
-	: activeMusicVolume(musicVolume_), activeSoundEffectVolume(soundVolume_)
-	{}
+//
+/// BARELY WORKS...
+/// i...    h a t e...  sdl audio...
+/// off the interwebs *thunder*
+//
 
-    ~Volume() = default;
-};
 
-class Audio {
+class Audio : public std::enable_shared_from_this<Audio> {
 public:
-    //  mp3 for size, wav for quality, ogg for a balance between size and quality
-    Audio(const int activeMusicVolume_ = 0, const int activeSoundEffectsVolume_ = 0, const int totalChannels_ = 10)
-	: music(nullptr), totalChannels(totalChannels_),
-	defaultMusicVolume(100), defaultSoundEffectVolume(100),
-	activeMusicVolume(activeMusicVolume_), activeSoundEffectVolume(activeSoundEffectsVolume_) {
+    Audio(const int activeSoundEffectVolume_ = 100)
+        : activeSoundEffectVolume(activeSoundEffectVolume_) {
+        if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+            // Handle SDL initialization error.
+            isSDLInitialized = true;
+        }
 
-        if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) { isSDLInitalized = true; }
-        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) { isMixerInitialized = true; }
+        SDL_AudioSpec desiredSpec;
+        desiredSpec.freq = 44100;
+        desiredSpec.format = AUDIO_S16SYS;
+        desiredSpec.channels = 2;
+        desiredSpec.samples = 2048;
+        desiredSpec.callback = AudioCallback;
+        desiredSpec.userdata = this;
+        if (SDL_OpenAudio(&desiredSpec, NULL) < 0) {
+            // Handle SDL audio initialization error.
+            isAudioInitialized = true;
+        }
 
-        if(activeMusicVolume == 0) { activeMusicVolume = defaultMusicVolume; }
-        if(activeSoundEffectVolume == 0) { activeSoundEffectVolume = defaultSoundEffectVolume; }
+        SDL_PauseAudio(0); // Start audio playback.
+        totalChannels = desiredSpec.channels;
 
+        // Initialize channels.
+        allChannelStates.resize(totalChannels, false);
+        channelSounds.resize(totalChannels);
     }
 
-    ~Audio() { 
-        Mix_CloseAudio();
-        SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    ~Audio() {
+        SDL_CloseAudio();
+        SDL_Quit();
     }
 
-    //  play a sound effect
-    auto playSound(const char* soundFileDirectory_) -> bool;
-    //  play a sound effect in channel...
-    auto playSound(const char* soundFileDirectory_, int channel_) -> bool;
-    //  attach the sound to a target (positional sound)
-    auto playSoundAt(const char* fileDirectory_, float playerX_, float playerY_, float targetX_, float targetY_) -> bool;
+    bool playSound(const char* soundFileDirectory_) {
+        SDL_LockAudio();
 
-    auto stopSound() -> bool;
+        // Load the sound effect.
+        SDL_AudioSpec wavSpec;
+        Uint32 wavLength;
+        Uint8* wavBuffer;
+        if (SDL_LoadWAV(soundFileDirectory_, &wavSpec, &wavBuffer, &wavLength) == NULL) {
+            SDL_UnlockAudio();
+            return false; // Error loading sound effect.
+        }
 
-    void pauseSound();
+        // Find an available channel.
+        int channel = findAvailableChannel();
+        if (channel == -1) {
+            SDL_UnlockAudio();
+            SDL_FreeWAV(wavBuffer);
+            return false; // No available channel.
+        }
+
+        // Set the volume by scaling the audio samples.
+        for (Uint32 i = 0; i < wavLength; i += 2) {
+            Sint16* sample = reinterpret_cast<Sint16*>(wavBuffer + i);
+            *sample = static_cast<Sint16>(*sample * activeSoundEffectVolume / 100);
+        }
+
+        // Play the sound effect only if the channel is not already active.
+        if (!allChannelStates[channel]) {
+            channelSounds[channel] = std::make_pair(wavBuffer, wavLength);
+            allChannelStates[channel] = true; // Set the channel as active.
+        }
+
+        SDL_UnlockAudio();
+
+        return true;
+    }
+
+
+    bool stopSound() {
+        SDL_LockAudio();
+
+        // Stop all channels.
+        for (int i = 0; i < totalChannels; i++) {
+            if (i >= 0 && i < totalChannels) {
+                if (allChannelStates[i] && channelSounds[i].first != nullptr) {
+                    SDL_FreeWAV(channelSounds[i].first);
+                    channelSounds[i].first = nullptr;
+                    allChannelStates[i] = false;
+                }
+            }
+        }
+
+        SDL_UnlockAudio();
+        return true;
+    }
+
+    std::function<void(int)> soundFinishedCallback;
+
+    std::shared_ptr<Audio> getShared() {
+        return shared_from_this();
+    }
 
 protected:
-    std::vector<Mix_Chunk*> allSoundEffects;
-    Mix_Music* music;
     int totalChannels;
     std::vector<bool> allChannelStates;
+    std::vector<std::pair<Uint8*, Uint32>> channelSounds;
 
-    // ReSharper disable once CppInconsistentNaming
-    bool isSDLInitalized;
-    bool isMixerInitialized;
+    bool isSDLInitialized = false;
+    bool isAudioInitialized = false;
 
-    //  the default volume to play music at
-    int defaultMusicVolume;
-    //  the default volume to play sfx at
-    int defaultSoundEffectVolume;
-public:
-    //  the volume music is played at
-    int activeMusicVolume;
-    //  the volume sfx are played at
     int activeSoundEffectVolume;
-};
 
+    int findAvailableChannel() {
+        for (int i = 0; i < totalChannels; i++) {
+            if (!allChannelStates[i]) {
+                return i;
+            }
+        }
+        return -1; // No available channel.
+    }
+
+    static void AudioCallback(void* userData, Uint8* stream, int len) {
+        auto shared = static_cast<Audio*>(userData)->getShared();
+        for (int i = 0; i < shared->totalChannels; i++) {
+            if (shared->allChannelStates[i]) {
+                Uint32 lengthToCopy = std::min(static_cast<Uint32>(len), shared->channelSounds[i].second);
+
+                if (lengthToCopy > 0) {
+                    SDL_memcpy(stream, shared->channelSounds[i].first, lengthToCopy);
+                    shared->channelSounds[i].first += lengthToCopy;
+                    shared->channelSounds[i].second -= lengthToCopy;
+
+                    if (shared->channelSounds[i].second == 0) {
+                        // Reset the position of the sound.
+                        SDL_FreeWAV(shared->channelSounds[i].first);
+                        shared->channelSounds[i].first = nullptr;
+                        shared->allChannelStates[i] = false;
+
+                        // Notify that the sound has finished playing.
+                        if (shared->soundFinishedCallback) {
+                            shared->soundFinishedCallback(i);
+                        }
+                    }
+                }
+            }
+            else if (shared->channelSounds[i].first != nullptr) {
+                // Sound was not marked as playing, but data remains, free it.
+                SDL_FreeWAV(shared->channelSounds[i].first);
+                shared->channelSounds[i].first = nullptr;
+
+                // Notify that the sound has finished playing (it was stopped).
+                if (shared->soundFinishedCallback) {
+                    shared->soundFinishedCallback(i);
+                }
+            }
+        }
+    }
+
+
+};

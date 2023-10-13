@@ -2,6 +2,9 @@
 #include "PrettyPrinting.h"
 #include "ConsistentConsole.h"
 
+
+
+
 //a global var. My problem was that i defined it in the Scene 3 again, that made a linking error.
 //IMPORTANT!!!
 ConsistentConsole cc; //not member of scene1 class. Define somewhere else 
@@ -113,13 +116,18 @@ bool Scene1::OnCreate() {
 
 	///	step 3: Hitbox and OnClick
 
+	audio->soundFinishedCallback = [&](int channel) { audio->stopSound(); };
+
+
 	for (auto* button : allButtons) { button->generateHitbox(); } //	<-- DO AFTER RE-POSITIONING!!!!!!!!!!!!!! [this generates the Clickbox]
 	//	what happens when each button is clicked?
 	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); });
 	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); });
 	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); });
-	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); });
+	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); });	
 	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); for(auto const button : allButtons) { button->isActive = true; }});
+
+
 
 
 	return true;
@@ -190,6 +198,7 @@ void Scene1::HandleEvents(const SDL_Event& event) {
 
 
 	if (event.key.keysym.sym == SDLK_i && event.type == SDL_KEYDOWN) {
+		audio->playSound("sound/blipblip.wav");
 		using namespace ui;
 
 		cc.consoleManager(update, "toggling all button visibility");
@@ -201,7 +210,7 @@ void Scene1::HandleEvents(const SDL_Event& event) {
 
 
 	if (event.key.keysym.sym == SDLK_o && event.type == SDL_KEYDOWN) {
-		eMap.insertEntity(string("test"), string("meowmeowmeow"));
+		audio->stopSound();
 	}
 
 
