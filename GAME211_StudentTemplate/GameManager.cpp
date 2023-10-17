@@ -180,10 +180,12 @@ void GameManager::LoadScene(int i) {
 
 	//Checks if we killed everyone to switch the scene. Right now its going to change scenes automatically. We dont have a door yet
 	if (ifDoorOpen == true) {
-		i++;
+		i++; //this one will teleport us on the next scene
+		i = (rand() % 4); //this one going to teleport us to a random scene from 0-3
 	}
 	
 	switch (i) {
+		playerMovedToTheNextLvl = true; //needed to spawn mobs AGAIN every time when we enter new room
 	case 1:
 		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
 		break;
@@ -204,10 +206,13 @@ void GameManager::LoadScene(int i) {
 
 void GameManager::PassTheLevel() {
 	//Game loop win/loose the room (Diana)
-	mobsLeft = mobsToSpawnOnTheLevel;
-	if (mobsLeft==0) {
-		ifDoorOpen = true;
+	if (playerMovedToTheNextLvl) { //if we moved to the next room, reset the mob spawner
+		mobsLeft = mobsToSpawnOnTheLevel; 
+		if (mobsLeft == 0) {
+			ifDoorOpen = true;
+		}
 	}
+	
 }
 
 bool GameManager::ValidateCurrentScene() {

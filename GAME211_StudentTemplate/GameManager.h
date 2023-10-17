@@ -8,6 +8,9 @@
 #include "Scene.h"
 #include "PlayerBody.h"
 
+//needed to use rand() function
+#include <ctime>
+#include <cstdlib>
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
 //const int SCREEN_WIDTH = 1540;
@@ -41,7 +44,7 @@ private:
 	bool ifDoorOpen = false;
 	int mobsToSpawnOnTheLevel = 10;
 	int mobsLeft;
-
+	bool playerMovedToTheNextLvl = true;
 public:
 
 	GameManager();
