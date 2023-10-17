@@ -8,6 +8,12 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	renderer = SDL_GetRenderer(window);
 	xAxis = 1600.0f;
 	yAxis = 900.0f;
+
+	scene2Button = new Button(Font{ "Adriel World", 100 });
+	scene2Button->textColour = SDL_COLOR_DEEP_PINK << SDL_White50;
+	scene2Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene2Button->offsetPosition(-300);
+	allButtons.emplace_back(scene2Button);
+
 }
 
 Scene2::~Scene2(){}
@@ -41,10 +47,7 @@ bool Scene2::OnCreate(){
 		571.0f * 0.1f
 	);
 
-	auto* scene2Button = new Button(Font{ "Adriel World", 100 });
-	scene2Button->textColour = SDL_COLOR_DEEP_PINK << SDL_White50;
-	scene2Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene2Button->offsetPosition(-300);
-	allButtons.emplace_back(scene2Button);
+
 
 	return true;
 }

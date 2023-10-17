@@ -20,10 +20,19 @@ private:
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4 inverseProjection;	// set in OnCreate()
 
-
-
-
 public:
+
+	ui::Button* myJankyText;
+	ui::Button* myJankySubText;
+	ui::Button* myCreditingText;
+	ui::Button* myStartButton;
+	ui::Button* myOptionsButton;
+	ui::Button* myExitButton;
+	ui::Button* mySmallButton;
+	ui::Button* myDebugButton;
+
+	ui::Button* mySpookyButton;
+	bool bTestMenu;
 
 	Sound sound;
 

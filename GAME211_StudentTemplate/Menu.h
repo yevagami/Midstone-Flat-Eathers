@@ -28,7 +28,6 @@ namespace ui {
 	SDL_Color operator<<(const SDL_Color& colourA_, const SDL_Color& colourB_);
 	//SDL_Color operator|(const SDL_Color& colourA_, const SDL_Color& colourB_);
 
-#define _debugbutton Button( Font{ "sans", 55, fontMap.at("comic sans"),0,0,55 }, SDL_Square, SDL_COLOR_DEEP_PINK, SDL_COLOR_CANDY_PINK)
 
 #pragma region shapes
 	extern SDL_Rect SDL_Testangle;
@@ -264,7 +263,6 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_ZINNWALDITE;
 	extern SDL_Color SDL_COLOR_ZUCCHINI;
 	extern SDL_Color SDL_COLOR_MARINE_BLUE;
-	extern SDL_Color SDL_COLOR_LAVENDER_BLUSH;
 	extern SDL_Color SDL_COLOR_PEACH;
 	extern SDL_Color SDL_COLOR_STARRY_NIGHT;
 	extern SDL_Color SDL_COLOR_EMERALD;
@@ -278,7 +276,6 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_SILVER_MIST;
 	extern SDL_Color SDL_COLOR_MYSTIC_PURPLE;
 	extern SDL_Color SDL_COLOR_TEAL_BLUE;
-	extern SDL_Color SDL_COLOR_BUBBLES;
 	extern SDL_Color SDL_COLOR_BUBBLEGUM;
 #pragma endregion
 #pragma region appliances dlc
@@ -456,13 +453,17 @@ namespace ui {
 			: fontText(fontText_), size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_) { }
 	};
 
+	enum class BackgroundType {
+		SolidColour,
+		Texture
+	};
+
 
 	class Button {
 	public:
 		/// Constructors
 		//Button() = default;
-		Button(const Button& otherButton_) = default;
-		Button& operator=(const Button& otherButton_) {
+		Button(const Button& otherButton_){
 			if (this != &otherButton_) {
 				rect = otherButton_.rect;
 				font = otherButton_.font;
@@ -472,6 +473,10 @@ namespace ui {
 				isTextCentered = otherButton_.isTextCentered;
 				isHovering = otherButton_.isHovering;
 				isActive = otherButton_.isActive;
+				isEasilyScared = otherButton_.isEasilyScared;
+				isPrideful = otherButton_.isPrideful;
+				isTogglable = otherButton_.isTogglable;
+				isOn = otherButton_.isOn;
 
 				backgroundColour = otherButton_.backgroundColour;
 				onHoveringBackgroundColour = otherButton_.onHoveringBackgroundColour;
@@ -481,13 +486,11 @@ namespace ui {
 
 				//	releasing old fonts
 				if (buttonTextFont) { TTF_CloseFont(buttonTextFont); }
-
-				// create a new TTF_Font by opening the font file with the same settings as the source  -- [ chat gpt ] --
 				buttonTextFont = TTF_OpenFont(otherButton_.fontItself, otherButton_.fontSize);
-			}
 
-			return *this;
+			}
 		}
+
 		//  main constructor
 		Button(
 			const Font& font_ = Font{},
@@ -507,7 +510,7 @@ namespace ui {
 			onHoveringBackgroundColour = SDL_COLOR_ROSE_TOY;
 			onHoveringTextColour = SDL_COLOR_ROSE_TOY;
 
-			hitbox.generateHitbox(rect_); // generates the hitbox based off initial pos (if you transform the box before rendering, regenerate).
+			hitbox = {0,0,0,0}; // null hitbox, hope his class can handle that! :D
 
 			//	font shenegans
 			text = font_.fontText;
@@ -517,7 +520,7 @@ namespace ui {
 			fontOffsetY = font_.offsetY;
 			fontRotation = font_.rotation;
 
-			//	SDL-grossness
+			//	po*nters
 			buttonTextFont = nullptr;
 			buttonTextTexture = nullptr;
 			buttonTextSurface = nullptr;
@@ -548,7 +551,7 @@ namespace ui {
 		/// Private Variables
 		//  a rectangle
 		SDL_Rect rect;
-		//	a hitbox
+		//	  a hitbox
 		Hitbox hitbox;
 		//  Font Container
 		Font font;

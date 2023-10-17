@@ -15,6 +15,7 @@ private:
 
 public:
 
+	ui::Button* scene2Button;
 	std::vector<ui::Button*> allButtons; // for making buttons using "Menu.h" **NOT UIMANAGER**
 
 

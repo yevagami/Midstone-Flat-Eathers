@@ -108,13 +108,16 @@ void GameManager::handleEvents() {
 		else if (event.type == SDL_KEYDOWN) {
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
-				isRunning = false;
+				isRunning = false;	//	quits the game when ESCAPE is pressed
 				break;
 			case SDL_SCANCODE_Q:
-				isRunning = false;
+				isRunning = false;	//	quits the game when Q is pressed
 				break;
 			case SDL_SCANCODE_DELETE:
-				isRunning = false;
+				isRunning = false;	//	quits the game when DELETE is pressed
+				break;
+			case SDL_SCANCODE_0:
+				system("cls"); //	clears the console when 0 is pressed
 				break;
 			case SDL_SCANCODE_1:
 				LoadScene(2);
