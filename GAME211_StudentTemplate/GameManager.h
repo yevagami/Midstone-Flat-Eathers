@@ -37,6 +37,11 @@ private:
 	// This might be unfamiliar
     class PlayerBody *player;
 
+	//For the game loop Diana
+	bool ifDoorOpen = false;
+	int mobsToSpawnOnTheLevel = 10;
+	int mobsLeft;
+
 public:
 
 	GameManager();
@@ -56,6 +61,7 @@ public:
 	void Run();
 	void handleEvents();
 	void LoadScene( int i );
+	void PassTheLevel(); //new
     bool ValidateCurrentScene();
     
 };

@@ -49,6 +49,8 @@ bool GameManager::OnCreate() {
 	Vec3 velocity(0.0f, 0.0f, 0.0f);
 	Vec3 acceleration(0.0f, 0.0f, 0.0f);
 
+	
+
 	player = new PlayerBody(
 		position,
 		velocity,
@@ -176,6 +178,11 @@ void GameManager::LoadScene(int i) {
 	currentScene->OnDestroy();
 	delete currentScene;
 
+	//Checks if we killed everyone to switch the scene. Right now its going to change scenes automatically. We dont have a door yet
+	if (ifDoorOpen == true) {
+		i++;
+	}
+	
 	switch (i) {
 	case 1:
 		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
@@ -193,6 +200,14 @@ void GameManager::LoadScene(int i) {
 
 	// using ValidateCurrentScene() to safely run OnCreate
 	if (!ValidateCurrentScene()) { isRunning = false; }
+}
+
+void GameManager::PassTheLevel() {
+	//Game loop win/loose the room (Diana)
+	mobsLeft = mobsToSpawnOnTheLevel;
+	if (mobsLeft==0) {
+		ifDoorOpen = true;
+	}
 }
 
 bool GameManager::ValidateCurrentScene() {
