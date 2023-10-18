@@ -1,4 +1,6 @@
 #include "GameManager.h"
+
+#include "Scene4.h"
 #include "scene_list.h"
 
 
@@ -122,13 +124,14 @@ void GameManager::handleEvents() {
 			case SDL_SCANCODE_1:
 				LoadScene(2);
 				break;
-
 			case SDL_SCANCODE_2:
 				LoadScene(1);
 				break;
-
 			case SDL_SCANCODE_3:
 				LoadScene(3);
+				break;
+			case SDL_SCANCODE_4:
+				LoadScene(4);
 				break;
 			default:
 				break;
@@ -188,6 +191,9 @@ void GameManager::LoadScene(int i) {
 		break;
 	case 3:
 		currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
+		break;
+	case 4:
+		currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
 		break;
 	default:
 		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);

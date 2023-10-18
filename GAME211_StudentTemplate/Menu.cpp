@@ -47,23 +47,28 @@ namespace ui {
 #pragma region Rendering
 	bool Button::Render(SDL_Renderer* buttonRenderer_) {
 		if (isActive) {
-			if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {
+			if (rect.w != 0 && rect.h != 0) {		//	if the rectangle exists...
+				if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {	//	render all 3 components
+					return false;
+				} ClearSDLStuff();	//	no leaks pls
+				return true;
+			}	//	if the rectangle doesn't exist...
+			if (!RenderText(buttonRenderer_)) { //	just render the text
 				return false;
-			} ClearSDLStuff();
-
-
-			return true;
+			} ClearSDLStuff();	//no	leaks pls
+			return true;	
 		}
-
-
-		return true;		//	true cuz no error, just didnt render (peep is "if isActive"). (can change)
+		return true; //	inactive buttons matter too.
+		//	(returning true because the initial condition checks to see if the button is enabled. a disabled button isnt an error with rendering, so we're return true)
 	}
 
+
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
+		//	if(backgroundType == solidColour) {}	 else if(backgroundType == picture) {}
 		if(rect.w != 0 && rect.h != 0) {
 			//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
 			const SDL_Color renderColour =
-				isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour;
+				isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour; //	isHovering checker. If true, colour is bkgCol / onHovBkg. If false, colour is bkgCol.
 
 			SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
 			SDL_RenderFillRect(renderer_, &rect);
@@ -72,18 +77,25 @@ namespace ui {
 		return true;
 	}
 
-	bool Button::RenderBorder(SDL_Renderer* renderer_) const {
-		SDL_Rect paddedRect = {
-				rect.x,
-				rect.y,
-				rect.w + 2,
-				rect.h + 2
-		};
-		SDL_SetRenderDrawColor(renderer_, borderColour.r, borderColour.g, borderColour.b, borderColour.a);
-		SDL_RenderDrawRect(renderer_, &paddedRect);
-		return true;
-	}
+bool Button::RenderBorder(SDL_Renderer* renderer_) const {
+    if (isHugged) { // if borders are enabled...
+		const SDL_Color renderColour =
+			isHovering ? !backgroundColour : borderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
 
+        for (int i = 0; i < hugPower; i++) {
+            SDL_Rect paddedRect = {
+                rect.x + i,
+                rect.y + i,
+                rect.w - 2 * i,
+                rect.h - 2 * i
+            };
+            SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
+            SDL_RenderDrawRect(renderer_, &paddedRect);
+        }
+        return true;
+    }
+    return true;
+}
 	bool Button::RenderText(SDL_Renderer* renderer_) {
 		if (text == nullptr || strlen(text) == 0) { return false; }
 
@@ -91,9 +103,9 @@ namespace ui {
 		buttonTextFont = TTF_OpenFont(fontItself, fontSize);
 		if (!buttonTextFont) { return false; }
 
-		//	if isHovering, textColour becomes inverted
+		//	if isHovering, textColour tints
 		const SDL_Color renderColour =
-			isHovering ? (textColour * onHoveringTextColour) : textColour;
+			isHovering ? (textColour * onHoveringTextColour) : textColour;	//	isHovering checker. If true, colour is txtCol / onHovTxt. If false, colour is txtCol.
 
 		//	2. set up a surface image with some text
 		buttonTextSurface = TTF_RenderText_Solid(buttonTextFont, text, renderColour);

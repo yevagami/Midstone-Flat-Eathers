@@ -2,11 +2,11 @@
 #define GAMEMANAGER_H
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <iostream>
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
 #include "PlayerBody.h"
+//#include <iostream>
 
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.

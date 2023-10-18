@@ -21,6 +21,7 @@ public:
 
 	Scene2(SDL_Window* sdlWindow_, GameManager* game_);
 	~Scene2();
+
 	bool OnCreate();
 	void OnDestroy();
 	void Update(const float time);

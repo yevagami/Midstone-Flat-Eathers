@@ -23,44 +23,46 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
 	yAxis = 15.0f;
 
 
-	///	button time
+		///	button time
 
-	auto BUTTON_BACKGROUND = ui::SDL_COLOR_CANDY_PINK; auto BUTTON_TEXT = ui::SDL_COLOR_BLACK; auto rectangle = SDL_Rect{ 0,0,325,75 }; auto square = ui::SDL_Square; auto BUTTON_HOVERBACKGROUND = ui::SDL_COLOR_BLACK; auto TEXT_TEXT = ui::SDL_COLOR_ROSE_TOY;
+	auto BUTTON_BACKGROUND = ui::SDL_COLOR_MYSTIC_PURPLE; auto BUTTON_TEXT = ui::SDL_COLOR_BLACK; auto rectangle = SDL_Rect{ 0,0,325,75 }; auto square = ui::SDL_Square;
+	auto BUTTON_HOVERBACKGROUND = ui::SDL_COLOR_GRAY; auto BUTTON_BORDER = SDL_COLOR_DARK_GRAY;
+	auto TEXT_TEXT = ui::SDL_COLOR_ROSE_TOY;
+
 		///	Step 1: Create the Buttons with Initial Values
 
-	myJankyText = new Button(Font{ "ur amazing<3", 100, fontMap.at("lobster") }, {}, SDL_COLOR_NULL, TEXT_TEXT);
-	myJankySubText = new Button(Font{ "stunning!", 25, fontMap.at("comic serif"),0,0,-45.0 }, {}, SDL_COLOR_NULL, TEXT_TEXT);
-	myCreditingText = new Button(Font{ "Adriel, Michael, Diana, and Helen", 25, fontMap.at("comic serif") }, {}, SDL_COLOR_NULL, TEXT_TEXT);
+	myJankyText = new Button(Font{ "ur amazing<3", 100, fontMap.at("lobster") }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
+	myJankySubText = new Button(Font{ "stunning!", 25, fontMap.at("comic serif"),0,0,-45.0 }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
+	myCreditingText = new Button(Font{ "Adriel, Michael, Diana, and Helen", 25, fontMap.at("comic serif") }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
 
 	myStartButton = new Button(	//	
 		Font{ "start", 50, fontMap.at("comic serif") },
-		rectangle,
-		BUTTON_BACKGROUND, BUTTON_TEXT);
+		rectangle, Colour{BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND});
 
 	myOptionsButton = new Button(	//	
 		Font{ "options", 50, fontMap.at("comic serif") },
 		rectangle,
-		BUTTON_BACKGROUND, BUTTON_TEXT);
+		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
 
 	myExitButton = new Button(	//	
 		Font{ "exit", 50, fontMap.at("comic serif") },
 		rectangle,
-		BUTTON_BACKGROUND, BUTTON_TEXT);
+		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
 
 	mySmallButton = new Button(	//
 		Font{ ":)", 55, fontMap.at("comic serif"),0,0,90 },
 		square,
-		SDL_COLOR_KIRIKO, BUTTON_TEXT);
+		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
 
 	myDebugButton = new Button(
 		Font{ "D:<", 55, fontMap.at("ransom"), 0,0,-90 },
 		square,
-		BUTTON_BACKGROUND,
-		BUTTON_TEXT);
+		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
 
 	mySpookyButton = new Button(
 		Font{ "boo!", 75, fontMap.at("gothic") },
-		square, BUTTON_BACKGROUND, BUTTON_TEXT	);
+		square, Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND }, 0);
+
 
 	//	grouping for mass attrbute changing, deleting and rendering
 	allButtons.emplace_back(myJankyText);	allButtons.emplace_back(myJankySubText); allButtons.emplace_back(myCreditingText); //	text
@@ -74,16 +76,17 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
 	//1.1 individial changes before grouping
 	mySmallButton->scaleDimensions(50);
 	myDebugButton->scaleDimensions(55);
+
 	myDebugButton->isPrideful = true;		//	changes colour on click
 	mySmallButton->isPrideful = true;		//	changes colour on click
-	myStartButton->isEasilyScared = true;//becomes inactive on click (it scurries away)
-	myExitButton->isEasilyScared = true;	//becomes inactive on click (it runs away)
+	myStartButton->isTogglable = true;//becomes inactive on click (it scurries away)
+	myExitButton->isTogglable = true;	//becomes inactive on click (it runs away)
 	myOptionsButton->isTogglable = true;	//	becomes togglablable (use button->isOn for the state)
 
 	myJankyText->textColour = myJankyText->textColour << SDL_White75;
 	myJankySubText->textColour = myJankySubText->textColour << SDL_White50; //	applying the transparency onto the colour
 	myCreditingText->textColour = myCreditingText->textColour << SDL_White10;
-
+	
 	//sub buttons
 	mySpookyButton->scaleDimensions(95);
 	mySpookyButton->isActive = false;
@@ -92,6 +95,7 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
 	///	Step 2: Aesthetics
 
 	for (auto* button : allButtons) {
+		button->isHugged = true;
 		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		button->onHoveringBackgroundColour = BUTTON_HOVERBACKGROUND;
 	}
@@ -110,7 +114,7 @@ Scene1::Scene1(SDL_Window* sdlWindow_, GameManager* game_) {
 	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW()); //	places the square button into the top corner
 	myDebugButton->setPosition(0, SCREEN_WIDTH - myDebugButton->getW()); //	places the square button into the bottom corner
 
-
+	isBopping = true;
 }
 
 
@@ -137,6 +141,7 @@ bool Scene1::OnCreate() {
 	constexpr float loudVolume = 0.1f;
 	constexpr float mybikeVolume = 3.0f;
 	//	loading audio to the MAP! this is indeed done in-scene
+	sound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
 	sound.loadSound("wong", "sound/wooooooooooooong.wav");
 	sound.loadSound("flame", "sound/flame.wav");
 	sound.loadSound("space boing", "sound/space boing.wav");
@@ -147,6 +152,7 @@ bool Scene1::OnCreate() {
 	sound.loadSound("boomp", "sound/boomp.wav");
 	sound.loadSound("dying printer", "sound/dying printer.wav");
 	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
+	sound.loadSound("oops", "sound/oops.wav");
 	sound.loadSound("my move", "sound/once i make my move.wav");
 	//its now loaded...
 
@@ -178,11 +184,11 @@ bool Scene1::OnCreate() {
 	//	what happens when each button is clicked?
 	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("flame", false);});
 	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("flame", false); bTestMenu = !bTestMenu; });
-	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); });
+	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
 	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
 	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
 
-	mySpookyButton->SetOnClick([&] {cc.consoleManager(update, "spooky aahhhH!"); sound.playSound("my move", true); });
+	mySpookyButton->SetOnClick([&] {cc.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
 
 
 	return true;
@@ -191,7 +197,6 @@ bool Scene1::OnCreate() {
 
 void Scene1::OnDestroy() {
 	for (auto* button : allButtons) { delete button; }
-	
 }
 
 
@@ -203,6 +208,8 @@ void Scene1::Update(const float deltaTime) {
 	} else {
 		mySpookyButton->isActive = false;
 	}
+
+
 
 
 }

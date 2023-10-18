@@ -37,6 +37,8 @@ public:
 	void createSoundGroup(const std::string& groupLabel_);
 	void addToSoundGroup(const std::string& label_, const std::string& groupLabel_);
 
+	/// checks & logic
+
 private:
 	irrklang::ISoundEngine* engine;
 	std::unordered_map<std::string, irrklang::ISoundSource*> soundSources;

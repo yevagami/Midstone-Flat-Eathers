@@ -22,6 +22,8 @@ private:
 
 public:
 
+	bool isBopping;
+
 	ui::Button* myJankyText;
 	ui::Button* myJankySubText;
 	ui::Button* myCreditingText;

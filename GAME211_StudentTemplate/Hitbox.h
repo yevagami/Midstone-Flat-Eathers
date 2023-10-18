@@ -18,9 +18,12 @@ public:
 	float w;
 	float h;
 
+	Hitbox(const float width_ = 0, const float height_ = 0, const int x_ = 0, const int y_ = 0) : x(x_), y(y_), w(width_), h(height_)
+	{}
+
 	bool generateHitbox(const SDL_Rect& rectangle_);
 
-	[[nodiscard]] bool collisionCheck(const Hitbox& other);
+	[[nodiscard]] bool collisionCheck(const Hitbox& other) const;
 	[[nodiscard]] bool collisionClickCheck(float pointX_, float pointY_) const;
 	[[nodiscard]] bool collisionClickCheck(const MATH::Vec3& mouseCoords_) const;
 };
