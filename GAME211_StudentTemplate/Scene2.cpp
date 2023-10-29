@@ -32,7 +32,7 @@ bool Scene2::OnCreate(){
 	name = "scene2";
 
 
-	
+	//Create the body
 	block = new Body();
 	block->setPos(Vec3(xAxis * 0.5f + 200.0f, yAxis * 0.5f, 0.0f));
 	block->setImage(IMG_Load("Textures/blue_block.jpg"));
@@ -42,12 +42,11 @@ bool Scene2::OnCreate(){
 		225.0f
 	);
 
+	//Load the body's hitbox
 	game->getPlayer()->LoadHitbox(
 		542.0f * 0.1f,
 		571.0f * 0.1f
 	);
-
-
 
 	return true;
 }
@@ -59,7 +58,7 @@ void Scene2::OnDestroy() {
 }
 
 void Scene2::Update(const float time){
-	//camera position update
+	//move the camera  update
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	Matrix4 ndc = MMath::viewportNDC(w, h);
@@ -69,19 +68,20 @@ void Scene2::Update(const float time){
 	float top = game->getPlayer()->getPos().y - yAxis / 2.0f;
 	float bottom = game->getPlayer()->getPos().y + yAxis / 2.0f;
 
-	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);
+	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);//
 	projectionMatrix = ndc * ortho;
 
-
+	//Check for collision
 	if (game->getPlayer()->getHitbox().collisionCheck(block->getHitbox())) {
 		game->getPlayer()->CollisionResponse(time, block);
 		std::cout << "Collided\n";
 	};
 
-
+	//Update the body
 	block->Update(time);
 	game->getPlayer()->Update(time);
 
+	//Update the hitboxes
 	block->UpdateHitbox(projectionMatrix);
 	game->getPlayer()->UpdateHitbox(projectionMatrix);
 }

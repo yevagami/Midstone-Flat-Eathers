@@ -42,6 +42,7 @@ void Body::LoadHitbox(float w_, float h_) {
 }
 
 void Body::UpdateHitbox(Matrix4 projectionMat){
+    //Updates the hitbox's position based on the projection matrix
     Vec3 hitboxPos = projectionMat * pos;
     hitbox.x = hitboxPos.x - hitbox.w * 0.5f;
     hitbox.y = hitboxPos.y - hitbox.h * 0.5f;
