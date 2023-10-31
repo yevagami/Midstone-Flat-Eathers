@@ -461,11 +461,7 @@ namespace ui {
 
 	};
 
-	enum class BackgroundType {
-		SolidColour,
-		Texture
-	};
-
+	///	Colour Modifier Object
 	struct Colour {
 		SDL_Color background;
 		SDL_Color text;
@@ -481,6 +477,11 @@ namespace ui {
 
 	};
 
+
+	enum class BackgroundType {
+		SolidColour,
+		Image
+	};
 
 
 	class Button {
@@ -502,7 +503,7 @@ namespace ui {
 				isTogglable = otherButton_.isTogglable;
 				isOn = otherButton_.isOn;
 				isHugged = otherButton_.isHugged;
-				hugPower = otherButton_.hugPower;
+				borderWidth = otherButton_.borderWidth;
 
 				backgroundColour = otherButton_.backgroundColour;
 				onHoveringBackgroundColour = otherButton_.onHoveringBackgroundColour;
@@ -524,7 +525,7 @@ namespace ui {
 			const Colour& colour_ = Colour{},
 			const int borderThickness_ = 4
 		) :
-			rect(rect_), font(font_), colour(colour_), hugPower(borderThickness_) {
+			rect(rect_), font(font_), colour(colour_), borderWidth(borderThickness_) {
 
 			hitbox = { 0,0,0,0 }; // null hitbox, hope his class can handle that! :D
 
@@ -621,7 +622,7 @@ namespace ui {
 		bool isEasilyScared;											//	causes the button to become inactive on click (default : false)
 
 		bool isHugged;													// enables/disables the border (default : true)
-		int hugPower;													//	how thick is the border? (default : 4)
+		int borderWidth;													//	how thick is the border? (default : 4)
 
 	protected:
 		///	Uneditable Attributes
@@ -664,6 +665,8 @@ namespace ui {
 	public:
 		//  is the mouse hovering over the button's dimensions? [true/false]
 		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
+
+
 #pragma endregion
 	};
 

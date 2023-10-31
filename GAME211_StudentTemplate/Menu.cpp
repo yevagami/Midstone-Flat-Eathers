@@ -82,7 +82,7 @@ bool Button::RenderBorder(SDL_Renderer* renderer_) const {
 		const SDL_Color renderColour =
 			isHovering ? !backgroundColour : borderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
 
-        for (int i = 0; i < hugPower; i++) {
+        for (int i = 0; i < borderWidth; i++) {
             SDL_Rect paddedRect = {
                 rect.x + i,
                 rect.y + i,
@@ -201,9 +201,13 @@ bool Button::RenderBorder(SDL_Renderer* renderer_) const {
 namespace ui {
 	template <typename  T>
 	T Clamp(const T value_, const T min_, const T max_) {
-		if (value_ < min_) { return min_; }
-		if (value_ < max_) { return max_; }
-		return value_;
+		if (value_ < min_) {
+			return static_cast<T>(min_);
+		}
+		if (value_ < max_) {
+			return static_cast<T>(max_);
+		}
+		return static_cast<T>(value_);
 	}
 
 
@@ -264,6 +268,7 @@ namespace ui {
 
 
 	SDL_Color operator~(const SDL_Color& colour_) {
+		///chatgpt helped here (random devices)
 		std::random_device randDev;
 		std::mt19937 randGen(randDev());
 		std::uniform_int_distribution<int> dis(0, 255);
