@@ -51,7 +51,7 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 		else { currentState = idle; }
 	}
 
-	//	dash controls
+	//dash controls
 	if (keyStates[SDL_SCANCODE_LSHIFT] == 1 && currentState != dash && (!dash_cooldown->hasStarted || dash_cooldown->completed)) {
 		currentState = dash;
 		dash_timer->Start();

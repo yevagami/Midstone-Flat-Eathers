@@ -14,6 +14,14 @@
 #include "Clock.h"
 #include <vector>
 
+//Abstracting the abilities away
+struct abilities {
+    virtual void activate(); //Will activate on an event (key press, mouse click, etc.)
+    virtual void passive(); //Will actitvate once when selecting the ability 
+};
+
+
+
 class PlayerBody : public Body{
 
 protected:
@@ -70,7 +78,7 @@ private:
     Vec3 playerDirection;
     bool canMove = true;
     float walkSpeed = 100.0f;
-    float dashSpeed = 200.0f;
+    float dashSpeed = 500.0f;
     float currentSpeed;
     float maxSpeed;
 

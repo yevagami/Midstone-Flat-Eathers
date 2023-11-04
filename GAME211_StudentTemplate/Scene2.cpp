@@ -16,7 +16,8 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 
 }
 
-Scene2::~Scene2(){}
+Scene2::~Scene2(){
+}
 
 bool Scene2::OnCreate(){
 	int w, h;
@@ -41,12 +42,14 @@ bool Scene2::OnCreate(){
 		225.0f,
 		225.0f
 	);
+	block->setParentScene(this);
 
 	//Load the body's hitbox
 	game->getPlayer()->LoadHitbox(
 		542.0f * 0.1f,
 		571.0f * 0.1f
 	);
+	game->getPlayer()->setParentScene(this);
 
 	return true;
 }
@@ -55,6 +58,7 @@ void Scene2::OnDestroy() {
 	for (auto* button : allButtons) {
 		delete button;
 	}
+	delete block;
 }
 
 void Scene2::Update(const float time){
@@ -80,10 +84,6 @@ void Scene2::Update(const float time){
 	//Update the body
 	block->Update(time);
 	game->getPlayer()->Update(time);
-
-	//Update the hitboxes
-	block->UpdateHitbox(projectionMatrix);
-	game->getPlayer()->UpdateHitbox(projectionMatrix);
 }
 
 void Scene2::Render(){
@@ -93,8 +93,8 @@ void Scene2::Render(){
 	block->Render(renderer, projectionMatrix);
 	game->RenderPlayer(0.1f);
 
-	game->getPlayer()->RenderHitbox(renderer, projectionMatrix, 0.1f);
-	block->RenderHitbox(renderer, projectionMatrix, 1.0f);
+	game->getPlayer()->RenderHitbox(renderer, 0.1f);
+	block->RenderHitbox(renderer, 1.0f);
 
 
 	for(auto* button : allButtons) {

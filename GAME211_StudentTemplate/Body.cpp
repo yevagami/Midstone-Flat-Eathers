@@ -1,4 +1,5 @@
 #include "Body.h"
+#include "Scene.h"
 
 //Body::Body() {
 //    pos = Vec3();
@@ -35,20 +36,13 @@ Body::Body (
 }
 
 void Body::LoadHitbox(float w_, float h_) {
-    hitbox.w = w_;
-    hitbox.h = h_;
-    hitbox.x = pos.x - hitbox.w * 0.5f;
-    hitbox.y = pos.y - hitbox.h * 0.5f;
+    hitbox = Hitbox(w_, h_, pos.x, pos.y);
 }
 
-void Body::UpdateHitbox(Matrix4 projectionMat){
-    //Updates the hitbox's position based on the projection matrix
-    Vec3 hitboxPos = projectionMat * pos;
-    hitbox.x = hitboxPos.x - hitbox.w * 0.5f;
-    hitbox.y = hitboxPos.y - hitbox.h * 0.5f;
+Body::~Body(){
+    delete texture;
+    delete image;
 }
-
-Body::~Body(){}
 
 void Body::ApplyForce( Vec3 force_ ) {
     accel = force_ / mass;
@@ -62,6 +56,16 @@ void Body::Update( float deltaTime ) {
     // Update orientation
     orientation += rotation * deltaTime;
     rotation += angular * deltaTime;
+
+    //Updates the hitbox's position based on the projection matrix
+    if (parentScene == nullptr) { //guard clause, exits the function early 
+        std::cout << "Parent scene is not set";
+        return; 
+    }
+    Matrix4 projectionMat = parentScene->getProjectionMatrix();
+    Vec3 hitboxPos = projectionMat * pos;
+    hitbox.x = hitboxPos.x - hitbox.w * 0.5f;
+    hitbox.y = hitboxPos.y - hitbox.h * 0.5f;
 }
 
 
@@ -115,7 +119,7 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scal
         orientationDegrees, nullptr, SDL_FLIP_NONE);
 }
 
-void Body::RenderHitbox(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scale_){
+void Body::RenderHitbox(SDL_Renderer* renderer_, float scale_){
     //Vec3 hitboxCoords = projectionMatrix * Vec3(hitbox.x, hitbox.y, 0.0f);
 
     SDL_Rect box;

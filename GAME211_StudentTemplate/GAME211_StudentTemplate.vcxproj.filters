@@ -52,6 +52,12 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{9b61642b-8f4b-4f38-8843-5cc700767ac2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Body\Player">
+      <UniqueIdentifier>{4528597a-50cb-4491-9cf3-98a3f7104dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Body\Player">
+      <UniqueIdentifier>{3a9db55d-aca5-45fb-ad0c-670a2370b369}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -63,16 +69,10 @@
     <ClCompile Include="Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Weapons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Body.cpp">
-      <Filter>Source Files\Body</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBody.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
     <ClCompile Include="Scene1.cpp">
@@ -132,11 +132,14 @@
     <ClCompile Include="Scene4.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerBody.cpp">
+      <Filter>Source Files\Body\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Melee.cpp">
+      <Filter>Source Files\Body\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Weapons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -147,9 +150,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Body.h">
-      <Filter>Header Files\Body</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBody.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
@@ -220,6 +220,15 @@
     </ClInclude>
     <ClInclude Include="Scene4.h">
       <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBody.h">
+      <Filter>Header Files\Body\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="abilitiy.h">
+      <Filter>Header Files\Body\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Melee.h">
+      <Filter>Header Files\Body\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

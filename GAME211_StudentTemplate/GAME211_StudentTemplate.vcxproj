@@ -105,6 +105,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Melee.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PrettyPrinting.cpp" />
@@ -116,10 +117,10 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UIManager.cpp" />
-    <ClCompile Include="Weapons.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="abilitiy.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Citations.hpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="KeybindHandler.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LogManager.h" />
+    <ClInclude Include="Melee.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PrettyPrinting.h" />
@@ -147,7 +149,6 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="VMath.h" />
-    <ClInclude Include="Weapons.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
