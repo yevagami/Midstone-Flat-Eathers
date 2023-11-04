@@ -39,7 +39,9 @@ void Sound::setVolume(const float volume_) const { if (engine) { engine->setSoun
 void Sound::setGroupVolume(const std::string& groupLabel_, const float volume_) {
 	if (soundGroups.find(groupLabel_) != soundGroups.end()) {
 		for (const std::string& soundLabel : soundGroups[groupLabel_]) {
-			if (soundSources.find(soundLabel) != soundSources.end()) { engine->setSoundVolume(volume_); }
+			if (soundSources.find(soundLabel) != soundSources.end()) {
+				engine->setSoundVolume(volume_);
+			}
 		}
 	}
 }

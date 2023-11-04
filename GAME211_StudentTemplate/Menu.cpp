@@ -47,23 +47,28 @@ namespace ui {
 #pragma region Rendering
 	bool Button::Render(SDL_Renderer* buttonRenderer_) {
 		if (isActive) {
-			if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {
+			if (rect.w != 0 && rect.h != 0) {		//	if the rectangle exists...
+				if (!RenderBackground(buttonRenderer_) || !RenderBorder(buttonRenderer_) || !RenderText(buttonRenderer_)) {	//	render all 3 components
+					return false;
+				} ClearSDLStuff();	//	no leaks pls
+				return true;
+			}	//	if the rectangle doesn't exist...
+			if (!RenderText(buttonRenderer_)) { //	just render the text
 				return false;
-			} ClearSDLStuff();
-
-
-			return true;
+			} ClearSDLStuff();	//no	leaks pls
+			return true;	
 		}
-
-
-		return true;		//	true cuz no error, just didnt render (peep is "if isActive"). (can change)
+		return true; //	inactive buttons matter too.
+		//	(returning true because the initial condition checks to see if the button is enabled. a disabled button isnt an error with rendering, so we're return true)
 	}
 
+
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
+		//	if(backgroundType == solidColour) {}	 else if(backgroundType == picture) {}
 		if(rect.w != 0 && rect.h != 0) {
 			//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
 			const SDL_Color renderColour =
-				isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour;
+				isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour; //	isHovering checker. If true, colour is bkgCol / onHovBkg. If false, colour is bkgCol.
 
 			SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
 			SDL_RenderFillRect(renderer_, &rect);
@@ -72,18 +77,25 @@ namespace ui {
 		return true;
 	}
 
-	bool Button::RenderBorder(SDL_Renderer* renderer_) const {
-		SDL_Rect paddedRect = {
-				rect.x,
-				rect.y,
-				rect.w + 2,
-				rect.h + 2
-		};
-		SDL_SetRenderDrawColor(renderer_, borderColour.r, borderColour.g, borderColour.b, borderColour.a);
-		SDL_RenderDrawRect(renderer_, &paddedRect);
-		return true;
-	}
+bool Button::RenderBorder(SDL_Renderer* renderer_) const {
+    if (isHugged) { // if borders are enabled...
+		const SDL_Color renderColour =
+			isHovering ? !backgroundColour : borderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
 
+        for (int i = 0; i < borderWidth; i++) {
+            SDL_Rect paddedRect = {
+                rect.x + i,
+                rect.y + i,
+                rect.w - 2 * i,
+                rect.h - 2 * i
+            };
+            SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
+            SDL_RenderDrawRect(renderer_, &paddedRect);
+        }
+        return true;
+    }
+    return true;
+}
 	bool Button::RenderText(SDL_Renderer* renderer_) {
 		if (text == nullptr || strlen(text) == 0) { return false; }
 
@@ -91,9 +103,9 @@ namespace ui {
 		buttonTextFont = TTF_OpenFont(fontItself, fontSize);
 		if (!buttonTextFont) { return false; }
 
-		//	if isHovering, textColour becomes inverted
+		//	if isHovering, textColour tints
 		const SDL_Color renderColour =
-			isHovering ? (textColour * onHoveringTextColour) : textColour;
+			isHovering ? (textColour * onHoveringTextColour) : textColour;	//	isHovering checker. If true, colour is txtCol / onHovTxt. If false, colour is txtCol.
 
 		//	2. set up a surface image with some text
 		buttonTextSurface = TTF_RenderText_Solid(buttonTextFont, text, renderColour);
@@ -189,9 +201,13 @@ namespace ui {
 namespace ui {
 	template <typename  T>
 	T Clamp(const T value_, const T min_, const T max_) {
-		if (value_ < min_) { return min_; }
-		if (value_ < max_) { return max_; }
-		return value_;
+		if (value_ < min_) {
+			return static_cast<T>(min_);
+		}
+		if (value_ < max_) {
+			return static_cast<T>(max_);
+		}
+		return static_cast<T>(value_);
 	}
 
 
@@ -252,6 +268,7 @@ namespace ui {
 
 
 	SDL_Color operator~(const SDL_Color& colour_) {
+		///chatgpt helped here (random devices)
 		std::random_device randDev;
 		std::mt19937 randGen(randDev());
 		std::uniform_int_distribution<int> dis(0, 255);
@@ -318,7 +335,7 @@ namespace ui {
 	SDL_Color SDL_COLOR_DARK_ORANGE = { 255, 140, 0, 255 };
 	SDL_Color SDL_COLOR_DARK_RED = { 139, 0, 0, 255 };
 	SDL_Color SDL_COLOR_DARK_SALMON = { 233, 150, 122, 255 };
-	SDL_Color SDL_COLOR_DARK_SEA_GREEN = { 143, 188, 143, 255 };
+	SDL_Color SDL_COLOR_DARK_SEA_GREEN = { 143, 188, 139, 255 };
 	SDL_Color SDL_COLOR_DARK_SLATE_BLUE = { 72, 61, 139, 255 };
 	SDL_Color SDL_COLOR_DARK_SLATE_GRAY = { 47, 79, 79, 255 };
 	SDL_Color SDL_COLOR_DARK_TURQUOISE = { 0, 206, 209, 255 };

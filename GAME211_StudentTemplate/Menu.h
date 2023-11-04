@@ -6,6 +6,7 @@
 #include <functional>
 
 
+
 /// Constants 
 namespace ui {
 	//	general clamping
@@ -28,7 +29,6 @@ namespace ui {
 	SDL_Color operator<<(const SDL_Color& colourA_, const SDL_Color& colourB_);
 	//SDL_Color operator|(const SDL_Color& colourA_, const SDL_Color& colourB_);
 
-#define _debugbutton Button( Font{ "sans", 55, fontMap.at("comic sans"),0,0,55 }, SDL_Square, SDL_COLOR_DEEP_PINK, SDL_COLOR_CANDY_PINK)
 
 #pragma region shapes
 	extern SDL_Rect SDL_Testangle;
@@ -39,6 +39,7 @@ namespace ui {
 	extern SDL_Rect SDL_Square;
 #pragma endregion
 #pragma region colour constants
+	///	Most Colour Constants are courtesy of GPT-3.5
 #pragma region transparency
 	extern SDL_Color SDL_White100;
 	extern SDL_Color SDL_White90;
@@ -47,6 +48,7 @@ namespace ui {
 	extern SDL_Color SDL_White25;
 	extern SDL_Color SDL_White10;
 #pragma endregion
+	///	"Give me a big list of SDL_Colors"
 #pragma region colours
 	extern SDL_Color SDL_COLOR_NULL;
 	extern SDL_Color SDL_COLOR_ALICE_BLUE;
@@ -264,7 +266,6 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_ZINNWALDITE;
 	extern SDL_Color SDL_COLOR_ZUCCHINI;
 	extern SDL_Color SDL_COLOR_MARINE_BLUE;
-	extern SDL_Color SDL_COLOR_LAVENDER_BLUSH;
 	extern SDL_Color SDL_COLOR_PEACH;
 	extern SDL_Color SDL_COLOR_STARRY_NIGHT;
 	extern SDL_Color SDL_COLOR_EMERALD;
@@ -278,9 +279,9 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_SILVER_MIST;
 	extern SDL_Color SDL_COLOR_MYSTIC_PURPLE;
 	extern SDL_Color SDL_COLOR_TEAL_BLUE;
-	extern SDL_Color SDL_COLOR_BUBBLES;
 	extern SDL_Color SDL_COLOR_BUBBLEGUM;
 #pragma endregion
+	///	"Give me a list of SDL_Colors based off appliances"
 #pragma region appliances dlc
 	extern SDL_Color SDL_COLOR_MUG;
 	extern SDL_Color SDL_COLOR_TOASTER;
@@ -311,6 +312,7 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_TOOTHBRUSH;
 	extern SDL_Color SDL_COLOR_WASHING_MACHINE;
 #pragma endregion
+	///	"Give me a list of SDL_Colors based off Minecraft blocks"
 #pragma region minecraft blocks dlc
 	extern SDL_Color SDL_COLOR_ANVIL;
 	extern SDL_Color SDL_COLOR_BARREL;
@@ -368,6 +370,7 @@ namespace ui {
 	extern SDL_Color SDL_COLOR_WATER;
 	extern SDL_Color SDL_COLOR_WET_SPONGE;
 #pragma endregion
+	///	"Give me a list of SDL_Colors based off Overwatch characters"
 #pragma region overwat dlc
 	// Tank Heroes
 	extern SDL_Color SDL_COLOR_DVA;
@@ -451,9 +454,33 @@ namespace ui {
 
 		// ReSharper disable once CppParameterMayBeConst
 		// ReSharper disable once CppNonExplicitConvertingConstructor
-		Font(const char* fontText_ = "", int size_ = 45,
+		Font(
+			const char* fontText_ = "", int size_ = 45,
 			const char* font_ = fontMap.at("comic sans"), const int x_ = 0, const int y_ = 0, const double rot_ = 0.0)
 			: fontText(fontText_), size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_) { }
+
+	};
+
+	///	Colour Modifier Object
+	struct Colour {
+		SDL_Color background;
+		SDL_Color text;
+		SDL_Color border;
+		SDL_Color onHoverBackground;
+		SDL_Color onHoverText;
+		SDL_Color onHoverBorder;
+
+		Colour(
+			const SDL_Color background_ = SDL_COLOR_BLACK, const SDL_Color text_ = SDL_COLOR_ANTIQUE_WHITE, const SDL_Color border_ = SDL_COLOR_ANTIQUE_WHITE, 
+			const SDL_Color onHoverBkg_ = SDL_COLOR_BLACK, const SDL_Color onHoverTxt_ = SDL_COLOR_ANTIQUE_WHITE, const SDL_Color onHoverBorder_ = SDL_COLOR_ANTIQUE_WHITE)
+			: background(background_), text(text_), border(border_), onHoverBackground(onHoverBkg_), onHoverText(onHoverTxt_), onHoverBorder(onHoverBorder_) { }
+
+	};
+
+
+	enum class BackgroundType {
+		SolidColour,
+		Image
 	};
 
 
@@ -461,8 +488,7 @@ namespace ui {
 	public:
 		/// Constructors
 		//Button() = default;
-		Button(const Button& otherButton_) = default;
-		Button& operator=(const Button& otherButton_) {
+		Button(const Button& otherButton_){
 			if (this != &otherButton_) {
 				rect = otherButton_.rect;
 				font = otherButton_.font;
@@ -472,6 +498,12 @@ namespace ui {
 				isTextCentered = otherButton_.isTextCentered;
 				isHovering = otherButton_.isHovering;
 				isActive = otherButton_.isActive;
+				isEasilyScared = otherButton_.isEasilyScared;
+				isPrideful = otherButton_.isPrideful;
+				isTogglable = otherButton_.isTogglable;
+				isOn = otherButton_.isOn;
+				isHugged = otherButton_.isHugged;
+				borderWidth = otherButton_.borderWidth;
 
 				backgroundColour = otherButton_.backgroundColour;
 				onHoveringBackgroundColour = otherButton_.onHoveringBackgroundColour;
@@ -481,21 +513,22 @@ namespace ui {
 
 				//	releasing old fonts
 				if (buttonTextFont) { TTF_CloseFont(buttonTextFont); }
-
-				// create a new TTF_Font by opening the font file with the same settings as the source  -- [ chat gpt ] --
 				buttonTextFont = TTF_OpenFont(otherButton_.fontItself, otherButton_.fontSize);
-			}
 
-			return *this;
+			}
 		}
+
 		//  main constructor
 		Button(
 			const Font& font_ = Font{},
-			SDL_Rect rect_ = { 0, 0, 0, 0 },
-			SDL_Color backgroundColour_ = SDL_COLOR_SOUL_CAMPFIRE,
-			SDL_Color textColour_ = SDL_COLOR_BLACK
+			const SDL_Rect& rect_ = { 0, 0, 0, 0 },
+			const Colour& colour_ = Colour{},
+			const int borderThickness_ = 4
 		) :
-			rect(rect_), font(font_), backgroundColour(backgroundColour_), textColour(textColour_) {
+			rect(rect_), font(font_), colour(colour_), borderWidth(borderThickness_) {
+
+			hitbox = { 0,0,0,0 }; // null hitbox, hope his class can handle that! :D
+
 			isTextCentered = true;
 			isActive = true;
 			isEasilyScared = false;
@@ -503,11 +536,14 @@ namespace ui {
 			isOn = false;
 			isHovering = false;
 			isPrideful = false;
-			borderColour = SDL_COLOR_BLACK;
-			onHoveringBackgroundColour = SDL_COLOR_ROSE_TOY;
-			onHoveringTextColour = SDL_COLOR_ROSE_TOY;
+			isHugged = true;
 
-			hitbox.generateHitbox(rect_); // generates the hitbox based off initial pos (if you transform the box before rendering, regenerate).
+			//	colour shenegans
+			backgroundColour = colour_.background;
+			textColour = colour_.text;
+			borderColour = colour_.border;
+			onHoveringBackgroundColour = colour_.onHoverBackground;
+			onHoveringTextColour = colour_.onHoverText;
 
 			//	font shenegans
 			text = font_.fontText;
@@ -517,7 +553,7 @@ namespace ui {
 			fontOffsetY = font_.offsetY;
 			fontRotation = font_.rotation;
 
-			//	SDL-grossness
+			//	po*nters
 			buttonTextFont = nullptr;
 			buttonTextTexture = nullptr;
 			buttonTextSurface = nullptr;
@@ -548,10 +584,12 @@ namespace ui {
 		/// Private Variables
 		//  a rectangle
 		SDL_Rect rect;
-		//	a hitbox
+		//	  a hitbox
 		Hitbox hitbox;
 		//  Font Container
 		Font font;
+		//	  Colour container
+		Colour colour;
 
 		TTF_Font* buttonTextFont;
 		SDL_Texture* buttonTextTexture;
@@ -569,19 +607,23 @@ namespace ui {
 		SDL_Color textColour;										//  button's text colour
 		SDL_Color onHoveringTextColour;					//  button's hovering text colour
 
-		int fontSize;														//	button's font size
-		double fontRotation;										//	font rotation
-		int fontOffsetX;												//	offset x
-		int fontOffsetY;												//	offset y
-		const char* text;												// button's text
-		const char* fontItself;									// button's font
+		int fontSize;														//	button's font size (default : 45)
+		double fontRotation;										//	font rotation (default : 0.0)
+		int fontOffsetX;												//	offset x (default : 0)
+		int fontOffsetY;												//	offset y (default : 0)
+		const char* text;												// button's text (default : "")
+		const char* fontItself;									// button's font (default : )
 
-		bool isActive;													//	is button active flag
-		bool isTogglable;												//	change to be a switch-style button
-		bool isOn;															//	when togglable, this is true when toggled
-		bool isTextCentered;										//  is text centered flag
-		bool isPrideful;													//	change colour on click
-		bool isEasilyScared;											//	causes the button to become inactive on click
+		bool isActive;													//	is button active flag (default : true)
+		bool isTogglable;												//	change to be a switch-style button (default : false)
+		bool isOn;															//	when togglable, this is true when toggled (default : false*)
+		bool isTextCentered;										//  is text centered flag (default : true)
+		bool isPrideful;													//	change colour on click (default : false)
+		bool isEasilyScared;											//	causes the button to become inactive on click (default : false)
+
+		bool isHugged;													// enables/disables the border (default : true)
+		int borderWidth;													//	how thick is the border? (default : 4)
+
 	protected:
 		///	Uneditable Attributes
 		bool isHovering;												//	is the mouse hovering over the button
@@ -623,6 +665,8 @@ namespace ui {
 	public:
 		//  is the mouse hovering over the button's dimensions? [true/false]
 		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
+
+
 #pragma endregion
 	};
 

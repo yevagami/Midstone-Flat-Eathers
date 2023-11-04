@@ -2,11 +2,11 @@
 #define GAMEMANAGER_H
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <iostream>
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
 #include "PlayerBody.h"
+//#include <iostream>
 
 //needed to use rand() function
 #include <ctime>

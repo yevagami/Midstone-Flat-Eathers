@@ -14,6 +14,14 @@ Scene3::Scene3(SDL_Window* sdlWindow_, GameManager* game_) {
 	renderer = SDL_GetRenderer(window);
 	xAxis = 25.0f;
 	yAxis = 15.0f;
+
+
+	scene3Button = new Button(Font{ "diana land", 100 });
+	scene3Button->textColour = SDL_COLOR_EMERALD_GREEN << SDL_White50;
+	scene3Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene3Button->offsetPosition(-300);
+	allButtons.emplace_back(scene3Button);
+
+
 }
 
 Scene3::~Scene3() = default;
@@ -31,12 +39,6 @@ bool Scene3::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 #pragma endregion
 	name = "scene3";
-
-	auto* scene3Button = new Button(Font{ "diana land", 100 });
-	scene3Button->textColour = SDL_COLOR_EMERALD_GREEN << SDL_White50;
-	scene3Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene3Button->offsetPosition(-300);
-	allButtons.emplace_back(scene3Button);
-	
 
 
 	return true;

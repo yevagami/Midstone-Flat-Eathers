@@ -3,10 +3,10 @@
 #include <SDL.h>
 #include <MMath.h>
 #include "Hitbox.h"
-#include <VMath.h>
-#include <SDL_image.h>
+
 
 using namespace MATH;
+
 
 struct Transform {
 	Vec3 bodyPosition;

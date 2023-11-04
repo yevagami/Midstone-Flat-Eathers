@@ -20,10 +20,21 @@ private:
 	Matrix4 projectionMatrix;	// set in OnCreate()
     Matrix4 inverseProjection;	// set in OnCreate()
 
-
-
-
 public:
+
+	bool isBopping;
+
+	ui::Button* myJankyText;
+	ui::Button* myJankySubText;
+	ui::Button* myCreditingText;
+	ui::Button* myStartButton;
+	ui::Button* myOptionsButton;
+	ui::Button* myExitButton;
+	ui::Button* mySmallButton;
+	ui::Button* myDebugButton;
+
+	ui::Button* mySpookyButton;
+	bool bTestMenu;
 
 	Sound sound;
 
@@ -45,6 +56,10 @@ public:
 	SDL_Window* getWindow() { return window; }
     Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
+
+
+
+	void initiateSoundEffects();
 };
 
 #endif
