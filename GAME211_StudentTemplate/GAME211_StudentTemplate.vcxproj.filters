@@ -138,6 +138,9 @@
     <ClCompile Include="Melee.cpp">
       <Filter>Source Files\Body\Player</Filter>
     </ClCompile>
+    <ClCompile Include="SceneUI.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Level.h">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Melee.h">
       <Filter>Header Files\Body\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneUI.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

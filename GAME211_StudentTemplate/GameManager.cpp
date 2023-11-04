@@ -39,7 +39,7 @@ bool GameManager::OnCreate() {
 	}
 
 	// select scene for specific assignment
-	currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
+	currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 
 	// create player
 	float mass = 1.0f;
@@ -135,6 +135,7 @@ void GameManager::handleEvents() {
 			case SDL_SCANCODE_4:
 				LoadScene(4);
 				break;
+
 			default:
 				break;
 			}
@@ -203,6 +204,9 @@ void GameManager::LoadScene(int i) {
 		break;
 	case 4:
 		currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+		break;
+	case 5:
+		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 		break;
 	default:
 		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
