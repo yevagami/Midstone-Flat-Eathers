@@ -35,19 +35,25 @@ Body::Body (
     image = nullptr;
 }
 
+Body::~Body() {}
+
 void Body::LoadHitbox(float w_, float h_) {
     hitbox = Hitbox(w_, h_, pos.x, pos.y);
 }
 
-Body::~Body(){
+void Body::OnDestroy() {
     delete texture;
+    texture = nullptr;
+
     delete image;
+    image = nullptr;
+
+    parentScene = nullptr;
 }
 
 void Body::ApplyForce( Vec3 force_ ) {
     accel = force_ / mass;
 }
-
 
 void Body::Update( float deltaTime ) {
     vel = vel + accel * deltaTime;
@@ -119,12 +125,8 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scal
         orientationDegrees, nullptr, SDL_FLIP_NONE);
 }
 
-void Body::RenderHitbox(SDL_Renderer* renderer_, float scale_){
-    //Vec3 hitboxCoords = projectionMatrix * Vec3(hitbox.x, hitbox.y, 0.0f);
-
+void Body::RenderHitbox(SDL_Renderer* renderer_){
     SDL_Rect box;
-   // box.x = static_cast<int>(hitboxCoords.x);
-    //box.y = static_cast<int>(hitboxCoords.y);
 
     box.x = static_cast<int>(hitbox.x);
     box.y = static_cast<int>(hitbox.y);

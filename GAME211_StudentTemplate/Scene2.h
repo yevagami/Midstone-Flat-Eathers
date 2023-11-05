@@ -1,10 +1,9 @@
 #include "Menu.h"
 #include "Scene.h"
+#include "Solid.h"
 
 class Scene2 : public Scene{
 private:
-	Body* block;
-
 	float xAxis;	
 	float yAxis;
 	SDL_Window* window;		
@@ -13,10 +12,13 @@ private:
 	Matrix4 inverseProjection;	
 
 public:
+	//Scene objects
+	std::vector<Body*>sceneObjects;
+	std::vector<Body*>flaggedObjects;
 
+	//UI stuff
 	ui::Button* scene2Button;
 	std::vector<ui::Button*> allButtons; // for making buttons using "Menu.h" **NOT UIMANAGER**
-
 
 	Scene2(SDL_Window* sdlWindow_, GameManager* game_);
 	~Scene2();

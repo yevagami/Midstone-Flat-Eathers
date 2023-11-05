@@ -7,8 +7,10 @@
 
 #include "PlayerBody.h"
 
-bool PlayerBody::OnCreate()
-{
+bool PlayerBody::OnCreate(){
+	//Create the melee hitbox
+	meleeHitbox = Hitbox(64, 64, pos.x, pos.y);
+
     //Creating timers
     dash_timer = new Clock(dashDuration, false);
     dash_cooldown = new Clock(dashCooldown, false);
@@ -20,7 +22,7 @@ bool PlayerBody::OnCreate()
     currentState = idle;
 
     //add a texture to the player
-    image = IMG_Load( "Textures/Pacman.png" );
+    image = IMG_Load( "Textures/programmer_art/player.png" );
     SDL_Renderer *renderer = game->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
     if (image == nullptr) {
@@ -57,6 +59,17 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 		dash_timer->Start();
 	}
 
+	//melee controls
+	if (SDL_MOUSEBUTTONDOWN) {
+
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			std::cout << "Pressed left\n";
+		}
+
+		if (event.button.button == SDL_BUTTON_RIGHT) {
+			std::cout << "Pressed right\n";
+		}
+	}
 }
 
 void PlayerBody::Update( float deltaTime ){
@@ -135,6 +148,44 @@ void PlayerBody::Update( float deltaTime ){
     // Note that would update velocity too, and rotation motion
     Body::Update( deltaTime );
 
+
+	//Update the melee hitbox
+	//Gets the direction of the mouse relative to the player's position
+	int mouseX;
+	int mouseY;
+	Matrix4 projectionMat = Body::getParentScene()->getProjectionMatrix();
+	SDL_GetMouseState(&mouseX, &mouseY);
+	Vec3 playerPos = projectionMat * pos;
+	Vec3 mouseDir = VMath::normalize(Vec3(
+		mouseX - playerPos.x,
+		mouseY - playerPos.y,
+		0.0f
+	));
+	//std::cout << mouseDir.x << ", " << mouseDir.y << "\n";
+	Hitbox playerHitbox = Body::getHitbox();
+	Vec3 hitboxPos = Vec3(
+		playerPos.x + (mouseDir.x * (50.0f + playerHitbox.w * 0.5f)),
+		playerPos.y + (mouseDir.y * (50.0f + playerHitbox.h * 0.5f)),
+		0.0f
+	);
+	meleeHitbox.x = hitboxPos.x - meleeHitbox.w * 0.5f;
+	meleeHitbox.y = hitboxPos.y - meleeHitbox.h * 0.5f;
+}
+
+void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
+	//Render the melee hitbox
+	SDL_Rect box;
+
+	box.x = static_cast<int>(meleeHitbox.x);
+	box.y = static_cast<int>(meleeHitbox.y);
+	box.w = static_cast<int>(meleeHitbox.w);
+	box.h = static_cast<int>(meleeHitbox.h);
+
+	SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
+	SDL_RenderDrawRect(renderer_, &box);
+	SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
+
+	Body::RenderHitbox(renderer_);
 }
 
 void PlayerBody::CollisionResponse(float deltaTime, Body* other){

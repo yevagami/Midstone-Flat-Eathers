@@ -14,13 +14,11 @@
 #include "Clock.h"
 #include <vector>
 
-//Abstracting the abilities away
-struct abilities {
-    virtual void activate(); //Will activate on an event (key press, mouse click, etc.)
-    virtual void passive(); //Will actitvate once when selecting the ability 
+
+struct ability {
+    virtual void Active() { return; }
+    virtual void Passive() { return; }
 };
-
-
 
 class PlayerBody : public Body{
 
@@ -57,13 +55,17 @@ public:
     // use the base class versions of getters
 
     bool OnCreate();
-    void HandleEvents( const SDL_Event& event );
-    void Update( float deltaTime );
+    void HandleEvents( const SDL_Event& event ) override;
+    void Update( float deltaTime ) override;
+    void RenderHitbox(SDL_Renderer* renderer_) override;
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
     void CollisionResponse(float deltaTime, Body* other);
     ~PlayerBody();
 
 private:
+    //melee hitbox
+    Hitbox meleeHitbox;
+
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
@@ -83,7 +85,7 @@ private:
     float maxSpeed;
 
     //states
-    enum states { idle, walk, dash };
+    enum states { idle, walk, dash, melee, shooting };
     states currentState;
 };
 

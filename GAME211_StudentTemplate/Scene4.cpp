@@ -106,13 +106,8 @@ void Scene4::Render() {
 	block->Render(renderer, projectionMatrix);
 	game->RenderPlayer(0.1f);
 
-	game->getPlayer()->RenderHitbox(renderer, 0.1f);
-	block->RenderHitbox(renderer, 1.0f);
-
-
-
-
-
+	game->getPlayer()->RenderHitbox(renderer);
+	block->RenderHitbox(renderer);
 
 	SDL_RenderPresent(renderer);
 }

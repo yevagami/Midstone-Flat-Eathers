@@ -13,12 +13,15 @@ namespace MATH {
 
 class Hitbox{
 public: 
+	bool active = true;
 	float x;
 	float y;
 	float w;
 	float h;
 
-	Hitbox(const float width_ = 0, const float height_ = 0, const int x_ = 0, const int y_ = 0) : x(x_), y(y_), w(width_), h(height_)
+	//Why is w,h a float and the x,y position an int??? So I swapped them
+	//-Adriel
+	Hitbox(const int width_ = 0, const int height_ = 0, const float x_ = 0, const float y_ = 0) : x(x_), y(y_), w(width_), h(height_)
 	{}
 	
 	bool generateHitbox(const SDL_Rect& rectangle_);

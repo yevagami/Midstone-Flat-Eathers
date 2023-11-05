@@ -34,22 +34,27 @@ bool Scene2::OnCreate(){
 
 
 	//Create the body
-	block = new Body();
-	block->setPos(Vec3(xAxis * 0.5f + 200.0f, yAxis * 0.5f, 0.0f));
-	block->setImage(IMG_Load("Textures/blue_block.jpg"));
+	Body* block = new Solid();
+	block->setPos(Vec3(xAxis * 0.5f + 400.0f, yAxis * 0.5f, 0.0f));
+	block->setImage(IMG_Load("Textures/programmer_art/block_cap.png"));
 	block->setTexture(SDL_CreateTextureFromSurface(renderer, block->getImage()));
 	block->LoadHitbox(
-		225.0f,
-		225.0f
+		128.0f,
+		128.0f
 	);
-	block->setParentScene(this);
 
 	//Load the body's hitbox
 	game->getPlayer()->LoadHitbox(
-		542.0f * 0.1f,
-		571.0f * 0.1f
+		128.0f,
+		128.0f
 	);
-	game->getPlayer()->setParentScene(this);
+
+	//Add the objects to the list
+	sceneObjects.push_back(block);
+	sceneObjects.push_back(game->getPlayer());
+	for (Body* body : sceneObjects) {
+		body->setParentScene(this);
+	}
 
 	return true;
 }
@@ -58,7 +63,12 @@ void Scene2::OnDestroy() {
 	for (auto* button : allButtons) {
 		delete button;
 	}
-	delete block;
+
+	for (Body* body : sceneObjects) {
+		body->OnDestroy();
+		delete body;
+	}
+	sceneObjects.clear();
 }
 
 void Scene2::Update(const float time){
@@ -76,35 +86,46 @@ void Scene2::Update(const float time){
 	projectionMatrix = ndc * ortho;
 
 	//Check for collision
-	if (game->getPlayer()->getHitbox().collisionCheck(block->getHitbox())) {
-		game->getPlayer()->CollisionResponse(time, block);
-		std::cout << "Collided\n";
-	};
+	for (Body* body : sceneObjects) {
+		for (Body* otherBody : sceneObjects) {
+			if (body == otherBody) { continue; }
+			if (body->getHitbox().collisionCheck(otherBody->getHitbox())) {
+				body->OnCollide(otherBody, time);
+			}
+		}
+	}
 
 	//Update the body
-	block->Update(time);
-	game->getPlayer()->Update(time);
+	for (Body* body : sceneObjects) {
+		body->Update(time);
+	}
+
+	//Delete the bodies that are flagged for deletion
+	if (flaggedObjects.empty()) { return; }
+	for (Body* body : flaggedObjects) {
+		body->OnDestroy();
+		delete body;
+	}
 }
 
 void Scene2::Render(){
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	block->Render(renderer, projectionMatrix);
-	game->RenderPlayer(0.1f);
-
-	game->getPlayer()->RenderHitbox(renderer, 0.1f);
-	block->RenderHitbox(renderer, 1.0f);
-
+	for (Body* body : sceneObjects) {
+		body->Render(renderer, projectionMatrix, 1.0f);
+		body->RenderHitbox(renderer);
+	}
 
 	for(auto* button : allButtons) {
 		button->Render(renderer);
 	}
 
-
 	SDL_RenderPresent(renderer);
 }
 
 void Scene2::HandleEvents(const SDL_Event& event){
-	game->getPlayer()->HandleEvents(event);
+	for (Body* body : sceneObjects) {
+		body->HandleEvents(event);
+	}
 }

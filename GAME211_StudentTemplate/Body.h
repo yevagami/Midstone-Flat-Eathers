@@ -33,7 +33,9 @@ struct Transform {
 
 class Scene;
 class Body {
-	Scene* parentScene;
+private:
+	//The scene where this body belongs to
+	Scene* parentScene = nullptr;
 
 public:
 	Body(
@@ -61,12 +63,14 @@ public:
 		rotation = transform_.bodyRotation;
 		angular = transform_.bodyAngular;
 	}
-	//Fundamental methods (create, update, handle input, render, destroy)
+	//Fundamental methods (create, update, handle input, render, destroy, collisions)
 	void LoadHitbox(float w_, float h_);
 	virtual void Update(float deltaTime);
 	virtual void HandleEvents(const SDL_Event& event_);
 	virtual void Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scale_ = 1.0f);
-	void RenderHitbox(SDL_Renderer* renderer_, float scale_ = 1.0f);
+	virtual void RenderHitbox(SDL_Renderer* renderer_);
+	virtual void OnCollide(Body* other, float deltaTime) { return; };
+	virtual void OnDestroy();
 	virtual ~Body();
 
 	//Getters and setters
@@ -79,7 +83,8 @@ public:
 	virtual float getOrientation() { return orientation; }
 	virtual float getRotation() { return rotation; }
 	virtual float getAngular() { return angular; }
-	virtual void setParentScene(Scene* parentScene_) { parentScene = parentScene_; }
+	Scene* getParentScene() { return parentScene; }
+	void setParentScene(Scene* parentScene_) { parentScene = parentScene_; }
 
 	//Texture related methods
 	virtual void setImage(SDL_Surface* image_) { image = image_; }
