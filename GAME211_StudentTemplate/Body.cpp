@@ -36,11 +36,8 @@ Body::Body (
 }
 
 void Body::OnDestroy() {
-    delete texture;
+    SDL_DestroyTexture(texture);
     texture = nullptr;
-
-    delete image;
-    image = nullptr;
 
     delete hitbox;
     hitbox = nullptr;

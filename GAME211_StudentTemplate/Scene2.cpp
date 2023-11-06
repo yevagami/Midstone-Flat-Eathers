@@ -64,10 +64,12 @@ void Scene2::OnDestroy() {
 		delete button;
 	}
 
-	for (auto* body : sceneObjects) {
+	/*
+	for (Body* body : sceneObjects) {
 		body->OnDestroy();
 		delete body;
 	}
+	*/
 	sceneObjects.clear();
 
 	player->OnDestroy();

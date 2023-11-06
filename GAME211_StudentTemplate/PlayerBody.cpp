@@ -194,9 +194,6 @@ void PlayerBody::OnDestroy(){
 	dash_timer = nullptr;
 	dash_cooldown = nullptr;
 
-	delete meleeHitbox;
-	meleeHitbox = nullptr;
-
 	Body::OnDestroy();
 }
 
