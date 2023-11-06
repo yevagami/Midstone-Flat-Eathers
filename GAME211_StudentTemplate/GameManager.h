@@ -5,7 +5,6 @@
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
-#include "PlayerBody.h"
 //#include <iostream>
 
 //needed to use rand() function
@@ -37,28 +36,22 @@ private:
 	bool isRunning;
 	class Scene *currentScene;
 
-	// This might be unfamiliar
-    class PlayerBody *player;
-
 	//For the game loop Diana
 	bool ifDoorOpen = false;
 	int mobsToSpawnOnTheLevel = 10;
 	int mobsLeft;
 	bool playerMovedToTheNextLvl = true;
-public:
 
+public:
 	GameManager();
 	~GameManager();
 	bool OnCreate();
 	void OnDestroy();
 
-
 	// These might be unfamiliar
 	float getSceneHeight();
 	float getSceneWidth();
-	Matrix4 getProjectionMatrix();
-    PlayerBody* getPlayer(){ return player; }
-	void RenderPlayer(float scale = 1.0f);
+	//Matrix4 getProjectionMatrix();
 	SDL_Renderer* getRenderer();
 
 	void Run();

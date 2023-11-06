@@ -46,7 +46,6 @@ public:
 		float rotation_ = 0.0f,
 		float angular_ = 0.0f
 	);
-
 	//	Constructor 2: (list initializer edition)
 	// ReSharper disable once CppPossiblyUninitializedMember
 	Body(
@@ -63,18 +62,28 @@ public:
 		rotation = transform_.bodyRotation;
 		angular = transform_.bodyAngular;
 	}
+	//Basic body constuctor containing everything we need to make it work (pos, scale, hitbox w&h, texture)
+	Body(
+		Scene* parentScene_,
+		Vec3 pos_,
+		Vec3 scale_,
+		int w_,
+		int h_,
+		SDL_Surface* image_
+	);
+
 	//Fundamental methods (create, update, handle input, render, destroy, collisions)
 	void LoadHitbox(float w_, float h_);
 	virtual void Update(float deltaTime);
 	virtual void HandleEvents(const SDL_Event& event_);
-	virtual void Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scale_ = 1.0f);
+	virtual void Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_);
 	virtual void RenderHitbox(SDL_Renderer* renderer_);
-	virtual void OnCollide(Body* other, float deltaTime) { return; };
+	virtual void OnCollide(Body* other, float deltaTime) { return; }
 	virtual void OnDestroy();
-	virtual ~Body();
+	virtual ~Body() {}
 
 	//Getters and setters
-	[[nodiscard]] Hitbox getHitbox() const { return hitbox; }
+	[[nodiscard]] Hitbox* getHitbox() const { return hitbox; }
 	virtual void ApplyForce(Vec3 force_);
 	virtual Vec3 getPos() { return pos; }
 	virtual Vec3 getVel() { return vel; }
@@ -89,12 +98,10 @@ public:
 	//Texture related methods
 	virtual void setImage(SDL_Surface* image_) { image = image_; }
 	virtual SDL_Surface* getImage() { return image; }
-
-	virtual void setImageSizeWorldCoords(const Vec3& imageSizeWorldCoords_) { imageSizeWorldCoords = imageSizeWorldCoords_; }
-
 	virtual void setTexture(SDL_Texture* texture_) { texture = texture_; }
 	virtual SDL_Texture* getTexture() { return texture; }
-
+	virtual void setImageSizeWorldCoords(const Vec3& imageSizeWorldCoords_) { imageSizeWorldCoords = imageSizeWorldCoords_; }
+	
 	// Added this as public to deal with my demo
 	// so that mouse position can be copied into a Body.
 	virtual void setPos(Vec3 pos_);
@@ -104,18 +111,19 @@ protected:
 	Vec3 pos;
 	Vec3 vel;
 	Vec3 accel;
+	Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
 	float mass;
 	float radius; // for getting near walls
 	float orientation; // facing this direction
 	float rotation; // rotating at this speed (radians per second?)
 	float angular; // angular acceleration
 
-	Hitbox hitbox;
+	Hitbox* hitbox;
 	Transform transform;	//	constructor list struct
 
 	Vec3 imageSizeWorldCoords;
-	SDL_Surface* image;
-	SDL_Texture* texture;
+	SDL_Surface* image = nullptr;
+	SDL_Texture* texture = nullptr;
 };
 
 

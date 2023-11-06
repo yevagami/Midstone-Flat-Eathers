@@ -1,7 +1,6 @@
 #include "Scene2.h"
 using namespace ui;
 
-
 Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
 	game = game_;
@@ -13,11 +12,9 @@ Scene2::Scene2(SDL_Window* sdlWindow_, GameManager* game_){
 	scene2Button->textColour = SDL_COLOR_DEEP_PINK << SDL_White50;
 	scene2Button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT); scene2Button->offsetPosition(-300);
 	allButtons.emplace_back(scene2Button);
-
 }
 
-Scene2::~Scene2(){
-}
+Scene2::~Scene2(){}
 
 bool Scene2::OnCreate(){
 	int w, h;
@@ -30,31 +27,34 @@ bool Scene2::OnCreate(){
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 
+	//Set the name of the scene for organizing purposes
 	name = "scene2";
 
-
 	//Create the body
-	Body* block = new Solid();
-	block->setPos(Vec3(xAxis * 0.5f + 400.0f, yAxis * 0.5f, 0.0f));
-	block->setImage(IMG_Load("Textures/programmer_art/block_cap.png"));
-	block->setTexture(SDL_CreateTextureFromSurface(renderer, block->getImage()));
-	block->LoadHitbox(
+	/*
+	block = new Solid(
+		this,
+		Vec3(xAxis * 0.5f + 400.0f, yAxis * 0.5f, 0.0f),
+		Vec3(1.0f, 1.0f, 1.0f),
+		128.0f, 
 		128.0f,
-		128.0f
+		IMG_Load("Textures/programmer_art/block_cap.png")
 	);
+	*/
 
 	//Load the body's hitbox
-	game->getPlayer()->LoadHitbox(
+	player = new PlayerBody(
+		this,
+		Vec3(xAxis * 0.5f, yAxis * 0.5f, 0.0f),
+		Vec3(1.0f, 1.0f, 1.0f),
 		128.0f,
 		128.0f
 	);
+	player->OnCreate();
 
 	//Add the objects to the list
-	sceneObjects.push_back(block);
-	sceneObjects.push_back(game->getPlayer());
-	for (Body* body : sceneObjects) {
-		body->setParentScene(this);
-	}
+	sceneObjects.push_back(player);
+	//sceneObjects.push_back(block);
 
 	return true;
 }
@@ -64,32 +64,46 @@ void Scene2::OnDestroy() {
 		delete button;
 	}
 
-	for (Body* body : sceneObjects) {
+	for (auto* body : sceneObjects) {
 		body->OnDestroy();
 		delete body;
 	}
 	sceneObjects.clear();
+
+	player->OnDestroy();
+	delete player;
 }
 
-void Scene2::Update(const float time){
+void Scene2::CameraFollowPlayer(PlayerBody* p){
+	//guard clause to make sure the player exists
+	if (p == nullptr) {
+		return;
+		std::cout << "Player doesn't exist\n";
+	}
+
 	//move the camera  update
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 
-	float left = game->getPlayer()->getPos().x - xAxis / 2.0f;
-	float right = game->getPlayer()->getPos().x + xAxis / 2.0f;
-	float top = game->getPlayer()->getPos().y - yAxis / 2.0f;
-	float bottom = game->getPlayer()->getPos().y + yAxis / 2.0f;
+	float left = p->getPos().x - xAxis / 2.0f;
+	float right = p->getPos().x + xAxis / 2.0f;
+	float top = p->getPos().y - yAxis / 2.0f;
+	float bottom = p->getPos().y + yAxis / 2.0f;
 
-	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);//
+	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
+}
+
+void Scene2::Update(const float time){
+
+	CameraFollowPlayer(player);
 
 	//Check for collision
 	for (Body* body : sceneObjects) {
 		for (Body* otherBody : sceneObjects) {
 			if (body == otherBody) { continue; }
-			if (body->getHitbox().collisionCheck(otherBody->getHitbox())) {
+			if (body->getHitbox()->collisionCheck(otherBody->getHitbox())) {
 				body->OnCollide(otherBody, time);
 			}
 		}
@@ -100,12 +114,13 @@ void Scene2::Update(const float time){
 		body->Update(time);
 	}
 
+	/*
 	//Delete the bodies that are flagged for deletion
-	if (flaggedObjects.empty()) { return; }
-	for (Body* body : flaggedObjects) {
-		body->OnDestroy();
+	if (trashObjects.empty()) { return; }
+	for (Body* body : trashObjects) {
 		delete body;
 	}
+	*/
 }
 
 void Scene2::Render(){
@@ -113,7 +128,7 @@ void Scene2::Render(){
 	SDL_RenderClear(renderer);
 
 	for (Body* body : sceneObjects) {
-		body->Render(renderer, projectionMatrix, 1.0f);
+		body->Render(renderer, projectionMatrix);
 		body->RenderHitbox(renderer);
 	}
 

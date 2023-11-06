@@ -25,6 +25,7 @@ public:
 	virtual SDL_Window* getWindow() = 0;
     virtual Matrix4 getProjectionMatrix() = 0;
 	virtual Matrix4 getInverseMatrix() = 0;
+	virtual SDL_Renderer* getRenderer() = 0;
 };
 
 #endif

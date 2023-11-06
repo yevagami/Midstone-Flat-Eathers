@@ -9,7 +9,7 @@
 
 bool PlayerBody::OnCreate(){
 	//Create the melee hitbox
-	meleeHitbox = Hitbox(64, 64, pos.x, pos.y);
+	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
 
     //Creating timers
     dash_timer = new Clock(dashDuration, false);
@@ -22,8 +22,8 @@ bool PlayerBody::OnCreate(){
     currentState = idle;
 
     //add a texture to the player
-    image = IMG_Load( "Textures/programmer_art/player.png" );
-    SDL_Renderer *renderer = game->getRenderer();
+    image = IMG_Load( "Textures/programmer_art/player.png");
+	SDL_Renderer* renderer = getParentScene()->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
     if (image == nullptr) {
         std::cerr << "Can't open the image" << std::endl;
@@ -162,24 +162,24 @@ void PlayerBody::Update( float deltaTime ){
 		0.0f
 	));
 	//std::cout << mouseDir.x << ", " << mouseDir.y << "\n";
-	Hitbox playerHitbox = Body::getHitbox();
+	Hitbox* playerHitbox = Body::getHitbox();
 	Vec3 hitboxPos = Vec3(
-		playerPos.x + (mouseDir.x * (50.0f + playerHitbox.w * 0.5f)),
-		playerPos.y + (mouseDir.y * (50.0f + playerHitbox.h * 0.5f)),
+		playerPos.x + (mouseDir.x * (50.0f + playerHitbox->w * 0.5f)),
+		playerPos.y + (mouseDir.y * (50.0f + playerHitbox->h * 0.5f)),
 		0.0f
 	);
-	meleeHitbox.x = hitboxPos.x - meleeHitbox.w * 0.5f;
-	meleeHitbox.y = hitboxPos.y - meleeHitbox.h * 0.5f;
+	meleeHitbox->x = hitboxPos.x - meleeHitbox->w * 0.5f;
+	meleeHitbox->y = hitboxPos.y - meleeHitbox->h * 0.5f;
 }
 
 void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
 	//Render the melee hitbox
 	SDL_Rect box;
 
-	box.x = static_cast<int>(meleeHitbox.x);
-	box.y = static_cast<int>(meleeHitbox.y);
-	box.w = static_cast<int>(meleeHitbox.w);
-	box.h = static_cast<int>(meleeHitbox.h);
+	box.x = static_cast<int>(meleeHitbox->x);
+	box.y = static_cast<int>(meleeHitbox->y);
+	box.w = static_cast<int>(meleeHitbox->w);
+	box.h = static_cast<int>(meleeHitbox->h);
 
 	SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
 	SDL_RenderDrawRect(renderer_, &box);
@@ -188,14 +188,19 @@ void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
 	Body::RenderHitbox(renderer_);
 }
 
-void PlayerBody::CollisionResponse(float deltaTime, Body* other){
-	pos.x -= vel.x * deltaTime;
-	pos.y -= vel.y * deltaTime;
-	pos.z -= vel.z * deltaTime;
+void PlayerBody::OnDestroy(){
+	for (Clock* item : cooldowns) { delete item; }
+	cooldowns.clear();
+	dash_timer = nullptr;
+	dash_cooldown = nullptr;
+
+	delete meleeHitbox;
+	meleeHitbox = nullptr;
+
+	Body::OnDestroy();
 }
 
 PlayerBody::~PlayerBody(){
-    for (Clock* item : cooldowns) { delete item; }
-    cooldowns.clear();
+	OnDestroy();
 }
 

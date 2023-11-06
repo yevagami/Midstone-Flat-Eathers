@@ -52,9 +52,6 @@ void Scene3::OnDestroy() {
 
 void Scene3::Update(const float deltaTime) {
 	// Update player
-	game->getPlayer()->Update(deltaTime);
-
-
 }
 
 void Scene3::Render() {
@@ -66,7 +63,6 @@ void Scene3::Render() {
 
 
 	// render the player
-	game->RenderPlayer(0.1f);
 
 	SDL_RenderPresent(renderer);
 }
@@ -74,9 +70,4 @@ void Scene3::Render() {
 void Scene3::HandleEvents(const SDL_Event& event)
 {
 	for (auto* button : allButtons) { button->HandleEvents(event); }
-
-
-	// send events to player as needed
-	game->getPlayer()->HandleEvents(event);
-
 }

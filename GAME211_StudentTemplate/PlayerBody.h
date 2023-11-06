@@ -15,19 +15,14 @@
 #include <vector>
 
 
-struct ability {
-    virtual void Active() { return; }
-    virtual void Passive() { return; }
-};
-
 class PlayerBody : public Body{
 
 protected:
     class GameManager* game;
 
 public:
+    //Constructors
     PlayerBody() : Body{} { game = nullptr; }
-
     // Note the last parameter in this constructor!
     // Look in GameManager.cpp to see how this is called.
     // Look in .cpp file, at Render(), to see why game_ is a parameter.
@@ -51,20 +46,32 @@ public:
     }
         , game{ game_ }
     {}
-    
-    // use the base class versions of getters
 
+    //Constructor requiring the bare minimum to make the player function
+    PlayerBody(Scene* parentScene_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_) : 
+        Body(parentScene_, pos_, scale_, w_, h_, image_){}
+
+    //Constructor requiring the bare minimum to make the player function + if you want to set the player's texture internally
+    PlayerBody(Scene* parentScene_, Vec3 pos_, Vec3 scale_, int w_, int h_) {
+        setParentScene(parentScene_);
+        pos = pos_;
+        scale = scale_;
+        Body::LoadHitbox(w_, h_);
+    }
+
+    // use the base class versions of getters
+    //Fundamental methods (create, update, handle input, render, destroy, collisions)
     bool OnCreate();
     void HandleEvents( const SDL_Event& event ) override;
     void Update( float deltaTime ) override;
     void RenderHitbox(SDL_Renderer* renderer_) override;
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
-    void CollisionResponse(float deltaTime, Body* other);
+    void OnDestroy() override;
     ~PlayerBody();
 
 private:
     //melee hitbox
-    Hitbox meleeHitbox;
+    Hitbox* meleeHitbox = nullptr;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
@@ -76,17 +83,17 @@ private:
     float dashCooldown = 0.3f;
 
     //movement variables
-    Vec3 movement;
-    Vec3 playerDirection;
+    Vec3 movement = {};
+    Vec3 playerDirection = {};
     bool canMove = true;
     float walkSpeed = 100.0f;
     float dashSpeed = 500.0f;
-    float currentSpeed;
-    float maxSpeed;
+    float currentSpeed = 0.0f;
+    float maxSpeed = 0.0f;
 
     //states
     enum states { idle, walk, dash, melee, shooting };
-    states currentState;
+    states currentState = idle;
 };
 
 #endif /* PLAYERBODY_H */

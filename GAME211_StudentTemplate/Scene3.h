@@ -38,8 +38,9 @@ public:
 	float getxAxis() { return xAxis; }
 	float getyAxis() { return yAxis; }
 	SDL_Window* getWindow() { return window; }
-	Matrix4 getProjectionMatrix() { return projectionMatrix; }
+	Matrix4 getProjectionMatrix() override { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
+	SDL_Renderer* getRenderer() { return renderer; }
 };
 
 #endif

@@ -1,6 +1,4 @@
 #include "GameManager.h"
-
-#include "Scene4.h"
 #include "scene_list.h"
 
 
@@ -9,7 +7,6 @@ GameManager::GameManager() {
 	timer = nullptr;
 	isRunning = true;
 	currentScene = nullptr;
-	player = nullptr;
 }
 
 
@@ -41,33 +38,6 @@ bool GameManager::OnCreate() {
 	// select scene for specific assignment
 	currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
 
-	// create player
-	float mass = 1.0f;
-	float radius = 0.5f;
-	float orientation = 0.0f;
-	float rotation = 0.0f;
-	float angular = 0.0f;
-	Vec3 position(0.5f * currentScene->getxAxis(), 0.5f * currentScene->getyAxis(), 0.0f);
-	Vec3 velocity(0.0f, 0.0f, 0.0f);
-	Vec3 acceleration(0.0f, 0.0f, 0.0f);
-
-	
-
-	player = new PlayerBody(
-		position,
-		velocity,
-		acceleration,
-		mass,
-		radius,
-		orientation,
-		rotation,
-		angular,
-		this
-	);
-	if (player->OnCreate() == false) {
-		OnDestroy();
-		return false;
-	}
 
 	// need to create Player before validating scene
 	if (!ValidateCurrentScene()) {
@@ -124,10 +94,10 @@ void GameManager::handleEvents() {
 				system("cls"); //	clears the console when 0 is pressed
 				break;
 			case SDL_SCANCODE_1:
-				LoadScene(2);
+				LoadScene(1);
 				break;
 			case SDL_SCANCODE_2:
-				LoadScene(1);
+				LoadScene(2);
 				break;
 			case SDL_SCANCODE_3:
 				LoadScene(3);
@@ -150,9 +120,11 @@ GameManager::~GameManager() {}
 void GameManager::OnDestroy() {
 	if (windowPtr) delete windowPtr;
 	if (timer) delete timer;
-	if (currentScene) delete currentScene;
-	if (player) delete player;
 
+	if (currentScene) {
+		currentScene->OnDestroy();
+		delete currentScene;
+	}
 
 	TTF_Quit();
 }
@@ -165,7 +137,7 @@ float GameManager::getSceneHeight() { return currentScene->getyAxis(); }
 float GameManager::getSceneWidth() { return currentScene->getxAxis(); }
 
 // This might be unfamiliar
-Matrix4 GameManager::getProjectionMatrix() { return currentScene->getProjectionMatrix(); }
+//Matrix4 GameManager::getProjectionMatrix() { return currentScene->getProjectionMatrix(); }
 
 // This might be unfamiliar
 SDL_Renderer* GameManager::getRenderer() {
@@ -175,10 +147,6 @@ SDL_Renderer* GameManager::getRenderer() {
 	return renderer;
 }
 
-// This might be unfamiliar
-void GameManager::RenderPlayer(float scale) {
-	player->Render(getRenderer(), currentScene->getProjectionMatrix(), scale);
-}
 
 void GameManager::LoadScene(int i) {
 	// cleanup of current scene before loading another one
@@ -203,7 +171,7 @@ void GameManager::LoadScene(int i) {
 		currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
 		break;
 	case 4:
-		currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+		//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
 		break;
 	case 5:
 		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);

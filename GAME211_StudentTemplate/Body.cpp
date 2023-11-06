@@ -35,12 +35,6 @@ Body::Body (
     image = nullptr;
 }
 
-Body::~Body() {}
-
-void Body::LoadHitbox(float w_, float h_) {
-    hitbox = Hitbox(w_, h_, pos.x, pos.y);
-}
-
 void Body::OnDestroy() {
     delete texture;
     texture = nullptr;
@@ -48,7 +42,23 @@ void Body::OnDestroy() {
     delete image;
     image = nullptr;
 
+    delete hitbox;
+    hitbox = nullptr;
+
     parentScene = nullptr;
+}
+
+Body::Body(Scene* parentScene_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_){
+    parentScene = parentScene_;
+    pos = pos_;
+    scale = scale_;
+    LoadHitbox(w_ * scale_.x, h_ * scale_.y);
+    image = image_;
+    texture = SDL_CreateTextureFromSurface(parentScene->getRenderer(), image);
+}
+
+void Body::LoadHitbox(float w_, float h_) {
+    hitbox = new Hitbox(w_, h_, pos.x, pos.y);
 }
 
 void Body::ApplyForce( Vec3 force_ ) {
@@ -68,10 +78,12 @@ void Body::Update( float deltaTime ) {
         std::cout << "Parent scene is not set";
         return; 
     }
+
+    if (hitbox == nullptr) { return; }
     Matrix4 projectionMat = parentScene->getProjectionMatrix();
     Vec3 hitboxPos = projectionMat * pos;
-    hitbox.x = hitboxPos.x - hitbox.w * 0.5f;
-    hitbox.y = hitboxPos.y - hitbox.h * 0.5f;
+    hitbox->x = hitboxPos.x - hitbox->w * 0.5f;
+    hitbox->y = hitboxPos.y - hitbox->h * 0.5f;
 }
 
 
@@ -95,7 +107,13 @@ void Body::setPos( Vec3 pos_ ){
 }
 
 
-void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scale_){
+void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
+    //Failsafe incase the programmer forgets to add a texture to the body
+    if (texture == nullptr) {
+        texture = SDL_CreateTextureFromSurface(renderer_, IMG_Load("Textures/programmer_art/missing_texture.png"));
+        std::cout << "You forgot a texture\n";
+    }
+
     SDL_Rect square;
     Vec3 screenCoords;
     float w, h;
@@ -104,8 +122,8 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scal
     screenCoords = projectionMatrix_ * pos;
 
     // Scale the image, in case the .png file is too big or small
-    w = image->w * scale_;
-    h = image->h * scale_;
+    w = image->w * scale.x;
+    h = image->h * scale.y;
 
     // The square's x and y values represent the top left corner of 
     // where SDL will draw the .png image.
@@ -128,10 +146,10 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_, float scal
 void Body::RenderHitbox(SDL_Renderer* renderer_){
     SDL_Rect box;
 
-    box.x = static_cast<int>(hitbox.x);
-    box.y = static_cast<int>(hitbox.y);
-    box.w = static_cast<int>(hitbox.w);
-    box.h = static_cast<int>(hitbox.h);
+    box.x = static_cast<int>(hitbox->x);
+    box.y = static_cast<int>(hitbox->y);
+    box.w = static_cast<int>(hitbox->w);
+    box.h = static_cast<int>(hitbox->h);
 
     SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
     SDL_RenderDrawRect(renderer_, &box);
