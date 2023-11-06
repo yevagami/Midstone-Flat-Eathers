@@ -49,16 +49,20 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 		square, Colour{ SDL_COLOR_NULL, SDL_COLOR_SCARLET_RED, BUTTON_BORDER, BUTTON_HOVERBACKGROUND }, 0);
 
 
+	buttonWithBkgImg = new Button({}, ui::SDL_Square);//	creating a button with no font and in a square shape
+	buttonWithBkgImg->EnableBackgroundImage("Textures/test.png"); //	1. loads the directory, and 2. tells the renderer to render an image
+
+
 	//	grouping for mass attrbute changing, deleting and rendering
 	allButtons.emplace_back(myJankyText); //	text
 	allButtons.emplace_back(myExitButton);
 	allButtons.emplace_back(playersHPBar);	//	lowkey the layering (who's rendered on top)
 	allButtons.emplace_back(mySmallButton);
 	allButtons.emplace_back(mySpookyButton);
+	allButtons.emplace_back(buttonWithBkgImg);
 
 	//1.1 individial changes before grouping
 	mySmallButton->scaleDimensions(50);
-
 
 	mySmallButton->isPrideful = true;		//	changes colour on click
 	myExitButton->isTogglable = true;	//becomes inactive on click (it runs away)
@@ -114,17 +118,17 @@ bool SceneUI::OnCreate() {
 	initiateSoundEffects();
 
 	//		button showcase
-	///	step 3: Hitbox and OnClick
+	///	step 3: Hitbox and OnLeftClick
 
 	for (auto* button : allButtons) { button->generateHitbox(); } //	we're going this in the OnCreate because the hitbox needs to be generated after repositioning. this ensures that
 
 	//	what happens when each button is clicked?
 	
-	myExitButton->SetOnClick([&] {ccui.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
+	myExitButton->SetOnLeftClick([&] {ccui.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
+	mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
 	
 
-	mySpookyButton->SetOnClick([&] {ccui.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
+	mySpookyButton->SetOnLeftClick([&] {ccui.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
 
 
 	return true;

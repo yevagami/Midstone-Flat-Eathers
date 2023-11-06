@@ -137,18 +137,23 @@ bool Scene1::OnCreate() {
 	initiateSoundEffects();
 
 	//		button showcase
-	///	step 3: Hitbox and OnClick
+	///	step 3: Hitbox and OnLeftClick
 
 	for (auto* button : allButtons) { button->generateHitbox(); } //	we're going this in the OnCreate because the hitbox needs to be generated after repositioning. this ensures that
 
 	//	what happens when each button is clicked?
-	myStartButton->SetOnClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("flame", false);});
-	myOptionsButton->SetOnClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("flame", false); bTestMenu = !bTestMenu; });
-	myExitButton->SetOnClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
-	myDebugButton->SetOnClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
+	myStartButton->SetOnLeftClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("flame", false);});
+	myOptionsButton->SetOnLeftClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("flame", false); bTestMenu = !bTestMenu; });
+	myExitButton->SetOnLeftClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
+	mySmallButton->SetOnLeftClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
+	myDebugButton->SetOnLeftClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
 
-	mySpookyButton->SetOnClick([&] {cc.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
+	mySpookyButton->SetOnLeftClick([&] {cc.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
+
+
+	myStartButton->SetOnRightClick([&] {cc.consoleManager(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
+	myStartButton->SetOnHover([&] {cc.consoleManager(update, "start hOOoOoVErrRRrrrRing"); });
+	myStartButton->SetOnScroll([&](int xxx) {cc.consoleManager(update, "start scrolled on (rekt ig)"); cout << xxx << endl; });
 
 
 	return true;

@@ -1,5 +1,7 @@
 #include "Menu.h"
 #include <random>
+#include <SDL_image.h>
+
 #include "ConsistentConsole.h"
 
 ConsistentConsole ccMenu(true);
@@ -9,24 +11,49 @@ namespace ui {
 #pragma region Core Methods
 	void Button::HandleEvents(const SDL_Event& event_) {
 		if (isActive) {
+
 			switch (event_.type) {
-				//	hovering
+
+				//	hovering events
 			case SDL_MOUSEMOTION:
 				if (isMouseOver(event_.motion.x, event_.motion.y)) {
+					Uint32 currentTime = SDL_GetTicks();
 					isHovering = true;
+
+					//	if theres an OnHover method AND its off cooldown
+					if (OnHover&& currentTime - lastHoverTime >= 1000) {
+						OnHover();
+						lastHoverTime = currentTime;
+					}
 				}
 				else { isHovering = false; }
 				break;
 
-				//	clicking
+				//	clicking events
 			case SDL_MOUSEBUTTONDOWN:
 				if (event_.button.button == SDL_BUTTON_LEFT) {
-					if (OnClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
-						OnClick();
+					if (OnLeftClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
+						//	this happens when the button is left clicked
+						OnLeftClick();
 						if (isTogglable) { isOn = !isOn; backgroundColour = !backgroundColour;  ccMenu.consoleManager(not_error, "button toggled"); std::cout << isOn << std::endl; }
 						if (isPrideful) { backgroundColour = ~backgroundColour; textColour = !textColour; ccMenu.consoleManager(not_error, "button colour change"); }
 						if (isEasilyScared) { isActive = !isActive; }
 					}
+				}
+				else if (event_.button.button == SDL_BUTTON_RIGHT) {
+					if (OnRightClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
+						//	this happens when the button is right clicked
+						OnRightClick();
+						ccMenu.consoleManager(not_error, "right clicked :O");
+					}
+				}
+				break;
+
+
+			case SDL_MOUSEWHEEL:
+				//	this happens when the button is scrolled on
+				if (OnScroll && isMouseOver(event_.motion.x, event_.motion.y)) {
+					OnScroll(event_.wheel.y);
 				}
 				break;
 
@@ -41,7 +68,10 @@ namespace ui {
 	void Button::Update(float deltaTime_) { }
 
 
-	void Button::SetOnClick(const std::function<void()>& onClick_) { OnClick = onClick_; }
+	void Button::SetOnLeftClick(const std::function<void()>& onClick_) { OnLeftClick = onClick_; }
+	void Button::SetOnRightClick(const std::function<void()>& onClick_) { OnRightClick = onClick_; }
+	void Button::SetOnHover(const std::function<void()>& onHover_) { OnHover = onHover_; }
+	void Button::SetOnScroll(const std::function<void(int scrollInt_)>& onScroll_) { OnScroll = onScroll_; }
 
 
 #pragma region Rendering
@@ -56,46 +86,62 @@ namespace ui {
 			if (!RenderText(buttonRenderer_)) { //	just render the text
 				return false;
 			} ClearSDLStuff();	//no	leaks pls
-			return true;	
+			return true;
 		}
 		return true; //	inactive buttons matter too.
 		//	(returning true because the initial condition checks to see if the button is enabled. a disabled button isnt an error with rendering, so we're return true)
 	}
 
+	auto Button::EnableBackgroundImage(const char* fileDirectory_) -> bool {
+		backgroundImageDirectory = fileDirectory_;
+		backgroundType = BackgroundType::Image;
+		return true;
+	}
+
 
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
-		//	if(backgroundType == solidColour) {}	 else if(backgroundType == picture) {}
-		if(rect.w != 0 && rect.h != 0) {
-			//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
-			const SDL_Color renderColour =
-				isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour; //	isHovering checker. If true, colour is bkgCol / onHovBkg. If false, colour is bkgCol.
+		if (rect.w != 0 && rect.h != 0) {
+			if (backgroundType == BackgroundType::SolidColour) {
+				//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
+				const SDL_Color renderColour =
+					isHovering ? (backgroundColour / onHoveringBackgroundColour) : backgroundColour; //	isHovering checker. If true, colour is bkgCol / onHovBkg. If false, colour is bkgCol.
 
-			SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
-			SDL_RenderFillRect(renderer_, &rect);
-			return true;
+				SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
+				SDL_RenderFillRect(renderer_, &rect);
+
+				return true;
+			}
+
+
+			else if (backgroundType == BackgroundType::Image) {
+				SDL_Texture* renderedTexture = nullptr;
+				SDL_RenderCopy(renderer_, renderedTexture, nullptr, &rect);
+			}
+
+
 		}
 		return true;
 	}
 
-bool Button::RenderBorder(SDL_Renderer* renderer_) const {
-    if (isHugged) { // if borders are enabled...
-		const SDL_Color renderColour =
-			isHovering ? !backgroundColour : borderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
+	bool Button::RenderBorder(SDL_Renderer* renderer_) const {
+		if (isBoardered) { // if borders are enabled...
+			const SDL_Color renderColour =
+				isHovering ? !backgroundColour : borderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
 
-        for (int i = 0; i < borderWidth; i++) {
-            SDL_Rect paddedRect = {
-                rect.x + i,
-                rect.y + i,
-                rect.w - 2 * i,
-                rect.h - 2 * i
-            };
-            SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
-            SDL_RenderDrawRect(renderer_, &paddedRect);
-        }
-        return true;
-    }
-    return true;
-}
+			for (int i = 0; i < borderWidth; i++) {
+				SDL_Rect paddedRect = {
+					rect.x + i,
+					rect.y + i,
+					rect.w - 2 * i,
+					rect.h - 2 * i
+				};
+				SDL_SetRenderDrawColor(renderer_, renderColour.r, renderColour.g, renderColour.b, renderColour.a);
+				SDL_RenderDrawRect(renderer_, &paddedRect);
+			}
+			return true;
+		}
+		return true;
+	}
 	bool Button::RenderText(SDL_Renderer* renderer_) {
 		if (text == nullptr || strlen(text) == 0) { return false; }
 
@@ -148,6 +194,20 @@ bool Button::RenderBorder(SDL_Renderer* renderer_) const {
 	void Button::centerPosition(const int screenWidth_, const int screenHeight_) {
 		rect.x = (screenWidth_ - rect.w) / 2;
 		rect.y = (screenHeight_ - rect.h) / 2;
+	}
+
+	bool Button::SetBackgroundImage(const char* fileDirectory_, SDL_Renderer* renderer_) {
+		//	loading the image as a texture
+		SDL_Surface* imageSurface = IMG_Load(fileDirectory_);
+		if (!imageSurface) return false;
+
+		//	freeing up previous textures if they exist (if a button changes background types during an active scene, this is useful)
+		if (backgroundImageTexture) { SDL_DestroyTexture(backgroundImageTexture); }
+
+		backgroundImageTexture = SDL_CreateTextureFromSurface(renderer_, imageSurface);
+		SDL_FreeSurface(imageSurface); //	its no longer needed, so let it go
+
+		return true;
 	}
 
 
@@ -283,7 +343,7 @@ namespace ui {
 
 
 	SDL_Color operator<<(const SDL_Color& colourA_, const SDL_Color& colourB_) {
-		return {colourA_.r, colourA_.g, colourA_.b, colourB_.a};
+		return { colourA_.r, colourA_.g, colourA_.b, colourB_.a };
 	}
 #pragma region shapes
 	SDL_Rect SDL_Testangle = { 0, 0, 425, 75 };
@@ -303,7 +363,7 @@ namespace ui {
 	SDL_Color SDL_White10 = { 255, 255, 255, 26 };
 #pragma endregion
 #pragma region colours
-	SDL_Color SDL_COLOR_NULL = {0,0,0,0};
+	SDL_Color SDL_COLOR_NULL = { 0,0,0,0 };
 	SDL_Color SDL_COLOR_ALICE_BLUE = { 240, 248, 255, 255 };
 	SDL_Color SDL_COLOR_ANTIQUE_WHITE = { 250, 235, 215, 255 };
 	SDL_Color SDL_COLOR_AQUA = { 0, 255, 255, 255 };

@@ -32,6 +32,9 @@ public:
 	ui::Button* myDebugButton;
 	ui::Button* playersHPBar;
 
+
+	ui::Button* buttonWithBkgImg;
+
 	ui::Button* mySpookyButton;
 	bool bTestMenu;
 

@@ -487,37 +487,6 @@ namespace ui {
 	class Button {
 	public:
 		/// Constructors
-		//Button() = default;
-		Button(const Button& otherButton_){
-			if (this != &otherButton_) {
-				rect = otherButton_.rect;
-				font = otherButton_.font;
-				text = otherButton_.text;
-				hitbox = otherButton_.hitbox;
-
-				isTextCentered = otherButton_.isTextCentered;
-				isHovering = otherButton_.isHovering;
-				isActive = otherButton_.isActive;
-				isEasilyScared = otherButton_.isEasilyScared;
-				isPrideful = otherButton_.isPrideful;
-				isTogglable = otherButton_.isTogglable;
-				isOn = otherButton_.isOn;
-				isHugged = otherButton_.isHugged;
-				borderWidth = otherButton_.borderWidth;
-
-				backgroundColour = otherButton_.backgroundColour;
-				onHoveringBackgroundColour = otherButton_.onHoveringBackgroundColour;
-				borderColour = otherButton_.borderColour;
-				textColour = otherButton_.textColour;
-				onHoveringTextColour = otherButton_.onHoveringTextColour;
-
-				//	releasing old fonts
-				if (buttonTextFont) { TTF_CloseFont(buttonTextFont); }
-				buttonTextFont = TTF_OpenFont(otherButton_.fontItself, otherButton_.fontSize);
-
-			}
-		}
-
 		//  main constructor
 		Button(
 			const Font& font_ = Font{},
@@ -527,7 +496,9 @@ namespace ui {
 		) :
 			rect(rect_), font(font_), colour(colour_), borderWidth(borderThickness_) {
 
-			hitbox = { 0,0,0,0 }; // null hitbox, hope his class can handle that! :D
+			hitbox = { 0,0,0,0 };
+			backgroundType = BackgroundType::SolidColour; //		default is SolidColour (changed with SetBackgroundImage)
+			backgroundImageDirectory = "";
 
 			isTextCentered = true;
 			isActive = true;
@@ -536,7 +507,7 @@ namespace ui {
 			isOn = false;
 			isHovering = false;
 			isPrideful = false;
-			isHugged = true;
+			isBoardered = true;
 
 			//	colour shenegans
 			backgroundColour = colour_.background;
@@ -557,7 +528,9 @@ namespace ui {
 			buttonTextFont = nullptr;
 			buttonTextTexture = nullptr;
 			buttonTextSurface = nullptr;
+			backgroundImageTexture = nullptr;
 		}
+
 
 		~Button() { ClearSDLStuff(); }
 
@@ -566,10 +539,17 @@ namespace ui {
 		void HandleEvents(const SDL_Event& event_);
 		//		for animations, hover effects, and live-things
 		void Update(float deltaTime_);
-		//		sets a callback function for when its clicked
-		void SetOnClick(const std::function<void()>& onClick_);
+		//		sets a callback function for when events occur
+		void SetOnLeftClick(const std::function<void()>& onClick_);
+		void SetOnRightClick(const std::function<void()>& onClick_);
+		void SetOnHover(const std::function<void()>& onHover_);
+		void SetOnScroll(const std::function<void(int scrollInt_)>& onScroll_);
+
+
 		//		renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
 		bool Render(SDL_Renderer* renderer_);
+
+		bool EnableBackgroundImage(const char* fileDirectory_);
 
 	protected:
 		/// Private Methods
@@ -579,6 +559,9 @@ namespace ui {
 		bool RenderBorder(SDL_Renderer* renderer_) const;
 		//		renders the text component
 		bool RenderText(SDL_Renderer* renderer_);
+
+		bool SetBackgroundImage(const char* fileDirectory_, SDL_Renderer* renderer_);
+
 
 
 		/// Private Variables
@@ -595,8 +578,14 @@ namespace ui {
 		SDL_Texture* buttonTextTexture;
 		SDL_Surface* buttonTextSurface;
 
-		//  a function as a variable
-		std::function<void()> OnClick;
+		SDL_Texture* backgroundImageTexture;
+
+		//  a function as variables
+		std::function<void()> OnLeftClick;
+		std::function<void()> OnRightClick;
+		std::function<void()> OnHover;
+		std::function<void(int scrollInt_)> OnScroll;
+		Uint32 lastHoverTime = 0;
 
 #pragma region styling [tw: aesthetic]
 	public:
@@ -606,6 +595,8 @@ namespace ui {
 		SDL_Color onHoveringBackgroundColour;			//  button's hover background colour
 		SDL_Color textColour;										//  button's text colour
 		SDL_Color onHoveringTextColour;					//  button's hovering text colour
+
+		BackgroundType backgroundType;
 
 		int fontSize;														//	button's font size (default : 45)
 		double fontRotation;										//	font rotation (default : 0.0)
@@ -621,12 +612,13 @@ namespace ui {
 		bool isPrideful;													//	change colour on click (default : false)
 		bool isEasilyScared;											//	causes the button to become inactive on click (default : false)
 
-		bool isHugged;													// enables/disables the border (default : true)
+		bool isBoardered;													// enables/disables the border (default : true)
 		int borderWidth;													//	how thick is the border? (default : 4)
 
 	protected:
 		///	Uneditable Attributes
 		bool isHovering;												//	is the mouse hovering over the button
+		const char* backgroundImageDirectory;
 
 	public:
 		/// Modifier Methods 
@@ -644,6 +636,8 @@ namespace ui {
 		void scaleDimensionsIndividually(int newRectHeightScaler_ = 1, int newRectWidthScaler_ = 1);
 		void scaleDimensions(int scaler_ = 1);
 		void centerPosition(int screenWidth_, int screenHeight_);
+
+
 #pragma endregion
 #pragma region utility
 	protected:

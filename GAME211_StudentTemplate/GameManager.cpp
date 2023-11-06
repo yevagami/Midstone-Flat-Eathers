@@ -170,9 +170,9 @@ void GameManager::LoadScene(int i) {
 	case 3:
 		currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
 		break;
-	case 4:
-		//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
-		break;
+	//case 4:
+	//	//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+	//	break;
 	case 5:
 		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 		break;
@@ -183,6 +183,7 @@ void GameManager::LoadScene(int i) {
 
 	// using ValidateCurrentScene() to safely run OnCreate
 	if (!ValidateCurrentScene()) { isRunning = false; }
+	std::cout << "Now loading: " << currentScene->name << std::endl;
 }
 
 void GameManager::PassTheLevel() {
