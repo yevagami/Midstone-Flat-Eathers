@@ -23,14 +23,9 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 	auto TEXT_TEXT = ui::SDL_COLOR_ROSE_TOY;
 
 	///	Step 1: Create the Buttons with Initial Values
-	myJankyText = new Button(Font{ "UI scene", 45, fontMap.at("comic serif") }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
+	mySceneName = new Button(Font{ "UI scene", 45, fontMap.at("comic serif") }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
 
-	myExitButton = new Button(	//	
-		Font{ "exit", 50, fontMap.at("comic serif") },
-		rectangle,
-		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
-
-
+	
 	//how to make it NOT change the color when cursor on top of it??
 	playersHPBar = new Button(	//	
 		Font{ " players HP here", 30, fontMap.at("comic serif") },
@@ -42,38 +37,19 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 		square,
 		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
 
-	
-
-	mySpookyButton = new Button(
-		Font{ "boo!", 75, fontMap.at("gothic") },
-		square, Colour{ SDL_COLOR_NULL, SDL_COLOR_SCARLET_RED, BUTTON_BORDER, BUTTON_HOVERBACKGROUND }, 0);
-
-
-	buttonWithBkgImg = new Button({}, ui::SDL_Square);//	creating a button with no font and in a square shape
-	buttonWithBkgImg->EnableBackgroundImage("Textures/test.png"); //	1. loads the directory, and 2. tells the renderer to render an image
-
-
 	//	grouping for mass attrbute changing, deleting and rendering
-	allButtons.emplace_back(myJankyText); //	text
-	allButtons.emplace_back(myExitButton);
+	allButtons.emplace_back(mySceneName); //	text
 	allButtons.emplace_back(playersHPBar);	//	lowkey the layering (who's rendered on top)
 	allButtons.emplace_back(mySmallButton);
-	allButtons.emplace_back(mySpookyButton);
-	allButtons.emplace_back(buttonWithBkgImg);
+
 
 	//1.1 individial changes before grouping
 	mySmallButton->scaleDimensions(50);
 
 	mySmallButton->isPrideful = true;		//	changes colour on click
-	myExitButton->isTogglable = true;	//becomes inactive on click (it runs away)
 	playersHPBar->isTogglable = false;
 	
-	myJankyText->textColour = myJankyText->textColour << SDL_White75;
-	
-
-	//sub buttons
-	mySpookyButton->scaleDimensions(95);
-	mySpookyButton->isActive = false;
+	mySceneName->textColour = mySceneName->textColour << SDL_White75;
 
 
 	///	Step 2: Aesthetics
@@ -82,12 +58,9 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 	}
 
-	myJankyText->offsetPosition(-300);	//	offsets the text up
+	mySceneName->offsetPosition(-300);	//	offsets the text up
 	
-
-	myExitButton->offsetPosition(+150);	//	offsets the exit button 150 units vertically (down)
 	playersHPBar->offsetPosition(-300, 500);
-	mySpookyButton->offsetPosition(0, 350);
 
 	//	cornering 
 	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW()); //	places the square button into the top corner
@@ -124,11 +97,9 @@ bool SceneUI::OnCreate() {
 
 	//	what happens when each button is clicked?
 	
-	myExitButton->SetOnLeftClick([&] {ccui.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
+	
 	mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
 	
-
-	mySpookyButton->SetOnLeftClick([&] {ccui.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
 
 
 	return true;
@@ -143,14 +114,6 @@ void SceneUI::OnDestroy() {
 void SceneUI::Update(const float deltaTime) {
 	// Update player
 	//game->getPlayer()->Update(deltaTime);
-	if (bTestMenu) {
-		mySpookyButton->isActive = true;
-	}
-	else {
-		mySpookyButton->isActive = false;
-	}
-
-
 
 
 }

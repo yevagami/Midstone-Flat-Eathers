@@ -22,20 +22,10 @@ private:
 public:
 	bool isBopping;
 
-	ui::Button* myJankyText;
-	ui::Button* myJankySubText;
-	ui::Button* myCreditingText;
-	ui::Button* myStartButton;
-	ui::Button* myOptionsButton;
-	ui::Button* myExitButton;
+	ui::Button* mySceneName;
 	ui::Button* mySmallButton;
-	ui::Button* myDebugButton;
 	ui::Button* playersHPBar;
 
-
-	ui::Button* buttonWithBkgImg;
-
-	ui::Button* mySpookyButton;
 	bool bTestMenu;
 
 	Sound sound;

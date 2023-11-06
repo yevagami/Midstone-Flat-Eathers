@@ -63,9 +63,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,9 +114,6 @@
     <ClCompile Include="LogManager.cpp">
       <Filter>Source Files\Saving</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="KeybindHandler.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -129,17 +123,20 @@
     <ClCompile Include="Scene3.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scene4.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerBody.cpp">
-      <Filter>Source Files\Body\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Melee.cpp">
       <Filter>Source Files\Body\Player</Filter>
     </ClCompile>
     <ClCompile Include="SceneUI.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Solid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Level1.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +203,6 @@
     <ClInclude Include="LogManager.h">
       <Filter>Header Files\Saving</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="KeybindHandler.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -221,20 +215,20 @@
     <ClInclude Include="Citations.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene4.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerBody.h">
-      <Filter>Header Files\Body\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="abilitiy.h">
-      <Filter>Header Files\Body\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Melee.h">
       <Filter>Header Files\Body\Player</Filter>
     </ClInclude>
     <ClInclude Include="SceneUI.h">
       <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Level1.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicLevel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
