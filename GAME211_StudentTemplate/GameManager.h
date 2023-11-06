@@ -1,19 +1,29 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 #include <SDL.h>
-#include <SDL_ttf.h>
+//#include <SDL_ttf.h>
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
 //#include <iostream>
 
-//needed to use rand() function
-#include <ctime>
-#include <cstdlib>
+#include "Audio.h"
+
+
+namespace audio {
+	inline Sound sound;
+
+	void InitializeSoundEffects();
+
+}
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
 //const int SCREEN_WIDTH = 1540;
 //const int SCREEN_HEIGHT = 860;
+
+
+//	Sound goes in here, the GameManager
+
 
 // Use 1000x600 for less than full screen
 const int SCREEN_WIDTH = 1366;
@@ -42,6 +52,12 @@ private:
 	int mobsLeft;
 	bool playerMovedToTheNextLvl = true;
 
+
+	//	sound stuff (test - Michael)
+
+
+
+
 public:
 	GameManager();
 	~GameManager();
@@ -59,7 +75,8 @@ public:
 	void LoadScene( int i );
 	void PassTheLevel(); //new
     bool ValidateCurrentScene();
-    
+
+
 };
 #endif
 

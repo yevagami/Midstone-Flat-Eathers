@@ -28,8 +28,6 @@ public:
 
 	bool bTestMenu;
 
-	Sound sound;
-
 	//	soon will just be the UIManager
 	std::vector<ui::Button*> allButtons; // for making buttons using "Menu.h" **NOT UIMANAGER**
 
@@ -50,7 +48,5 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	SDL_Renderer* getRenderer() { return renderer; }
 
-
-	void initiateSoundEffects();
 };
 #endif

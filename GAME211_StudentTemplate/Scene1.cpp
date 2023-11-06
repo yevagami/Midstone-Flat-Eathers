@@ -134,7 +134,6 @@ bool Scene1::OnCreate() {
 	name = "scene1"; // we dont need that 
 				//	ew^
 
-	initiateSoundEffects();
 
 	//		button showcase
 	///	step 3: Hitbox and OnLeftClick
@@ -142,13 +141,19 @@ bool Scene1::OnCreate() {
 	for (auto* button : allButtons) { button->generateHitbox(); } //	we're going this in the OnCreate because the hitbox needs to be generated after repositioning. this ensures that
 
 	//	what happens when each button is clicked?
-	myStartButton->SetOnLeftClick([&] {cc.consoleManager(update, "start pressed"); sound.playSound("flame", false);});
-	myOptionsButton->SetOnLeftClick([&] {cc.consoleManager(update, "options pressed"); sound.playSound("flame", false); bTestMenu = !bTestMenu; });
-	myExitButton->SetOnLeftClick([&] {cc.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnLeftClick([&] {cc.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
-	myDebugButton->SetOnLeftClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!"); sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
+	myStartButton->SetOnLeftClick([&] {cc.consoleManager(update, "start pressed"); 
+	audio::sound.playSound("flame", false);});
+	myOptionsButton->SetOnLeftClick([&] {cc.consoleManager(update, "options pressed");
+		audio::sound.playSound("flame", false); bTestMenu = !bTestMenu; });
+	myExitButton->SetOnLeftClick([&] {cc.consoleManager(update, "exit pressed");
+		audio::sound.playSound("big powerup", false); isBopping = !isBopping; });
+	mySmallButton->SetOnLeftClick([&] {cc.consoleManager(update, "small pressed");
+		audio::sound.playSound("my bike", false); });
+	myDebugButton->SetOnLeftClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!");
+		audio::sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
 
-	mySpookyButton->SetOnLeftClick([&] {cc.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
+	mySpookyButton->SetOnLeftClick([&] {cc.consoleManager(update, "spooky aahhhH!");
+		audio::sound.playSound("oops", true); });
 
 
 	myStartButton->SetOnRightClick([&] {cc.consoleManager(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
@@ -266,48 +271,4 @@ void Scene1::HandleEvents(const SDL_Event& event) {
 		eMap.saveEntityMapToFile("SaveData/entitymap.txt");
 	}
 #pragma endregion
-}
-
-void Scene1::initiateSoundEffects() {
-
-	///	audio testing:
-	constexpr float blipsVolume = 1.0f;
-	constexpr float loudVolume = 0.1f;
-	constexpr float mybikeVolume = 3.0f;
-	//	loading audio to the MAP! this is indeed done in-scene
-	sound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
-	sound.loadSound("wong", "sound/wooooooooooooong.wav");
-	sound.loadSound("flame", "sound/flame.wav");
-	sound.loadSound("space boing", "sound/space boing.wav");
-	sound.loadSound("big powerup", "sound/big powerup.wav");
-	sound.loadSound("blipblip", "sound/blipblip.wav");
-	sound.loadSound("bip", "sound/bip.wav");
-	sound.loadSound("ting", "sound/ting.wav");
-	sound.loadSound("boomp", "sound/boomp.wav");
-	sound.loadSound("dying printer", "sound/dying printer.wav");
-	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
-	sound.loadSound("oops", "sound/oops.wav");
-	sound.loadSound("my move", "sound/once i make my move.wav");
-	//its now loaded...
-
-	sound.createSoundGroup("blips");
-	sound.addToSoundGroup("blipblip", "blips");
-	sound.addToSoundGroup("bip", "blips");
-	sound.addToSoundGroup("ting", "blips");
-	sound.addToSoundGroup("flame", "blips");
-	sound.addToSoundGroup("boomp", "blips");
-	sound.setGroupVolume("blips", blipsVolume);
-
-	sound.createSoundGroup("loud");
-	sound.addToSoundGroup("big powerup", "loud");
-	sound.addToSoundGroup("wong", "loud");
-	sound.addToSoundGroup("dying printer", "loud");
-	sound.addToSoundGroup("my move", "loud");
-	sound.setGroupVolume("loud", loudVolume);
-
-	sound.createSoundGroup("kiriko");
-	sound.addToSoundGroup("my bike", "kiriko");
-	sound.setGroupVolume("kiriko", mybikeVolume);
-
-
 }
