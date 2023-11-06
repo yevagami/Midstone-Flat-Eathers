@@ -114,9 +114,6 @@ bool SceneUI::OnCreate() {
 #pragma endregion
 	name = "SceneUI"; // we dont need that 
 
-
-	initiateSoundEffects();
-
 	//		button showcase
 	///	step 3: Hitbox and OnLeftClick
 
@@ -124,11 +121,14 @@ bool SceneUI::OnCreate() {
 
 	//	what happens when each button is clicked?
 	
-	myExitButton->SetOnLeftClick([&] {ccui.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
+	myExitButton->SetOnLeftClick([&] {ccui.consoleManager(update, "exit pressed");
+		audio::sound.playSound("big powerup", false); isBopping = !isBopping; });
+	mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed");
+		audio::sound.playSound("my bike", false); });
 	
 
-	mySpookyButton->SetOnLeftClick([&] {ccui.consoleManager(update, "spooky aahhhH!"); sound.playSound("oops", true); });
+	mySpookyButton->SetOnLeftClick([&] {ccui.consoleManager(update, "spooky aahhhH!");
+		audio::sound.playSound("oops", true); });
 
 
 	return true;
@@ -244,46 +244,4 @@ void SceneUI::HandleEvents(const SDL_Event& event) {
 		euiMap.saveEntityMapToFile("SaveData/entitymap.txt");
 	}
 #pragma endregion
-}
-
-void SceneUI::initiateSoundEffects() {
-
-	///	audio testing:
-	constexpr float blipsVolume = 1.0f;
-	constexpr float loudVolume = 0.1f;
-	constexpr float mybikeVolume = 3.0f;
-	//	loading audio to the MAP! this is indeed done in-scene
-	sound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
-	sound.loadSound("wong", "sound/wooooooooooooong.wav");
-	sound.loadSound("flame", "sound/flame.wav");
-	sound.loadSound("space boing", "sound/space boing.wav");
-	sound.loadSound("big powerup", "sound/big powerup.wav");
-	sound.loadSound("blipblip", "sound/blipblip.wav");
-	sound.loadSound("bip", "sound/bip.wav");
-	sound.loadSound("ting", "sound/ting.wav");
-	sound.loadSound("boomp", "sound/boomp.wav");
-	sound.loadSound("dying printer", "sound/dying printer.wav");
-	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
-	sound.loadSound("oops", "sound/oops.wav");
-	sound.loadSound("my move", "sound/once i make my move.wav");
-	//its now loaded...
-
-	sound.createSoundGroup("blips");
-	sound.addToSoundGroup("blipblip", "blips");
-	sound.addToSoundGroup("bip", "blips");
-	sound.addToSoundGroup("ting", "blips");
-	sound.addToSoundGroup("flame", "blips");
-	sound.addToSoundGroup("boomp", "blips");
-	sound.setGroupVolume("blips", blipsVolume);
-
-	sound.createSoundGroup("loud");
-	sound.addToSoundGroup("big powerup", "loud");
-	sound.addToSoundGroup("wong", "loud");
-	sound.addToSoundGroup("dying printer", "loud");
-	sound.addToSoundGroup("my move", "loud");
-	sound.setGroupVolume("loud", loudVolume);
-
-	sound.createSoundGroup("kiriko");
-	sound.addToSoundGroup("my bike", "kiriko");
-	sound.setGroupVolume("kiriko", mybikeVolume);
 }

@@ -1,6 +1,49 @@
 #include "GameManager.h"
 #include "scene_list.h"
 
+//	namespace audio
+void audio::InitializeSoundEffects() {
+	///	Volumes
+	constexpr float blipsVolume = 1.0f;
+	constexpr float loudVolume = 0.1f;
+	constexpr float mybikeVolume = 3.0f;
+
+	///	Initialize sound effects here and link them to a label. Then call them from the label in-scene.
+	//	loading audio to the MAP!
+	sound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
+	sound.loadSound("wong", "sound/wooooooooooooong.wav");
+	sound.loadSound("flame", "sound/flame.wav");
+	sound.loadSound("space boing", "sound/space boing.wav");
+	sound.loadSound("big powerup", "sound/big powerup.wav");
+	sound.loadSound("blipblip", "sound/blipblip.wav");
+	sound.loadSound("bip", "sound/bip.wav");
+	sound.loadSound("ting", "sound/ting.wav");
+	sound.loadSound("boomp", "sound/boomp.wav");
+	sound.loadSound("dying printer", "sound/dying printer.wav");
+	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
+	sound.loadSound("oops", "sound/oops.wav");
+	sound.loadSound("my move", "sound/once i make my move.wav");
+	//its now loaded...
+
+	sound.createSoundGroup("blips");
+	sound.addToSoundGroup("blipblip", "blips");
+	sound.addToSoundGroup("bip", "blips");
+	sound.addToSoundGroup("ting", "blips");
+	sound.addToSoundGroup("flame", "blips");
+	sound.addToSoundGroup("boomp", "blips");
+	sound.setGroupVolume("blips", blipsVolume);
+
+	sound.createSoundGroup("loud");
+	sound.addToSoundGroup("big powerup", "loud");
+	sound.addToSoundGroup("wong", "loud");
+	sound.addToSoundGroup("dying printer", "loud");
+	sound.addToSoundGroup("my move", "loud");
+	sound.setGroupVolume("loud", loudVolume);
+
+	sound.createSoundGroup("kiriko");
+	sound.addToSoundGroup("my bike", "kiriko");
+	sound.setGroupVolume("kiriko", mybikeVolume);
+}
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -11,13 +54,14 @@ GameManager::GameManager() {
 
 
 bool GameManager::OnCreate() {
-	/// font
+	///	font
 	if (TTF_Init() < 0) {
 		std::cout << TTF_GetError() << std::endl;
 		return false;
 	}
-	///
 
+	///	sound
+	audio::InitializeSoundEffects();
 
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {
