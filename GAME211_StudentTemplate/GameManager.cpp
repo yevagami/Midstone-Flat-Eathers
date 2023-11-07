@@ -107,20 +107,18 @@ void GameManager::Run() {
 	timer->Start();
 
 	while (isRunning) {
-		handleEvents();
 		timer->UpdateFrameTicks();
-		float deltaTime = timer->GetDeltaTime();
+		const float deltaTime = timer->GetDeltaTime();
+
 		Update(deltaTime);
-		currentScene->Update(deltaTime);
-		currentScene->Render();
 
 		/// Keep the event loop running at a proper rate
-		SDL_Delay(timer->GetSleepTime(60)); ///60 frames per sec
+		SDL_Delay(timer->GetSleepTime(fps)); ///60 frames per sec
 	}
 }
 
 
-void GameManager::handleEvents() {
+void GameManager::HandleEvents() {
 	SDL_Event event;
 
 	// Let's add mouse movement and position
@@ -167,10 +165,12 @@ void GameManager::handleEvents() {
 	}
 }
 
-void GameManager::Update(float deltaTime_) {
+void GameManager::Update(const float deltaTime_) {
+	HandleEvents();
 
 
-
+	currentScene->Update(deltaTime_);
+	currentScene->Render();
 }
 
 

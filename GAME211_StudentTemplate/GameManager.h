@@ -73,6 +73,18 @@ private:
 	//	michael's playground uwu
 	bool isPaused;
 
+	//	settings (abstraction)
+
+	float fps = 60.0f;
+	float screenHeight = 768.0f;
+	float screenWidth = 1366.0f;
+
+	auto setDefaultSettings() -> bool {
+		fps = 60.0f;
+
+		return true;
+
+	}
 
 
 
@@ -90,7 +102,7 @@ public:
 	SDL_Renderer* getRenderer();
 
 	void Run();
-	void handleEvents();
+	void HandleEvents();
 	void Update(float deltaTime_);
 	void LoadScene( int i );
 	void PassTheLevel(); //new
