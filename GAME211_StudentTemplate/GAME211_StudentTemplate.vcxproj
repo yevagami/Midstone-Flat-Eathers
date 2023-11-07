@@ -101,7 +101,6 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Level1.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -132,7 +131,6 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="KeybindHandler.h" />
-    <ClInclude Include="Level.h" />
     <ClInclude Include="Level1.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Menu.h" />

@@ -6,7 +6,7 @@
 #include "Solid.h"
 #include "PlayerBody.h"
 
-class Level1 : public BaseLevel{
+class Level1 : public Level{
 private: 
 	SDL_Texture* background = nullptr;
 public:
