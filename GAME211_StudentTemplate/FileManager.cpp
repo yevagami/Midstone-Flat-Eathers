@@ -12,11 +12,11 @@ ConsistentConsole ccFile(true);
 bool FileManager::fileCreate(const char* fileDirectory) {
 	fstream file(fileDirectory);
 	if (file.fail()) {
-		ccFile.consoleManager("error", "file failed to open");
+		ccFile.log("error", "file failed to open");
 		
 		file.open(fileDirectory, ios::out);
 		if (file.fail()) {	//creating the file if it doesn't exist
-			ccFile.consoleManager("error", "file failed to be created");
+			ccFile.log("error", "file failed to be created");
 			return false;
 		} }
 
@@ -37,7 +37,7 @@ vector<string> FileManager::parseTHIS(const char* fileDirectory) {
 
 	// check if the file is open
 	if (file.fail()) {
-	ccFile.consoleManager("error", "Couldn't open saveFile in SaveManager::Parser");
+	ccFile.log("error", "Couldn't open saveFile in SaveManager::Parser");
 	return data; }
 	string line;
 	
@@ -56,7 +56,7 @@ bool FileManager::fileWrite(vector<string>& savedData, const char* fileDirectory
 	ofstream file(fileDirectory);
 
 	if (file.fail()) {
-		ccFile.consoleManager("error", "file didn't open in writeData function");
+		ccFile.log("error", "file didn't open in writeData function");
 		return false; }
 
 	// loop through the vector elements
@@ -72,17 +72,17 @@ bool FileManager::fileWrite(vector<string>& savedData, const char* fileDirectory
 
 bool FileManager::fileLoadToVector(vector<string>& savedData, const char* fileDirectory) {
 	if (!fileCheck(fileDirectory)) {
-		ccFile.consoleManager("error", "uh oh... file loadn't");
+		ccFile.log("error", "uh oh... file loadn't");
 		return false;
 	}
 
 	if (!fileWrite(savedData, fileDirectory)) {
-		ccFile.consoleManager("error", "save load failed, save file doesn't exist and cannot be created...");
+		ccFile.log("error", "save load failed, save file doesn't exist and cannot be created...");
 		return false;
 	}
 
 
-	ccFile.consoleManager("update", "file loaded");
+	ccFile.log("update", "file loaded");
 	return true;
 		
 }
@@ -94,7 +94,7 @@ bool FileManager::fileEmpty(const char* fileDirectory) {
 	ofstream file(fileDirectory, ios::trunc);
 	//opens the file in truncate (t r u n c) mode
 	if (file.fail()) { 
-		ccFile.consoleManager(error, "no trunc :( (file didn't empty"); 
+		ccFile.log(error, "no trunc :( (file didn't empty"); 
 		return false; 
 	}
 
@@ -102,7 +102,7 @@ bool FileManager::fileEmpty(const char* fileDirectory) {
 	file.open(fileDirectory, ios::out | ios::trunc);  // reopen for writing and truncation
 
 	if (!file.is_open()) {
-		ccFile.consoleManager(error, "no trunc");
+		ccFile.log(error, "no trunc");
 		return false;
 	}
 
@@ -115,7 +115,7 @@ bool FileManager::isHere(const char* searchTarget, const char* fileDirectory) {
 	ifstream file(fileDirectory);
 
 	if (!file.is_open()) {
-		ccFile.consoleManager("error", "failed to open file for searching :(");
+		ccFile.log("error", "failed to open file for searching :(");
 		return false;
 	}
 
@@ -173,7 +173,7 @@ bool FileManager::fileInsert(string content, const char* fileDirectory) {
 		return true;
 	}
 	else {
-		ccFile.consoleManager("error", "addToFile failed. cannot open file :(");
+		ccFile.log("error", "addToFile failed. cannot open file :(");
 		return false;
 	}
 }
@@ -181,7 +181,7 @@ bool FileManager::fileInsert(string content, const char* fileDirectory) {
 bool FileManager::replaceValue(const char* variable, const char* newValue, const char* fileDirectory) {
 	std::ifstream inputFile(fileDirectory);
 	if (inputFile.fail()) {
-		ccFile.consoleManager(error, "couldn't open file to replace variable in");
+		ccFile.log(error, "couldn't open file to replace variable in");
 		return false;
 	}
 	std::string line;
@@ -262,7 +262,7 @@ vector<string> FileManager::replaceValue(const char* variableName_, const char* 
 	}
 
 	if (!flag) {
-		ccFile.consoleManager("error", "no match or replacement was made for SaveManager::replaceValues :(");
+		ccFile.log("error", "no match or replacement was made for SaveManager::replaceValues :(");
 	}
 
 	return result;
@@ -330,12 +330,12 @@ bool FileManager::deleteFromFile(string content, const char* fileDirectory) {
 
 			}
 			else {
-				ccFile.consoleManager("error", "deleteLine failed. cannot open temporary file");
+				ccFile.log("error", "deleteLine failed. cannot open temporary file");
 				return false;
 			}
 		}
 		else {
-			ccFile.consoleManager("error", "deleteLine failed. cannot open original file");
+			ccFile.log("error", "deleteLine failed. cannot open original file");
 			return false;
 		}
 	}

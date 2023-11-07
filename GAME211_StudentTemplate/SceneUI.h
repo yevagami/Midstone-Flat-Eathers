@@ -26,6 +26,9 @@ public:
 
 	bool isBopping;
 
+	bool pauseMenuOpen;
+	bool mainMenuOpen;
+
 	ui::Button* mySceneName;
 	ui::Button* mySmallButton;
 	ui::Button* playersHPBar;
@@ -44,7 +47,7 @@ public:
 	void OnDestroy();
 	void Update(const float time);
 	void Render();
-	void HandleEvents(const SDL_Event& event);
+	void HandleEvents(const SDL_Event& event_);
 	float getxAxis() { return xAxis; }
 	float getyAxis() { return yAxis; }
 	SDL_Window* getWindow() { return window; }

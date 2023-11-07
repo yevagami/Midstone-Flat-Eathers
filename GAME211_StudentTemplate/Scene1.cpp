@@ -139,18 +139,18 @@ bool Scene1::OnCreate() {
 
 	//	what happens when each button is clicked?
 	myStartButton->SetOnLeftClick([&] {
-		cc.consoleManager(update, "start pressed"); sound.playSound("flame", false);});
-	myOptionsButton->SetOnLeftClick([&] {cc.consoleManager(update, "options pressed");sound.playSound("flame", false); bTestMenu = !bTestMenu; });
-	myExitButton->SetOnLeftClick([&] {cc.consoleManager(update, "exit pressed");sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnLeftClick([&] {cc.consoleManager(update, "small pressed");sound.playSound("my bike", false); });
-	myDebugButton->SetOnLeftClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!");sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
+		cc.log(update, "start pressed"); sound.playSound("flame", false);});
+	myOptionsButton->SetOnLeftClick([&] {cc.log(update, "options pressed");sound.playSound("flame", false); bTestMenu = !bTestMenu; });
+	myExitButton->SetOnLeftClick([&] {cc.log(update, "exit pressed");sound.playSound("big powerup", false); isBopping = !isBopping; });
+	mySmallButton->SetOnLeftClick([&] {cc.log(update, "small pressed");sound.playSound("my bike", false); });
+	myDebugButton->SetOnLeftClick([&] {cc.log(update, "debug pressed | back from the dead!");sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
 
-	mySpookyButton->SetOnLeftClick([&] {cc.consoleManager(update, "spooky aahhhH!");sound.playSound("oops", true); });
+	mySpookyButton->SetOnLeftClick([&] {cc.log(update, "spooky aahhhH!");sound.playSound("oops", true); });
 
 
-	myStartButton->SetOnRightClick([&] {cc.consoleManager(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
-	myStartButton->SetOnHover([&] {cc.consoleManager(update, "start hOOoOoVErrRRrrrRing"); });
-	myStartButton->SetOnScroll([&](int xxx) {cc.consoleManager(update, "start scrolled on (rekt ig)"); cout << xxx << endl; });
+	myStartButton->SetOnRightClick([&] {cc.log(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
+	myStartButton->SetOnHover([&] {cc.log(update, "start hOOoOoVErrRRrrrRing"); });
+	myStartButton->SetOnScroll([&](int xxx) {cc.log(update, "start scrolled on (rekt ig)"); cout << xxx << endl; });
 
 
 	return true;
@@ -201,17 +201,17 @@ void Scene1::HandleEvents(const SDL_Event& event) {
 	if (event.key.keysym.sym == SDLK_u && event.type == SDL_KEYDOWN) {
 		///	CONSOLE TESTING
 		//	console messages display: how to call the method
-		cc.consoleManager(error, "error: this is an error message");
-		cc.consoleManager(warning, "warning: this is a warning message");
-		cc.consoleManager(update, "update: this is an update message");
-		cc.consoleManager(not_error, "this is not an error");
+		cc.log(error, "error: this is an error message");
+		cc.log(warning, "warning: this is a warning message");
+		cc.log(update, "update: this is an update message");
+		cc.log(not_error, "this is not an error");
 	}
 
 
 	if (event.key.keysym.sym == SDLK_i && event.type == SDL_KEYDOWN) {
 		using namespace ui;
 
-		cc.consoleManager(update, "toggling all button visibility");
+		cc.log(update, "toggling all button visibility");
 		for(auto button : allButtons) {
 			bool state = button->isActive;
 			button->isActive = !state; }

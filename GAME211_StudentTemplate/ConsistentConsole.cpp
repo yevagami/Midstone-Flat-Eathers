@@ -1,11 +1,8 @@
 #include "ConsistentConsole.h"
 #include <iostream>
-#include <string> 
 #include <sstream>
-#include <vector>
 #include <unordered_map>
 //header includes:
-#include "LogManager.h"
 
 //	class instances and namespaces
 //using namespace std;
@@ -16,11 +13,10 @@
 #pragma region constructor
 ConsistentConsole::ConsistentConsole(bool visibility, bool logToFile_) {
 	isConsoleTextEnabled = visibility;
-	isLogging = logToFile_;
 }
 #pragma endregion
 
-bool ConsistentConsole::consoleManager(const char* type_, const char* msg_) {
+bool ConsistentConsole::log(const char* type_, const char* msg_) {
 	if (!isConsoleTextEnabled) { return false; }
 
 	static std::unordered_map<const char*, const char*> types = {
@@ -32,7 +28,7 @@ bool ConsistentConsole::consoleManager(const char* type_, const char* msg_) {
 
 	colour(types.at(type_));
 
-	ostringstream formattedString; const char* specialMessage = "";
+	std::ostringstream formattedString; const char* specialMessage = "";
 	if (strcmp(type_, "error") == 0) {
 		specialMessage = "[error] "; }
 	else if (strcmp(type_, "update") == 0) {
@@ -46,7 +42,7 @@ bool ConsistentConsole::consoleManager(const char* type_, const char* msg_) {
 		<< specialMessage
 		<< "[" << msg_ << "]";
 
-	cout << formattedString.str() << endl;
+	std::cout << formattedString.str() << std::endl;
 	
 	colour(clear);
 	return true;
@@ -54,7 +50,7 @@ bool ConsistentConsole::consoleManager(const char* type_, const char* msg_) {
 
 #pragma region formatting
 inline bool ConsistentConsole::colour(const char* colour_) {
-	static unordered_map<const char*, const char*> colours = {
+	static std::unordered_map<const char*, const char*> colours = {
 	{clear, "\033[0m"},
 	{red, "\033[31m"},
 	{blue , "\033[34m"},
@@ -65,14 +61,14 @@ inline bool ConsistentConsole::colour(const char* colour_) {
 	{pink, "\033[95m"}
 	}; if (colours.find(colour_) == colours.end()) { return false; }
 
-	cout 
+	std::cout 
 		<< colours.at(colour_);	 
 
 	return true;
 }
 
 inline bool ConsistentConsole::colour(const char* colour_, const char* modifier_) {
-	static unordered_map<const char*, const char*> colours = {
+	static std::unordered_map<const char*, const char*> colours = {
 		{clear, "\033[0m"},
 		{red, "\033[31m"},
 		{blue , "\033[34m"},
@@ -83,7 +79,7 @@ inline bool ConsistentConsole::colour(const char* colour_, const char* modifier_
 		{pink, "\033[95m"}
 	}; if (colours.find(colour_) == colours.end()) { return false; }
 
-	static unordered_map<const char*, const char*> modifiers = {
+	static std::unordered_map<const char*, const char*> modifiers = {
 		{clear, "\033[0m"},
 		{newline, "\n"},
 		{indent, "\t"},
@@ -92,14 +88,14 @@ inline bool ConsistentConsole::colour(const char* colour_, const char* modifier_
 		{bold, "\033[1m"},
 	}; if (modifiers.find(modifier_) == modifiers.end()) { return false; }
 
-	cout
+	std::cout
 		<< colours.at(colour_)
 		<< modifiers.at(modifier_);
 
 	return true;
 }
 
-void ConsistentConsole::clearConsole() { cout << "\e[2J"; }
+void ConsistentConsole::clearConsole() { std::cout << "\e[2J"; }
 #pragma endregion
 
 #pragma region constants

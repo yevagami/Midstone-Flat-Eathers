@@ -79,7 +79,7 @@ void PrettyPrinting::printVS(vector<string> vString) {
 			cout << "\t" << string << "\n";
 		}
 	} else {
-		ccPrint.consoleManager(error, "empty vector<string>");
+		ccPrint.log(error, "empty vector<string>");
 	} 
 	
 	ccPrint.colour(clear);

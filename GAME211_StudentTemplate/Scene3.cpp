@@ -1,6 +1,4 @@
 #include "Scene3.h"
-#include "PrettyPrinting.h"
-
 using namespace ui;
 
 
@@ -67,7 +65,6 @@ void Scene3::Render() {
 	SDL_RenderPresent(renderer);
 }
 
-void Scene3::HandleEvents(const SDL_Event& event)
-{
+void Scene3::HandleEvents(const SDL_Event& event) {
 	for (auto* button : allButtons) { button->HandleEvents(event); }
 }

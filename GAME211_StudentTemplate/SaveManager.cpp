@@ -11,7 +11,7 @@ SaveState ssSave;
 
 void SaveManager::toggleSafeToSave() {
  isSafeToSave = !isSafeToSave; 
- ccSave.consoleManager("update", "safeToSave toggled"); 
+ ccSave.log("update", "safeToSave toggled"); 
 }
 
 
@@ -26,27 +26,27 @@ SaveManager::SaveManager() {
 
 bool SaveManager::writeSave() {
 	if (!isSafeToSave) {
-		ccSave.consoleManager("error", "save game failed, save file doesn't exist and cannot be created...");
+		ccSave.log("error", "save game failed, save file doesn't exist and cannot be created...");
 		return false;
 	}
 
-	ccSave.consoleManager("update", "goofiness aside, saving...");
+	ccSave.log("update", "goofiness aside, saving...");
 	vector<string> saveDataCurrent = getCurrentSaveData();
 	vector<string> saveDataOld = getOldSaveData();
 
 	//	printing
 	if (ccSave.getConsoleState()) {
-		ccSave.consoleManager("", "replacing:");
+		ccSave.log("", "replacing:");
 		//ppSave.printVS(saveDataOld);
-		ccSave.consoleManager("", "with:");
+		ccSave.log("", "with:");
 		//ppSave.printVS(saveDataCurrent); }
 
 	//copies the contents from the temp SaveManager file to the main SaveManager file.
 		if (!fileWrite(saveDataCurrent, getSaveFileDirectory())) {
-			ccSave.consoleManager("error", "uh oh... file saved't");
+			ccSave.log("error", "uh oh... file saved't");
 		}
 
-		ccSave.consoleManager("update", "file succ1essfully saved");
+		ccSave.log("update", "file succ1essfully saved");
 		return true;
 
 	}
@@ -54,17 +54,17 @@ bool SaveManager::writeSave() {
 
 	bool SaveManager::clearBothSaves() {
 		if (!clearOldSave() && !clearCurrentSave()) {
-			ccSave.consoleManager(error, "couldn't clear both the Saves");
+			ccSave.log(error, "couldn't clear both the Saves");
 			return false;
 		}
 
-		ccSave.consoleManager(update, "cleared both files");
+		ccSave.log(update, "cleared both files");
 		return true;
 	}
 
 bool SaveManager::clearOldSave() {
 	if (!fileEmpty(getSaveFileDirectory())) {
-		ccSave.consoleManager(error, "couldn't clear the Old Save");
+		ccSave.log(error, "couldn't clear the Old Save");
 		return false;
 	}
 
@@ -73,7 +73,7 @@ bool SaveManager::clearOldSave() {
 
 bool SaveManager::clearCurrentSave() {
 	if (!fileEmpty(getCurrentSaveFileDirectory())) {
-		ccSave.consoleManager(error, "couldn't clear the Current Save");
+		ccSave.log(error, "couldn't clear the Current Save");
 		return false;
 	}
 
@@ -83,13 +83,13 @@ bool SaveManager::clearCurrentSave() {
 
 bool SaveManager::readSave() {
 	if (!isSafeToSave) {
-		ccSave.consoleManager("error", "save load failed, unsafe to load save.");
+		ccSave.log("error", "save load failed, unsafe to load save.");
 		return false;
 	}
 
 	vector<string> saveDataCurrentTemp = getCurrentSaveData();
 	fileLoadToVector(saveDataCurrentTemp, ssSave.getSaveFileDirectory());
-	ccSave.consoleManager("update", "save loaded");
+	ccSave.log("update", "save loaded");
 	return true;
 
 }
@@ -120,7 +120,7 @@ bool SaveManager::addValueToCurrentSaveFile(const char* variableName_, const cha
 		return true;
 
 	} else {
-		ccSave.consoleManager("error", "variable already exists inside the current save");
+		ccSave.log("error", "variable already exists inside the current save");
 	}
 	return false;
 }

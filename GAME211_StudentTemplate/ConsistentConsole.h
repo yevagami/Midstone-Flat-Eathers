@@ -7,7 +7,7 @@
 /// - visibility = true, logging = false
 /// 
 ///		Main Methods:
-/// - consoleManager
+/// - log
 /// - colour (colour)
 /// - colour (colour, modifier)
 /// 
@@ -24,7 +24,7 @@ public:
 
 	///	Methods
 	//	error, warning, safe, or update. then a message for context. ez.
-	bool consoleManager(const char* type_, const char* msg_);
+	bool log(const char* type_, const char* msg_);
 	//	colour options: red, blue, green, purple, cyan, yellow, pink, clear
 	inline bool colour(const char* colour_);
 	//	modifier options: clear, newline, indent, blink, bold, italic
@@ -38,16 +38,10 @@ public:
 	void setConsoleState(const bool state_) { isConsoleTextEnabled = state_; }
 	//	returns the consoleText boolean state
 	[[nodiscard]] bool getConsoleState() const { return isConsoleTextEnabled; }	
-	
-	//	sets the logging state to the provided bool
-	void setLogState(const bool state_) { isLogging = state_; }
-	//	returns the log boolean state
-	[[nodiscard]] bool getLogState() const { return isLogging; }
 #pragma endregion
 protected:
 	///	Variables
 	bool isConsoleTextEnabled;
-	bool isLogging;
 };
 
 #pragma region constants

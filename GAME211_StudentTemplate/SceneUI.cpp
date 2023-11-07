@@ -1,9 +1,6 @@
 #include "SceneUI.h"
-#include "PrettyPrinting.h"
-#include "ConsistentConsole.h"
 using namespace ui;
 
-ConsistentConsole ccui;
 #include "EntityMap.h"
 EntityMap euiMap; 
 
@@ -25,7 +22,6 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 	///	Step 1: Create the Buttons with Initial Values
 	mySceneName = new Button(Font{ "UI scene", 45, fontMap.at("comic serif") }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
 
-	
 	//how to make it NOT change the color when cursor on top of it??
 	playersHPBar = new Button(	//	
 		Font{ " players HP here", 30, fontMap.at("comic serif") },
@@ -78,7 +74,6 @@ bool SceneUI::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
-
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
@@ -86,14 +81,15 @@ bool SceneUI::OnCreate() {
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 #pragma endregion
-	name = "SceneUI"; // we dont need that 
+	name = "SceneUI"; // we dont need that -scott
 
-	//		button showcase
-	///	step 3: Hitbox and OnLeftClick
 
-	for (auto* button : allButtons) { button->generateHitbox(); } //	we're going this in the OnCreate because the hitbox needs to be generated after repositioning. this ensures that
 
-	//	what happens when each button is clicked?
+	//	step 3: generating hitbox
+	for (auto* button : allButtons) { button->generateHitbox(); }
+
+	//	step 4: callback function assignment (OnClick)
+	//codecodecode
 	
 	newLevel->OnCreate();
 
@@ -108,7 +104,9 @@ void SceneUI::OnDestroy() {
 
 	///	newLevel objects aren't special enough memory wise to warrent calling a whole ahh OnDestroy() here. we want to use *delete* as this "newLevel" is merely a pointer to the actual object, not the object itself
 	delete newLevel; // - michael
+	///	!!!BaseLevel needs a non-virtual destructor!!!
 	//newLevel->OnDestroy();
+
 
 
 
@@ -139,30 +137,38 @@ void SceneUI::Render() {
 }
 
 
-void SceneUI::HandleEvents(const SDL_Event& event) {
-	PrettyPrinting::printMouseCoords(event);
-	for (const auto button : allButtons) { button->HandleEvents(event); }
+void SceneUI::HandleEvents(const SDL_Event& event_) {
+	PrettyPrinting::printMouseCoords(event_);
+	for (const auto button : allButtons) { button->HandleEvents(event_); }
 
+	switch(event_.key.keysym.scancode) {
+	case SDLK_ESCAPE || SDLK_p:
+		pauseMenuOpen = !pauseMenuOpen;
+		break;
+
+		default:
+		break;
+	}
 
 
 	// send events to player as needed
 	//game->getPlayer()->HandleEvents(event);
 
 #pragma region debuggingKeys
-	if (event.key.keysym.sym == SDLK_u && event.type == SDL_KEYDOWN) {
+	if (event_.key.keysym.sym == SDLK_u && event_.type == SDL_KEYDOWN) {
 		///	CONSOLE TESTING
 		//	console messages display: how to call the method
-		ccui.consoleManager(error, "error: this is an error message");
-		ccui.consoleManager(warning, "warning: this is a warning message");
-		ccui.consoleManager(update, "update: this is an update message");
-		ccui.consoleManager(not_error, "this is not an error");
+		cc.log(error, "error: this is an error message");
+		cc.log(warning, "warning: this is a warning message");
+		cc.log(update, "update: this is an update message");
+		cc.log(not_error, "this is not an error");
 	}
 
 
-	if (event.key.keysym.sym == SDLK_i && event.type == SDL_KEYDOWN) {
+	if (event_.key.keysym.sym == SDLK_i && event_.type == SDL_KEYDOWN) {
 		using namespace ui;
 
-		ccui.consoleManager(update, "toggling all button visibility");
+		cc.log(update, "toggling all button visibility");
 		for (auto button : allButtons) {
 			bool state = button->isActive;
 			button->isActive = !state;
@@ -171,17 +177,17 @@ void SceneUI::HandleEvents(const SDL_Event& event) {
 	}
 
 
-	if (event.key.keysym.sym == SDLK_o && event.type == SDL_KEYDOWN) {
+	if (event_.key.keysym.sym == SDLK_o && event_.type == SDL_KEYDOWN) {
 	}
 
 
-	if (event.key.keysym.sym == SDLK_n && event.type == SDL_KEYDOWN) {
+	if (event_.key.keysym.sym == SDLK_n && event_.type == SDL_KEYDOWN) {
 		PrettyPrinting::printVS(euiMap.findEntitiesByData(string("dog")));
 		PrettyPrinting::printVS(euiMap.findEntitiesByData(string("meow")));
 	}
 
 
-	if (event.key.keysym.sym == SDLK_m && event.type == SDL_KEYDOWN) {
+	if (event_.key.keysym.sym == SDLK_m && event_.type == SDL_KEYDOWN) {
 		///	ENTITY MAP TESTING
 		//	to insert into an entit map...
 		euiMap.insertEntity(string("rex"), string("is my dog"));
