@@ -15,7 +15,7 @@ private:
 public:
 	//Player related stuff
 //Solid* block;
-	PlayerBody* player;
+	PlayerBody* player = nullptr;
 	void CameraFollowPlayer(PlayerBody* p);
 
 	//Scene objects

@@ -2,7 +2,7 @@
 #define LEVEL1_H
 
 
-#include "BaseLevel.h"
+#include "Level.h"
 #include "Solid.h"
 #include "PlayerBody.h"
 
@@ -17,6 +17,7 @@ public:
 	std::vector<Body*>trashObjects;
 
 	//Constructor
+	Level1();
 	Level1(Scene* currentScene);
 	~Level1();
 
