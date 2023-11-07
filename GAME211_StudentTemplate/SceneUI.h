@@ -22,7 +22,6 @@ private:
 
 public:
 
-
 	BaseLevel* newLevel = new Level1(this);
 
 	bool isBopping;
