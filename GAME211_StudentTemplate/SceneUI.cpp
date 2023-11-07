@@ -78,6 +78,7 @@ bool SceneUI::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
+
 	Matrix4 ndc = MMath::viewportNDC(w, h);
 	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
@@ -103,6 +104,7 @@ bool SceneUI::OnCreate() {
 
 void SceneUI::OnDestroy() {
 	for (auto* button : allButtons) { delete button; }
+	newLevel->OnDestroy();
 }
 
 
@@ -118,9 +120,12 @@ void SceneUI::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
+	newLevel->Render();
+
 	//	render the buttons
 	for (auto* button : allButtons) { button->Render(renderer); }
 
+	
 
 	//random blur test code (doesnt work) >:(
 	//auto* myBody = new Body(Transform{});

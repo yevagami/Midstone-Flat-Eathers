@@ -8,14 +8,7 @@
 
 class Level1 : public BaseLevel{
 private: 
-	float xAxis;
-	float yAxis;
-	SDL_Window* window;
-	GameManager* game;
-	SDL_Renderer* renderer;
-	Matrix4 projectionMatrix;
-	Matrix4 inverseProjection;
-
+	SDL_Texture* background;
 public:
 
 
@@ -24,7 +17,7 @@ public:
 	std::vector<Body*>trashObjects;
 
 	//Constructor
-	Level1(SDL_Window* sdlWindow_, GameManager* game_);
+	Level1(Scene* currentScene);
 	~Level1();
 
 	//Fundamental methods (create, update, render, handle input, destroy)
@@ -35,11 +28,6 @@ public:
 	void HandleEvents(const SDL_Event& event) override;
 
 	//getters and setters
-	float getxAxis() { return xAxis; }
-	float getyAxis() { return yAxis; }
-	SDL_Window* getWindow() { return window; }
-	Matrix4 getProjectionMatrix() { return projectionMatrix; }
-	Matrix4 getInverseMatrix() { return inverseProjection; }
-	SDL_Renderer* getRenderer() { return renderer; }
+
 };
 #endif

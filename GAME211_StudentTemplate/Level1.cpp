@@ -1,69 +1,36 @@
 #include "Level1.h"
 
-Level1::Level1(SDL_Window* sdlWindow_, GameManager* game_) { 
-	window = sdlWindow_;
-	game = game_;
-	renderer = SDL_GetRenderer(window);
-	xAxis = 1600.0f;
-	yAxis = 900.0f;
-
+Level1::Level1(Scene* currentScene) { 
+	setParentScene(currentScene);
 }
 Level1::~Level1() {}
 
 bool Level1::OnCreate()
 {
-	int w, h;
-	SDL_GetWindowSize(window, &w, &h);
-
-	Matrix4 ndc = MMath::viewportNDC(w, h);
-	Matrix4 ortho = MMath::orthographic(0.0f, xAxis, 0.0f, yAxis, 0.0f, 1.0f);
-	projectionMatrix = ndc * ortho;
-
-	/// Turn on the SDL imaging subsystem
-	IMG_Init(IMG_INIT_PNG);
-
-	//Create the body
-	/*
-	block = new Solid(
-		this,
-		Vec3(xAxis * 0.5f + 400.0f, yAxis * 0.5f, 0.0f),
-		Vec3(1.0f, 1.0f, 1.0f),
-		128.0f,
-		128.0f,
-		IMG_Load("Textures/programmer_art/block_cap.png")
-	);
-	*/
-
-	//Load the body's hitbox
-
-
-	//Add the objects to the list
-	
-	//sceneObjects.push_back(block);
-
+	background = SDL_CreateTextureFromSurface(getParentScene()->getRenderer(), IMG_Load("Textures/programmer_art/void_cat.png"));
 	return true;
 }
 
 void Level1::OnDestroy() {
-	/*
-	for (Body* body : sceneObjects) {
+	for (Body* body : levelBodies) {
 		body->OnDestroy();
 		delete body;
 	}
-	*/
-	sceneObjects.clear();
-
-	
+	for (Body* body : trashBodies) {
+		body->OnDestroy();
+		delete body;
+	}
+	delete background;
+	levelBodies.clear();
+	trashBodies.clear();
 }
 
 
 void Level1::Update(const float time) {
 
-	
-
 	//Check for collision
-	for (Body* body : sceneObjects) {
-		for (Body* otherBody : sceneObjects) {
+	for (Body* body : levelBodies) {
+		for (Body* otherBody : levelBodies) {
 			if (body == otherBody) { continue; }
 			if (body->getHitbox()->collisionCheck(otherBody->getHitbox())) {
 				body->OnCollide(otherBody, time);
@@ -72,32 +39,28 @@ void Level1::Update(const float time) {
 	}
 
 	//Update the body
-	for (Body* body : sceneObjects) {
+	for (Body* body : levelBodies) {
 		body->Update(time);
 	}
 
-	/*
+	
 	//Delete the bodies that are flagged for deletion
-	if (trashObjects.empty()) { return; }
-	for (Body* body : trashObjects) {
+	if (trashBodies.empty()) { return; }
+	for (Body* body : trashBodies) {
 		delete body;
 	}
-	*/
 }
 
 void Level1::Render() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderClear(renderer);
-
-	for (Body* body : sceneObjects) {
-		body->Render(renderer, projectionMatrix);
-		body->RenderHitbox(renderer);
-	}
-	SDL_RenderPresent(renderer);
+	for (Body* body : levelBodies) {
+		body->Render(getParentScene()->getRenderer(), getParentScene()->getProjectionMatrix());
+		body->RenderHitbox(getParentScene()->getRenderer());
+	} 
+	SDL_RenderCopy(getParentScene()->getRenderer(), background, nullptr, nullptr);
 }
 
 void Level1::HandleEvents(const SDL_Event& event) {
-	for (Body* body : sceneObjects) {
+	for (Body* body : levelBodies) {
 		body->HandleEvents(event);
 	}
 }

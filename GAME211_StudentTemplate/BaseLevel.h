@@ -6,7 +6,7 @@
 class BaseLevel
 {
 private:
-
+	Scene* parentScene;
 public:
 	//The vectors where all the bodies will be stored and updated and destroyed 
 	//"Aka the mortuary" -Diana Astafyeva
@@ -20,5 +20,7 @@ public:
 	virtual void Render() = 0;
 	virtual void HandleEvents(const SDL_Event& event) = 0;
 
+	virtual Scene* getParentScene() { return parentScene; };
+	virtual void setParentScene(Scene* currentScene) { parentScene = currentScene; };
 };
 #endif

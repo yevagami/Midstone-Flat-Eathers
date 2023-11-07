@@ -3,6 +3,7 @@
 
 #include <MMath.h>
 #include "Scene.h"
+#include "Level1.h"
 #include <vector>
 #include "Menu.h"
 #include "Audio.h"
@@ -20,6 +21,10 @@ private:
 	Matrix4 inverseProjection;	// set in OnCreate()
 
 public:
+
+
+	BaseLevel* newLevel = new Level1(this);
+
 	bool isBopping;
 
 	ui::Button* mySceneName;
