@@ -98,6 +98,8 @@ bool SceneUI::OnCreate() {
 
 	//mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
 	
+	newLevel->OnCreate();
+
 	return true;
 }
 

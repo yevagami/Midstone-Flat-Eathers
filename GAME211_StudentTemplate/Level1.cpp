@@ -7,7 +7,7 @@ Level1::~Level1() {}
 
 bool Level1::OnCreate()
 {
-	background = SDL_CreateTextureFromSurface(getParentScene()->getRenderer(), IMG_Load("Textures/programmer_art/void_cat.png"));
+	background = SDL_CreateTextureFromSurface(getParentScene()->getRenderer(), IMG_Load("Textures/programmer_art/himeko.jpg"));
 	return true;
 }
 
@@ -56,6 +56,11 @@ void Level1::Render() {
 		body->Render(getParentScene()->getRenderer(), getParentScene()->getProjectionMatrix());
 		body->RenderHitbox(getParentScene()->getRenderer());
 	} 
+
+	if (background == nullptr) {
+		std::cout << "Forgot the background stupid" << std::endl;
+		return;
+	}
 	SDL_RenderCopy(getParentScene()->getRenderer(), background, nullptr, nullptr);
 }
 

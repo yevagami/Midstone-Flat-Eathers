@@ -8,7 +8,7 @@
 
 class Level1 : public BaseLevel{
 private: 
-	SDL_Texture* background;
+	SDL_Texture* background = nullptr;
 public:
 
 
