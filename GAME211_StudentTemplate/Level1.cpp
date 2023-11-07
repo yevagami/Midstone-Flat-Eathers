@@ -3,8 +3,8 @@
 
 #include <SDL_image.h>
 
-Level1::Level1(Scene* currentScene) { 
-	setParentScene(currentScene);
+Level1::Level1(Scene* currentScene) {
+	Level::setParentScene(currentScene);
 }
 Level1::~Level1() {}
 

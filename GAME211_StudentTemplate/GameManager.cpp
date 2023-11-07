@@ -22,6 +22,7 @@ void InitializeSoundEffects() {
 	sound.loadSound("dying printer", "sound/dying printer.wav");
 	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
 	sound.loadSound("oops", "sound/oops.wav");
+	sound.loadSound("gyat", "sound/gyat.wav");
 	sound.loadSound("my move", "sound/once i make my move.wav");
 
 
@@ -42,6 +43,7 @@ void InitializeSoundEffects() {
 
 	sound.createSoundGroup("kiriko");
 	sound.addToSoundGroup("my bike", "kiriko");
+	sound.addToSoundGroup("gyat", "kiriko");
 	sound.setGroupVolume("kiriko", mybikeVolume);
 }
 #pragma endregion
@@ -55,6 +57,9 @@ GameManager::GameManager() {
 	isRunning = true;
 	isPaused = false;
 	currentScene = nullptr;
+	menuScene = nullptr;
+
+	setDefaultSettings();
 }
 
 
@@ -86,6 +91,8 @@ bool GameManager::OnCreate() {
 		return false;
 	}
 
+	//	load the menu scene on top of the current scene
+	menuScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 	// select scene for specific assignment
 	currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 
@@ -113,7 +120,7 @@ void GameManager::Run() {
 		Update(deltaTime);
 
 		/// Keep the event loop running at a proper rate
-		SDL_Delay(timer->GetSleepTime(fps)); ///60 frames per sec
+		SDL_Delay(timer->GetSleepTime(settings::FPS)); ///60 frames per sec
 	}
 }
 
@@ -179,6 +186,11 @@ GameManager::~GameManager() {}
 void GameManager::OnDestroy() {
 	if (windowPtr) delete windowPtr;
 	if (timer) delete timer;
+
+	if(menuScene) {
+		menuScene->OnDestroy();
+		delete menuScene;
+	}
 
 	if (currentScene) {
 		currentScene->OnDestroy();

@@ -143,7 +143,7 @@ bool Scene1::OnCreate() {
 	myOptionsButton->SetOnLeftClick([&] {cc.log(update, "options pressed");sound.playSound("flame", false); bTestMenu = !bTestMenu; });
 	myExitButton->SetOnLeftClick([&] {cc.log(update, "exit pressed");sound.playSound("big powerup", false); isBopping = !isBopping; });
 	mySmallButton->SetOnLeftClick([&] {cc.log(update, "small pressed");sound.playSound("my bike", false); });
-	myDebugButton->SetOnLeftClick([&] {cc.log(update, "debug pressed | back from the dead!");sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
+	myDebugButton->SetOnLeftClick([&] {cc.log(update, "debug pressed | back from the dead!");sound.playSound("gyat"); for (auto const button : allButtons) { button->isActive = true; }});
 
 	mySpookyButton->SetOnLeftClick([&] {cc.log(update, "spooky aahhhH!");sound.playSound("oops", true); });
 

@@ -6,12 +6,10 @@
 #include "Level1.h"
 #include <vector>
 #include "Menu.h"
-#include "Audio.h"
 
 using namespace MATH;
 
-class SceneUI : public Scene
-{
+class SceneUI : public Scene {
 private:
 	float xAxis;	// scene width, in game coords, set in constructor
 	float yAxis;	// scene height, in game coords, set in constructor

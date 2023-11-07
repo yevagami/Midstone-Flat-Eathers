@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
+#include "SceneUI.h"
 
 
 
@@ -23,6 +24,8 @@ namespace settings {
 
 	inline float SoundEffectVolume;
 	inline float MusicVolume;
+
+	inline int FPS;
 
 	inline void SetVolume(float newVolume_) {
 		sound.setVolume(newVolume_);
@@ -63,6 +66,8 @@ private:
 	class Timer *timer;
 	bool isRunning;
 	class Scene *currentScene;
+	Scene *menuScene;
+	
 
 	//For the game loop Diana
 	bool ifDoorOpen = false;
@@ -75,19 +80,27 @@ private:
 
 	//	settings (abstraction)
 
-	float fps = 60.0f;
-	float screenHeight = 768.0f;
-	float screenWidth = 1366.0f;
 
-	auto setDefaultSettings() -> bool {
-		fps = 60.0f;
-
-		return true;
+	static void setDefaultSettings() {
+		settings::FPS = 60;
+		settings::MasterVolume = 1.0f;
+		settings::MaxVolume = 1.0f;
+		settings::MusicVolume = 0.5f;
+		settings::SoundEffectVolume = 0.75f;
 
 	}
 
+	void instanciateMenu(const bool state_) const {
+		if (state_) {
+			menuScene->OnCreate();
+		} else {
+			menuScene->OnDestroy();
+		}
+	}
 
-
+	void loadMenu(const bool enabled_) const {
+		instanciateMenu(enabled_);
+	}
 
 public:
 	GameManager();
