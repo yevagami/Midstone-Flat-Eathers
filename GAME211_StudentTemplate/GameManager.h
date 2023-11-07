@@ -8,14 +8,32 @@
 //#include <iostream>
 
 #include "Audio.h"
+#include "ConsistentConsole.h"
+#include "PrettyPrinting.h"
 
 
-namespace audio {
+
+
 	inline Sound sound;
-
 	void InitializeSoundEffects();
 
+namespace settings {
+	inline float MasterVolume;
+	inline float MaxVolume = 100.0f;
+
+	inline float SoundEffectVolume;
+	inline float MusicVolume;
+
+	inline void SetVolume(float newVolume_) {
+		sound.setVolume(newVolume_);
+	}
 }
+
+	inline ConsistentConsole cc(true);
+	inline PrettyPrinting pp;
+
+
+
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
 //const int SCREEN_WIDTH = 1540;

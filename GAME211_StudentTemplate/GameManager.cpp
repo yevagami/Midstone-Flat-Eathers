@@ -1,12 +1,12 @@
 #include "GameManager.h"
 #include "scene_list.h"
 
-//	namespace audio
-void audio::InitializeSoundEffects() {
+#pragma region GLOBAL NAMESPACE
+void InitializeSoundEffects() {
 	///	Volumes
 	constexpr float blipsVolume = 1.0f;
 	constexpr float loudVolume = 0.1f;
-	constexpr float mybikeVolume = 3.0f;
+	constexpr float mybikeVolume = 1.0f;
 
 	///	Initialize sound effects here and link them to a label. Then call them from the label in-scene.
 	//	loading audio to the MAP!
@@ -23,7 +23,7 @@ void audio::InitializeSoundEffects() {
 	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
 	sound.loadSound("oops", "sound/oops.wav");
 	sound.loadSound("my move", "sound/once i make my move.wav");
-	//its now loaded...
+
 
 	sound.createSoundGroup("blips");
 	sound.addToSoundGroup("blipblip", "blips");
@@ -44,6 +44,10 @@ void audio::InitializeSoundEffects() {
 	sound.addToSoundGroup("my bike", "kiriko");
 	sound.setGroupVolume("kiriko", mybikeVolume);
 }
+#pragma endregion
+
+
+
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -61,7 +65,7 @@ bool GameManager::OnCreate() {
 	}
 
 	///	sound
-	audio::InitializeSoundEffects();
+	::InitializeSoundEffects();
 
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {

@@ -95,10 +95,8 @@ bool SceneUI::OnCreate() {
 
 	//	what happens when each button is clicked?
 	
-
-	//mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
-	
 	newLevel->OnCreate();
+
 
 	return true;
 }
@@ -128,24 +126,6 @@ void SceneUI::Render() {
 	for (auto* button : allButtons) { button->Render(renderer); }
 
 	
-
-	//random blur test code (doesnt work) >:(
-	//auto* myBody = new Body(Transform{});
-	//myBody->setImage(IMG_Load("Textures/test.png"));
-	//// create a surface for the blurred texture
-	//SDL_Surface* blurredSurface = SDL_CreateRGBSurface(0, 200, 200, 32, 0, 0, 0, 0);
-	//// downscale the image
-	//SDL_SoftStretch(myBody->getImage(), nullptr, blurredSurface, nullptr);
-	//// create a texture from the blurred surface
-	//SDL_Texture* blurredTexture = SDL_CreateTextureFromSurface(renderer, blurredSurface);
-	//SDL_FreeSurface(blurredSurface);
-	//// set the blend mode for the blurred texture
-	//SDL_SetTextureBlendMode(blurredTexture, SDL_BLENDMODE_ADD);
-	//SDL_Rect rooct = { 200, 200, 200, 200 };
-	//SDL_RenderCopy(renderer, blurredTexture, nullptr, &rooct);
-
-	// render the player
-	//game->RenderPlayer(0.1f);
 
 
 	SDL_RenderPresent(renderer);

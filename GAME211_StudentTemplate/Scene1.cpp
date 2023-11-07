@@ -1,13 +1,10 @@
 #include "Scene1.h"
-#include "PrettyPrinting.h"
-#include "ConsistentConsole.h"
 
 using namespace ui;
 
 
 //a global var. My problem was that i defined it in the Scene 3 again, that made a linking error.
 //IMPORTANT!!!
-ConsistentConsole cc; //not member of scene1 class. Define somewhere else 
 #include "EntityMap.h"
 EntityMap eMap; //not member of scene1 class
 
@@ -141,19 +138,14 @@ bool Scene1::OnCreate() {
 	for (auto* button : allButtons) { button->generateHitbox(); } //	we're going this in the OnCreate because the hitbox needs to be generated after repositioning. this ensures that
 
 	//	what happens when each button is clicked?
-	myStartButton->SetOnLeftClick([&] {cc.consoleManager(update, "start pressed"); 
-	audio::sound.playSound("flame", false);});
-	myOptionsButton->SetOnLeftClick([&] {cc.consoleManager(update, "options pressed");
-		audio::sound.playSound("flame", false); bTestMenu = !bTestMenu; });
-	myExitButton->SetOnLeftClick([&] {cc.consoleManager(update, "exit pressed");
-		audio::sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnLeftClick([&] {cc.consoleManager(update, "small pressed");
-		audio::sound.playSound("my bike", false); });
-	myDebugButton->SetOnLeftClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!");
-		audio::sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
+	myStartButton->SetOnLeftClick([&] {
+		cc.consoleManager(update, "start pressed"); sound.playSound("flame", false);});
+	myOptionsButton->SetOnLeftClick([&] {cc.consoleManager(update, "options pressed");sound.playSound("flame", false); bTestMenu = !bTestMenu; });
+	myExitButton->SetOnLeftClick([&] {cc.consoleManager(update, "exit pressed");sound.playSound("big powerup", false); isBopping = !isBopping; });
+	mySmallButton->SetOnLeftClick([&] {cc.consoleManager(update, "small pressed");sound.playSound("my bike", false); });
+	myDebugButton->SetOnLeftClick([&] {cc.consoleManager(update, "debug pressed | back from the dead!");sound.playSound("dying printer"); for (auto const button : allButtons) { button->isActive = true; }});
 
-	mySpookyButton->SetOnLeftClick([&] {cc.consoleManager(update, "spooky aahhhH!");
-		audio::sound.playSound("oops", true); });
+	mySpookyButton->SetOnLeftClick([&] {cc.consoleManager(update, "spooky aahhhH!");sound.playSound("oops", true); });
 
 
 	myStartButton->SetOnRightClick([&] {cc.consoleManager(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
@@ -191,25 +183,6 @@ void Scene1::Render() {
 
 	//	render the buttons
 	for (auto* button : allButtons) { button->Render(renderer); }
-
-
-	//random blur test code (doesnt work) >:(
-	//auto* myBody = new Body(Transform{});
-	//myBody->setImage(IMG_Load("Textures/test.png"));
-	//// create a surface for the blurred texture
-	//SDL_Surface* blurredSurface = SDL_CreateRGBSurface(0, 200, 200, 32, 0, 0, 0, 0);
-	//// downscale the image
-	//SDL_SoftStretch(myBody->getImage(), nullptr, blurredSurface, nullptr);
-	//// create a texture from the blurred surface
-	//SDL_Texture* blurredTexture = SDL_CreateTextureFromSurface(renderer, blurredSurface);
-	//SDL_FreeSurface(blurredSurface);
-	//// set the blend mode for the blurred texture
-	//SDL_SetTextureBlendMode(blurredTexture, SDL_BLENDMODE_ADD);
-	//SDL_Rect rooct = { 200, 200, 200, 200 };
-	//SDL_RenderCopy(renderer, blurredTexture, nullptr, &rooct);
-
-	// render the player
-	//game->RenderPlayer(0.1f);
 
 
 	SDL_RenderPresent(renderer); }

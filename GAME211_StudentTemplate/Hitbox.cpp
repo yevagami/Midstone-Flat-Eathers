@@ -16,10 +16,10 @@ bool Hitbox::generateHitbox(const SDL_Rect& rectangle_) {
 
 
 bool Hitbox::collisionCheck(const Hitbox* other) const {
-    bool collisionX = x + w >= other->x &&
+	const bool collisionX = x + w >= other->x &&
         other->x + other->w >= x;
 
-    bool collisionY = y + h >= other->y &&
+    const bool collisionY = y + h >= other->y &&
         other->y + other->h >= y;
     
     return collisionX && collisionY;

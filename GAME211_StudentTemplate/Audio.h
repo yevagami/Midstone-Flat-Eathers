@@ -13,10 +13,8 @@ public:
 		if (engine) { engine->setSoundVolume(1.0f); }
 	}
 
-
 	~Sound
 	() { if (engine) { engine->drop(); } }
-
 
 	///	play, pause, resume, stop
 
@@ -39,8 +37,10 @@ public:
 
 	/// checks & logic
 
-private:
+	//	the sound engine... public :O
 	irrklang::ISoundEngine* engine;
+
+private:
 	std::unordered_map<std::string, irrklang::ISoundSource*> soundSources;
 	std::unordered_map<std::string, std::vector<std::string>> soundGroups; //	not the map of string to vector<string>
 };
