@@ -35,16 +35,10 @@ bool Level1::OnCreate()
 	*/
 
 	//Load the body's hitbox
-	player = new PlayerBody(
-		this,
-		Vec3(xAxis * 0.5f, yAxis * 0.5f, 0.0f),
-		Vec3(1.0f, 1.0f, 1.0f),
-		128.0f,
-		128.0f);
-	player->OnCreate();
+	
 
 	//Add the objects to the list
-	sceneObjects.push_back(player);
+	
 	//sceneObjects.push_back(block);
 
 	return true;
@@ -59,34 +53,13 @@ void Level1::OnDestroy() {
 	*/
 	sceneObjects.clear();
 
-	player->OnDestroy();
-	delete player;
+	
 }
 
-void Level1::CameraFollowPlayer(PlayerBody* p) {
-	//guard clause to make sure the player exists
-	if (p == nullptr) {
-		return;
-		std::cout << "Player doesn't exist\n";
-	}
-
-	//move the camera  update
-	int w, h;
-	SDL_GetWindowSize(window, &w, &h);
-	Matrix4 ndc = MMath::viewportNDC(w, h);
-
-	float left = p->getPos().x - xAxis / 2.0f;
-	float right = p->getPos().x + xAxis / 2.0f;
-	float top = p->getPos().y - yAxis / 2.0f;
-	float bottom = p->getPos().y + yAxis / 2.0f;
-
-	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);
-	projectionMatrix = ndc * ortho;
-}
 
 void Level1::Update(const float time) {
 
-	CameraFollowPlayer(player);
+	
 
 	//Check for collision
 	for (Body* body : sceneObjects) {
@@ -120,7 +93,6 @@ void Level1::Render() {
 		body->Render(renderer, projectionMatrix);
 		body->RenderHitbox(renderer);
 	}
-
 	SDL_RenderPresent(renderer);
 }
 

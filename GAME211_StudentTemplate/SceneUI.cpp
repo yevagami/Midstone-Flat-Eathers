@@ -94,14 +94,9 @@ bool SceneUI::OnCreate() {
 
 	//	what happens when each button is clicked?
 	
-	myExitButton->SetOnLeftClick([&] {ccui.consoleManager(update, "exit pressed"); sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
+
+	//mySmallButton->SetOnLeftClick([&] {ccui.consoleManager(update, "small pressed"); sound.playSound("my bike", false); });
 	
-
-	mySpookyButton->SetOnLeftClick([&] {ccui.consoleManager(update, "spooky aahhhH!");
-		audio::sound.playSound("oops", true); });
-
-
 	return true;
 }
 

@@ -16,8 +16,7 @@ private:
 	Matrix4 inverseProjection;
 
 public:
-	PlayerBody* player;
-	void CameraFollowPlayer(PlayerBody* p);
+
 
 	//Scene objects
 	std::vector<Body*>sceneObjects;
