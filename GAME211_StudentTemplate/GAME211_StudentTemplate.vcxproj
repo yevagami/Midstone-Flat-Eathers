@@ -108,6 +108,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PrettyPrinting.cpp" />
+    <ClCompile Include="projectile.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="Scene2.cpp" />
@@ -121,7 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
-    <ClInclude Include="BasicLevel.h" />
+    <ClInclude Include="BaseLevel.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Citations.hpp" />
     <ClInclude Include="Clock.h" />
@@ -137,6 +138,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PrettyPrinting.h" />
+    <ClInclude Include="projectile.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene1.h" />

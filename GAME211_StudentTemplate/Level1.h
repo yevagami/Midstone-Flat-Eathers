@@ -2,10 +2,11 @@
 #define LEVEL1_H
 
 
-#include "BasicLevel.h"
+#include "BaseLevel.h"
 #include "Solid.h"
 #include "PlayerBody.h"
-class Level1 : BasicLevel{
+
+class Level1 : public BaseLevel{
 private: 
 	float xAxis;
 	float yAxis;
@@ -27,11 +28,11 @@ public:
 	~Level1();
 
 	//Fundamental methods (create, update, render, handle input, destroy)
-	bool OnCreate();
-	void OnDestroy();
-	void Update(const float time);
-	void Render();
-	void HandleEvents(const SDL_Event& event);
+	bool OnCreate() override;
+	void OnDestroy() override;
+	void Update(const float time) override;
+	void Render() override;
+	void HandleEvents(const SDL_Event& event) override;
 
 	//getters and setters
 	float getxAxis() { return xAxis; }
@@ -40,6 +41,5 @@ public:
 	Matrix4 getProjectionMatrix() { return projectionMatrix; }
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	SDL_Renderer* getRenderer() { return renderer; }
-
 };
 #endif

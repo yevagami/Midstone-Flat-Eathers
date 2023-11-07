@@ -80,7 +80,7 @@ bool GameManager::OnCreate() {
 	}
 
 	// select scene for specific assignment
-	currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
+	currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
 
 
 	// need to create Player before validating scene

@@ -58,6 +58,12 @@
     <Filter Include="Source Files\Body\Player">
       <UniqueIdentifier>{3a9db55d-aca5-45fb-ad0c-670a2370b369}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scene\Levels">
+      <UniqueIdentifier>{afb29145-6786-41bb-b57d-40cccc23fb8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene\Levels">
+      <UniqueIdentifier>{d05927b8-438f-4e57-8017-0fb115733291}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -132,11 +138,14 @@
     <ClCompile Include="Solid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Level1.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="projectile.cpp">
+      <Filter>Source Files\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Level1.cpp">
+      <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,11 +233,14 @@
     <ClInclude Include="Solid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level1.h">
-      <Filter>Header Files\Scene</Filter>
+    <ClInclude Include="projectile.h">
+      <Filter>Header Files\Body</Filter>
     </ClInclude>
-    <ClInclude Include="BasicLevel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BaseLevel.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level1.h">
+      <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

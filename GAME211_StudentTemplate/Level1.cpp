@@ -35,7 +35,7 @@ bool Level1::OnCreate()
 	*/
 
 	//Load the body's hitbox
-	
+
 
 	//Add the objects to the list
 	
