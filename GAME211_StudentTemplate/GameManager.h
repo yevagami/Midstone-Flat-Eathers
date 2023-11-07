@@ -67,20 +67,11 @@ private:
 	bool isRunning;
 	class Scene *currentScene;
 	Scene *menuScene;
-	
-
-	//For the game loop Diana
-	bool ifDoorOpen = false;
-	int mobsToSpawnOnTheLevel = 10;
-	int mobsLeft;
-	bool playerMovedToTheNextLvl = true;
 
 	//	michael's playground uwu
 	bool isPaused;
 
 	//	settings (abstraction)
-
-
 	static void setDefaultSettings() {
 		settings::FPS = 60;
 		settings::MasterVolume = 1.0f;
@@ -118,7 +109,6 @@ public:
 	void HandleEvents();
 	void Update(float deltaTime_);
 	void LoadScene( int i );
-	void PassTheLevel(); //new
     bool ValidateCurrentScene();
 
 

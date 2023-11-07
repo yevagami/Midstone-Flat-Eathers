@@ -17,7 +17,21 @@ public:
 
 	//Constructor/destructors
 	PlayScene(SDL_Window* sdlWindow_, GameManager* game_);
-	~PlayScene();
+	~PlayScene(){}
 
+	//Fundamental methods
+	bool OnCreate();
+	void OnDestroy();
+	void Update(const float time);
+	void Render();
+	void HandleEvents(const SDL_Event& event);
+
+	//getters and setters
+	float getxAxis() { return xAxis; }
+	float getyAxis() { return yAxis; }
+	SDL_Window* getWindow() { return window; }
+	Matrix4 getProjectionMatrix() { return projectionMatrix; }
+	Matrix4 getInverseMatrix() { return inverseProjection; }
+	SDL_Renderer* getRenderer() { return renderer; }
 };
 

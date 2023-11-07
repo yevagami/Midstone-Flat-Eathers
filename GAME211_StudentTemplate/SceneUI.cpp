@@ -13,7 +13,6 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 	xAxis = 25.0f;
 	yAxis = 15.0f;
 
-
 	///	button time
 	auto BUTTON_BACKGROUND = ui::SDL_COLOR_MYSTIC_PURPLE; auto BUTTON_TEXT = ui::SDL_COLOR_BLACK; auto rectangle = SDL_Rect{ 0,0,325,75 }; auto square = ui::SDL_Square;
 	auto BUTTON_HOVERBACKGROUND = ui::SDL_COLOR_GRAY; auto BUTTON_BORDER = SDL_COLOR_DARK_GRAY;
@@ -41,27 +40,21 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 
 	//1.1 individial changes before grouping
 	mySmallButton->scaleDimensions(50);
-
 	mySmallButton->isPrideful = true;		//	changes colour on click
 	playersHPBar->isTogglable = false;
-	
 	mySceneName->textColour = mySceneName->textColour << SDL_White75;
 
 
 	///	Step 2: Aesthetics
-
 	for (auto* button : allButtons) {
 		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 	}
 
 	mySceneName->offsetPosition(-300);	//	offsets the text up
-	
 	playersHPBar->offsetPosition(-300, 500);
-
 	//	cornering 
 	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW()); //	places the square button into the top corner
 	
-
 	isBopping = true;
 }
 
@@ -81,18 +74,12 @@ bool SceneUI::OnCreate() {
 	/// Turn on the SDL imaging subsystem
 	IMG_Init(IMG_INIT_PNG);
 #pragma endregion
-	name = "SceneUI"; // we dont need that -scott
-
-
-
-	//	step 3: generating hitbox
+	name = "SceneUI"; 
+	// we dont need that -scott
+	//shut up scott -Adriel
 	for (auto* button : allButtons) { button->generateHitbox(); }
-
-	//	step 4: callback function assignment (OnClick)
-	//codecodecode
-	
-	newLevel->OnCreate();
-
+	level_1 = new Level1(this);
+	level_1->OnCreate();
 
 	return true;
 }
@@ -101,22 +88,12 @@ bool SceneUI::OnCreate() {
 void SceneUI::OnDestroy() {
 	for (auto* button : allButtons) { delete button; }
 
-
-	///	newLevel objects aren't special enough memory wise to warrent calling a whole ahh OnDestroy() here. we want to use *delete* as this "newLevel" is merely a pointer to the actual object, not the object itself
-	//delete newLevel; // - michael
-	///	!!!BaseLevel needs a non-virtual destructor!!!
-	newLevel->OnDestroy();
-
-
-
-
+	level_1->OnDestroy();
+	delete level_1;
 }
 
 
 void SceneUI::Update(const float deltaTime) {
-	// Update player
-	//game->getPlayer()->Update(deltaTime);
-
 
 }
 
@@ -125,13 +102,10 @@ void SceneUI::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	newLevel->Render();
+	level_1->Render();
 
 	//	render the buttons
 	for (auto* button : allButtons) { button->Render(renderer); }
-
-	
-
 
 	SDL_RenderPresent(renderer);
 }

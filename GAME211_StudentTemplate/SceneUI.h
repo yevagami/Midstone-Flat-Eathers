@@ -20,7 +20,7 @@ private:
 
 public:
 
-	Level* newLevel = new Level1(this);
+	Level* level_1 = nullptr;
 
 	bool isBopping;
 

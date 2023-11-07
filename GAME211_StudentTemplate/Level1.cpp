@@ -3,36 +3,29 @@
 
 #include <SDL_image.h>
 
-Level1::Level1(Scene* currentScene) {
-	Level::setParentScene(currentScene);
-}
-Level1::~Level1() {}
-
-bool Level1::OnCreate()
-{
-	background = SDL_CreateTextureFromSurface(getParentScene()->getRenderer(), IMG_Load("Textures/programmer_art/himeko.jpg"));
+bool Level1::OnCreate(){
+	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/himeko.jpg"));
 	return true;
 }
 
 void Level1::OnDestroy() {
-	//	clearing bodies that exist in the level
+	//clearing bodies that exist in the level
 	for (Body* body : levelBodies) {
 		body->OnDestroy();
 		delete body;
 	} levelBodies.clear();
 
-	//	trash bin lmao
+	//trash bin lmao
 	for (Body* body : trashBodies) {
 		body->OnDestroy();
 		delete body;
 	} trashBodies.clear();
 
+	//deleting texture
 	if (background) {
 		SDL_DestroyTexture(background);
 		background = nullptr;
 	}
-	
-	
 }
 
 
@@ -63,15 +56,15 @@ void Level1::Update(const float time) {
 
 void Level1::Render() {
 	for (Body* body : levelBodies) {
-		body->Render(getParentScene()->getRenderer(), getParentScene()->getProjectionMatrix());
-		body->RenderHitbox(getParentScene()->getRenderer());
+		body->Render(parentScene->getRenderer(), parentScene->getProjectionMatrix());
+		body->RenderHitbox(parentScene->getRenderer());
 	} 
 
 	if (background == nullptr) {
 		std::cout << "Forgot the background stupid" << std::endl;
 		return;
 	}
-	SDL_RenderCopy(getParentScene()->getRenderer(), background, nullptr, nullptr);
+	SDL_RenderCopy(parentScene->getRenderer(), background, nullptr, nullptr);
 }
 
 void Level1::HandleEvents(const SDL_Event& event) {

@@ -10,7 +10,7 @@ using namespace MATH;
 
 class Scene {
 public:
-	const char* name;
+	const char* name = "";
     class GameManager* game = NULL;
 	virtual ~Scene() {};
 
