@@ -7,6 +7,10 @@
 
 #include "PlayerBody.h"
 
+#include <SDL_image.h>
+
+#include "Scene.h"
+
 bool PlayerBody::OnCreate(){
 	//Create the melee hitbox
 	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);

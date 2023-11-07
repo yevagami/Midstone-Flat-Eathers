@@ -4,7 +4,7 @@
 //#include <SDL_ttf.h>
 #include "Window.h"
 #include "Timer.h"
-#include "Scene.h"
+//#include "Scene.h"
 //#include <iostream>
 
 #include "Audio.h"
@@ -19,7 +19,7 @@
 
 namespace settings {
 	inline float MasterVolume;
-	inline float MaxVolume = 100.0f;
+	inline float MaxVolume = 1.0f;
 
 	inline float SoundEffectVolume;
 	inline float MusicVolume;
@@ -30,7 +30,7 @@ namespace settings {
 }
 
 	inline ConsistentConsole cc(true);
-	inline PrettyPrinting pp;
+	inline PrettyPrinting pp(pink, purple, cyan);
 
 
 
@@ -70,8 +70,9 @@ private:
 	int mobsLeft;
 	bool playerMovedToTheNextLvl = true;
 
+	//	michael's playground uwu
+	bool isPaused;
 
-	//	sound stuff (test - Michael)
 
 
 
@@ -90,6 +91,7 @@ public:
 
 	void Run();
 	void handleEvents();
+	void Update(float deltaTime_);
 	void LoadScene( int i );
 	void PassTheLevel(); //new
     bool ValidateCurrentScene();

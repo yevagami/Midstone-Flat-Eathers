@@ -103,9 +103,9 @@ void SceneUI::OnDestroy() {
 
 
 	///	newLevel objects aren't special enough memory wise to warrent calling a whole ahh OnDestroy() here. we want to use *delete* as this "newLevel" is merely a pointer to the actual object, not the object itself
-	delete newLevel; // - michael
+	//delete newLevel; // - michael
 	///	!!!BaseLevel needs a non-virtual destructor!!!
-	//newLevel->OnDestroy();
+	newLevel->OnDestroy();
 
 
 

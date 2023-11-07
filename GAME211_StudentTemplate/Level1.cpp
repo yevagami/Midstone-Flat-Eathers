@@ -1,4 +1,7 @@
 #include "Level1.h"
+#include "Scene.h"
+
+#include <SDL_image.h>
 
 Level1::Level1(Scene* currentScene) { 
 	setParentScene(currentScene);
@@ -12,17 +15,24 @@ bool Level1::OnCreate()
 }
 
 void Level1::OnDestroy() {
+	//	clearing bodies that exist in the level
 	for (Body* body : levelBodies) {
 		body->OnDestroy();
 		delete body;
-	}
+	} levelBodies.clear();
+
+	//	trash bin lmao
 	for (Body* body : trashBodies) {
 		body->OnDestroy();
 		delete body;
+	} trashBodies.clear();
+
+	if (background) {
+		SDL_DestroyTexture(background);
+		background = nullptr;
 	}
-	delete background;
-	levelBodies.clear();
-	trashBodies.clear();
+	
+	
 }
 
 

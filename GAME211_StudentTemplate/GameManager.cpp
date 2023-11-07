@@ -53,6 +53,7 @@ GameManager::GameManager() {
 	windowPtr = nullptr;
 	timer = nullptr;
 	isRunning = true;
+	isPaused = false;
 	currentScene = nullptr;
 }
 
@@ -66,6 +67,8 @@ bool GameManager::OnCreate() {
 
 	///	sound
 	::InitializeSoundEffects();
+
+
 
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {
@@ -106,7 +109,9 @@ void GameManager::Run() {
 	while (isRunning) {
 		handleEvents();
 		timer->UpdateFrameTicks();
-		currentScene->Update(timer->GetDeltaTime());
+		float deltaTime = timer->GetDeltaTime();
+		Update(deltaTime);
+		currentScene->Update(deltaTime);
 		currentScene->Render();
 
 		/// Keep the event loop running at a proper rate
@@ -130,7 +135,7 @@ void GameManager::handleEvents() {
 		else if (event.type == SDL_KEYDOWN) {
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
-				isRunning = false;	//	quits the game when ESCAPE is pressed
+				isPaused = !isPaused;
 				break;
 			case SDL_SCANCODE_Q:
 				isRunning = false;	//	quits the game when Q is pressed
@@ -160,6 +165,12 @@ void GameManager::handleEvents() {
 		}
 		currentScene->HandleEvents(event);
 	}
+}
+
+void GameManager::Update(float deltaTime_) {
+
+
+
 }
 
 
