@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Level1.h"
 #include <vector>
+
 #include "Menu.h"
 
 using namespace MATH;
@@ -20,7 +21,7 @@ private:
 
 public:
 
-	Level* level_1 = nullptr;
+	class Level* level_1;
 
 	bool isBopping;
 

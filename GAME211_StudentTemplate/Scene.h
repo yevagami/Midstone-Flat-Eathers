@@ -12,7 +12,12 @@ class Scene {
 public:
 	const char* name = "";
     class GameManager* game = NULL;
-	virtual ~Scene() {};
+
+	Scene()
+	{} 
+
+	virtual ~Scene()
+	{}
 
 	virtual bool OnCreate() = 0;
 	virtual void OnDestroy() = 0;

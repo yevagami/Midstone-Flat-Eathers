@@ -1,16 +1,15 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 #include <SDL.h>
-//#include <SDL_ttf.h>
+#include <SDL_ttf.h>
 #include "Window.h"
 #include "Timer.h"
-//#include "Scene.h"
+#include "Scene.h"
 //#include <iostream>
 
 #include "Audio.h"
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
-#include "SceneUI.h"
 
 
 
@@ -71,8 +70,8 @@ private:
 	//	michael's playground uwu
 	bool isPaused;
 
-	//	settings (abstraction)
-	static void setDefaultSettings() {
+	//	settings default values
+	void setDefaultSettings() {
 		settings::FPS = 60;
 		settings::MasterVolume = 1.0f;
 		settings::MaxVolume = 1.0f;
@@ -83,14 +82,14 @@ private:
 
 	void instanciateMenu(const bool state_) const {
 		if (state_) {
-			menuScene->OnCreate();
+			//menuScene->OnCreate();
 		} else {
-			menuScene->OnDestroy();
+			//menuScene->OnDestroy();
 		}
 	}
 
 	void loadMenu(const bool enabled_) const {
-		instanciateMenu(enabled_);
+		//instanciateMenu(enabled_);
 	}
 
 public:

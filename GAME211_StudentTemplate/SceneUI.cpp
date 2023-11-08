@@ -115,65 +115,16 @@ void SceneUI::HandleEvents(const SDL_Event& event_) {
 	PrettyPrinting::printMouseCoords(event_);
 	for (const auto button : allButtons) { button->HandleEvents(event_); }
 
-	switch(event_.key.keysym.scancode) {
+	switch (event_.key.keysym.scancode) {
 	case SDLK_ESCAPE || SDLK_p:
 		pauseMenuOpen = !pauseMenuOpen;
 		break;
 
-		default:
+	default:
 		break;
 	}
 
 
 	// send events to player as needed
 	//game->getPlayer()->HandleEvents(event);
-
-#pragma region debuggingKeys
-	if (event_.key.keysym.sym == SDLK_u && event_.type == SDL_KEYDOWN) {
-		///	CONSOLE TESTING
-		//	console messages display: how to call the method
-		cc.log(error, "error: this is an error message");
-		cc.log(warning, "warning: this is a warning message");
-		cc.log(update, "update: this is an update message");
-		cc.log(not_error, "this is not an error");
-	}
-
-
-	if (event_.key.keysym.sym == SDLK_i && event_.type == SDL_KEYDOWN) {
-		using namespace ui;
-
-		cc.log(update, "toggling all button visibility");
-		for (auto button : allButtons) {
-			bool state = button->isActive;
-			button->isActive = !state;
-		}
-
-	}
-
-
-	if (event_.key.keysym.sym == SDLK_o && event_.type == SDL_KEYDOWN) {
-	}
-
-
-	if (event_.key.keysym.sym == SDLK_n && event_.type == SDL_KEYDOWN) {
-		PrettyPrinting::printVS(euiMap.findEntitiesByData(string("dog")));
-		PrettyPrinting::printVS(euiMap.findEntitiesByData(string("meow")));
-	}
-
-
-	if (event_.key.keysym.sym == SDLK_m && event_.type == SDL_KEYDOWN) {
-		///	ENTITY MAP TESTING
-		//	to insert into an entit map...
-		euiMap.insertEntity(string("rex"), string("is my dog"));
-		euiMap.insertEntity(string("deedee"), string("was my dog ;-;"));
-		euiMap.insertEntity(string("turnip"), string("is my cat"));
-		euiMap.insertEntity(string("adriel"), string("is adriel"));
-		//	DELETING the test entity
-		euiMap.removeEntity(string("test"));
-		//	printing...
-		PrettyPrinting::printEM(euiMap);
-		//	to serialize that entity map...
-		euiMap.saveEntityMapToFile("SaveData/entitymap.txt");
-	}
-#pragma endregion
 }
