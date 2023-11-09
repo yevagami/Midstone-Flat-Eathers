@@ -20,7 +20,7 @@ public:
 	bool OnCreate() override;
 	void OnDestroy() override;
 	void Update(const float time) override;
-	void Render() override;
+	void Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) override;
 	void HandleEvents(const SDL_Event& event) override;
 };
 #endif

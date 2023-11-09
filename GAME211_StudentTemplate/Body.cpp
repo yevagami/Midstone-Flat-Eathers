@@ -1,18 +1,5 @@
 #include "Body.h"
-#include "Scene.h"
-
-//Body::Body() {
-//    pos = Vec3();
-//    vel = Vec3();
-//    accel = Vec3();
-//	mass = 1.0f;
-//    radius = 0.0f;
-//    orientation = 0.0f;
-//    rotation = 0.0f;
-//    angular = 0.0f;
-//
-//	image = nullptr;
-//}
+#include "Level.h"
 
 Body::Body (
     Vec3 pos_, Vec3 vel_, Vec3 accel_,
@@ -35,6 +22,16 @@ Body::Body (
     image = nullptr;
 }
 
+
+Body::Body(Level* parentLevel_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_){
+    parentLevel = parentLevel_;
+    pos = pos_;
+    scale = scale_;
+    LoadHitbox(w_ * scale_.x, h_ * scale_.y);
+    image = image_;
+    texture = SDL_CreateTextureFromSurface(parentLevel->getParentScene()->getRenderer(), image);
+}
+
 void Body::OnDestroy() {
     if (texture) {
         SDL_DestroyTexture(texture);
@@ -47,29 +44,19 @@ void Body::OnDestroy() {
     }
 
     delete hitbox;
-    hitbox = nullptr;
 
-    parentScene = nullptr;
-}
-
-Body::Body(Scene* parentScene_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_){
-    parentScene = parentScene_;
-    pos = pos_;
-    scale = scale_;
-    LoadHitbox(w_ * scale_.x, h_ * scale_.y);
-    image = image_;
-    texture = SDL_CreateTextureFromSurface(parentScene->getRenderer(), image);
+    parentLevel = nullptr;
 }
 
 void Body::LoadHitbox(float w_, float h_) {
     hitbox = new Hitbox(w_, h_, pos.x, pos.y);
 }
 
-void Body::ApplyForce( Vec3 force_ ) {
+void Body::ApplyForce(Vec3 force_) {
     accel = force_ / mass;
 }
 
-void Body::Update( float deltaTime ) {
+void Body::Update(float deltaTime) {
     vel = vel + accel * deltaTime;
     pos = pos + vel * deltaTime + accel * (0.5f * deltaTime * deltaTime);
     
@@ -78,13 +65,13 @@ void Body::Update( float deltaTime ) {
     rotation += angular * deltaTime;
 
     //Updates the hitbox's position based on the projection matrix
-    if (parentScene == nullptr) { //guard clause, exits the function early 
-        std::cout << "Parent scene is not set";
+    if (parentLevel == nullptr) { //guard clause, exits the function early 
+        std::cout << "Parent level is not set\n";
         return; 
     }
 
     if (hitbox == nullptr) { return; }
-    Matrix4 projectionMat = parentScene->getProjectionMatrix();
+    Matrix4 projectionMat = parentLevel->getParentScene()->getProjectionMatrix();
     Vec3 hitboxPos = projectionMat * pos;
     hitbox->x = hitboxPos.x - hitbox->w * 0.5f;
     hitbox->y = hitboxPos.y - hitbox->h * 0.5f;

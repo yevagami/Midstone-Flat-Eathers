@@ -8,9 +8,13 @@ PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	renderer = SDL_GetRenderer(window);
 	xAxis = 1600.0f;
 	yAxis = 900.0f;
+
+	player = nullptr;
+	currentLevel = nullptr;
 }
 
 bool PlayScene::OnCreate(){
+	//SDL window stuff
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 
@@ -24,6 +28,13 @@ bool PlayScene::OnCreate(){
 	//Set the name of the scene for organizing purposes
 	name = "Play Scene";
 
+	//Creating the level
+	currentLevel = new Level_test(this);
+	if (!currentLevel->OnCreate()) {
+		std::cout << "Something went wrong with the Level\n";
+	}
+
+	//Creating the player body
 	player = new PlayerBody(
 		this,
 		Vec3(xAxis * 0.5f, yAxis * 0.5f, 0.0f),
@@ -31,25 +42,34 @@ bool PlayScene::OnCreate(){
 		128.0f,
 		128.0f
 	);
-	player->OnCreate();
+	if (!player->OnCreate()) {
+		std::cout << "Something went wrong with the Player object\n";
+		return false;
+	};
+	player->setParentLevel(currentLevel);
+	currentLevel->levelBodies.push_back(player);
 
 	return true;
 }
 
 void PlayScene::OnDestroy(){
+	currentLevel->OnDestroy();
+	delete currentLevel;
+
 	player->OnDestroy();
 	delete player;
 }
 
 void PlayScene::Update(const float time){
-	player->Update(time);
+	CameraFollowPlayer(player);
+	currentLevel->Update(time);
 }
 
 void PlayScene::Render(){
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	player->Render(renderer, projectionMatrix);
+	currentLevel->Render(renderer, projectionMatrix);
 
 	SDL_RenderPresent(renderer);
 }

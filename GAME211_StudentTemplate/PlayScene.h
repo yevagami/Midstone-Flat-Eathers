@@ -1,9 +1,11 @@
 #pragma once
 #include "Scene.h"
 #include "PlayerBody.h"
+#include "Level_test.h"
 
 class PlayScene : public Scene{
 private:
+	//Basic scene stuff
 	float xAxis;
 	float yAxis;
 	SDL_Window* window;
@@ -11,9 +13,13 @@ private:
 	Matrix4 projectionMatrix;
 	Matrix4 inverseProjection;
 
-public:
-	PlayerBody* player = nullptr;
+	//Player 
+	PlayerBody* player;
 	void CameraFollowPlayer(PlayerBody* p);
+
+	//Level 
+	Level* currentLevel;
+public:
 
 	//Constructor/destructors
 	PlayScene(SDL_Window* sdlWindow_, GameManager* game_);

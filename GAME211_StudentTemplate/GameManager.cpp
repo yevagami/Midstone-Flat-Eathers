@@ -91,7 +91,7 @@ bool GameManager::OnCreate() {
 	//	load the menu scene on top of the current scene
 	menuScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 	// select scene for specific assignment
-	currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
+	currentScene = new PlayScene(windowPtr->GetSDL_Window(), this);
 
 
 	// need to create Player before validating scene

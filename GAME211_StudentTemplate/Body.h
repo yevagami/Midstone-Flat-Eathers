@@ -31,13 +31,18 @@ struct Transform {
 		  bodyAngular(angular_) {}
 };
 
-class Scene;
+class Level;
 class Body {
-private:
-	//The scene where this body belongs to
-	Scene* parentScene = nullptr;
-
 public:
+	//Enum for body types
+	enum TYPE{
+		body = 0, 
+		solid = 1, 
+		projectile = 2, 
+		player = 3
+	};
+	TYPE type = body;
+
 	Body(
 		Vec3 pos_, Vec3 vel_ = Vec3(0, 0, 0), Vec3 accel_ = Vec3(0, 0, 0),
 		float mass_ = 1.0f,
@@ -64,7 +69,7 @@ public:
 	}
 	//Basic body constuctor containing everything we need to make it work (pos, scale, hitbox w&h, texture)
 	Body(
-		Scene* parentScene_,
+		Level* parentLevel_,
 		Vec3 pos_,
 		Vec3 scale_,
 		int w_,
@@ -87,13 +92,14 @@ public:
 	virtual void ApplyForce(Vec3 force_);
 	virtual Vec3 getPos() { return pos; }
 	virtual Vec3 getVel() { return vel; }
+	virtual void setVel(Vec3 vel_) { vel = vel_; }
 	virtual Vec3 getAccel() { return accel; }
 	virtual float getMass() { return mass; }
 	virtual float getOrientation() { return orientation; }
 	virtual float getRotation() { return rotation; }
 	virtual float getAngular() { return angular; }
-	Scene* getParentScene() { return parentScene; }
-	void setParentScene(Scene* parentScene_) { parentScene = parentScene_; }
+	Level* getParentLevel() { return parentLevel; }
+	void setParentLevel(Level* parentLevel_) { parentLevel = parentLevel_; }
 
 	//Texture related methods
 	virtual void setImage(SDL_Surface* image_) { image = image_; }
@@ -108,6 +114,8 @@ public:
 
 protected:
 	// inherited classes can access this
+	Level* parentLevel = nullptr;
+
 	Vec3 pos;
 	Vec3 vel;
 	Vec3 accel;

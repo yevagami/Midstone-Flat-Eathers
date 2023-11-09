@@ -102,7 +102,7 @@ void SceneUI::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	level_1->Render();
+	level_1->Render(renderer, projectionMatrix);
 
 	//	render the buttons
 	for (auto* button : allButtons) { button->Render(renderer); }

@@ -64,15 +64,15 @@
     <Filter Include="Source Files\Scene\Levels">
       <UniqueIdentifier>{d05927b8-438f-4e57-8017-0fb115733291}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{5e82a0b2-a8c7-4573-b6d2-f298a35871a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{f9cd07e4-f280-4b09-b995-48fce41bcaf3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Body.cpp">
@@ -123,9 +123,6 @@
     <ClCompile Include="KeybindHandler.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="UIManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scene3.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -135,23 +132,32 @@
     <ClCompile Include="SceneUI.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Solid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="projectile.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
     <ClCompile Include="Level1.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_test.cpp">
+      <Filter>Source Files\Scene\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files\Visualization</Filter>
+    </ClCompile>
+    <ClCompile Include="Solid.cpp">
+      <Filter>Source Files\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Body.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
@@ -209,9 +215,6 @@
     <ClInclude Include="KeybindHandler.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="UIManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene3.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
@@ -224,17 +227,32 @@
     <ClInclude Include="SceneUI.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Solid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="projectile.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-    <ClInclude Include="BaseLevel.h">
-      <Filter>Header Files\Scene\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="Level1.h">
       <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level_test.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>Header Files\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Header Files\Visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -54,7 +54,7 @@ void Level1::Update(const float time) {
 	}
 }
 
-void Level1::Render() {
+void Level1::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	for (Body* body : levelBodies) {
 		body->Render(parentScene->getRenderer(), parentScene->getProjectionMatrix());
 		body->RenderHitbox(parentScene->getRenderer());

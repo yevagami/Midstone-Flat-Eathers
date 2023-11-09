@@ -6,9 +6,7 @@
 //
 
 #include "PlayerBody.h"
-
 #include <SDL_image.h>
-
 #include "Scene.h"
 
 bool PlayerBody::OnCreate(){
@@ -26,13 +24,19 @@ bool PlayerBody::OnCreate(){
     currentState = idle;
 
     //add a texture to the player
-    image = IMG_Load( "Textures/programmer_art/player.png");
-	SDL_Renderer* renderer = getParentScene()->getRenderer();
+    image = IMG_Load("Textures/programmer_art/player.png");
+	SDL_Renderer* renderer = parentScene->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
     if (image == nullptr) {
         std::cerr << "Can't open the image" << std::endl;
         return false;
     }
+
+	//Failsafe incase the programmer forgets the parentScene
+	if (parentScene == nullptr) { 
+		std::cout << "You forgot the parentScene for the Player";
+		return false; 
+	}
     return true;
 }
 
@@ -157,7 +161,7 @@ void PlayerBody::Update( float deltaTime ){
 	//Gets the direction of the mouse relative to the player's position
 	int mouseX;
 	int mouseY;
-	Matrix4 projectionMat = Body::getParentScene()->getProjectionMatrix();
+	Matrix4 projectionMat = parentScene->getProjectionMatrix();
 	SDL_GetMouseState(&mouseX, &mouseY);
 	Vec3 playerPos = projectionMat * pos;
 	Vec3 mouseDir = VMath::normalize(Vec3(
