@@ -1,17 +1,19 @@
 #include "Level_Test.h"
 
 bool Level_test::OnCreate(){
-
-	Solid* wall = new Solid(
-		this,
-		Vec3(1600.0f / 2.0f + 500.0f, 900.0f / 2.0f, 0.0f),
-		Vec3(5.0f, 1.0f, 1.0f),
-		128.0f,
-		128.0f,
-		IMG_Load("Textures/programmer_art/block_cap.png")
-	);
-	levelBodies.push_back(wall);
-	wall = nullptr;
+	Vec3 tileDistance = parentScene->getInverseMatrix() * Vec3(128.0f, 128.0f, 128.0f);
+	for (int i = 0; i < 5; i++) {
+		Solid* wall = new Solid(
+			this,
+			Vec3(1600.0f / 2.0f + (tileDistance.x * i) + 500.0f, 900.0f / 2.0f, 0.0f),
+			Vec3(1.0f, 1.0f, 1.0f),
+			128.0f,
+			128.0f,
+			IMG_Load("Textures/programmer_art/block_cap.png")
+		);
+		levelBodies.push_back(wall);
+		wall = nullptr;
+	}
 	return true;
 }
 
@@ -28,6 +30,7 @@ void Level_test::OnDestroy(){
 
 void Level_test::Update(const float time){
 	for(Body* body : levelBodies) {
+		//std::cout << body->type << "\n";
 		body->Update(time);
 
 		//Collision checks
@@ -39,9 +42,27 @@ void Level_test::Update(const float time){
 		}
 	}
 
+	//Bodies that are in queue for spawning will now be placed into the main body vector
+	//c++ doesn't like it when you are pushing something to a vector
+	//while you are iterating over it
+	if (!spawningBodies.empty()) {
+		for (Body* spawn : spawningBodies) {
+			levelBodies.push_back(spawn);
+			spawn = nullptr;
+		}
+		spawningBodies.clear();
+	}
+
 	//Cleanup
 	if (trashBodies.empty()) { return; }
-	for (Body* trash : trashBodies) { delete trash; }
+	for (Body* trash : trashBodies) {
+		auto it = std::find(levelBodies.begin(), levelBodies.end(), trash);
+		if (it != levelBodies.end()) {
+			levelBodies.erase(it);
+		}
+		trash->OnDestroy();
+		delete trash;
+	}
 	trashBodies.clear();
 }
 

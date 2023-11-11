@@ -14,6 +14,7 @@ public:
 	//"Aka the mortuary" -Diana Astafyeva
 	std::vector<Body*>levelBodies;
 	std::vector<Body*>trashBodies;
+	std::vector<Body*>spawningBodies;
 
 	//Fundamental methods (create, update, render, handle input, destroy)
 	virtual bool OnCreate() = 0;

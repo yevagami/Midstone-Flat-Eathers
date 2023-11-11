@@ -9,7 +9,7 @@ public:
 	Solid() {}
 	Solid(float x_, float y_, float w_, float h_);
 	Solid(Level* parentLevel_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_) : 
-		Body(parentLevel_, pos_, scale_, w_, h_, image_) { type = solid; }
+		Body(parentLevel_, pos_, scale_, w_, h_, image_) { type = SOLID; }
 
 	//Override methods
 	void OnCollide(Body* other, float deltaTime) override;

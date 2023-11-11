@@ -1,13 +1,8 @@
-//
-//  PlayerBody.cpp
-//  DemoAI
-//
-//  Created by Gail Harris on 2021-Dec-23.
-//
-
 #include "PlayerBody.h"
 #include <SDL_image.h>
 #include "Scene.h"
+#include "Level.h"
+#include "projectile.h"
 
 bool PlayerBody::OnCreate(){
 	//Create the melee hitbox
@@ -16,7 +11,9 @@ bool PlayerBody::OnCreate(){
     //Creating timers
     dash_timer = new Clock(dashDuration, false);
     dash_cooldown = new Clock(dashCooldown, false);
+	shooting_cooldown = new Clock(shootingCooldown, false);
     cooldowns.push_back(dash_cooldown);
+	cooldowns.push_back(shooting_cooldown);
 
     //set the maxSpeed to the currentSpeed
     currentSpeed = walkSpeed;
@@ -71,10 +68,12 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 	if (SDL_MOUSEBUTTONDOWN) {
 
 		if (event.button.button == SDL_BUTTON_LEFT) {
+			currentState = melee;
 			std::cout << "Pressed left\n";
 		}
 
-		if (event.button.button == SDL_BUTTON_RIGHT) {
+		if (event.button.button == SDL_BUTTON_RIGHT && currentState != shooting && (!shooting_cooldown->hasStarted || shooting_cooldown->completed)) {
+			currentState = shooting;
 			std::cout << "Pressed right\n";
 		}
 	}
@@ -89,10 +88,7 @@ void PlayerBody::Update( float deltaTime ){
 		canMove = true;
 		break;
 
-
-		//Walk state
 	case walk:
-		//std::cout << "walk state \n";
 		currentSpeed = walkSpeed;
 		maxSpeed = walkSpeed;
 		break;
@@ -100,7 +96,6 @@ void PlayerBody::Update( float deltaTime ){
 
 		//Dash state
 	case dash:
-		//std::cout << "dash state " << "time elapsed: " << dash_timer->timer << "\n";
 		canMove = false; //disables the player's movement input
 		dash_timer->Update(deltaTime);
 
@@ -117,7 +112,7 @@ void PlayerBody::Update( float deltaTime ){
 			vel = Vec3(playerDirection.x * currentSpeed, playerDirection.y * currentSpeed, 0.0f);
 		}
 
-
+		//Resets the timer when the duration has elapsed 
 		if (dash_timer->completed) {
 			//set the current and max speed;
 			currentSpeed = walkSpeed;
@@ -129,6 +124,25 @@ void PlayerBody::Update( float deltaTime ){
 			vel = Vec3(); //reset the player's speed and set the state to idle
 			currentState = idle;
 		}
+		break;
+
+	case melee:
+		currentState = idle;
+		break;
+
+	case shooting:
+		shooting_cooldown->Start();
+		projectile* bullet = new projectile(
+			parentLevel,
+			pos,
+			mouseDirection * projectileSpeed,
+			Vec3(0.1f, 0.1f, 0.1f),
+			64, 64,
+			1.0f
+		);
+		parentLevel->spawningBodies.push_back(bullet);
+		bullet = nullptr;
+		currentState = idle;
 		break;
 	}
 
@@ -159,25 +173,8 @@ void PlayerBody::Update( float deltaTime ){
 
 	//Update the melee hitbox
 	//Gets the direction of the mouse relative to the player's position
-	int mouseX;
-	int mouseY;
-	Matrix4 projectionMat = parentScene->getProjectionMatrix();
-	SDL_GetMouseState(&mouseX, &mouseY);
-	Vec3 playerPos = projectionMat * pos;
-	Vec3 mouseDir = VMath::normalize(Vec3(
-		mouseX - playerPos.x,
-		mouseY - playerPos.y,
-		0.0f
-	));
-	//std::cout << mouseDir.x << ", " << mouseDir.y << "\n";
-	Hitbox* playerHitbox = Body::getHitbox();
-	Vec3 hitboxPos = Vec3(
-		playerPos.x + (mouseDir.x * (50.0f + playerHitbox->w * 0.5f)),
-		playerPos.y + (mouseDir.y * (50.0f + playerHitbox->h * 0.5f)),
-		0.0f
-	);
-	meleeHitbox->x = hitboxPos.x - meleeHitbox->w * 0.5f;
-	meleeHitbox->y = hitboxPos.y - meleeHitbox->h * 0.5f;
+	updateMouseDir();
+	updateMeleeHitbox();
 }
 
 void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
@@ -209,3 +206,32 @@ PlayerBody::~PlayerBody(){
 	OnDestroy();
 }
 
+void PlayerBody::updateMouseDir(){
+	//Gets the direction of the mouse relative to the player's position
+	Matrix4 projectionMat = parentScene->getInverseMatrix();
+	int mouseX;
+	int mouseY;
+	SDL_GetMouseState(&mouseX, &mouseY);
+
+	Vec3 mousePos = projectionMat * Vec3(mouseX, mouseY, 0.0f);
+
+	Vec3 mouseDir = VMath::normalize(Vec3(
+		mousePos.x - pos.x,
+		mousePos.y - pos.y,
+		0.0f
+	));
+	//std::cout << "(" << mouseDir.x << ", " << mouseDir.y << ")" << "(" << pos.x << ", " << pos.y << ")\n";
+	mouseDirection = mouseDir;
+}
+
+void PlayerBody::updateMeleeHitbox() {
+	Matrix4 projectionMat = parentScene->getProjectionMatrix();
+	Vec3 hitboxPos = Vec3(
+		pos.x + (mouseDirection.x * (meleeHitbox->w + 100.0f)),
+		pos.y + (mouseDirection.y * (meleeHitbox->h + 100.0f)),
+		0.0f
+	);
+	Vec3 hitboxPosScreen = projectionMat * hitboxPos;
+	meleeHitbox->x = hitboxPosScreen.x - meleeHitbox->w * 0.5f;
+	meleeHitbox->y = hitboxPosScreen.y - meleeHitbox->h * 0.5f;
+}

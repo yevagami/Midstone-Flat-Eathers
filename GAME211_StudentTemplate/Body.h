@@ -36,12 +36,12 @@ class Body {
 public:
 	//Enum for body types
 	enum TYPE{
-		body = 0, 
-		solid = 1, 
-		projectile = 2, 
-		player = 3
+		BODY = 0, 
+		SOLID = 1, 
+		PROJECTILE = 2, 
+		PLAYER = 3
 	};
-	TYPE type = body;
+	TYPE type = BODY;
 
 	Body(
 		Vec3 pos_, Vec3 vel_ = Vec3(0, 0, 0), Vec3 accel_ = Vec3(0, 0, 0),

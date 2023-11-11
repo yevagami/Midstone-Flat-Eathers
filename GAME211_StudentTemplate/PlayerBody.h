@@ -13,13 +13,14 @@
 #include "GameManager.h"
 #include "Clock.h"
 #include <vector>
-class Scene;
 
+class Scene;
 class PlayerBody : public Body{
 protected:
     Scene* parentScene = nullptr;
 
 public:
+    int counter = 0;
     //Constructors
     PlayerBody() {}
 
@@ -29,7 +30,7 @@ public:
         pos = pos_;
         scale = scale_;
         Body::LoadHitbox(w_, h_);
-        type = player;
+        type = PLAYER;
     }
 
     // use the base class versions of getters
@@ -42,13 +43,24 @@ public:
     void OnDestroy() override;
     ~PlayerBody();
 
+    //Extra methods
+    void updateMouseDir();
+    void updateMeleeHitbox();
+
 private:
-    //melee hitbox
+    Vec3 mouseDirection = {};
+
+    //melee variables
     Hitbox* meleeHitbox = nullptr;
+
+    //shooting variables
+    float projectileSpeed = 500.0f;
+    float shootingCooldown = 0.5f;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
+    Clock* shooting_cooldown = nullptr;
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables
