@@ -1,11 +1,11 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
+#include <functional>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "Window.h"
 #include "Timer.h"
 #include "Scene.h"
-//#include <iostream>
 
 #include "Audio.h"
 #include "ConsistentConsole.h"
@@ -13,28 +13,56 @@
 
 
 
-
+	//	global classes
 	inline Sound sound;
+	inline ConsistentConsole cc(true);
+	inline PrettyPrinting pp(pink, purple, cyan);
+
+
 	void InitializeSoundEffects();
 
 namespace settings {
-	inline float MasterVolume;
 	inline float MaxVolume = 1.0f;
+	inline float MasterVolume;
 
 	inline float SoundEffectVolume;
 	inline float MusicVolume;
 
 	inline int FPS;
 
-	inline void SetVolume(float newVolume_) {
-		sound.setVolume(newVolume_);
+	inline void SetFPS(const int newFPS_) {
+		if (newFPS_ != 30 || newFPS_ != 60) { return; }
+		settings::FPS = newFPS_;
 	}
+
+	
+	inline void SetMusicVolume(const float newMusicVolume_) {
+		if (newMusicVolume_ < 0.0f || newMusicVolume_ > 1.0f) { return; }
+
+		MusicVolume = newMusicVolume_;
+		sound.setGroupVolume(type::music, MusicVolume * MasterVolume);
+	}
+
+	inline void SetSFXVolume(const float newSFXVolume_) {
+		if (newSFXVolume_ < 0.0f || newSFXVolume_ > 1.0f) { return; }
+
+		SoundEffectVolume = newSFXVolume_;
+		sound.setGroupVolume(type::sfx, SoundEffectVolume * MasterVolume);
+	}
+
+	inline void SetMasterVolume(const float newMaterVolume_) {
+		if (newMaterVolume_ < 0.0f || newMaterVolume_ > 1.0f) { return; }
+
+		//	compare the newMaster to the MaxVolume and take the lowest
+		MasterVolume = std::min(newMaterVolume_, MaxVolume);
+		sound.setVolume(MasterVolume);
+
+		//update the other volumes cuz the master changed
+		SetMusicVolume(MusicVolume);
+		SetSFXVolume(SoundEffectVolume);
+	}
+
 }
-
-	inline ConsistentConsole cc(true);
-	inline PrettyPrinting pp(pink, purple, cyan);
-
-
 
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
@@ -107,7 +135,7 @@ public:
 	void Run();
 	void HandleEvents();
 	void Update(float deltaTime_);
-	void LoadScene( int i );
+	void LoadScene( int i_ );
     bool ValidateCurrentScene();
 
 

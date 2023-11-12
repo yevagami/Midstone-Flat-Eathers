@@ -3,6 +3,11 @@
 #include <unordered_map>
 #include <string>
 
+namespace type {
+	extern std::string music;
+	extern std::string sfx;
+	extern std::string test;
+}
 
 class Sound {
 public:
@@ -17,7 +22,6 @@ public:
 	() { if (engine) { engine->drop(); } }
 
 	///	play, pause, resume, stop
-
 	void loadSound(const std::string& label_, const char* soundFile_);
 	void playSound(const std::string& label_, bool looped_ = false, float volume_ = 1.0f);
 	void playSoundDirectly(const char* soundFile_, bool looped_ = false, float volume_ = 1.0f) const;
@@ -28,19 +32,21 @@ public:
 	//  stops all currently playing sounds
 	void stopAllSounds() const;
 
-	///	manipulation & control
-
+	///	official irrklang supported volume control
 	void setVolume(float volume_) const;
 	void setGroupVolume(const std::string& groupLabel_, float volume_);
 	void createSoundGroup(const std::string& groupLabel_);
 	void addToSoundGroup(const std::string& label_, const std::string& groupLabel_);
 
-	/// checks & logic
+	/// groups (manual)
+	std::unordered_map<std::string, std::vector<std::string>> soundGroups; //	not the map of string to vector<string>
+	std::vector<irrklang::ISound*> ambientSounds;
+	std::vector<irrklang::ISound*> sfxSounds;
+	std::vector<irrklang::ISound*> musicSounds;
 
 	//	the sound engine... public :O
 	irrklang::ISoundEngine* engine;
 
 private:
 	std::unordered_map<std::string, irrklang::ISoundSource*> soundSources;
-	std::unordered_map<std::string, std::vector<std::string>> soundGroups; //	not the map of string to vector<string>
 };

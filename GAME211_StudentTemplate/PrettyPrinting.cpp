@@ -8,11 +8,13 @@ using namespace std;
 ConsistentConsole ccPrint(true);
 
 
-PrettyPrinting::PrettyPrinting(const char* primary, const char* secondary, const char* accent) {
-	themePrimary = primary;
-	themeSecondary = secondary;
-	themeAccent = accent;
+PrettyPrinting::PrettyPrinting(const char* primary_, const char* secondary_, const char* accent_) {
+	themePrimary = primary_;
+	themeSecondary = secondary_;
+	themeAccent = accent_;
 
+
+	eMap = nullptr;
 }
 
 void PrettyPrinting::printXYZ(Vec3 v) {
@@ -140,8 +142,8 @@ void PrettyPrinting::printEM(EntityMap& entityMap) {
 void PrettyPrinting::printMouseCoords(const SDL_Event& event_) {
 	if (event_.type == SDL_MOUSEBUTTONDOWN) {
 		if (event_.button.button == SDL_BUTTON_LEFT) {
-			int mx = event_.button.x;
-			int my = event_.button.y;
+			const int mx = event_.button.x;
+			const int my = event_.button.y;
 			ccPrint.colour(pink);
 			std::cout << mx << ", " << my << std::endl;
 			ccPrint.colour(clear);

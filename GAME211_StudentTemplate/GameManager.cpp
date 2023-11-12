@@ -3,14 +3,10 @@
 
 #pragma region GLOBAL NAMESPACE
 void InitializeSoundEffects() {
-	///	Volumes
-	constexpr float blipsVolume = 1.0f;
-	constexpr float loudVolume = 0.1f;
-	constexpr float mybikeVolume = 1.0f;
-
 	///	Initialize sound effects here and link them to a label. Then call them from the label in-scene.
-	//	loading audio to the MAP!
+	//		music
 	sound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
+	//		sfx
 	sound.loadSound("wong", "sound/wooooooooooooong.wav");
 	sound.loadSound("flame", "sound/flame.wav");
 	sound.loadSound("space boing", "sound/space boing.wav");
@@ -20,31 +16,38 @@ void InitializeSoundEffects() {
 	sound.loadSound("ting", "sound/ting.wav");
 	sound.loadSound("boomp", "sound/boomp.wav");
 	sound.loadSound("dying printer", "sound/dying printer.wav");
+	//		test
 	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
 	sound.loadSound("oops", "sound/oops.wav");
 	sound.loadSound("gyat", "sound/gyat.wav");
 	sound.loadSound("my move", "sound/once i make my move.wav");
 
+		///	SOUND EFFECTS GROUP HERE
+	sound.createSoundGroup(type::sfx);	//	creating a sound group for sfx
 
-	sound.createSoundGroup("blips");
-	sound.addToSoundGroup("blipblip", "blips");
-	sound.addToSoundGroup("bip", "blips");
-	sound.addToSoundGroup("ting", "blips");
-	sound.addToSoundGroup("flame", "blips");
-	sound.addToSoundGroup("boomp", "blips");
-	sound.setGroupVolume("blips", blipsVolume);
+	sound.addToSoundGroup("blipblip", type::sfx);
+	sound.addToSoundGroup("bip", type::sfx);
+	sound.addToSoundGroup("ting", type::sfx);
+	sound.addToSoundGroup("flame", type::sfx);
+	sound.addToSoundGroup("boomp", type::sfx);
 
-	sound.createSoundGroup("loud");
-	sound.addToSoundGroup("big powerup", "loud");
-	sound.addToSoundGroup("wong", "loud");
-	sound.addToSoundGroup("dying printer", "loud");
-	sound.addToSoundGroup("my move", "loud");
-	sound.setGroupVolume("loud", loudVolume);
+	sound.setGroupVolume(type::sfx, settings::SoundEffectVolume); 	//	dont touch this 
 
-	sound.createSoundGroup("kiriko");
-	sound.addToSoundGroup("my bike", "kiriko");
-	sound.addToSoundGroup("gyat", "kiriko");
-	sound.setGroupVolume("kiriko", mybikeVolume);
+		///	MUSIC GROUPS HERE
+	sound.createSoundGroup(type::music);	//	creating a sound group for music
+
+	sound.addToSoundGroup("big powerup", type::music);
+	sound.addToSoundGroup("wong", type::music);
+	sound.addToSoundGroup("dying printer", type::music);
+	sound.addToSoundGroup("my move", type::music);
+
+	sound.setGroupVolume(type::music, settings::MusicVolume);	//	dont touch this 
+
+	sound.createSoundGroup(type::test);
+	sound.addToSoundGroup("oops", type::test);
+	sound.addToSoundGroup("my bike", type::test);
+	sound.addToSoundGroup("gyat", type::test);
+	sound.setGroupVolume(type::test, mybikeVolume);
 }
 #pragma endregion
 
@@ -138,6 +141,7 @@ void GameManager::HandleEvents() {
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
 				isPaused = !isPaused;
+				isRunning = false; // for now, eventually this'll enable/disable a menuScene 
 				break;
 			case SDL_SCANCODE_Q:
 				isRunning = false;	//	quits the game when Q is pressed
@@ -215,12 +219,12 @@ SDL_Renderer* GameManager::getRenderer() {
 }
 
 
-void GameManager::LoadScene(int i) {
+void GameManager::LoadScene(const int i_) {
 	// cleanup of current scene before loading another one
 	currentScene->OnDestroy();
 	delete currentScene;
 
-	switch (i) {
+	switch (i_) {
 	case 1:
 		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
 		break;

@@ -11,7 +11,7 @@
 //	printing to the console... but pretty
 class PrettyPrinting {
 public:
-	PrettyPrinting(const char* primary = pink, const char* secondary = purple, const char* accent = cyan);
+	PrettyPrinting(const char* primary_ = pink, const char* secondary_ = purple, const char* accent_ = cyan);
 
 	static void printXYZ(MATH::Vec3 v);
 	static void printXY(MATH::Vec3 v);
