@@ -2,6 +2,7 @@
 #ifndef BODY_H
 #define BODY_H
 #include <SDL.h>
+#include <SDL_image.h>
 #include <MMath.h>
 #include "Hitbox.h"
 
@@ -107,30 +108,33 @@ public:
 	virtual SDL_Surface* getImage() { return image; }
 	virtual void setTexture(SDL_Texture* texture_) { texture = texture_; }
 	virtual SDL_Texture* getTexture() { return texture; }
-	virtual void setImageSizeWorldCoords(const Vec3& imageSizeWorldCoords_) { imageSizeWorldCoords = imageSizeWorldCoords_; }
-	
+
+	//Extra methods
 	// Added this as public to deal with my demo
 	// so that mouse position can be copied into a Body.
 	void setPos(Vec3 pos_) { pos = pos_; }
+	virtual void takeDamage(float amount) { return; }
 
 protected:
 	// inherited classes can access this
 	Level* parentLevel = nullptr;
 
+	//Body variables
 	Vec3 pos;
 	Vec3 vel;
 	Vec3 accel;
 	Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
+	float currentHealth = 100;
+	float maxHealth = 100;
 	float mass;
 	float radius; // for getting near walls
 	float orientation; // facing this direction
 	float rotation; // rotating at this speed (radians per second?)
 	float angular; // angular acceleration
-
+	bool destroyFlag = false;
 	Hitbox* hitbox;
 	Transform transform;	//	constructor list struct
 
-	Vec3 imageSizeWorldCoords;
 	SDL_Surface* image = nullptr;
 	SDL_Texture* texture = nullptr;
 };

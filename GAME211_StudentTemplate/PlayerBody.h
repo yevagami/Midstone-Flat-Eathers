@@ -71,7 +71,7 @@ private:
     Vec3 movement = {};
     Vec3 playerDirection = {};
     bool canMove = true;
-    float walkSpeed = 100.0f;
+    float walkSpeed = 1000.0f;
     float dashSpeed = 1500.0f;
     float currentSpeed = 0.0f;
     float maxSpeed = 0.0f;

@@ -14,6 +14,10 @@ bool Level_test::OnCreate(){
 		wall = nullptr;
 		
 	}
+
+	Enemy* ghost = new Enemy(this, Vec3((1600.0f / 2.0f) - 1000 + 500.0f, 900.0f / 2.0f, 0.0f), Enemy::flash);
+	levelBodies.push_back(ghost);
+	ghost = nullptr;
 	return true;
 }
 
@@ -41,7 +45,7 @@ void Level_test::Update(const float time){
 				}
 			}
 		}
-	
+	}
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector

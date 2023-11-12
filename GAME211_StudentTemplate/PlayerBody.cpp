@@ -69,12 +69,12 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			currentState = melee;
-			std::cout << "Pressed left\n";
+			//std::cout << "Pressed left\n";
 		}
 
 		if (event.button.button == SDL_BUTTON_RIGHT && currentState != shooting && (!shooting_cooldown->hasStarted || shooting_cooldown->completed)) {
 			currentState = shooting;
-			std::cout << "Pressed right\n";
+			//std::cout << "Pressed right\n";
 		}
 	}
 }
@@ -127,6 +127,14 @@ void PlayerBody::Update( float deltaTime ){
 		break;
 
 	case melee:
+
+		for (Body* body : parentLevel->levelBodies) {
+			if (body->type == PLAYER) { continue; }
+			if (body->getHitbox()->collisionCheck(meleeHitbox)) {
+				if (body->type == SOLID) { std::cout << "You hit a solid\n"; }
+				if (body->type == ENEMY) { std::cout << "You hit an enemy\n"; }
+			}
+		}
 		currentState = idle;
 		break;
 

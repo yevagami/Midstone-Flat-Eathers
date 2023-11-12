@@ -47,7 +47,7 @@ void InitializeSoundEffects() {
 	sound.addToSoundGroup("oops", type::test);
 	sound.addToSoundGroup("my bike", type::test);
 	sound.addToSoundGroup("gyat", type::test);
-	sound.setGroupVolume(type::test, mybikeVolume);
+
 }
 #pragma endregion
 

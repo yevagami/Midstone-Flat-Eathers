@@ -57,6 +57,12 @@ void Body::ApplyForce(Vec3 force_) {
 }
 
 void Body::Update(float deltaTime) {
+    //If a body is flagged for deletion, push itself to the trash vector
+    if (destroyFlag) {
+        parentLevel->trashBodies.push_back(this);
+        return;
+    }
+
     vel = vel + accel * deltaTime;
     pos = pos + vel * deltaTime + accel * (0.5f * deltaTime * deltaTime);
     

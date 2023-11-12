@@ -20,7 +20,6 @@ public:
 	void OnDestroy() override;
 
 private:
-	bool destroyFlag = false;
 	float duration = 3.0f;
 	Clock* duration_timer = nullptr;
 };

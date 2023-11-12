@@ -1,5 +1,4 @@
 #include "Projectile.h"
-#include <SDL_image.h>
 #include "Level.h"
 
 Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, int w_, int h_, float duration_){
@@ -32,10 +31,6 @@ void Projectile::Update(float deltaTime){
 	duration_timer->Update(deltaTime);
 	if (duration_timer->completed && !destroyFlag) {
 		destroyFlag = true;
-	}
-
-	if (destroyFlag) {
-		parentLevel->trashBodies.push_back(this);
 	}
 
 	Body::Update(deltaTime);

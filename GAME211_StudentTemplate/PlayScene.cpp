@@ -62,7 +62,7 @@ void PlayScene::OnDestroy(){
 }
 
 void PlayScene::Update(const float time){
-	CameraFollowPlayer(player);
+	//CameraFollowPlayer(player);
 	currentLevel->Update(time);
 }
 

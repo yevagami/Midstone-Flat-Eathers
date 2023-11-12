@@ -1,6 +1,8 @@
 #pragma once
 #include "Level.h"
 #include "Solid.h"
+#include "Enemy.h"
+
 class Level_test : public Level{
 public:
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
