@@ -54,8 +54,8 @@ private:
     Hitbox* meleeHitbox = nullptr;
 
     //shooting variables
-    float projectileSpeed = 500.0f;
-    float shootingCooldown = 0.5f;
+    float projectileSpeed = 2500.0f;
+    float shootingCooldown = 0.2f;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
@@ -64,7 +64,7 @@ private:
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables
-    float dashDuration = 0.15f;
+    float dashDuration = 0.2f;
     float dashCooldown = 0.3f;
 
     //movement variables
@@ -72,7 +72,7 @@ private:
     Vec3 playerDirection = {};
     bool canMove = true;
     float walkSpeed = 100.0f;
-    float dashSpeed = 1000.0f;
+    float dashSpeed = 1500.0f;
     float currentSpeed = 0.0f;
     float maxSpeed = 0.0f;
 

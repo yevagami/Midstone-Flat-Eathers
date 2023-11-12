@@ -98,4 +98,5 @@ void PlayScene::CameraFollowPlayer(PlayerBody* p){
 
 	Matrix4 ortho = MMath::orthographic(left, right, top, bottom, 0.0f, 1.0f);
 	projectionMatrix = ndc * ortho;
+	inverseProjection = MMath::inverse(projectionMatrix);
 }

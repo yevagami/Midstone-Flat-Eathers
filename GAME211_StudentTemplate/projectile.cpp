@@ -1,8 +1,8 @@
-#include "projectile.h"
+#include "Projectile.h"
 #include <SDL_image.h>
 #include "Level.h"
 
-projectile::projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, int w_, int h_, float duration_){
+Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, int w_, int h_, float duration_){
 	parentLevel = parentLevel_;
 	pos = pos_;
 	vel = vel_;
@@ -15,7 +15,7 @@ projectile::projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, i
 	duration_timer->Start();
 }
 
-projectile::projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, int w_, int h_, float duration_, SDL_Surface* image_) {
+Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, int w_, int h_, float duration_, SDL_Surface* image_) {
 	parentLevel = parentLevel_;
 	pos = pos_;
 	vel = vel_;
@@ -28,7 +28,7 @@ projectile::projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, i
 	duration_timer->Start();
 }
 
-void projectile::Update(float deltaTime){
+void Projectile::Update(float deltaTime){
 	duration_timer->Update(deltaTime);
 	if (duration_timer->completed && !destroyFlag) {
 		destroyFlag = true;
@@ -41,14 +41,14 @@ void projectile::Update(float deltaTime){
 	Body::Update(deltaTime);
 }
 
-void projectile::OnCollide(Body* other, float deltaTime){
+void Projectile::OnCollide(Body* other, float deltaTime){
 	if (other->type == SOLID) {
 		destroyFlag = true;
 	}
 	
 }
 
-void projectile::OnDestroy(){
+void Projectile::OnDestroy(){
 	delete duration_timer;
 	Body::OnDestroy();
 }

@@ -39,7 +39,8 @@ public:
 		BODY = 0, 
 		SOLID = 1, 
 		PROJECTILE = 2, 
-		PLAYER = 3
+		PLAYER = 3,
+		ENEMY = 4
 	};
 	TYPE type = BODY;
 
@@ -92,7 +93,7 @@ public:
 	virtual void ApplyForce(Vec3 force_);
 	virtual Vec3 getPos() { return pos; }
 	virtual Vec3 getVel() { return vel; }
-	virtual void setVel(Vec3 vel_) { vel = vel_; }
+	void setVel(Vec3 vel_) { vel = vel_; }
 	virtual Vec3 getAccel() { return accel; }
 	virtual float getMass() { return mass; }
 	virtual float getOrientation() { return orientation; }
@@ -110,7 +111,7 @@ public:
 	
 	// Added this as public to deal with my demo
 	// so that mouse position can be copied into a Body.
-	virtual void setPos(Vec3 pos_);
+	void setPos(Vec3 pos_) { pos = pos_; }
 
 protected:
 	// inherited classes can access this

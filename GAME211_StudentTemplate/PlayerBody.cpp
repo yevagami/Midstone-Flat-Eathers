@@ -2,7 +2,7 @@
 #include <SDL_image.h>
 #include "Scene.h"
 #include "Level.h"
-#include "projectile.h"
+#include "Projectile.h"
 
 bool PlayerBody::OnCreate(){
 	//Create the melee hitbox
@@ -59,13 +59,13 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 	}
 
 	//dash controls
-	if (keyStates[SDL_SCANCODE_LSHIFT] == 1 && currentState != dash && (!dash_cooldown->hasStarted || dash_cooldown->completed)) {
+	if (keyStates[SDL_SCANCODE_SPACE] == 1 && currentState != dash && (!dash_cooldown->hasStarted || dash_cooldown->completed)) {
 		currentState = dash;
 		dash_timer->Start();
 	}
 
 	//melee controls
-	if (SDL_MOUSEBUTTONDOWN) {
+	if (SDL_MOUSEBUTTONUP) {
 
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			currentState = melee;
@@ -132,7 +132,7 @@ void PlayerBody::Update( float deltaTime ){
 
 	case shooting:
 		shooting_cooldown->Start();
-		projectile* bullet = new projectile(
+		Projectile* bullet = new Projectile(
 			parentLevel,
 			pos,
 			mouseDirection * projectileSpeed,
@@ -207,20 +207,18 @@ PlayerBody::~PlayerBody(){
 }
 
 void PlayerBody::updateMouseDir(){
-	//Gets the direction of the mouse relative to the player's position
 	Matrix4 projectionMat = parentScene->getInverseMatrix();
 	int mouseX;
 	int mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 	Vec3 mousePos = projectionMat * Vec3(mouseX, mouseY, 0.0f);
-
 	Vec3 mouseDir = VMath::normalize(Vec3(
 		mousePos.x - pos.x,
 		mousePos.y - pos.y,
 		0.0f
 	));
-	//std::cout << "(" << mouseDir.x << ", " << mouseDir.y << ")" << "(" << pos.x << ", " << pos.y << ")\n";
+	//std::cout << "(" << mousePos.x << ", " << mousePos.y << ")" << "(" << pos.x << ", " << pos.y << ")\n";
 	mouseDirection = mouseDir;
 }
 

@@ -23,6 +23,7 @@
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="ConsistentConsole.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EntityMap.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -109,7 +110,7 @@
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PrettyPrinting.cpp" />
-    <ClCompile Include="projectile.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="Scene2.cpp" />
@@ -123,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Citations.hpp" />
@@ -140,7 +142,7 @@
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PrettyPrinting.h" />
-    <ClInclude Include="projectile.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene1.h" />

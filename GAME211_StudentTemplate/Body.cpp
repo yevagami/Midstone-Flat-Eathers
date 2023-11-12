@@ -93,18 +93,16 @@ void Body::HandleEvents( const SDL_Event& event_ ) {
     // etc
 }
 
-void Body::setPos( Vec3 pos_ ){
-    pos = pos_;
-}
-
 
 void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     //Failsafe incase the programmer forgets to add a texture to the body
+    
     if (texture == nullptr) {
-        texture = SDL_CreateTextureFromSurface(renderer_, IMG_Load("Textures/programmer_art/missing_texture.png"));
-        std::cout << "You forgot a texture\n";
+           texture = SDL_CreateTextureFromSurface(renderer_, IMG_Load("Textures/programmer_art/missing_texture.png"));
+           std::cout << "You forgot a texture\n";
     }
-
+    
+   
     SDL_Rect square;
     Vec3 screenCoords;
     float w, h;
