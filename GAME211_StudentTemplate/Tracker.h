@@ -23,7 +23,7 @@ public:
 	void scary();
 	//	destroy all trackers
 	void unscary();
-	void render(SDL_Renderer renderer_);
+	void render(SDL_Renderer* renderer_);
 	//	testing
 	static int genRanNum(int min_, int max_);
 
