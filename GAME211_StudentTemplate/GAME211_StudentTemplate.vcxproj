@@ -117,6 +117,7 @@
     <ClCompile Include="Scene3.cpp" />
     <ClCompile Include="SceneUI.cpp" />
     <ClCompile Include="Solid.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UIManager.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="SceneUI.h" />
     <ClInclude Include="scene_list.h" />
     <ClInclude Include="Solid.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UIManager.h" />
