@@ -8,6 +8,8 @@ Solid::Solid(Vec3 pos_, float w_, float h_) {
 void Solid::OnCollide(Body* other, float deltaTime){
 	Vec3 otherVel = other->getVel();
 	Vec3 otherPos = other->getPos();
-	Vec3 newPos = otherPos + -1 *(otherVel * deltaTime);
+
+	Vec3 newPos = otherPos + -1 * otherVel * deltaTime;
 	other->setPos(newPos);
+	other->setVel(Vec3());
 }

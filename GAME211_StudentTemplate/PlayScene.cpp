@@ -6,9 +6,8 @@ PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
-	xAxis = 1600.0f;
-	yAxis = 900.0f;
-
+	xAxis = 1366.0f;
+	yAxis = 768.0f;
 	player = nullptr;
 	currentLevel = nullptr;
 }
@@ -85,9 +84,10 @@ void PlayScene::Render(){
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
+	currentLevel->Render(renderer, projectionMatrix);
+
 	//render the trackers
 	tracker.render(renderer);
-	currentLevel->Render(renderer, projectionMatrix);
 
 	SDL_RenderPresent(renderer);
 }

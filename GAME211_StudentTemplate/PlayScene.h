@@ -5,7 +5,6 @@
 #include "Menu.h"
 #include "Tracker.h"
 
-
 class PlayScene : public Scene{
 private:
 	//Basic scene stuff

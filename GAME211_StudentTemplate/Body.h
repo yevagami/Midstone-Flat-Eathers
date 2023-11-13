@@ -6,9 +6,7 @@
 #include <MMath.h>
 #include "Hitbox.h"
 
-
 using namespace MATH;
-
 struct Transform {
 	Vec3 bodyPosition;
 	Vec3 bodyVelocity;
@@ -78,6 +76,7 @@ public:
 		int h_,
 		SDL_Surface* image_
 	);
+
 
 	//Fundamental methods (create, update, handle input, render, destroy, collisions)
 	void LoadHitbox(float w_, float h_);

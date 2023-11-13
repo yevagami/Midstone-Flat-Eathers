@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <string>
 #include "Sprite.h"
-namespace SPRITE_DEFINITIONS {
+
 	enum SpriteDefinitions{
 		Missing = 0,
 		Player = 1,
@@ -18,5 +18,5 @@ namespace SPRITE_DEFINITIONS {
 		projectile = 9,
 		melee_strike = 10
 	};
-}
+
 #endif

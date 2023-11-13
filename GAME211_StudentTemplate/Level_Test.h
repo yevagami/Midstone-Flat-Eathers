@@ -2,13 +2,9 @@
 #include "Level.h"
 #include "Solid.h"
 #include "Enemy.h"
-#include "SpriteDefs.h"
 
-using namespace SPRITE_DEFINITIONS;
 class Level_test : public Level{
 private:
-	Sprite* LevelSprites = nullptr;
-
 	//Background
 	SDL_Texture* background = nullptr;
 	//Floor

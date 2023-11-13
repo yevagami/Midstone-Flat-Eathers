@@ -7,7 +7,7 @@ Sprite::Sprite(const char* file, SDL_Renderer* renderer_)
 {
 	renderer = renderer_;
 	image = IMG_Load(file);
-	spriteSheet = SDL_CreateTextureFromSurface(renderer, image);
+	texture = SDL_CreateTextureFromSurface(renderer, image);
 }
 
 // assume 128 x 128 textures/images, and cut up
@@ -19,7 +19,7 @@ bool Sprite::autoLoadSprites()
 		return false;
 	}
 
-	if (spriteSheet == nullptr) {
+	if (texture == nullptr) {
 		std::cout << "The texture has been missing or broken." << "\n";
 		return false;
 	}
@@ -50,7 +50,7 @@ bool Sprite::loadSpriteFromRect(int x_, int y_, int w_, int h_)
 		return false;
 	}
 
-	if (spriteSheet == nullptr) {
+	if (texture == nullptr) {
 		std::cout << "The texture has been missing or broken." << "\n";
 		return false;
 	}
@@ -73,9 +73,9 @@ void Sprite::onDestroy()
 		SDL_FreeSurface(image);
 		image = nullptr;
 	}
-	if (spriteSheet) {
-		SDL_DestroyTexture(spriteSheet);
-		spriteSheet = nullptr;
+	if (texture) {
+		SDL_DestroyTexture(texture);
+		texture = nullptr;
 	}
 	renderer = nullptr;
 }

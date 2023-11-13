@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Level.h"
 #include "Projectile.h"
+#include "SpriteDefs.h"
 
 bool PlayerBody::OnCreate(){
 	//Setting the variables
@@ -29,13 +30,7 @@ bool PlayerBody::OnCreate(){
     maxSpeed = currentSpeed;
     currentState = idle;
 
-    //add a texture to the player
-	playerSprite = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
-	if (!playerSprite.autoLoadSprites()) {
-		std::cerr << "Error with the sprites" << std::endl;
-		return false;
-	}
-	/*
+	
     image = IMG_Load("Textures/programmer_art/player.png");
 	SDL_Renderer* renderer = parentScene->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
@@ -43,7 +38,7 @@ bool PlayerBody::OnCreate(){
         std::cerr << "Can't open the image" << std::endl;
         return false;
     }
-	*/
+	
 
 	//Failsafe incase the programmer forgets the parentScene
 	if (parentScene == nullptr) { 
@@ -210,30 +205,11 @@ void PlayerBody::Update( float deltaTime ){
 	//Gets the direction of the mouse relative to the player's position
 	updateMouseDir();
 	updateMeleeHitbox();
+	//std::cout << "(" << pos.x << ", " << pos.y << ")\n";
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
-	SDL_Rect square;
-	Vec3 screenCoords;
-	float w, h;
-
-	// convert the position from game coords to screen coords.
-	screenCoords = projectionMatrix_ * pos;
-
-	// Scale the image, in case the .png file is too big or small
-	w = 128.0f * scale.x;
-	h = 128.0f * scale.y;
-
-	square.x = static_cast<int>(screenCoords.x - 0.5f * w);
-	square.y = static_cast<int>(screenCoords.y - 0.5f * h);
-	square.w = static_cast<int>(w);
-	square.h = static_cast<int>(h);
-
-	// Convert character orientation from radians to degrees.
-	float orientationDegrees = orientation * 180.0f / M_PI;
-
-	SDL_RenderCopyEx(renderer_, playerSprite.spriteSheet, &playerSprite.spriteStorage[1], &square,
-		orientationDegrees, nullptr, SDL_FLIP_NONE);
+	Body::Render(renderer_, projectionMatrix_);
 }
 
 void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
@@ -260,8 +236,6 @@ void PlayerBody::OnDestroy(){
 
 	delete dash_timer;
 	delete invincible_timer;
-
-	playerSprite.onDestroy();
 
 	Body::OnDestroy();
 }

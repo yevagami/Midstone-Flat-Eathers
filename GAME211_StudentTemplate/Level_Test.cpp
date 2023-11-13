@@ -5,18 +5,92 @@ bool Level_test::OnCreate(){
 	levelBodies.push_back(ghost);
 	ghost = nullptr;
 
-	
-	LevelSprites = new Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
-	if (!LevelSprites->autoLoadSprites()) {
-		std::cout << "Sprite sheet broke\n";
-		return false;
-	}
-
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 
 	//Creating the floor
-	floor = new Body(this, Vec3((1600.0f / 2.0f), 900.0f / 2.0f, 0.0f), Vec3(5.0f, 5.0f, 5.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/floor.png"));
+	floor = new Body(this, Vec3((1366.0f / 2.0f), 768.0f / 2.0f, 0.0f), Vec3(10.0f, 10.0f, 10.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/tile_floor_red.png"));
+
+#pragma region Creating Walls
+	//creating the walls
+	//Top wall
+	Solid* wall = new Solid(
+		this,
+		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 5.5, 0.0f),
+		Vec3(12.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+	);
+	levelBodies.push_back(wall);
+	//Accent to make the wall look tall
+	Body* tiles= new Body(
+		this,
+		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 4.5, 0.0f),
+		Vec3(11.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+	);
+	levelBodies.push_back(tiles);
+
+
+	//Right wall
+	 wall = new Solid(
+		this,
+		Vec3(1366.0f / 2.0f + 128 * 5.5, 768.0f / 2.0f + 128 * 0.5, 0.0f),
+		Vec3(1.0f, 9.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+	);
+	levelBodies.push_back(wall);
+
+	tiles = new Body(
+		this,
+		Vec3(1366.0f / 2.0f + 128 * 5.5, 768.0f / 2.0f - 128 * 7, 0.0f),
+		Vec3(1.0f, 6.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+	);
+	levelBodies.push_back(tiles);
+
+	//Left wall
+	wall = new Solid(
+		this,
+		Vec3(1366.0f / 2.0f - 128 * 5.5, 768.0f / 2.0f + 128 * 0.5, 0.0f),
+		Vec3(1.0f, 9.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+	);
+	levelBodies.push_back(wall);
+
+	tiles = new Body(
+		this,
+		Vec3(1366.0f / 2.0f - 128 * 5.5, 768.0f / 2.0f - 128 * 7, 0.0f),
+		Vec3(1.0f, 6.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+	);
+	levelBodies.push_back(tiles);
+
+	//Bottom wall
+	wall = new Solid(
+		this,
+		Vec3((1366.0f / 2.0f), 768.0f / 2.0f - 128 * 7.5, 0.0f),
+		Vec3(10.0f, 5.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+	);
+	levelBodies.push_back(wall);
+
+	wall = nullptr;
+
+#pragma endregion
 
 	return true;
 }
@@ -30,9 +104,6 @@ void Level_test::OnDestroy(){
 		delete body;
 	}
 	levelBodies.clear();
-
-	LevelSprites->onDestroy();
-	delete LevelSprites;
 
 	if (background) {
 		SDL_DestroyTexture(background);
@@ -96,7 +167,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		body->RenderHitbox(renderer_);
+		//body->RenderHitbox(renderer_);
 	}
 }
 

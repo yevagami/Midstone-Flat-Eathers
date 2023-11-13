@@ -17,7 +17,8 @@ public:
 
 	std::vector<SDL_Rect> spriteStorage; // store all individual sprites cut out from big sprites
 	//moving these to public so other classes can access it -Adriel
-	SDL_Texture* spriteSheet = nullptr;  // texture from the spriteSheet image
+	//Renamed from spriteSheet to texture to avoid confusion - Adriel
+	SDL_Texture* texture = nullptr;  // texture from the spriteSheet image 
 	SDL_Surface* image = nullptr; // path to the spriteSheet image
 
 	Sprite() {};
