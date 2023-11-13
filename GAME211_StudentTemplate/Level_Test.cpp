@@ -1,23 +1,23 @@
 #include "Level_Test.h"
 
 bool Level_test::OnCreate(){
-	for (int i = 0; i < 5; i++) {
-		Solid* wall = new Solid(
-			this,
-			Vec3(1600.0f / 2.0f + (500 * i) + 500.0f, 900.0f / 2.0f, 0.0f),
-			Vec3(1.0f, 1.0f, 1.0f),
-			128.0f,
-			128.0f,
-			IMG_Load("Textures/programmer_art/block_cap.png")
-		);
-		levelBodies.push_back(wall);
-		wall = nullptr;
-		
-	}
-
 	Enemy* ghost = new Enemy(this, Vec3((1600.0f / 2.0f) - 1000 + 500.0f, 900.0f / 2.0f, 0.0f), Enemy::flash);
 	levelBodies.push_back(ghost);
 	ghost = nullptr;
+
+	
+	LevelSprites = new Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+	if (!LevelSprites->autoLoadSprites()) {
+		std::cout << "Sprite sheet broke\n";
+		return false;
+	}
+
+	//Creating the background
+	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
+
+	//Creating the floor
+	floor = new Body(this, Vec3((1600.0f / 2.0f), 900.0f / 2.0f, 0.0f), Vec3(5.0f, 5.0f, 5.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/floor.png"));
+
 	return true;
 }
 
@@ -30,6 +30,17 @@ void Level_test::OnDestroy(){
 		delete body;
 	}
 	levelBodies.clear();
+
+	LevelSprites->onDestroy();
+	delete LevelSprites;
+
+	if (background) {
+		SDL_DestroyTexture(background);
+		delete background;
+	}
+
+	floor->OnDestroy();
+	delete floor;
 }
 
 void Level_test::Update(const float time){
@@ -79,6 +90,10 @@ void Level_test::Update(const float time){
 }
 
 void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
+	//render the background
+	SDL_RenderCopy(parentScene->getRenderer(), background, nullptr, nullptr);
+	floor->Render(renderer_, projectionMatrix_);
+
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
 		body->RenderHitbox(renderer_);

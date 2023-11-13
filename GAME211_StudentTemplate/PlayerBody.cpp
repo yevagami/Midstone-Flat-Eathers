@@ -5,11 +5,20 @@
 #include "Projectile.h"
 
 bool PlayerBody::OnCreate(){
+	//Setting the variables
+	maxHealth = maxPlayerHealth;
+	currentHealth = maxHealth;
+
 	//Create the melee hitbox
 	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
 
     //Creating timers
+	//Note: these timers will be independent of the clock updating pool 
+	//because they need to be activated and updated in certain circumstances
     dash_timer = new Clock(dashDuration, false);
+	invincible_timer = new Clock(invincibleDuration, false);
+
+	//These ones will be part of the update pool
     dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
     cooldowns.push_back(dash_cooldown);
@@ -21,6 +30,12 @@ bool PlayerBody::OnCreate(){
     currentState = idle;
 
     //add a texture to the player
+	playerSprite = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+	if (!playerSprite.autoLoadSprites()) {
+		std::cerr << "Error with the sprites" << std::endl;
+		return false;
+	}
+	/*
     image = IMG_Load("Textures/programmer_art/player.png");
 	SDL_Renderer* renderer = parentScene->getRenderer();
     texture = SDL_CreateTextureFromSurface( renderer, image );
@@ -28,6 +43,7 @@ bool PlayerBody::OnCreate(){
         std::cerr << "Can't open the image" << std::endl;
         return false;
     }
+	*/
 
 	//Failsafe incase the programmer forgets the parentScene
 	if (parentScene == nullptr) { 
@@ -80,6 +96,9 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 }
 
 void PlayerBody::Update( float deltaTime ){
+	//If the destroy flag has been set, the player is now dead
+	if (currentHealth <= 0) { std::cout << "YOU DIED LMAO \n"; }
+
 	//state machine
 	switch (currentState) {
 		//Idle state
@@ -93,8 +112,6 @@ void PlayerBody::Update( float deltaTime ){
 		maxSpeed = walkSpeed;
 		break;
 
-
-		//Dash state
 	case dash:
 		canMove = false; //disables the player's movement input
 		dash_timer->Update(deltaTime);
@@ -121,18 +138,22 @@ void PlayerBody::Update( float deltaTime ){
 			//reset the timer and start the cooldown
 			dash_timer->Reset();
 			dash_cooldown->Start();
-			vel = Vec3(); //reset the player's speed and set the state to idle
+			//vel = Vec3(); //reset the player's speed and set the state to idle
 			currentState = idle;
+			canMove = true;
 		}
 		break;
 
 	case melee:
 
-		for (Body* body : parentLevel->levelBodies) {
-			if (body->type == PLAYER) { continue; }
-			if (body->getHitbox()->collisionCheck(meleeHitbox)) {
-				if (body->type == SOLID) { std::cout << "You hit a solid\n"; }
-				if (body->type == ENEMY) { std::cout << "You hit an enemy\n"; }
+		for (Body* other : parentLevel->levelBodies) {
+			if (other->type == PLAYER) { continue; }
+			if (other->getHitbox()->collisionCheck(meleeHitbox)) {
+				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }
+				if (other->type == ENEMY) {
+					std::cout << "You hit an enemy\n"; 
+					other->takeDamage(meleePower);
+				}
 			}
 		}
 		currentState = idle;
@@ -156,11 +177,18 @@ void PlayerBody::Update( float deltaTime ){
 
 	//update the cooldown timers
 	for (Clock* cd : cooldowns) {
-		if (cd->hasStarted) {
-			cd->Update(deltaTime);
-			if (cd->completed) { cd->Reset(); }
+		cd->Update(deltaTime);
+		if (cd->completed) { cd->Reset(); }
+	}
+
+	if (invincible) {
+		invincible_timer->Update(deltaTime);
+		if (invincible_timer->completed) { 
+			invincible = false; 
+			invincible_timer->Reset();
 		}
 	}
+
 
 	//cap the player's movement speed
 	if (canMove) {
@@ -178,11 +206,34 @@ void PlayerBody::Update( float deltaTime ){
     // Note that would update velocity too, and rotation motion
     Body::Update( deltaTime );
 
-
 	//Update the melee hitbox
 	//Gets the direction of the mouse relative to the player's position
 	updateMouseDir();
 	updateMeleeHitbox();
+}
+
+void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
+	SDL_Rect square;
+	Vec3 screenCoords;
+	float w, h;
+
+	// convert the position from game coords to screen coords.
+	screenCoords = projectionMatrix_ * pos;
+
+	// Scale the image, in case the .png file is too big or small
+	w = 128.0f * scale.x;
+	h = 128.0f * scale.y;
+
+	square.x = static_cast<int>(screenCoords.x - 0.5f * w);
+	square.y = static_cast<int>(screenCoords.y - 0.5f * h);
+	square.w = static_cast<int>(w);
+	square.h = static_cast<int>(h);
+
+	// Convert character orientation from radians to degrees.
+	float orientationDegrees = orientation * 180.0f / M_PI;
+
+	SDL_RenderCopyEx(renderer_, playerSprite.spriteSheet, &playerSprite.spriteStorage[1], &square,
+		orientationDegrees, nullptr, SDL_FLIP_NONE);
 }
 
 void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
@@ -206,6 +257,11 @@ void PlayerBody::OnDestroy(){
 	cooldowns.clear();
 	dash_timer = nullptr;
 	dash_cooldown = nullptr;
+
+	delete dash_timer;
+	delete invincible_timer;
+
+	playerSprite.onDestroy();
 
 	Body::OnDestroy();
 }
@@ -240,4 +296,12 @@ void PlayerBody::updateMeleeHitbox() {
 	Vec3 hitboxPosScreen = projectionMat * hitboxPos;
 	meleeHitbox->x = hitboxPosScreen.x - meleeHitbox->w * 0.5f;
 	meleeHitbox->y = hitboxPosScreen.y - meleeHitbox->h * 0.5f;
+}
+
+void PlayerBody::takeDamage(float amount){
+	if (invincible) { return; }
+	currentHealth -= amount - ((amount * (playerDefense / 100)) * 0.8);
+	std::cout << "Player took damage\n";
+	invincible_timer->Start();
+	invincible = true;
 }

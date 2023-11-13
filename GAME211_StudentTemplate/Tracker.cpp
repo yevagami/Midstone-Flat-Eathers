@@ -44,6 +44,6 @@ int Tracker::genRanNum(int min_, int max_) {
 	std::mt19937 gen(rd());
 
 	std::uniform_int_distribution<> distrib(min_, max_);
-	std::cout << distrib(gen) << std::endl;
+	//std::cout << distrib(gen) << std::endl;
 	return distrib(gen);
 }

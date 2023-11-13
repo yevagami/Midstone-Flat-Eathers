@@ -13,23 +13,43 @@ struct enemyVariables {
 
 class Enemy : public Body{
 public:
-	//States
-	enum states { idle, walk, followPlayer };
-	states currentState = followPlayer;
-
 	//Enemy type definitions
 	enum subType {
 		flash = 0, 
 		miracle = 1, 
 		strong = 2
 	};
+	
+	//constructors
+	Enemy(Level* parentLevel_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_) :
+		Body(parentLevel_, pos_, scale_, w_, h_, image_) {
+		type = ENEMY;
+	}
+	Enemy(Level* parentLevel_, Vec3 pos_, subType type_);
 
+	//methods
+	void Update(float time) override;
+	void OnCollide(Body* other, float deltaTime) override;
+	void OnDestroy() override;
+	void takeDamage(float amount) override;
+
+private:
+	//enemy states
+	enum states { idle, walk, followPlayer };
+	states currentState = followPlayer;
+
+	//Enemy specific variables
+	float enemyMoveSpeed;
+	float enemyPower;
+	Body* player = nullptr;
+
+	//Map contain multiple enemy definitions
 	std::unordered_map<subType, enemyVariables> enemyDefintions{
 		{subType::flash, enemyVariables{
 			100.0f,
 			900.0f,
 			IMG_Load("Textures/programmer_art/enemy.png"),
-			0.0f,
+			10.0f,
 			128.0f,
 			128.0f
 		}},
@@ -53,19 +73,5 @@ public:
 		}},
 
 	};
-	
-	//Enemy specific variables
-	float moveSpeed;
-	float power; 
-	Body* player = nullptr;
-
-	//constructors
-	Enemy(Level* parentLevel_, Vec3 pos_, Vec3 scale_, int w_, int h_, SDL_Surface* image_) :
-		Body(parentLevel_, pos_, scale_, w_, h_, image_) {
-		type = ENEMY;
-	}
-	Enemy(Level* parentLevel_, Vec3 pos_, subType type_);
-
-
 };
 

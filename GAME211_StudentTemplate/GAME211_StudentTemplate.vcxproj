@@ -141,6 +141,7 @@
     <ClInclude Include="Level_test.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="SpriteDefs.h" />
     <ClInclude Include="Tracker.h" />
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PlayScene.h" />

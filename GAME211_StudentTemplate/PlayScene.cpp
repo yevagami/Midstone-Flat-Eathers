@@ -1,9 +1,6 @@
 #include "PlayScene.h"
-
 #include <random>
 #include <utility>
-
-
 
 PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -71,7 +68,7 @@ void PlayScene::OnDestroy(){
 }
 
 void PlayScene::Update(const float time){
-	//CameraFollowPlayer(player);
+	CameraFollowPlayer(player);
 	currentLevel->Update(time);
 
 	std::string important = std::to_string(Tracker::genRanNum(0, 10));
@@ -88,9 +85,8 @@ void PlayScene::Render(){
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	//	render the trackers
+	//render the trackers
 	tracker.render(renderer);
-
 	currentLevel->Render(renderer, projectionMatrix);
 
 	SDL_RenderPresent(renderer);

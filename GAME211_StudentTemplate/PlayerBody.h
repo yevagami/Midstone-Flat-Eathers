@@ -13,7 +13,9 @@
 #include "GameManager.h"
 #include "Clock.h"
 #include <vector>
+#include "SpriteDefs.h"
 
+using namespace SPRITE_DEFINITIONS;
 class Scene;
 class PlayerBody : public Body{
 protected:
@@ -38,6 +40,7 @@ public:
     bool OnCreate();
     void HandleEvents( const SDL_Event& event ) override;
     void Update( float deltaTime ) override;
+    void Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) override;
     void RenderHitbox(SDL_Renderer* renderer_) override;
     void setTexture( SDL_Texture* texture_ ) { texture = texture_; }
     void OnDestroy() override;
@@ -46,21 +49,33 @@ public:
     //Extra methods
     void updateMouseDir();
     void updateMeleeHitbox();
+    void takeDamage(float amount) override;
 
 private:
-    Vec3 mouseDirection = {};
+    //player sprite
+    Sprite playerSprite;
+
+    //Player variables
+    float maxPlayerHealth = 250.0f;
+    float playerDefense = 25.0f;
+    float invincibleDuration = 1.5f;
+    bool invincible = false;
 
     //melee variables
     Hitbox* meleeHitbox = nullptr;
+    Vec3 mouseDirection = {};
+    float meleePower = 100.0f;
 
     //shooting variables
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
+    float projectilePower = 85.0f;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
     Clock* shooting_cooldown = nullptr;
+    Clock* invincible_timer = nullptr;
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables

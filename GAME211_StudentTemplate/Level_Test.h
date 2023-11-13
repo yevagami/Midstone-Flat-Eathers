@@ -2,8 +2,18 @@
 #include "Level.h"
 #include "Solid.h"
 #include "Enemy.h"
+#include "SpriteDefs.h"
 
+using namespace SPRITE_DEFINITIONS;
 class Level_test : public Level{
+private:
+	Sprite* LevelSprites = nullptr;
+
+	//Background
+	SDL_Texture* background = nullptr;
+	//Floor
+	Body* floor = nullptr;
+
 public:
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
 	bool OnCreate();

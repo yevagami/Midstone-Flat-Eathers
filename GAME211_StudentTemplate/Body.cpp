@@ -83,7 +83,6 @@ void Body::Update(float deltaTime) {
     hitbox->y = hitboxPos.y - hitbox->h * 0.5f;
 }
 
-
 void Body::HandleEvents( const SDL_Event& event_ ) {
     
     //  michael- i'm moving this stuff. imma make a keybinds class for global keybinds, then u can just do "keybindHandler.HandleEvents(event)"
@@ -99,13 +98,12 @@ void Body::HandleEvents( const SDL_Event& event_ ) {
     // etc
 }
 
-
 void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     //Failsafe incase the programmer forgets to add a texture to the body
     
     if (texture == nullptr) {
-           texture = SDL_CreateTextureFromSurface(renderer_, IMG_Load("Textures/programmer_art/missing_texture.png"));
-           std::cout << "You forgot a texture\n";
+          texture = SDL_CreateTextureFromSurface(renderer_, IMG_Load("Textures/programmer_art/missing_texture.png"));
+          std::cout << "You forgot a texture\n";
     }
     
    

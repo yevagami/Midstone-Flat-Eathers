@@ -2,22 +2,23 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 #include <stdio.h>
+#include <iostream>
 #include <vector>
 #include "SDL.h"
-#include "GameManager.h"
-class Sprite
-{
+#include "SDL_image.h"
+
+class Sprite{
 private:
 
 	// variables to get class working
-
-	SDL_Surface* image = nullptr; // path to the spriteSheet image
-	SDL_Texture* spriteSheet = nullptr;  // texture from the spriteSheet image
 	SDL_Renderer* renderer = nullptr; // machine that makes things draw on the screen
 
 public:
 
 	std::vector<SDL_Rect> spriteStorage; // store all individual sprites cut out from big sprites
+	//moving these to public so other classes can access it -Adriel
+	SDL_Texture* spriteSheet = nullptr;  // texture from the spriteSheet image
+	SDL_Surface* image = nullptr; // path to the spriteSheet image
 
 	Sprite() {};
 	Sprite(const char* file, SDL_Renderer* renderer_); // first parameter = file path to image, second = reference to scene renderer

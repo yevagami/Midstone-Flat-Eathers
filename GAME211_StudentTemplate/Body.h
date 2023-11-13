@@ -124,8 +124,8 @@ protected:
 	Vec3 vel;
 	Vec3 accel;
 	Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
-	float currentHealth = 100;
 	float maxHealth = 100;
+	float currentHealth = 100;
 	float mass;
 	float radius; // for getting near walls
 	float orientation; // facing this direction
@@ -135,6 +135,7 @@ protected:
 	Hitbox* hitbox;
 	Transform transform;	//	constructor list struct
 
+	//Texture stuff
 	SDL_Surface* image = nullptr;
 	SDL_Texture* texture = nullptr;
 };
