@@ -4,7 +4,6 @@ namespace type {
 	std::string music = "music";
 	std::string sfx = "sfx";
 	std::string test = "test";
-
 }
 
 void Sound::loadSound(const std::string& label_, const char* soundFile_) {

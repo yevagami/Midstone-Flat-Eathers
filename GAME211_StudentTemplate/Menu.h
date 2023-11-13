@@ -6,7 +6,6 @@
 #include <functional>
 
 
-
 /// Constants 
 namespace ui {
 	//	general clamping
@@ -445,7 +444,7 @@ namespace ui {
 
 	/// Font Modifier Object
 	struct Font {
-		const char* fontText;
+		std::string fontText;
 		int size;
 		const char* font;
 		int offsetX;
@@ -455,9 +454,9 @@ namespace ui {
 		// ReSharper disable once CppParameterMayBeConst
 		// ReSharper disable once CppNonExplicitConvertingConstructor
 		Font(
-			const char* fontText_ = "", int size_ = 45,
+			std::string fontText_ = "", int size_ = 45,
 			const char* font_ = fontMap.at("comic sans"), const int x_ = 0, const int y_ = 0, const double rot_ = 0.0)
-			: fontText(fontText_), size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_) { }
+			: fontText(std::move(fontText_)), size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_) { }
 
 	};
 
@@ -602,7 +601,7 @@ namespace ui {
 		double fontRotation;										//	font rotation (default : 0.0)
 		int fontOffsetX;												//	offset x (default : 0)
 		int fontOffsetY;												//	offset y (default : 0)
-		const char* text;												// button's text (default : "")
+		std::string text;												// button's text (default : "")
 		const char* fontItself;									// button's font (default : )
 
 		bool isActive;													//	is button active flag (default : true)

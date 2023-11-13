@@ -95,7 +95,7 @@ private:
 	class Scene *currentScene;
 	Scene *menuScene;
 
-	//	michael's playground uwu
+	//	michael's playground ahahhahahaha
 	bool isPaused;
 
 	//	settings default values

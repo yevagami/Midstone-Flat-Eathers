@@ -143,7 +143,7 @@ namespace ui {
 		return true;
 	}
 	bool Button::RenderText(SDL_Renderer* renderer_) {
-		if (text == nullptr || strlen(text) == 0) { return false; }
+		if (text.empty()) { return false; }
 
 		//	1. set up a font
 		buttonTextFont = TTF_OpenFont(fontItself, fontSize);
@@ -154,7 +154,7 @@ namespace ui {
 			isHovering ? (textColour * onHoveringTextColour) : textColour;	//	isHovering checker. If true, colour is txtCol / onHovTxt. If false, colour is txtCol.
 
 		//	2. set up a surface image with some text
-		buttonTextSurface = TTF_RenderText_Solid(buttonTextFont, text, renderColour);
+		buttonTextSurface = TTF_RenderText_Solid(buttonTextFont, text.c_str(), renderColour);
 		if (!buttonTextSurface) { return false; }
 
 		// 3. set up a texture for the surface
