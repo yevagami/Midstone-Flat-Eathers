@@ -64,3 +64,18 @@ bool Sprite::loadSpriteFromRect(int x_, int y_, int w_, int h_)
 
 	return true;
 }
+
+// destroys the image and spriteSheet; clean up memory used to not cause memory leaks
+
+void Sprite::onDestroy()
+{
+	if (image) {
+		SDL_FreeSurface(image);
+		image = nullptr;
+	}
+	if (spriteSheet) {
+		SDL_DestroyTexture(spriteSheet);
+		spriteSheet = nullptr;
+	}
+	renderer = nullptr;
+}
