@@ -1,10 +1,12 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "Hitbox.h"
 #include <unordered_map>
 #include <functional>
 
+#include "Hitbox.h"
+
+class Tracker;
 
 /// Constants 
 namespace ui {
@@ -544,6 +546,7 @@ namespace ui {
 		void SetOnHover(const std::function<void()>& onHover_);
 		void SetOnScroll(const std::function<void(int scrollInt_)>& onScroll_);
 
+		friend class Tracker;
 
 		//		renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
 		bool Render(SDL_Renderer* renderer_);

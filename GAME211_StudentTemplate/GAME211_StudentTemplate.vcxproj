@@ -107,7 +107,7 @@
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PrettyPrinting.cpp" />
@@ -141,7 +141,7 @@
     <ClInclude Include="Level_test.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="Panel.h" />
+    <ClInclude Include="Tracker.h" />
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PrettyPrinting.h" />

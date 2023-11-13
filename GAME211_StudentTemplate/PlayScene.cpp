@@ -4,6 +4,7 @@
 #include <utility>
 
 
+
 PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
 	game = game_;
@@ -32,7 +33,7 @@ bool PlayScene::OnCreate(){
 	name = "Play Scene";
 
 	//	load trackers
-	scary();
+	tracker.scary();
 
 
 	//Creating the level
@@ -63,9 +64,7 @@ void PlayScene::OnDestroy(){
 	currentLevel->OnDestroy();
 	delete currentLevel;
 
-	for (auto tracker : allTrackers) {
-		delete tracker;
-	}
+	tracker.unscary();
 
 	player->OnDestroy();
 	delete player;
@@ -75,13 +74,14 @@ void PlayScene::Update(const float time){
 	//CameraFollowPlayer(player);
 	currentLevel->Update(time);
 
-	std::string important = std::to_string(genRanNum(0, 10));
-	std::string notImportant = std::to_string(genRanNum(50, 150));
-	std::string somewhatImportant = std::to_string(genRanNum(5000, 6000));
+	std::string important = std::to_string(Tracker::genRanNum(0, 10));
+	std::string notImportant = std::to_string(Tracker::genRanNum(50, 150));
+	std::string somewhatImportant = std::to_string(Tracker::genRanNum(5000, 6000));
 
-	trackThis(important, tracker1);
-	trackThis(notImportant, tracker2);
-	trackThis(somewhatImportant, tracker3);
+
+	tracker.trackThis(important, tracker.tracker1);
+	tracker.trackThis(notImportant, tracker.tracker2);
+	tracker.trackThis(somewhatImportant, tracker.tracker3);
 }
 
 void PlayScene::Render(){
@@ -89,10 +89,7 @@ void PlayScene::Render(){
 	SDL_RenderClear(renderer);
 
 	//	render the trackers
-	for (const auto tracker : allTrackers) {
-		tracker->Render(renderer);
-	}
-
+	tracker.render(renderer);
 
 	currentLevel->Render(renderer, projectionMatrix);
 
@@ -129,38 +126,3 @@ void PlayScene::CameraFollowPlayer(PlayerBody* p){
 }
 
 
-
-
-
-
-void PlayScene::scary() {
-	int size = 20;
-	tracker1 = new ui::Button(ui::Font{"", size});
-	tracker2 = new ui::Button(ui::Font{"", size });
-	tracker3 = new ui::Button(ui::Font{"", size });
-	allTrackers.emplace_back(tracker1);
-	allTrackers.emplace_back(tracker2);
-	allTrackers.emplace_back(tracker3);
-
-	for (auto t : allTrackers) {
-		t->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-		t->textColour = ui::SDL_COLOR_ANTIQUE_WHITE;
-		t->offsetPosition(-SCREEN_HEIGHT +400);
-	}
-	tracker2->setPositionRelativeTo(*tracker1, 25);
-	tracker3->setPositionRelativeTo(*tracker2, 25);
-
-}
-
-void PlayScene::trackThis(std::string value_, ui::Button* tracker_) {
-	tracker_->text = std::move(value_);
-}
-
-int PlayScene::genRanNum(const int min_, const int max_) {
-	std::random_device rd;
-	std::mt19937 gen(rd()); 
-
-	uniform_int_distribution<> distrib(min_, max_);
-	cout << distrib(gen) << endl;
-	return distrib(gen);
-}
