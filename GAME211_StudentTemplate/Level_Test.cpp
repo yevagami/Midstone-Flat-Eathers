@@ -42,10 +42,10 @@ void Level_test::Update(const float time){
 			if (otherBody == body) { continue; }
 			if (body->getHitbox()->collisionCheck(otherBody->getHitbox())) {
 				body->OnCollide(otherBody, time);
-				}
 			}
 		}
 	}
+	
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
