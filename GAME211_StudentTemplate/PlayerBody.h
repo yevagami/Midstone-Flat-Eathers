@@ -106,7 +106,7 @@ private:
     float maxSpeed = 0.0f;
 
     //states
-    enum states { idle, walk, dash, attack};
+    enum states { idle, dash, attack};
     states currentState = idle;
 };
 

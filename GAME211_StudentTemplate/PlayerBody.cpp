@@ -63,10 +63,14 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 
 		//if the movement keys are pressed, set the state to walk
 		if (VMath::mag(movement) > VERY_SMALL) {
-			currentState = walk;
 			playerDirection = movement;
 		}
-		else { currentState = idle; }
+		else { 
+			if (currentState != attack) {
+				currentState = idle; 
+			}
+			
+		}
 	}
 
 	//dash controls
@@ -93,6 +97,11 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 }
 
 void PlayerBody::Update( float deltaTime ){
+	//Update the melee hitbox
+	//Gets the direction of the mouse relative to the player's position
+	updateMouseDir();
+	updateMeleeHitbox();
+
 	//If the destroy flag has been set, the player is now dead
 	if (currentHealth <= 0) { std::cout << "YOU DIED LMAO \n"; }
 
@@ -104,15 +113,12 @@ void PlayerBody::Update( float deltaTime ){
 		state_idle();
 		break;
 
-	case walk:
-		state_walk();
-		break;
-
 	case dash:
 		state_dash(deltaTime);
 		break;
 
 	case attack:
+		std::cout << "Attacking\n";
 		state_attack(deltaTime);
 		break;
 
@@ -149,10 +155,7 @@ void PlayerBody::Update( float deltaTime ){
     // Note that would update velocity too, and rotation motion
     Body::Update( deltaTime );
 
-	//Update the melee hitbox
-	//Gets the direction of the mouse relative to the player's position
-	updateMouseDir();
-	updateMeleeHitbox();
+
 	//std::cout << "(" << pos.x << ", " << pos.y << ")\n";
 }
 
@@ -251,11 +254,6 @@ void PlayerBody::state_idle(){
 	canMove = true;
 }
 
-void PlayerBody::state_walk(){
-	currentSpeed = walkSpeed;
-	maxSpeed = walkSpeed;
-}
-
 void PlayerBody::state_dash(float deltaTime_){
 	canMove = false; //disables the player's movement input
 	dash_timer->Update(deltaTime_);
@@ -285,6 +283,9 @@ void PlayerBody::state_dash(float deltaTime_){
 		//vel = Vec3(); //reset the player's speed and set the state to idle
 		currentState = idle;
 		canMove = true;
+
+		currentSpeed = walkSpeed;
+		maxSpeed = walkSpeed;
 	}
 }
 
@@ -335,10 +336,8 @@ void PlayerBody::state_attack(float deltaTime_){
 			for (Body* other : parentLevel->levelBodies) {
 				if (other->type == PLAYER) { continue; } // skip the player
 				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
-
-					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
 					if (other->type == ENEMY) {		//on hit enemy
-						cout << "shielding against an enemy\n";
+						//cout << "shielding against an enemy\n";
 
 						Vec3 otherVel = other->getVel();
 						Vec3 otherPos = other->getPos();
