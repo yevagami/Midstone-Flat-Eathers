@@ -16,7 +16,9 @@
 		Tile_top_gray = 7,
 		Tile_wall_gray = 8,
 		projectile = 9,
-		melee_strike = 10
+		melee_strike = 10,
+		boom = 11,
+		ouch = 12
 	};
 
 #endif

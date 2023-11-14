@@ -16,7 +16,7 @@ bool PlayerBody::OnCreate(){
 	//because they need to be activated and updated in certain circumstances
     dash_timer = new Clock(dashDuration, false);
 	invincible_timer = new Clock(invincibleDuration, false);
-
+	melee_timer = new Clock(meleeDuration, false);
 
 	//These ones will be part of the update pool
     dash_cooldown = new Clock(dashCooldown, false);
@@ -118,7 +118,6 @@ void PlayerBody::Update( float deltaTime ){
 		break;
 
 	case attack:
-		std::cout << "Attacking\n";
 		state_attack(deltaTime);
 		break;
 
@@ -137,7 +136,14 @@ void PlayerBody::Update( float deltaTime ){
 			invincible_timer->Reset();
 		}
 	}
-
+	
+	if (drawMelee) {
+		melee_timer->Update(deltaTime);
+		if (melee_timer->completed) {
+			drawMelee = false;
+			melee_timer->Reset();
+		}
+	}
 
 	//cap the player's movement speed
 	if (canMove) {
@@ -160,8 +166,15 @@ void PlayerBody::Update( float deltaTime ){
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
-
-
+	if(drawMelee){
+		SDL_Rect meleeDest{
+			meleeHitbox->x,
+			meleeHitbox->y,
+			128,
+			128
+		};
+		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[ouch], &meleeDest);
+	}
 
 	Body::Render(renderer_, projectionMatrix_);
 }
@@ -190,6 +203,7 @@ void PlayerBody::OnDestroy(){
 
 	delete dash_timer;
 	delete invincible_timer;
+	delete melee_timer;
 
 	Body::OnDestroy();
 }
@@ -293,18 +307,24 @@ void PlayerBody::state_attack(float deltaTime_){
 	switch (selectedAbilities) {
 		case melee:
 		{
+			if (!drawMelee) {
+				melee_timer->Start();
+				drawMelee = true;
+			}
 			//	for all bodies within the level scene
 			for (Body* other : parentLevel->levelBodies) {
 				if (other->type == PLAYER) { continue; } // skip the player
 				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
 					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
 					if (other->type == ENEMY) {		//on hit enemy
-						std::cout << "You hit an enemy\n";
+						//std::cout << "You hit an enemy\n";
 						other->takeDamage(meleePower);
 					}
 				}
 			}
+			
 			currentState = idle;
+
 		}
 		break;
 
