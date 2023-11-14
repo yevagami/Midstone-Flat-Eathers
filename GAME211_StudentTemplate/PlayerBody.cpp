@@ -2,54 +2,55 @@
 #include "Scene.h"
 #include "Level.h"
 #include "Projectile.h"
+#include "math.h"
 
-bool PlayerBody::OnCreate(){
+bool PlayerBody::OnCreate() {
 	//Setting the variables
-	maxHealth = maxPlayerHealth;
+	maxHealth = playerHealth;
 	currentHealth = maxHealth;
 
 	//Create the melee hitbox
 	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
 
-    //Creating timers
+	//Creating timers
 	//Note: these timers will be independent of the clock updating pool 
 	//because they need to be activated and updated in certain circumstances
-    dash_timer = new Clock(dashDuration, false);
+	dash_timer = new Clock(dashDuration, false);
 	invincible_timer = new Clock(invincibleDuration, false);
 
 
 	//These ones will be part of the update pool
-    dash_cooldown = new Clock(dashCooldown, false);
+	dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
-    cooldowns.push_back(dash_cooldown);
+	cooldowns.push_back(dash_cooldown);
 	cooldowns.push_back(shooting_cooldown);
 
-    //set the maxSpeed to the currentSpeed
-    currentSpeed = walkSpeed;
-    maxSpeed = currentSpeed;
-    currentState = idle;
+	//set the maxSpeed to the currentSpeed
+	currentSpeed = walkSpeed;
+	maxSpeed = currentSpeed;
+	currentState = idle;
 
 	//Load the sprite sheet
 	playerSpriteSheet = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
-    if(!playerSpriteSheet.autoLoadSprites()){
+	if (!playerSpriteSheet.autoLoadSprites()) {
 		std::cout << "Error in the sprite sheet\n";
 		return false;
 	}
 	image = playerSpriteSheet.image;
 	texture = playerSpriteSheet.texture;
 	cutout = &playerSpriteSheet.spriteStorage[Player];
-	
+
 
 	//Failsafe incase the programmer forgets the parentScene
-	if (parentScene == nullptr) { 
+	if (parentScene == nullptr) {
 		std::cout << "You forgot the parentScene for the Player";
-		return false; 
+		return false;
 	}
 
-    return true;
+	return true;
 }
 
-void PlayerBody::HandleEvents( const SDL_Event& event ){
+void PlayerBody::HandleEvents(const SDL_Event& event) {
 	const Uint8* keyStates = SDL_GetKeyboardState(nullptr);
 
 	//movement controls
@@ -65,11 +66,11 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 		if (VMath::mag(movement) > VERY_SMALL) {
 			playerDirection = movement;
 		}
-		else { 
+		else {
 			if (currentState != attack) {
-				currentState = idle; 
+				currentState = idle;
 			}
-			
+
 		}
 	}
 
@@ -81,7 +82,6 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 
 	//melee controls
 	if (SDL_MOUSEBUTTONUP) {
-
 		if (event.button.button == SDL_BUTTON_LEFT) {
 			currentState = attack;
 			//std::cout << "Pressed left\n";
@@ -90,13 +90,23 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 
 	//Switching abilities
 	if (currentState != attack) {
-		if(keyStates[SDL_SCANCODE_J]) { selectedAbilities = melee; }
-		if(keyStates[SDL_SCANCODE_K]) { selectedAbilities = shoot; }
-		if(keyStates[SDL_SCANCODE_L]) { selectedAbilities = shield; }
+		switch (event.key.keysym.scancode) {
+		case SDL_SCANCODE_J:
+			selectedAbilities = melee;
+			break;
+		case SDL_SCANCODE_K:
+			selectedAbilities = shoot;
+			break;
+		case SDL_SCANCODE_L:
+			isShielding = !isShielding;
+			cout << isShielding << endl;
+			selectedAbilities = shield;
+			break;
+		}
 	}
 }
 
-void PlayerBody::Update( float deltaTime ){
+void PlayerBody::Update(float deltaTime) {
 	//Update the melee hitbox
 	//Gets the direction of the mouse relative to the player's position
 	updateMouseDir();
@@ -132,8 +142,8 @@ void PlayerBody::Update( float deltaTime ){
 
 	if (invincible) {
 		invincible_timer->Update(deltaTime);
-		if (invincible_timer->completed) { 
-			invincible = false; 
+		if (invincible_timer->completed) {
+			invincible = false;
 			invincible_timer->Reset();
 		}
 	}
@@ -151,22 +161,22 @@ void PlayerBody::Update( float deltaTime ){
 	}
 
 
-    // Update position, call Update from base class
-    // Note that would update velocity too, and rotation motion
-    Body::Update( deltaTime );
+	// Update position, call Update from base class
+	// Note that would update velocity too, and rotation motion
+	Body::Update(deltaTime);
 
 
 	//std::cout << "(" << pos.x << ", " << pos.y << ")\n";
 }
 
-void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
+void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 
 
 
 	Body::Render(renderer_, projectionMatrix_);
 }
 
-void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
+void PlayerBody::RenderHitbox(SDL_Renderer* renderer_) {
 	//Render the melee hitbox
 	SDL_Rect box;
 
@@ -182,7 +192,7 @@ void PlayerBody::RenderHitbox(SDL_Renderer* renderer_){
 	Body::RenderHitbox(renderer_);
 }
 
-void PlayerBody::OnDestroy(){
+void PlayerBody::OnDestroy() {
 	for (Clock* item : cooldowns) { delete item; }
 	cooldowns.clear();
 	dash_timer = nullptr;
@@ -194,11 +204,11 @@ void PlayerBody::OnDestroy(){
 	Body::OnDestroy();
 }
 
-PlayerBody::~PlayerBody(){
+PlayerBody::~PlayerBody() {
 	OnDestroy();
 }
 
-void PlayerBody::updateMouseDir(){
+void PlayerBody::updateMouseDir() {
 	Matrix4 projectionMat = parentScene->getInverseMatrix();
 	int mouseX;
 	int mouseY;
@@ -226,7 +236,7 @@ void PlayerBody::updateMeleeHitbox() {
 	meleeHitbox->y = hitboxPosScreen.y - meleeHitbox->h * 0.5f;
 }
 
-void PlayerBody::takeDamage(float amount){
+void PlayerBody::takeDamage(float amount) {
 	if (invincible) { return; }
 	if (amount == 0) return;
 
@@ -250,11 +260,11 @@ int PlayerBody::getSelectedAbility() const {
 
 
 #pragma region State methods
-void PlayerBody::state_idle(){
+void PlayerBody::state_idle() {
 	canMove = true;
 }
 
-void PlayerBody::state_dash(float deltaTime_){
+void PlayerBody::state_dash(float deltaTime_) {
 	canMove = false; //disables the player's movement input
 	dash_timer->Update(deltaTime_);
 
@@ -289,66 +299,64 @@ void PlayerBody::state_dash(float deltaTime_){
 	}
 }
 
-void PlayerBody::state_attack(float deltaTime_){
+void PlayerBody::state_attack(float deltaTime_) {
 	switch (selectedAbilities) {
-		case melee:
-		{
-			//	for all bodies within the level scene
-			for (Body* other : parentLevel->levelBodies) {
-				if (other->type == PLAYER) { continue; } // skip the player
-				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
-					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
-					if (other->type == ENEMY) {		//on hit enemy
-						std::cout << "You hit an enemy\n";
-						other->takeDamage(meleePower);
-					}
+	case melee:
+	{
+		//	for all bodies within the level scene
+		for (Body* other : parentLevel->levelBodies) {
+			if (other->type == PLAYER) { continue; } // skip the player
+			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
+				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
+				if (other->type == ENEMY) {		//on hit enemy
+					std::cout << "You hit an enemy\n";
+					other->takeDamage(meleePower);
 				}
 			}
-			currentState = idle;
 		}
-		break;
+		currentState = idle;
+	}
+	break;
 
-		case shoot: {
-				//	cooldown check! (if its on cooldown, leave)
-			if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
-				shooting_cooldown->Start(); // start the cooldown timer
-				//	create a new bullet projectile
-				Projectile* bullet = new Projectile(
-					parentLevel,
-					pos,
-					mouseDirection * projectileSpeed,
-					Vec3(0.3f, 0.3f, 0.3f),
-					128 * 0.3f, 128 * 0.3f,
-					1.0f,
-					projectilePower
-				);
-				//	add it to all spawned objects (to be pushed to levelObjects pool)
-				parentLevel->spawningBodies.push_back(bullet);
-				bullet = nullptr;
-			}
-			currentState = idle;
+	case shoot: {
+		//	cooldown check! (if its on cooldown, leave)
+		if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
+			shooting_cooldown->Start(); // start the cooldown timer
+			//	create a new bullet projectile
+			Projectile* bullet = new Projectile(
+				parentLevel,
+				pos,
+				mouseDirection * projectileSpeed,
+				Vec3(0.3f, 0.3f, 0.3f),
+				128 * 0.3f, 128 * 0.3f,
+				1.0f,
+				projectilePower
+			);
+			//	add it to all spawned objects (to be pushed to levelObjects pool)
+			parentLevel->spawningBodies.push_back(bullet);
+			bullet = nullptr;
 		}
-		break;
+		currentState = idle;
+	}
+			  break;
 
 
-		case shield:
-			//	for all bodies within the level scene
-			for (Body* other : parentLevel->levelBodies) {
-				if (other->type == PLAYER) { continue; } // skip the player
-				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
-					if (other->type == ENEMY) {		//on hit enemy
-						//cout << "shielding against an enemy\n";
+	case shield:
+		//	for all bodies within the level scene
+		for (Body* other : parentLevel->levelBodies) {
+			if (other->type == PLAYER) { continue; } // skip the player
+			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
+				if (other->type == ENEMY) {		//on hit enemy
 
-						Vec3 otherVel = other->getVel();
-						Vec3 otherPos = other->getPos();
-						Vec3 newPos = otherPos + -1 * otherVel * deltaTime_;
-						other->setPos(newPos);
-						other->setVel(Vec3());
-					}
+					cout << "shielding against an enemy\n";
+					if (!isShielding)  playerDefense = 75.0f;
+					if (isShielding) playerDefense = playerDefenseDefault;
 
 				}
 			}
-			break;
+		}
+		break;
 	}
 }
+
 #pragma endregion

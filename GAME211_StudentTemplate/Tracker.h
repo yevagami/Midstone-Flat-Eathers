@@ -32,5 +32,7 @@ public:
 	ui::Button* tracker1;
 	ui::Button* tracker2;
 	ui::Button* tracker3;
+	ui::Button* tracker4;
+	ui::Button* tracker5;
 protected:
 };

@@ -12,9 +12,13 @@ void Tracker::scary() {
 	tracker1 = new ui::Button(ui::Font{ "", size });
 	tracker2 = new ui::Button(ui::Font{ "", size });
 	tracker3 = new ui::Button(ui::Font{ "", size });
+	tracker4 = new ui::Button(ui::Font{ "", size });
+	tracker5 = new ui::Button(ui::Font{ "", size });
 	allTrackers.emplace_back(tracker1);
 	allTrackers.emplace_back(tracker2);
 	allTrackers.emplace_back(tracker3);
+	allTrackers.emplace_back(tracker4);
+	allTrackers.emplace_back(tracker5);
 
 	for (auto t : allTrackers) {
 		t->centerPosition(stolen::SCREEN_WIDTH, stolen::SCREEN_HEIGHT);
@@ -23,6 +27,8 @@ void Tracker::scary() {
 	}
 	tracker2->setPositionRelativeTo(*tracker1, 25);
 	tracker3->setPositionRelativeTo(*tracker2, 25);
+	tracker4->setPositionRelativeTo(*tracker3, 25);
+	tracker5->setPositionRelativeTo(*tracker4, 25);
 
 
 }

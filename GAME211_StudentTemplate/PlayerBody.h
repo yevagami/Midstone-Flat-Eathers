@@ -66,25 +66,32 @@ private:
     abilities selectedAbilities = melee;
 
     //Player variables
-    float maxPlayerHealth = 250.0f;
+    float playerHealth = 250.0f;
+    float playerHealthDefault = 250.0f;
+    float playerHealthMax = 250.0f;
+
     float playerDefense = 25.0f;
+    float playerDefenseDefault = 25.0f;
+    float playerDefenseMax = 100.0f;
+
     float invincibleDuration = 1.5f;
+    float invincibleDurationDefault = 1.5f;
     bool invincible = false;
+
     Sprite playerSpriteSheet;
 
     //melee variables
     Hitbox* meleeHitbox = nullptr;
     Vec3 mouseDirection = {};
     float meleePower = 50.0f;
-    void facePlayerDir();
 
     //shooting variables
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
     float projectilePower = 50.0f;
-
-    Solid* shieldWall;
-
+public:
+    bool isShielding;
+private:
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
