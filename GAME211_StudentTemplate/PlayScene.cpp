@@ -1,7 +1,4 @@
 #include "PlayScene.h"
-#include <random>
-#include <utility>
-#include <math.h>
 
 PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -72,8 +69,16 @@ void PlayScene::Update(const float time){
 	currentLevel->Update(time);
 
 	std::string important = std::to_string(int(round(player->getCurrentHealth())));
-	std::string notImportant = std::to_string(Tracker::genRanNum(50, 150));
-	std::string somewhatImportant = std::to_string(Tracker::genRanNum(5000, 6000));
+	int enemycounter = 0;
+	for (auto enemy : currentLevel->levelBodies) {
+		if (enemy->type == Body::ENEMY) {
+			enemycounter++;
+		}
+
+	}
+	std::string notImportant = std::to_string(enemycounter);
+	
+	std::string somewhatImportant = std::to_string(player->getSelectedAbility());
 
 
 	tracker.trackThis(important, tracker.tracker1);

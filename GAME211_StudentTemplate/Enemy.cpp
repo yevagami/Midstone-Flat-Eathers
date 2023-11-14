@@ -49,6 +49,8 @@ void Enemy::OnDestroy(){
 }
 
 void Enemy::takeDamage(float amount){
+	if (amount == 0) return;
+
 	currentHealth -= amount;
 	if (currentHealth <= 0) { destroyFlag = true; }
 }
@@ -68,6 +70,7 @@ void Enemy::state_idle(){
 }
 
 void Enemy::state_walk(){
+
 }
 
 void Enemy::state_followPlayer(){

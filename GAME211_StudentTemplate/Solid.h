@@ -13,6 +13,10 @@ public:
 
 	//Override methods
 	void OnCollide(Body* other, float deltaTime) override;
+
+
+	bool isActive;
+
 };
 
 #endif // !SOLID_H

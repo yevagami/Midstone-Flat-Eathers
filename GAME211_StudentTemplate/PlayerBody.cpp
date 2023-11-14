@@ -1,5 +1,4 @@
 #include "PlayerBody.h"
-#include <SDL_image.h>
 #include "Scene.h"
 #include "Level.h"
 #include "Projectile.h"
@@ -114,7 +113,7 @@ void PlayerBody::Update( float deltaTime ){
 		break;
 
 	case attack:
-		state_attack();
+		state_attack(deltaTime);
 		break;
 
 	}
@@ -158,6 +157,9 @@ void PlayerBody::Update( float deltaTime ){
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
+
+
+
 	Body::Render(renderer_, projectionMatrix_);
 }
 
@@ -223,10 +225,24 @@ void PlayerBody::updateMeleeHitbox() {
 
 void PlayerBody::takeDamage(float amount){
 	if (invincible) { return; }
+	if (amount == 0) return;
+
 	currentHealth -= amount - ((amount * (playerDefense / 100)) * 0.8);
 	std::cout << "Player took damage\n";
 	invincible_timer->Start();
 	invincible = true;
+}
+
+int PlayerBody::getSelectedAbility() const {
+	switch (selectedAbilities) {
+	case melee:
+		return melee;
+	case shoot:
+		return shoot;
+	case shield:
+		return shield;
+	}
+	return 0;
 }
 
 
@@ -240,9 +256,9 @@ void PlayerBody::state_walk(){
 	maxSpeed = walkSpeed;
 }
 
-void PlayerBody::state_dash(float deltaTime){
+void PlayerBody::state_dash(float deltaTime_){
 	canMove = false; //disables the player's movement input
-	dash_timer->Update(deltaTime);
+	dash_timer->Update(deltaTime_);
 
 	//set the max speed to the dash speed
 	currentSpeed = dashSpeed;
@@ -272,15 +288,16 @@ void PlayerBody::state_dash(float deltaTime){
 	}
 }
 
-void PlayerBody::state_attack(){
+void PlayerBody::state_attack(float deltaTime_){
 	switch (selectedAbilities) {
 		case melee:
 		{
+			//	for all bodies within the level scene
 			for (Body* other : parentLevel->levelBodies) {
-				if (other->type == PLAYER) { continue; }
-				if (other->getHitbox()->collisionCheck(meleeHitbox)) {
-					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }
-					if (other->type == ENEMY) {
+				if (other->type == PLAYER) { continue; } // skip the player
+				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
+					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
+					if (other->type == ENEMY) {		//on hit enemy
 						std::cout << "You hit an enemy\n";
 						other->takeDamage(meleePower);
 					}
@@ -291,8 +308,10 @@ void PlayerBody::state_attack(){
 		break;
 
 		case shoot: {
+				//	cooldown check! (if its on cooldown, leave)
 			if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
-				shooting_cooldown->Start();
+				shooting_cooldown->Start(); // start the cooldown timer
+				//	create a new bullet projectile
 				Projectile* bullet = new Projectile(
 					parentLevel,
 					pos,
@@ -302,6 +321,7 @@ void PlayerBody::state_attack(){
 					1.0f,
 					projectilePower
 				);
+				//	add it to all spawned objects (to be pushed to levelObjects pool)
 				parentLevel->spawningBodies.push_back(bullet);
 				bullet = nullptr;
 			}
@@ -311,7 +331,24 @@ void PlayerBody::state_attack(){
 
 
 		case shield:
-			currentState = idle;
+			//	for all bodies within the level scene
+			for (Body* other : parentLevel->levelBodies) {
+				if (other->type == PLAYER) { continue; } // skip the player
+				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
+
+					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
+					if (other->type == ENEMY) {		//on hit enemy
+						cout << "shielding against an enemy\n";
+
+						Vec3 otherVel = other->getVel();
+						Vec3 otherPos = other->getPos();
+						Vec3 newPos = otherPos + -1 * otherVel * deltaTime_;
+						other->setPos(newPos);
+						other->setVel(Vec3());
+					}
+
+				}
+			}
 			break;
 	}
 }

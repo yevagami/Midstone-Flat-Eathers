@@ -1,8 +1,8 @@
 #pragma once
 #ifndef SPRITEDEFS_H
 #define SPRITEDEFS_H
-#include <unordered_map>
-#include <string>
+//#include <unordered_map>
+//#include <string>
 #include "Sprite.h"
 
 	enum SpriteDefinitions{

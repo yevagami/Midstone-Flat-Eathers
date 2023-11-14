@@ -1,18 +1,13 @@
 #pragma once
 #ifndef SPRITE_H
 #define SPRITE_H
-#include <stdio.h>
-#include <iostream>
 #include <vector>
 #include "SDL.h"
-#include "SDL_image.h"
 
 class Sprite{
-private:
-
+private: //classes are private by defalt
 	// variables to get class working
 	SDL_Renderer* renderer = nullptr; // machine that makes things draw on the screen
-
 public:
 
 	std::vector<SDL_Rect> spriteStorage; // store all individual sprites cut out from big sprites

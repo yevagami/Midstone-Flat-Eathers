@@ -8,14 +8,15 @@
 #ifndef PLAYERBODY_H
 #define PLAYERBODY_H
 
-#include <stdio.h>
 #include "Body.h"
 #include "GameManager.h"
 #include "Clock.h"
 #include <vector>
 #include "SpriteDefs.h"
 
+class Solid;
 class Scene;
+
 class PlayerBody : public Body{
 protected:
     Scene* parentScene = nullptr;
@@ -50,11 +51,14 @@ public:
     void updateMeleeHitbox();
     void takeDamage(float amount) override;
 
+
+    int getSelectedAbility() const;
+
     //state methods
     void state_idle();
     void state_walk();
-    void state_dash(float deltaTime);
-    void state_attack();
+    void state_dash(float deltaTime_);
+    void state_attack(float deltaTime_);
 
 private:
     //Player abilities
@@ -72,11 +76,14 @@ private:
     Hitbox* meleeHitbox = nullptr;
     Vec3 mouseDirection = {};
     float meleePower = 50.0f;
+    void facePlayerDir();
 
     //shooting variables
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
     float projectilePower = 50.0f;
+
+    Solid* shieldWall;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for

@@ -1,5 +1,6 @@
 #include "Sprite.h"
-#include "Math.h"
+#include <iostream>
+#include <SDL_image.h>
 
 // adds file and renderer to create a texture and a surface
 
