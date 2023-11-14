@@ -17,7 +17,7 @@ bool PlayerBody::OnCreate() {
 	//because they need to be activated and updated in certain circumstances
 	dash_timer = new Clock(dashDuration, false);
 	invincible_timer = new Clock(invincibleDuration, false);
-
+	drawMelee_timer = new Clock(drawMeleeDuration, false); drawMelee_timer = new Clock(drawMeleeDuration, false);
 
 	//These ones will be part of the update pool
 	dash_cooldown = new Clock(dashCooldown, false);
@@ -148,6 +148,13 @@ void PlayerBody::Update(float deltaTime) {
 		}
 	}
 
+	if (drawMelee) {
+		drawMelee_timer->Update(deltaTime);
+		if (drawMelee_timer->completed) {
+			drawMelee = false;
+			drawMelee_timer->Reset();
+		}
+	}
 
 	//cap the player's movement speed
 	if (canMove) {
@@ -170,9 +177,10 @@ void PlayerBody::Update(float deltaTime) {
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
-
-
-
+	if (drawMelee) {
+		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64};
+		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[ouch], &Rect);
+	}
 	Body::Render(renderer_, projectionMatrix_);
 }
 
@@ -303,6 +311,10 @@ void PlayerBody::state_attack(float deltaTime_) {
 	switch (selectedAbilities) {
 	case melee:
 	{
+		if (!drawMelee) { 
+			drawMelee = true;
+			drawMelee_timer->Start();
+		}
 		//	for all bodies within the level scene
 		for (Body* other : parentLevel->levelBodies) {
 			if (other->type == PLAYER) { continue; } // skip the player
@@ -341,7 +353,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 			  break;
 
 
-	case shield:
+	case shield: {
 		//	for all bodies within the level scene
 		for (Body* other : parentLevel->levelBodies) {
 			if (other->type == PLAYER) { continue; } // skip the player
@@ -356,6 +368,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 			}
 		}
 		break;
+		}
 	}
 }
 

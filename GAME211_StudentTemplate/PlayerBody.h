@@ -56,7 +56,6 @@ public:
 
     //state methods
     void state_idle();
-    void state_walk();
     void state_dash(float deltaTime_);
     void state_attack(float deltaTime_);
 
@@ -84,6 +83,8 @@ private:
     Hitbox* meleeHitbox = nullptr;
     Vec3 mouseDirection = {};
     float meleePower = 50.0f;
+    float drawMeleeDuration = 0.3f;
+    bool drawMelee = false;
 
     //shooting variables
     float projectileSpeed = 2500.0f;
@@ -97,6 +98,7 @@ private:
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
     Clock* shooting_cooldown = nullptr;
     Clock* invincible_timer = nullptr;
+    Clock* drawMelee_timer = nullptr;
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables
