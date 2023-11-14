@@ -45,6 +45,8 @@ void Body::OnDestroy() {
 
     delete hitbox;
 
+    cutout = nullptr;
+
     parentLevel = nullptr;
 }
 
@@ -115,8 +117,14 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     screenCoords = projectionMatrix_ * pos;
 
     // Scale the image, in case the .png file is too big or small
-    w = image->w * scale.x;
-    h = image->h * scale.y;
+    if (cutout == nullptr) {
+        w = image->w * scale.x;
+        h = image->h * scale.y;
+    }
+    else {
+        w = cutout->w * scale.x;
+        h = cutout->h * scale.y;
+    }
 
     // The square's x and y values represent the top left corner of 
     // where SDL will draw the .png image.
@@ -132,7 +140,7 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     // Convert character orientation from radians to degrees.
     float orientationDegrees = orientation * 180.0f / M_PI;
 
-    SDL_RenderCopyEx(renderer_, texture, nullptr, &square,
+    SDL_RenderCopyEx(renderer_, texture, cutout, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
 }
 

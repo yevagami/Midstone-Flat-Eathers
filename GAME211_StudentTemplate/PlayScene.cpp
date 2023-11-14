@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include <random>
 #include <utility>
+#include <math.h>
 
 PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	window = sdlWindow_;
@@ -70,7 +71,7 @@ void PlayScene::Update(const float time){
 	CameraFollowPlayer(player);
 	currentLevel->Update(time);
 
-	std::string important = std::to_string(Tracker::genRanNum(0, 10));
+	std::string important = std::to_string(int(round(player->getCurrentHealth())));
 	std::string notImportant = std::to_string(Tracker::genRanNum(50, 150));
 	std::string somewhatImportant = std::to_string(Tracker::genRanNum(5000, 6000));
 
@@ -92,12 +93,9 @@ void PlayScene::Render(){
 	SDL_RenderPresent(renderer);
 }
 
-
-
 void PlayScene::HandleEvents(const SDL_Event& event){
 	player->HandleEvents(event);
 }
-
 
 void PlayScene::CameraFollowPlayer(PlayerBody* p){
 	//guard clause to make sure the player exists

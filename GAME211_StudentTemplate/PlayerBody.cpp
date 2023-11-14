@@ -3,7 +3,6 @@
 #include "Scene.h"
 #include "Level.h"
 #include "Projectile.h"
-#include "SpriteDefs.h"
 
 bool PlayerBody::OnCreate(){
 	//Setting the variables
@@ -19,6 +18,7 @@ bool PlayerBody::OnCreate(){
     dash_timer = new Clock(dashDuration, false);
 	invincible_timer = new Clock(invincibleDuration, false);
 
+
 	//These ones will be part of the update pool
     dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
@@ -30,14 +30,15 @@ bool PlayerBody::OnCreate(){
     maxSpeed = currentSpeed;
     currentState = idle;
 
-	
-    image = IMG_Load("Textures/programmer_art/player.png");
-	SDL_Renderer* renderer = parentScene->getRenderer();
-    texture = SDL_CreateTextureFromSurface( renderer, image );
-    if (image == nullptr) {
-        std::cerr << "Can't open the image" << std::endl;
-        return false;
-    }
+	//Load the sprite sheet
+	playerSpriteSheet = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+    if(!playerSpriteSheet.autoLoadSprites()){
+		std::cout << "Error in the sprite sheet\n";
+		return false;
+	}
+	image = playerSpriteSheet.image;
+	texture = playerSpriteSheet.texture;
+	cutout = &playerSpriteSheet.spriteStorage[Player];
 	
 
 	//Failsafe incase the programmer forgets the parentScene
@@ -45,17 +46,17 @@ bool PlayerBody::OnCreate(){
 		std::cout << "You forgot the parentScene for the Player";
 		return false; 
 	}
+
     return true;
 }
 
 void PlayerBody::HandleEvents( const SDL_Event& event ){
 	const Uint8* keyStates = SDL_GetKeyboardState(nullptr);
 
-	//resets the input each frame
-	movement = Vec3();
-
 	//movement controls
 	if (canMove) {
+		//resets the input each frame
+		movement = Vec3();
 		if (keyStates[SDL_SCANCODE_W] == 1) { movement.y += 1.0f; }
 		if (keyStates[SDL_SCANCODE_S] == 1) { movement.y -= 1.0f; }
 		if (keyStates[SDL_SCANCODE_A] == 1) { movement.x -= 1.0f; }
@@ -79,14 +80,16 @@ void PlayerBody::HandleEvents( const SDL_Event& event ){
 	if (SDL_MOUSEBUTTONUP) {
 
 		if (event.button.button == SDL_BUTTON_LEFT) {
-			currentState = melee;
+			currentState = attack;
 			//std::cout << "Pressed left\n";
 		}
+	}
 
-		if (event.button.button == SDL_BUTTON_RIGHT && currentState != shooting && (!shooting_cooldown->hasStarted || shooting_cooldown->completed)) {
-			currentState = shooting;
-			//std::cout << "Pressed right\n";
-		}
+	//Switching abilities
+	if (currentState != attack) {
+		if(keyStates[SDL_SCANCODE_J]) { selectedAbilities = melee; }
+		if(keyStates[SDL_SCANCODE_K]) { selectedAbilities = shoot; }
+		if(keyStates[SDL_SCANCODE_L]) { selectedAbilities = shield; }
 	}
 }
 
@@ -99,75 +102,21 @@ void PlayerBody::Update( float deltaTime ){
 		//Idle state
 	case idle:
 		//std::cout << "idle state \n";
-		canMove = true;
+		state_idle();
 		break;
 
 	case walk:
-		currentSpeed = walkSpeed;
-		maxSpeed = walkSpeed;
+		state_walk();
 		break;
 
 	case dash:
-		canMove = false; //disables the player's movement input
-		dash_timer->Update(deltaTime);
-
-		//set the max speed to the dash speed
-		currentSpeed = dashSpeed;
-		maxSpeed = dashSpeed;
-
-		//cap the dash speed so the player doesn't move faster when moving diagonally 
-		if (VMath::mag(vel) > maxSpeed) {
-			float newSpeed = sqrt((currentSpeed * currentSpeed) / 2);
-			vel = Vec3(playerDirection.x * newSpeed, playerDirection.y * newSpeed, 0.0f);
-		}
-		else {
-			vel = Vec3(playerDirection.x * currentSpeed, playerDirection.y * currentSpeed, 0.0f);
-		}
-
-		//Resets the timer when the duration has elapsed 
-		if (dash_timer->completed) {
-			//set the current and max speed;
-			currentSpeed = walkSpeed;
-			maxSpeed = walkSpeed;
-
-			//reset the timer and start the cooldown
-			dash_timer->Reset();
-			dash_cooldown->Start();
-			//vel = Vec3(); //reset the player's speed and set the state to idle
-			currentState = idle;
-			canMove = true;
-		}
+		state_dash(deltaTime);
 		break;
 
-	case melee:
-
-		for (Body* other : parentLevel->levelBodies) {
-			if (other->type == PLAYER) { continue; }
-			if (other->getHitbox()->collisionCheck(meleeHitbox)) {
-				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }
-				if (other->type == ENEMY) {
-					std::cout << "You hit an enemy\n"; 
-					other->takeDamage(meleePower);
-				}
-			}
-		}
-		currentState = idle;
+	case attack:
+		state_attack();
 		break;
 
-	case shooting:
-		shooting_cooldown->Start();
-		Projectile* bullet = new Projectile(
-			parentLevel,
-			pos,
-			mouseDirection * projectileSpeed,
-			Vec3(0.1f, 0.1f, 0.1f),
-			64, 64,
-			1.0f
-		);
-		parentLevel->spawningBodies.push_back(bullet);
-		bullet = nullptr;
-		currentState = idle;
-		break;
 	}
 
 	//update the cooldown timers
@@ -263,8 +212,8 @@ void PlayerBody::updateMouseDir(){
 void PlayerBody::updateMeleeHitbox() {
 	Matrix4 projectionMat = parentScene->getProjectionMatrix();
 	Vec3 hitboxPos = Vec3(
-		pos.x + (mouseDirection.x * (meleeHitbox->w + 100.0f)),
-		pos.y + (mouseDirection.y * (meleeHitbox->h + 100.0f)),
+		pos.x + (mouseDirection.x * (meleeHitbox->w + 32.0f)),
+		pos.y + (mouseDirection.y * (meleeHitbox->h + 32.0f)),
 		0.0f
 	);
 	Vec3 hitboxPosScreen = projectionMat * hitboxPos;
@@ -279,3 +228,91 @@ void PlayerBody::takeDamage(float amount){
 	invincible_timer->Start();
 	invincible = true;
 }
+
+
+#pragma region State methods
+void PlayerBody::state_idle(){
+	canMove = true;
+}
+
+void PlayerBody::state_walk(){
+	currentSpeed = walkSpeed;
+	maxSpeed = walkSpeed;
+}
+
+void PlayerBody::state_dash(float deltaTime){
+	canMove = false; //disables the player's movement input
+	dash_timer->Update(deltaTime);
+
+	//set the max speed to the dash speed
+	currentSpeed = dashSpeed;
+	maxSpeed = dashSpeed;
+
+	//cap the dash speed so the player doesn't move faster when moving diagonally 
+	if (VMath::mag(vel) > maxSpeed) {
+		float newSpeed = sqrt((currentSpeed * currentSpeed) / 2);
+		vel = Vec3(playerDirection.x * newSpeed, playerDirection.y * newSpeed, 0.0f);
+	}
+	else {
+		vel = Vec3(playerDirection.x * currentSpeed, playerDirection.y * currentSpeed, 0.0f);
+	}
+
+	//Resets the timer when the duration has elapsed 
+	if (dash_timer->completed) {
+		//set the current and max speed;
+		currentSpeed = walkSpeed;
+		maxSpeed = walkSpeed;
+
+		//reset the timer and start the cooldown
+		dash_timer->Reset();
+		dash_cooldown->Start();
+		//vel = Vec3(); //reset the player's speed and set the state to idle
+		currentState = idle;
+		canMove = true;
+	}
+}
+
+void PlayerBody::state_attack(){
+	switch (selectedAbilities) {
+		case melee:
+		{
+			for (Body* other : parentLevel->levelBodies) {
+				if (other->type == PLAYER) { continue; }
+				if (other->getHitbox()->collisionCheck(meleeHitbox)) {
+					if (other->type == SOLID) { std::cout << "You hit a solid\n"; }
+					if (other->type == ENEMY) {
+						std::cout << "You hit an enemy\n";
+						other->takeDamage(meleePower);
+					}
+				}
+			}
+			currentState = idle;
+		}
+		break;
+
+		case shoot: {
+			if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
+				shooting_cooldown->Start();
+				Projectile* bullet = new Projectile(
+					parentLevel,
+					pos,
+					mouseDirection * projectileSpeed,
+					Vec3(0.3f, 0.3f, 0.3f),
+					128 * 0.3f, 128 * 0.3f,
+					1.0f,
+					projectilePower
+				);
+				parentLevel->spawningBodies.push_back(bullet);
+				bullet = nullptr;
+			}
+			currentState = idle;
+		}
+		break;
+
+
+		case shield:
+			currentState = idle;
+			break;
+	}
+}
+#pragma endregion

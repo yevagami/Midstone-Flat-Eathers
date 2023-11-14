@@ -13,13 +13,15 @@
 #include "GameManager.h"
 #include "Clock.h"
 #include <vector>
+#include "SpriteDefs.h"
+
 class Scene;
 class PlayerBody : public Body{
 protected:
     Scene* parentScene = nullptr;
 
 public:
-    int counter = 0;
+ 
     //Constructors
     PlayerBody() {}
 
@@ -48,22 +50,33 @@ public:
     void updateMeleeHitbox();
     void takeDamage(float amount) override;
 
+    //state methods
+    void state_idle();
+    void state_walk();
+    void state_dash(float deltaTime);
+    void state_attack();
+
 private:
+    //Player abilities
+    enum abilities { melee, shoot, shield };
+    abilities selectedAbilities = melee;
+
     //Player variables
     float maxPlayerHealth = 250.0f;
     float playerDefense = 25.0f;
     float invincibleDuration = 1.5f;
     bool invincible = false;
+    Sprite playerSpriteSheet;
 
     //melee variables
     Hitbox* meleeHitbox = nullptr;
     Vec3 mouseDirection = {};
-    float meleePower = 100.0f;
+    float meleePower = 50.0f;
 
     //shooting variables
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
-    float projectilePower = 85.0f;
+    float projectilePower = 50.0f;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
@@ -86,7 +99,7 @@ private:
     float maxSpeed = 0.0f;
 
     //states
-    enum states { idle, walk, dash, melee, shooting };
+    enum states { idle, walk, dash, attack};
     states currentState = idle;
 };
 

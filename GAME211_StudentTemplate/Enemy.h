@@ -41,37 +41,42 @@ private:
 	//Enemy specific variables
 	float enemyMoveSpeed;
 	float enemyPower;
-	Body* player = nullptr;
+	Body* playerReference = nullptr;
 
 	//Map contain multiple enemy definitions
 	std::unordered_map<subType, enemyVariables> enemyDefintions{
 		{subType::flash, enemyVariables{
+			250.0f,
 			100.0f,
-			900.0f,
 			IMG_Load("Textures/programmer_art/enemy.png"),
-			10.0f,
+			35.0f,
 			128.0f,
 			128.0f
 		}},
 
 		{subType::miracle, enemyVariables{
-			75.0f,
+			175.0f,
 			1500.0f,
-			nullptr,
-			0.0f,
+			IMG_Load("Textures/programmer_art/enemy.png"),
+			20.0f,
 			128.0f,
 			128.0f
 		}},
 
 		{subType::strong, enemyVariables{
-			250.0f,
+			500.0f,
 			750.0f,
-			nullptr,
-			0.0f,
+			IMG_Load("Textures/programmer_art/enemy.png"),
+			50.0f,
 			128.0f,
 			128.0f
 		}},
 
 	};
+
+	//state methods
+	void state_idle();
+	void state_walk();
+	void state_followPlayer();
 };
 

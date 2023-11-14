@@ -112,6 +112,7 @@ void Level_test::OnDestroy(){
 
 	floor->OnDestroy();
 	delete floor;
+
 }
 
 void Level_test::Update(const float time){
@@ -167,7 +168,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		//body->RenderHitbox(renderer_);
+		body->RenderHitbox(renderer_);
 	}
 }
 

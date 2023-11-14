@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include <MMath.h>
 #include "Hitbox.h"
+#include "SpriteDefs.h"
 
 using namespace MATH;
 struct Transform {
@@ -101,6 +102,7 @@ public:
 	virtual float getAngular() { return angular; }
 	Level* getParentLevel() { return parentLevel; }
 	void setParentLevel(Level* parentLevel_) { parentLevel = parentLevel_; }
+	float getCurrentHealth() { return currentHealth; }
 
 	//Texture related methods
 	virtual void setImage(SDL_Surface* image_) { image = image_; }
@@ -113,6 +115,7 @@ public:
 	// so that mouse position can be copied into a Body.
 	void setPos(Vec3 pos_) { pos = pos_; }
 	virtual void takeDamage(float amount) { return; }
+	void setCutout(SDL_Rect* cutout_) { cutout = cutout_; }
 
 protected:
 	// inherited classes can access this
@@ -137,6 +140,7 @@ protected:
 	//Texture stuff
 	SDL_Surface* image = nullptr;
 	SDL_Texture* texture = nullptr;
+	SDL_Rect* cutout = nullptr;
 };
 
 
