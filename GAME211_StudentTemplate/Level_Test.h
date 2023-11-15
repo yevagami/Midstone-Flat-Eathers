@@ -2,7 +2,8 @@
 #include "Level.h"
 #include "Solid.h"
 #include "Enemy.h"
-
+#include <cstdlib>
+#include <ctime>
 class Level_test : public Level{
 private:
 	//Background
@@ -11,7 +12,11 @@ private:
 	Body* floor = nullptr;
 
 public:
+
+	int enemycounter = 0;
+
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
+	void mobSpawner();
 	bool OnCreate();
 	void OnDestroy();
 	void Update(const float time);

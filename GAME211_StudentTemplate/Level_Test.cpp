@@ -1,7 +1,31 @@
 #include "Level_Test.h"
 
+void Level_test::mobSpawner() {
+	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
+	for (auto enemy : levelBodies) {
+		int enemycounter = 0;
+		if (enemy->type == Body::ENEMY) {
+			enemycounter++;
+			return;
+		}
+		
+	}
+
+	//This whole section is made to randomise the position of spawned mob. Yes its an int because rand() wants an int. Sorry.
+	int scaryMaxX = (1366.0f / 2.0f) + 128.0f * 4.5f;
+	int scaryMaxY = (768.0f / 2.0f) + 128.0f * 4.5f;
+	int scaryMinX = (1366.0f / 2.0f) - 128.0f * 4.5f;
+	int scaryMinY = (768.0f / 2.0f) - 128.0f * 4.5f;
+	
+	Enemy* ghost = new Enemy (this, Vec3((std::rand() % scaryMaxX + scaryMinX), (std::rand() % scaryMaxY + scaryMinY), 0), Enemy::flash);
+	levelBodies.push_back(ghost);
+	ghost = nullptr;
+	std::cout << "Did i come here?";
+	
+}
+
 bool Level_test::OnCreate(){
-	Enemy* ghost = new Enemy(this, Vec3((1600.0f / 2.0f) - 1000 + 500.0f, 900.0f / 2.0f, 0.0f), Enemy::flash);
+	Enemy* ghost = new Enemy(this, Vec3((1366.0f / 2.0f) - 500.0f, 768.0f / 2.0f, 0.0f), Enemy::flash);
 	levelBodies.push_back(ghost);
 	ghost = nullptr;
 
@@ -128,7 +152,7 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	
+	mobSpawner();
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
