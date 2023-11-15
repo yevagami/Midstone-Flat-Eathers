@@ -15,6 +15,9 @@ Enemy::Enemy(Level* parentLevel_, Vec3 pos_, subType type_) {
 }
 
 void Enemy::Update(float time){
+	//Technically is redundant, because the Body::update is called anyways
+	//But I wanna make sure that checking if it should be destroyed is the first thing
+	//Because it can exit early
 	if (destroyFlag) {
 		parentLevel->trashBodies.push_back(this);
 		return;
@@ -56,8 +59,8 @@ void Enemy::takeDamage(float amount){
 }
 
 void Enemy::state_idle(){
+	//Find the player and set it to the playerReference if not already
 	if (playerReference == nullptr) {
-		//Find the player
 		for (Body* body : parentLevel->levelBodies) {
 			if (body->type == PLAYER) {
 				playerReference = body;
@@ -74,10 +77,13 @@ void Enemy::state_walk(){
 }
 
 void Enemy::state_followPlayer(){
+	//If it hasn't found the player yet, go to the idle state and find them
 	if (playerReference == nullptr) {
 		currentState = idle;
 		return;
 	}
+
+	//Moves towards the player
 	Vec3 playerDirection = VMath::normalize(playerReference->getPos() - pos);
 	vel = playerDirection * enemyMoveSpeed;
 }

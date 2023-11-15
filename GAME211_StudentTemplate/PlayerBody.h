@@ -58,7 +58,7 @@ public:
     void state_attack(float deltaTime_);
 
 private:
-    //Player abilities
+    //Player abilities enum
     enum abilities { melee, shoot, shield };
     abilities selectedAbilities = melee;
 
@@ -66,12 +66,14 @@ private:
     float playerHealth = 250.0f;
     float playerHealthDefault = 250.0f;
     float playerHealthMax = 250.0f;
-
+    
+    //Defense/Shield ability related variables
     float playerDefense = 25.0f;
     float playerDefenseDefault = 25.0f;
     float playerDefenseMax = 100.0f;
     bool drawShield = false;
 
+    //Invincible frames so the player doesn't get hurt every single fram
     float invincibleDuration = 1.5f;
     float invincibleDurationDefault = 1.5f;
     bool invincible = false;
@@ -83,21 +85,24 @@ private:
     Vec3 mouseDirection = {};
     float meleePower = 50.0f;
     float drawMeleeDuration = 0.3f;
-    bool drawMelee = false;
+    bool drawMelee = false; //Draws a sprite to the screen when the player melees
 
     //shooting variables
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
     float projectilePower = 50.0f;
+
+    //Idk what this is -Adriel
 public:
     bool isShielding;
 private:
+
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
-    Clock* shooting_cooldown = nullptr;
-    Clock* invincible_timer = nullptr;
-    Clock* drawMelee_timer = nullptr;
+    Clock* shooting_cooldown = nullptr; //how long before the player can shoot again
+    Clock* invincible_timer = nullptr; //how long before the player can take damage again
+    Clock* drawMelee_timer = nullptr;  //how long the melee sprite would stay on screen for
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables

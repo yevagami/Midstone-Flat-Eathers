@@ -48,6 +48,8 @@ bool PlayScene::OnCreate(){
 		std::cout << "Something went wrong with the Player object\n";
 		return false;
 	};
+
+	//Attaching the playerbody to the level's vector so it can interact with the objects there
 	player->setParentLevel(currentLevel);
 	currentLevel->levelBodies.push_back(player);
 
@@ -66,20 +68,22 @@ void PlayScene::OnDestroy(){
 
 
 void PlayScene::Update(const float time){
-	CameraFollowPlayer(player);
+	CameraFollowPlayer(player); //Make the camera follow the player
 	currentLevel->Update(time);
 
+	//Tracking stuff
 	std::string important = std::to_string(int(round(player->getCurrentHealth())));
 	int enemycounter = 0;
 
+	//Keeps track how many enemies are in the level
 	for (auto enemy : currentLevel->levelBodies) {
 		if (enemy->type == Body::ENEMY) {
 			enemycounter++;
 		}
 	}
 
-	std::string notImportant = std::to_string(enemycounter);
-	std::string somewhatImportant = player->getSelectedAbility();
+	std::string notImportant = std::to_string(enemycounter); 
+	std::string somewhatImportant = player->getSelectedAbility(); //Keeps track on the ability that the player is using
 	//std::string shieldActive = std::to_string(player->isShielding);
 
 	tracker.trackThis(important, tracker.tracker1);
@@ -111,7 +115,7 @@ void PlayScene::CameraFollowPlayer(PlayerBody* p){
 		std::cout << "Player doesn't exist\n";
 	}
 
-	//move the camera  update
+	//move the camera update
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	Matrix4 ndc = MMath::viewportNDC(w, h);

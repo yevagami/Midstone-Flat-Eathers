@@ -22,7 +22,7 @@ public:
 private:
 	float power;
 	Sprite projectileSprite;
-	float duration = 3.0f;
+	float duration = 3.0f; //How long the projectile can exists before destroying itself
 	Clock* duration_timer = nullptr;
 };
 

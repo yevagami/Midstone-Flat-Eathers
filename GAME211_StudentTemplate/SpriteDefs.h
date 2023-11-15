@@ -4,7 +4,8 @@
 //#include <unordered_map>
 //#include <string>
 #include "Sprite.h"
-
+	//These are just enums that I've defined so you don't have to go around lookg through the sprite sheet
+	//To see which index belongs to which sprite
 	enum SpriteDefinitions{
 		Missing = 0,
 		Player = 1,

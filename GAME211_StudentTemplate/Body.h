@@ -115,7 +115,7 @@ public:
 	// so that mouse position can be copied into a Body.
 	void setPos(Vec3 pos_) { pos = pos_; }
 	virtual void takeDamage(float amount) { return; }
-	void setCutout(SDL_Rect* cutout_) { cutout = cutout_; }
+	void setCutout(SDL_Rect* cutout_) { cutout = cutout_; } //Sets the SRect when rendering from a larger sprite sheet
 
 protected:
 	// inherited classes can access this
@@ -133,7 +133,7 @@ protected:
 	float orientation; // facing this direction
 	float rotation; // rotating at this speed (radians per second?)
 	float angular; // angular acceleration
-	bool destroyFlag = false;
+	bool destroyFlag = false; //Bool that will self report iself to the trashBodies vector to remove itself from the level
 	Hitbox* hitbox;
 	Transform transform;	//	constructor list struct
 

@@ -35,7 +35,10 @@ Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, i
 
 
 void Projectile::Update(float deltaTime){
+	//Updates the timer
 	duration_timer->Update(deltaTime);
+
+	//Once the time is up and it isn't yet marked for deletion, do it
 	if (duration_timer->completed && !destroyFlag) {
 		destroyFlag = true;
 	}
@@ -44,10 +47,12 @@ void Projectile::Update(float deltaTime){
 }
 
 void Projectile::OnCollide(Body* other, float deltaTime){
+	//If it's a solid, just destroy itself
 	if (other->type == SOLID) {
 		destroyFlag = true;
 	}
 
+	//if it's an enemy, hurt it then destroy itself
 	if (other->type == ENEMY) {
 		other->takeDamage(power);
 		destroyFlag = true;

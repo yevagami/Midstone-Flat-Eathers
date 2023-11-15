@@ -22,10 +22,7 @@ private:
 
 	//Player 
 	PlayerBody* player;
-	void CameraFollowPlayer(PlayerBody* p);
-
-	//	for enemy ai, for example "if (howClose is more than 5){ enemy.rangedAttack; }"
-	//int howClose(Body* body_, Body* otherBody_);
+	void CameraFollowPlayer(PlayerBody* p); 
 
 	//Level 
 	Level* currentLevel;

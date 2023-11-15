@@ -15,7 +15,7 @@ public:
 	//"Aka the mortuary" -Diana Astafyeva
 	std::vector<Body*>levelBodies;
 	std::vector<Body*>trashBodies;
-	std::vector<Body*>spawningBodies;
+	std::vector<Body*>spawningBodies; //I'm adding this vector because std::vector doesn't like it when you try to push_back() something to the vector while iterating through it
 
 	//Fundamental methods (create, update, render, handle input, destroy)
 	virtual bool OnCreate() = 0;

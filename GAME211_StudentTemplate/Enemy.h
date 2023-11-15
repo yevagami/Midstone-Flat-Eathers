@@ -2,6 +2,7 @@
 #include "Body.h"
 #include <unordered_map>
 
+//This struct is merely for the enemy subtype map
 struct enemyVariables {
 	float health;
 	float moveSpeed;

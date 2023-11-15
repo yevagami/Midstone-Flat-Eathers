@@ -1,5 +1,7 @@
 #include "Level_Test.h"
 
+//I might have to reorder the methods for organizing purposes
+
 void Level_test::mobSpawner() {
 	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
 	int enemycounter = 0;
@@ -29,17 +31,16 @@ void Level_test::mobSpawner() {
 }
 
 bool Level_test::OnCreate(){
-	Enemy* ghost = new Enemy(this, Vec3((1366.0f / 2.0f) - 500.0f, 768.0f / 2.0f, 0.0f), Enemy::flash);
-	levelBodies.push_back(ghost);
-	ghost = nullptr;
-
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 
+	//Note:
+	//I made the screen size and the physics size the same because it's much easier to use when constructing levels
+#pragma region Creating Level geometry
 	//Creating the floor
 	floor = new Body(this, Vec3((1366.0f / 2.0f), 768.0f / 2.0f, 0.0f), Vec3(10.0f, 10.0f, 10.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/tile_floor_red.png"));
 
-#pragma region Creating Walls
+
 	//creating the walls
 	//Top wall
 	Solid* wall = new Solid(
@@ -51,7 +52,7 @@ bool Level_test::OnCreate(){
 		IMG_Load("Textures/programmer_art/tile_roof_red.png")
 	);
 	levelBodies.push_back(wall);
-	//Accent to make the wall look tall
+	//Accent to make the wall look nicer, also by default bodies don't have collision
 	Body* tiles= new Body(
 		this,
 		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 4.5, 0.0f),
@@ -73,7 +74,7 @@ bool Level_test::OnCreate(){
 		IMG_Load("Textures/programmer_art/tile_roof_red.png")
 	);
 	levelBodies.push_back(wall);
-
+	//Accent
 	tiles = new Body(
 		this,
 		Vec3(1366.0f / 2.0f + 128 * 5.5, 768.0f / 2.0f - 128 * 7, 0.0f),
@@ -94,7 +95,7 @@ bool Level_test::OnCreate(){
 		IMG_Load("Textures/programmer_art/tile_roof_red.png")
 	);
 	levelBodies.push_back(wall);
-
+	//Accent
 	tiles = new Body(
 		this,
 		Vec3(1366.0f / 2.0f - 128 * 5.5, 768.0f / 2.0f - 128 * 7, 0.0f),
@@ -124,6 +125,7 @@ bool Level_test::OnCreate(){
 }
 
 void Level_test::OnDestroy(){
+	//Destroys everything except the player
 	for (Body* body : levelBodies) {
 		if (body->type == body->PLAYER) {
 			body = nullptr;
@@ -140,10 +142,10 @@ void Level_test::OnDestroy(){
 
 	floor->OnDestroy();
 	delete floor;
-
 }
 
 void Level_test::Update(const float time){
+	//Updates the level bodies
 	for(Body* body : levelBodies) {
 		//std::cout << body->type << "\n";
 		body->Update(time);
@@ -170,7 +172,7 @@ void Level_test::Update(const float time){
 	}
 
 	//Cleanup
-	if (trashBodies.empty()) { return; }
+	if (trashBodies.empty()) { return; } //Exit early if there are no necessary cleanups
 	for (Body* trash : trashBodies) {
 		//Go through the levelBodies vector and find the trash object that still has a  reference in it
 		//https://www.youtube.com/watch?v=SgcHcbQ0RCQ
@@ -190,9 +192,8 @@ void Level_test::Update(const float time){
 }
 
 void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
-	//render the background
-	SDL_RenderCopy(parentScene->getRenderer(), background, nullptr, nullptr);
-	floor->Render(renderer_, projectionMatrix_);
+	SDL_RenderCopy(parentScene->getRenderer(), background, nullptr, nullptr); //render the background
+	floor->Render(renderer_, projectionMatrix_); //render the floor
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);

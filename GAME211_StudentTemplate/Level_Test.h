@@ -14,9 +14,8 @@ private:
 public:
 
 	int enemycounter = 0;
-
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
-	void mobSpawner();
+	void mobSpawner(); //Method that spawns the enemies
 	bool OnCreate();
 	void OnDestroy();
 	void Update(const float time);

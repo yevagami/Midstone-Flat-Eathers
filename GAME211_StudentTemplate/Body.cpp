@@ -59,7 +59,7 @@ void Body::ApplyForce(Vec3 force_) {
 }
 
 void Body::Update(float deltaTime) {
-    //If a body is flagged for deletion, push itself to the trash vector
+    //If a body is flagged for deletion, push itself to the trash vector (unless the update method is overrided) 
     if (destroyFlag) {
         parentLevel->trashBodies.push_back(this);
         return;
@@ -78,6 +78,8 @@ void Body::Update(float deltaTime) {
         return; 
     }
 
+    //Updates the hitbox's postion
+    //If it doesn't have a hitbox for whatever reason, just leave
     if (hitbox == nullptr) { return; }
     Matrix4 projectionMat = parentLevel->getParentScene()->getProjectionMatrix();
     Vec3 hitboxPos = projectionMat * pos;
@@ -102,7 +104,6 @@ void Body::HandleEvents( const SDL_Event& event_ ) {
 
 void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     //Failsafe incase the programmer forgets to add a texture to the body
-    
     if (texture == nullptr) {
           texture = SDL_CreateTextureFromSurface(renderer_, IMG_Load("Textures/programmer_art/missing_texture.png"));
           std::cout << "You forgot a texture\n";
@@ -117,6 +118,8 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     screenCoords = projectionMatrix_ * pos;
 
     // Scale the image, in case the .png file is too big or small
+    //If a cutout was provided, scale the image based on it
+    //Otherwise use the image's dimensions
     if (cutout == nullptr) {
         w = image->w * scale.x;
         h = image->h * scale.y;
@@ -139,7 +142,10 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
     // Convert character orientation from radians to degrees.
     float orientationDegrees = orientation * 180.0f / M_PI;
+    
 
+    //If you don't give it a cutout for a smaller section of the image, it'll just use the entire thing
+    //Pretty useful ngl -Adriel
     SDL_RenderCopyEx(renderer_, texture, cutout, &square,
         orientationDegrees, nullptr, SDL_FLIP_NONE);
 }

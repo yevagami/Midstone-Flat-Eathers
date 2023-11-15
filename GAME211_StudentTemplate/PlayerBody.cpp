@@ -62,11 +62,12 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 		if (keyStates[SDL_SCANCODE_A] == 1) { movement.x -= 1.0f; }
 		if (keyStates[SDL_SCANCODE_D] == 1) { movement.x += 1.0f; }
 
-		//if the movement keys are pressed, set the state to walk
+		//if the movement keys are pressed, move the player
 		if (VMath::mag(movement) > VERY_SMALL) {
 			playerDirection = movement;
 		}
 		else {
+			//Otherwise, set the state to idle
 			if (currentState != attack) {
 				currentState = idle;
 			}
@@ -94,9 +95,11 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 		case SDL_SCANCODE_J:
 			selectedAbilities = melee;
 			break;
+
 		case SDL_SCANCODE_K:
 			selectedAbilities = shoot;
 			break;
+
 		case SDL_SCANCODE_L:
 			isShielding = !isShielding;
 			selectedAbilities = shield;
@@ -106,19 +109,15 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 }
 
 void PlayerBody::Update(float deltaTime) {
-	//Update the melee hitbox
-	//Gets the direction of the mouse relative to the player's position
-	updateMouseDir();
-	updateMeleeHitbox();
+	updateMouseDir(); //Update the melee hitbox
+	updateMeleeHitbox(); //Gets the direction of the mouse relative to the player's position
 
 	//If the destroy flag has been set, the player is now dead
-	if (currentHealth <= 0) { std::cout << "YOU DIED LMAO \n"; }
+	if (currentHealth <= 0) { std::cout << "YOU ARE DEAD \n"; }
 
 	//state machine
 	switch (currentState) {
-		//Idle state
 	case idle:
-		//std::cout << "idle state \n";
 		state_idle();
 		break;
 
@@ -134,11 +133,15 @@ void PlayerBody::Update(float deltaTime) {
 	}
 
 	//update the cooldown timers
+	//The difference between the timers in the update pool and the ones that aren't
+	//Is that the ones in the update pool don't have a callback, I.e. run this piece of code once it's completed
+	//-Adriel
 	for (Clock* cd : cooldowns) {
 		cd->Update(deltaTime);
 		if (cd->completed) { cd->Reset(); }
 	}
 
+	//Updating the invincible timer
 	if (invincible) {
 		invincible_timer->Update(deltaTime);
 		if (invincible_timer->completed) {
@@ -147,6 +150,7 @@ void PlayerBody::Update(float deltaTime) {
 		}
 	}
 
+	//Updating the drawMelee timer
 	if (drawMelee) {
 		drawMelee_timer->Update(deltaTime);
 		if (drawMelee_timer->completed) {
@@ -170,17 +174,16 @@ void PlayerBody::Update(float deltaTime) {
 	// Update position, call Update from base class
 	// Note that would update velocity too, and rotation motion
 	Body::Update(deltaTime);
-
-
-	//std::cout << "(" << pos.x << ", " << pos.y << ")\n";
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
+	//Drawing the melee sprite
 	if (drawMelee) {
 		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64};
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[ouch], &Rect);
 	}
-
+	
+	//Drawing the shield sprite
 	if (drawShield) {
 		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
@@ -206,6 +209,7 @@ void PlayerBody::RenderHitbox(SDL_Renderer* renderer_) {
 }
 
 void PlayerBody::OnDestroy() {
+	//Cleanup stuff
 	for (Clock* item : cooldowns) { delete item; }
 	cooldowns.clear();
 	dash_timer = nullptr;
@@ -213,6 +217,7 @@ void PlayerBody::OnDestroy() {
 
 	delete dash_timer;
 	delete invincible_timer;
+	delete drawMelee_timer;
 
 	Body::OnDestroy();
 }
@@ -222,6 +227,8 @@ PlayerBody::~PlayerBody() {
 }
 
 void PlayerBody::updateMouseDir() {
+	//Gets the mouse position in physics space
+	//Then calculates the normal from the player
 	Matrix4 projectionMat = parentScene->getInverseMatrix();
 	int mouseX;
 	int mouseY;
@@ -238,6 +245,7 @@ void PlayerBody::updateMouseDir() {
 }
 
 void PlayerBody::updateMeleeHitbox() {
+	//From the mouse direction, sets the hitbox location in screenSpace
 	Matrix4 projectionMat = parentScene->getProjectionMatrix();
 	Vec3 hitboxPos = Vec3(
 		pos.x + (mouseDirection.x * (meleeHitbox->w + 32.0f)),
@@ -250,6 +258,8 @@ void PlayerBody::updateMeleeHitbox() {
 }
 
 void PlayerBody::takeDamage(float amount) {
+	//Guard clauses
+	//If the player is invincible or is dead, just exit 
 	if (invincible) { return; }
 	if (amount == 0) return;
 
@@ -260,6 +270,7 @@ void PlayerBody::takeDamage(float amount) {
 }
 
 std::string PlayerBody::getSelectedAbility() const {
+	//For the tracker in the scene
 	switch (selectedAbilities) {
 	case melee:
 		return "melee";
@@ -268,14 +279,11 @@ std::string PlayerBody::getSelectedAbility() const {
 	case shield:
 		return "shield";
 	}
-	return 0;
 }
 
 
 #pragma region State methods
-void PlayerBody::state_idle() {
-	canMove = true;
-}
+void PlayerBody::state_idle() { canMove = true;}
 
 void PlayerBody::state_dash(float deltaTime_) {
 	canMove = false; //disables the player's movement input
@@ -306,25 +314,27 @@ void PlayerBody::state_dash(float deltaTime_) {
 		//vel = Vec3(); //reset the player's speed and set the state to idle
 		currentState = idle;
 		canMove = true;
-
-		currentSpeed = walkSpeed;
-		maxSpeed = walkSpeed;
 	}
 }
 
 void PlayerBody::state_attack(float deltaTime_) {
 	switch (selectedAbilities) {
 	case melee:{
+		//Stops the shield sprite from rendering
+		//Yes, this is a hotfix -Adriel
 		drawShield = false;
+
+		//Draw the melee sprite only when we haven't done it yet
 		if (!drawMelee) { 
 			drawMelee = true;
 			drawMelee_timer->Start();
 		}
-		//	for all bodies within the level scene
+
+		//Check for all the bodies in the scene and comparing it to the melee hitbox
 		for (Body* other : parentLevel->levelBodies) {
 			if (other->type == PLAYER) { continue; } // skip the player
-			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
-				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//	on hit solid
+			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //if the melee hitbox hits the otherBody hitbox
+				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//on hit solid,pretty much useless -Adriel
 				if (other->type == ENEMY) {		//on hit enemy
 					std::cout << "You hit an enemy\n";
 					other->takeDamage(meleePower);
@@ -336,11 +346,13 @@ void PlayerBody::state_attack(float deltaTime_) {
 	}
 
 	case shoot: {
+		//Yes, this is a hotfix again -Adriel
 		drawShield = false;
-		//	cooldown check! (if its on cooldown, leave)
+
+		//cooldown check! (if its on cooldown, leave)
 		if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
 			shooting_cooldown->Start(); // start the cooldown timer
-			//	create a new bullet projectile
+			//create a new bullet projectile
 			Vec3 bulletStartPosition = parentScene->getInverseMatrix() * Vec3(meleeHitbox->x, meleeHitbox->y, 0.0f);
 			Projectile* bullet = new Projectile(
 				parentLevel,
@@ -351,7 +363,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 				1.0f,
 				projectilePower
 			);
-			//	add it to all spawned objects (to be pushed to levelObjects pool)
+			//add it to all spawned objects (to be pushed to levelObjects pool)
 			parentLevel->spawningBodies.push_back(bullet);
 			bullet = nullptr;
 		}
@@ -361,6 +373,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 
 	case shield: {
 		drawShield = true;
+
 		//	for all bodies within the level scene
 		for (Body* other : parentLevel->levelBodies) {
 			if (other->type == PLAYER) { continue; } // skip the player
@@ -371,6 +384,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 					if (!isShielding) playerDefense = 75.0f;
 					if (isShielding) playerDefense = playerDefenseDefault;
 
+					//Basically the same collsion response code as the solid
 					Vec3 otherVel = other->getVel();
 					Vec3 otherPos = other->getPos();
 

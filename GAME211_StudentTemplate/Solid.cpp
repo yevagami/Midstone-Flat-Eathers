@@ -6,6 +6,8 @@ Solid::Solid(Vec3 pos_, float w_, float h_) {
 }
 
 void Solid::OnCollide(Body* other, float deltaTime){
+	//Pushes the body that's collided with it back
+	//Just like newton's third law 
 	Vec3 otherVel = other->getVel();
 	Vec3 otherPos = other->getPos();
 
