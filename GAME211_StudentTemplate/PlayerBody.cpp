@@ -82,7 +82,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 
 	//melee controls
 	if (SDL_MOUSEBUTTONUP) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
+		if (event.button.button == SDL_BUTTON_LEFT && currentState == idle) {
 			currentState = attack;
 			//std::cout << "Pressed left\n";
 		}
@@ -99,7 +99,6 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 			break;
 		case SDL_SCANCODE_L:
 			isShielding = !isShielding;
-			cout << isShielding << endl;
 			selectedAbilities = shield;
 			break;
 		}
@@ -125,10 +124,10 @@ void PlayerBody::Update(float deltaTime) {
 
 	case dash:
 		state_dash(deltaTime);
+		drawShield = false;
 		break;
 
 	case attack:
-		std::cout << "Attacking\n";
 		state_attack(deltaTime);
 		break;
 
@@ -181,6 +180,12 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64};
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[ouch], &Rect);
 	}
+
+	if (drawShield) {
+		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
+		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
+	}
+
 	Body::Render(renderer_, projectionMatrix_);
 }
 
@@ -254,14 +259,14 @@ void PlayerBody::takeDamage(float amount) {
 	invincible = true;
 }
 
-int PlayerBody::getSelectedAbility() const {
+std::string PlayerBody::getSelectedAbility() const {
 	switch (selectedAbilities) {
 	case melee:
-		return melee;
+		return "melee";
 	case shoot:
-		return shoot;
+		return "shoot";
 	case shield:
-		return shield;
+		return "shield";
 	}
 	return 0;
 }
@@ -309,8 +314,8 @@ void PlayerBody::state_dash(float deltaTime_) {
 
 void PlayerBody::state_attack(float deltaTime_) {
 	switch (selectedAbilities) {
-	case melee:
-	{
+	case melee:{
+		drawShield = false;
 		if (!drawMelee) { 
 			drawMelee = true;
 			drawMelee_timer->Start();
@@ -327,17 +332,19 @@ void PlayerBody::state_attack(float deltaTime_) {
 			}
 		}
 		currentState = idle;
+		break;
 	}
-	break;
 
 	case shoot: {
+		drawShield = false;
 		//	cooldown check! (if its on cooldown, leave)
 		if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
 			shooting_cooldown->Start(); // start the cooldown timer
 			//	create a new bullet projectile
+			Vec3 bulletStartPosition = parentScene->getInverseMatrix() * Vec3(meleeHitbox->x, meleeHitbox->y, 0.0f);
 			Projectile* bullet = new Projectile(
 				parentLevel,
-				pos,
+				bulletStartPosition,
 				mouseDirection * projectileSpeed,
 				Vec3(0.3f, 0.3f, 0.3f),
 				128 * 0.3f, 128 * 0.3f,
@@ -349,26 +356,33 @@ void PlayerBody::state_attack(float deltaTime_) {
 			bullet = nullptr;
 		}
 		currentState = idle;
+		break;
 	}
-			  break;
-
 
 	case shield: {
+		drawShield = true;
 		//	for all bodies within the level scene
 		for (Body* other : parentLevel->levelBodies) {
 			if (other->type == PLAYER) { continue; } // skip the player
 			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
 				if (other->type == ENEMY) {		//on hit enemy
-
-					cout << "shielding against an enemy\n";
-					if (!isShielding)  playerDefense = 75.0f;
+					//std::cout << "Attacking\n";
+					//cout << "shielding against an enemy\n";
+					if (!isShielding) playerDefense = 75.0f;
 					if (isShielding) playerDefense = playerDefenseDefault;
+
+					Vec3 otherVel = other->getVel();
+					Vec3 otherPos = other->getPos();
+
+					Vec3 newPos = otherPos + -1 * otherVel * deltaTime_;
+					other->setPos(newPos);
+					other->setVel(Vec3());
 
 				}
 			}
 		}
 		break;
-		}
+	}
 	}
 }
 

@@ -72,16 +72,20 @@ void PlayScene::Update(const float time){
 	std::string important = std::to_string(int(round(player->getCurrentHealth())));
 	int enemycounter = 0;
 
+	for (auto enemy : currentLevel->levelBodies) {
+		if (enemy->type == Body::ENEMY) {
+			enemycounter++;
+		}
+	}
 
-	
-	//std::string notImportant = std::to_string(enemycounter);
-	std::string somewhatImportant = std::to_string(player->getSelectedAbility());
-	std::string shieldActive = std::to_string(player->isShielding);
+	std::string notImportant = std::to_string(enemycounter);
+	std::string somewhatImportant = player->getSelectedAbility();
+	//std::string shieldActive = std::to_string(player->isShielding);
 
 	tracker.trackThis(important, tracker.tracker1);
-	//tracker.trackThis(notImportant, tracker.tracker2);
+	tracker.trackThis(notImportant, tracker.tracker2);
 	tracker.trackThis(somewhatImportant, tracker.tracker3);
-	tracker.trackThis(shieldActive, tracker.tracker4);
+	//tracker.trackThis(shieldActive, tracker.tracker4);
 }
 
 void PlayScene::Render(){

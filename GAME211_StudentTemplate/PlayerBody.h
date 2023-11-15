@@ -50,9 +50,7 @@ public:
     void updateMouseDir();
     void updateMeleeHitbox();
     void takeDamage(float amount) override;
-
-
-    int getSelectedAbility() const;
+    std::string getSelectedAbility() const;
 
     //state methods
     void state_idle();
@@ -72,6 +70,7 @@ private:
     float playerDefense = 25.0f;
     float playerDefenseDefault = 25.0f;
     float playerDefenseMax = 100.0f;
+    bool drawShield = false;
 
     float invincibleDuration = 1.5f;
     float invincibleDurationDefault = 1.5f;

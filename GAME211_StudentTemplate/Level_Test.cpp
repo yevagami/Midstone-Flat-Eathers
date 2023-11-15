@@ -2,13 +2,17 @@
 
 void Level_test::mobSpawner() {
 	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
+	int enemycounter = 0;
 	for (auto enemy : levelBodies) {
-		int enemycounter = 0;
 		if (enemy->type == Body::ENEMY) {
 			enemycounter++;
-			return;
 		}
 		
+	}
+
+	//I changed the limit to be 5 so it's more fun :) -Adriel
+	if (enemycounter >= 5) {
+		return;
 	}
 
 	//This whole section is made to randomise the position of spawned mob. Yes its an int because rand() wants an int. Sorry.
