@@ -47,9 +47,9 @@ void InitializeSoundEffects() {
 	sound.addToSoundGroup("oops", type::test);
 	sound.addToSoundGroup("my bike", type::test);
 	sound.addToSoundGroup("gyat", type::test);
-
 }
 #pragma endregion
+
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -71,7 +71,7 @@ bool GameManager::OnCreate() {
 	}
 
 	///	sound
-	::InitializeSoundEffects();
+	InitializeSoundEffects();
 
 
 

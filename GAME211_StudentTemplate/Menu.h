@@ -581,6 +581,7 @@ namespace ui {
 		SDL_Surface* buttonTextSurface;
 
 		SDL_Texture* backgroundImageTexture;
+		SDL_Surface* backgroundImageSurface;
 
 		//  a function as variables
 		std::function<void()> OnLeftClick;
