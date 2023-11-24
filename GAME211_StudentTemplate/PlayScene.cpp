@@ -72,7 +72,7 @@ void PlayScene::Update(const float time){
 	currentLevel->Update(time);
 
 	//Tracking stuff
-	std::string important = std::to_string(int(round(player->getCurrentHealth())));
+	std::string healthTrackerString = std::to_string(int(round(player->getCurrentHealth())));
 	int enemycounter = 0;
 
 	//Keeps track how many enemies are in the level
@@ -82,13 +82,34 @@ void PlayScene::Update(const float time){
 		}
 	}
 
-	std::string notImportant = std::to_string(enemycounter); 
-	std::string somewhatImportant = player->getSelectedAbility(); //Keeps track on the ability that the player is using
+	std::string enemyCountString = std::to_string(enemycounter); 
+	std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
 	//std::string shieldActive = std::to_string(player->isShielding);
 
-	tracker.trackThis(important, tracker.tracker1);
-	tracker.trackThis(notImportant, tracker.tracker2);
-	tracker.trackThis(somewhatImportant, tracker.tracker3);
+	tracker.trackThis(healthTrackerString, tracker.tracker1);
+
+	if(healthTrackerString > "0") {
+		tracker.tracker1->textColour = ui::SDL_COLOR_DARK_GREEN;
+	}
+	if(healthTrackerString < "0") {
+		tracker.tracker1->textColour = ui::SDL_COLOR_ROSE_TOY;
+	}
+
+	tracker.trackThis(enemyCountString, tracker.tracker2);
+	tracker.trackThis(abilityTrackerString, tracker.tracker3);
+	if(abilityTrackerString == "melee") {
+		tracker.tracker3->textColour = ui::SDL_COLOR_BANANA_YELLOW;
+	}
+	else if(abilityTrackerString == "shoot") {
+		tracker.tracker3->textColour = ui::SDL_COLOR_LIGHT_BLUE;
+	}
+	else if(abilityTrackerString == "shield") {
+		tracker.tracker3->textColour = ui::SDL_COLOR_SILVER;
+	}
+
+
+
+
 	//tracker.trackThis(shieldActive, tracker.tracker4);
 }
 

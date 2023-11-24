@@ -21,6 +21,7 @@ void Tracker::scary() {
 	allTrackers.emplace_back(tracker5);
 
 	for (auto t : allTrackers) {
+		t->isTextBordered = true;
 		t->centerPosition(stolen::SCREEN_WIDTH, stolen::SCREEN_HEIGHT);
 		t->textColour = ui::SDL_COLOR_ANTIQUE_WHITE;
 		t->offsetPosition(-stolen::SCREEN_HEIGHT + 400);

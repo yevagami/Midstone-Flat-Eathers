@@ -272,5 +272,11 @@
     <ClInclude Include="Tracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_scaary.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

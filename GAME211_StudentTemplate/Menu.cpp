@@ -21,7 +21,7 @@ namespace ui {
 					isHovering = true;
 
 					//	if theres an OnHover method AND its off cooldown
-					if (OnHover&& currentTime - lastHoverTime >= 1000) {
+					if (OnHover && currentTime - lastHoverTime >= 1000) {
 						OnHover();
 						lastHoverTime = currentTime;
 					}
@@ -114,7 +114,6 @@ namespace ui {
 				return true;
 			}
 
-
 			else if (backgroundType == BackgroundType::Image) {
 				SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface);
 				SDL_RenderCopy(renderer_, renderedTexture, nullptr, &rect);
@@ -126,11 +125,11 @@ namespace ui {
 	}
 
 	bool Button::RenderBorder(SDL_Renderer* renderer_) const {
-		if (isBoardered) { // if borders are enabled...
+		if (isButtonBordered) { // if borders are enabled...
 			const SDL_Color renderColour =
-				isHovering ? !backgroundColour : borderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
+				isHovering ? !backgroundColour : buttonBorderColour;	//	isHovering checker. If true, colour is inverted bkgCol. If false, colour is borderCol.
 
-			for (int i = 0; i < borderWidth; i++) {
+			for (int i = 0; i < buttonBorderSize; i++) {
 				SDL_Rect paddedRect = {
 					rect.x + i,
 					rect.y + i,
@@ -144,6 +143,7 @@ namespace ui {
 		}
 		return true;
 	}
+
 	bool Button::RenderText(SDL_Renderer* renderer_) {
 		if (text.empty()) { return false; }
 
@@ -166,22 +166,108 @@ namespace ui {
 		int textWidth, textHeight;
 		SDL_QueryTexture(buttonTextTexture, nullptr, nullptr, &textWidth, &textHeight);
 		//	aesthetic: text centering
-		int x, y;
+
+		//	centering, check if its centered
+		int x, y;	
 		if (isTextCentered) {
 			x = rect.x + (rect.w - textWidth) / 2;
 			y = rect.y + (rect.h - textHeight) / 2;
-		}
-		else {
+		} else {
 			x = rect.x;
 			y = rect.y;
 		}
+		//	make a rect based off the centered text
+		SDL_Rect textRect = { x, y, textWidth, textHeight }; 
+		textRect.x += fontOffsetX;		//	offset the text based off the font offset
+		textRect.y += fontOffsetY;		//	offset the text based off the font offset
 
-		SDL_Rect textRect = { x, y, textWidth, textHeight };
-		textRect.x += fontOffsetX;
-		textRect.y += fontOffsetY;
+		//	4. set up text borders (if enabled)
+#pragma region text borders
+		if (isTextBordered) {
+			SDL_Surface* borderTextSurface = TTF_RenderText_Solid(buttonTextFont, text.c_str(), textBorderColour);
+			SDL_Texture* borderTextTexture = SDL_CreateTextureFromSurface(renderer_, borderTextSurface);
+
+			//	render multiple copies of the border in different directions. +x, -x, +y, -y, +xy, -xy, +x-y, -x+y
+			// render +x border
+			SDL_Rect borderTextRectPlusX = {
+				textRect.x + textBorderSize,
+				textRect.y,
+				textWidth,
+				textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectPlusX, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			// render -x border
+			SDL_Rect borderTextRectMinusX = {
+				textRect.x - textBorderSize,
+				textRect.y,
+				textWidth,
+				textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectMinusX, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			// render +y border
+			SDL_Rect borderTextRectPlusY = {
+				textRect.x,
+				textRect.y + textBorderSize,
+				textWidth,
+				textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectPlusY, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			// render -y border
+			SDL_Rect borderTextRectMinusY = {
+				textRect.x,
+				textRect.y - textBorderSize,
+				textWidth,
+				textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectMinusY, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			//	render +x+y border
+			SDL_Rect borderTextRectPlusXY = {
+			textRect.x + textBorderSize,
+			textRect.y + textBorderSize,
+			textWidth,
+			textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectPlusXY, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			//	render -x-y border
+			SDL_Rect borderTextRectMinuxXY = {
+			textRect.x - textBorderSize,
+			textRect.y - textBorderSize,
+			textWidth,
+			textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectMinuxXY, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			// render +x-y border
+			SDL_Rect borderTextRectPlusYX = {
+				textRect.x + textBorderSize,
+				textRect.y - textBorderSize,
+				textWidth,
+				textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectPlusYX, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			// render -x+y border
+			SDL_Rect borderTextRectMinusYX = {
+				textRect.x - textBorderSize,
+				textRect.y + textBorderSize,
+				textWidth,
+				textHeight
+			};
+			SDL_RenderCopyEx(renderer_, borderTextTexture, nullptr, &borderTextRectMinusYX, fontRotation, nullptr, SDL_FLIP_NONE);
+
+			//	clean up
+			SDL_FreeSurface(borderTextSurface);
+			SDL_DestroyTexture(borderTextTexture);
+		}
+#pragma endregion
+
 
 		SDL_RenderCopyEx(renderer_, buttonTextTexture, nullptr, &textRect, fontRotation, nullptr, SDL_FLIP_NONE);
-
 		return true;
 	}
 #pragma endregion
@@ -275,20 +361,24 @@ namespace ui {
 
 	SDL_Color operator+(const SDL_Color& colourA_, const SDL_Color& colourB_) {
 		SDL_Color result;
-		result.r = Clamp(colourA_.r + colourB_.r, 0, 255);
-		result.g = Clamp(colourA_.g + colourB_.g, 0, 255);
-		result.b = Clamp(colourA_.b + colourB_.b, 0, 255);
-		result.a = Clamp(colourA_.a + colourB_.a, 0, 255);
+
+		result.r = static_cast<uint8_t>(Clamp(colourA_.r + colourB_.r, 0, 255));
+		result.g = static_cast<uint8_t>(Clamp(colourA_.g + colourB_.g, 0, 255));
+		result.b = static_cast<uint8_t>(Clamp(colourA_.b + colourB_.b, 0, 255));
+		result.a = static_cast<uint8_t>(Clamp(colourA_.a + colourB_.a, 0, 255));
+
 		return result;
 	}
 
 
 	SDL_Color operator-(const SDL_Color& colourA_, const SDL_Color& colourB_) {
 		SDL_Color result;
-		result.r = Clamp(colourA_.r - colourB_.r, 0, 255);
-		result.g = Clamp(colourA_.g - colourB_.g, 0, 255);
-		result.b = Clamp(colourA_.b - colourB_.b, 0, 255);
-		result.a = Clamp(colourA_.a - colourB_.a, 0, 255);
+
+		result.r = static_cast<uint8_t>(Clamp(colourA_.r - colourB_.r, 0, 255));
+		result.g = static_cast<uint8_t>(Clamp(colourA_.g - colourB_.g, 0, 255));
+		result.b = static_cast<uint8_t>(Clamp(colourA_.b - colourB_.b, 0, 255));
+		result.a = static_cast<uint8_t>(Clamp(colourA_.a - colourB_.a, 0, 255));
+
 		return result;
 	}
 

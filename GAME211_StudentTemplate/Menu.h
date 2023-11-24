@@ -6,9 +6,10 @@
 
 #include "Hitbox.h"
 
+//	any class that utilizes the button, add the forward reference here, then tell the class itself that your class is a 'friend' of ui::Button
 class Tracker;
 
-/// Constants 
+/// SDL Menu Constants [scary | recommend hiding]
 namespace ui {
 	//	general clamping
 	template <typename T>
@@ -425,9 +426,15 @@ namespace ui {
 }
 
 
-/// Main Classes
+///  Main Class
 namespace ui {
-	/// comic sans, open sans, gothic, heebo, roboto, ubuntu, verdana, wingdings, lobster, ransom
+	///	this namespace handles font, buttons, text, and many constants. all under the "ui" namespace.
+	///	font map: holds all fonts usable by the button class
+	///	Font struct: purely for the constructor. allows the constructor to be called simply but with more power if needed
+	///	Colour struct: purely for the constructor. ^
+	///	Background Type enum class: literally just an enum.
+
+	// comic sans, open sans, gothic, heebo, roboto, ubuntu, verdana, wingdings, lobster, ransom
 	static const std::unordered_map<const char*, const char*> fontMap = {
 			{"comic sans", "fonts/COMIC.TTF"},
 			{"open sans", "fonts/OpenSans-Regular.ttf"},
@@ -444,7 +451,7 @@ namespace ui {
 
 	};
 
-	/// Font Modifier Object
+	/// Font Constructor Object
 	struct Font {
 		std::string fontText;
 		int size;
@@ -462,23 +469,29 @@ namespace ui {
 
 	};
 
-	///	Colour Modifier Object
+	///	Colour Constructor Object
 	struct Colour {
 		SDL_Color background;
 		SDL_Color text;
 		SDL_Color border;
+		SDL_Color textBorder;
 		SDL_Color onHoverBackground;
 		SDL_Color onHoverText;
 		SDL_Color onHoverBorder;
 
 		Colour(
-			const SDL_Color background_ = SDL_COLOR_BLACK, const SDL_Color text_ = SDL_COLOR_ANTIQUE_WHITE, const SDL_Color border_ = SDL_COLOR_ANTIQUE_WHITE, 
-			const SDL_Color onHoverBkg_ = SDL_COLOR_BLACK, const SDL_Color onHoverTxt_ = SDL_COLOR_ANTIQUE_WHITE, const SDL_Color onHoverBorder_ = SDL_COLOR_ANTIQUE_WHITE)
-			: background(background_), text(text_), border(border_), onHoverBackground(onHoverBkg_), onHoverText(onHoverTxt_), onHoverBorder(onHoverBorder_) { }
+			const SDL_Color background_ = SDL_COLOR_BLACK, 
+			const SDL_Color text_ = SDL_COLOR_ANTIQUE_WHITE, 
+			const SDL_Color border_ = SDL_COLOR_ANTIQUE_WHITE, 
+			const SDL_Color textBorder_ = SDL_COLOR_BLACK,
+			const SDL_Color onHoverBkg_ = SDL_COLOR_BLACK, 
+			const SDL_Color onHoverTxt_ = SDL_COLOR_ANTIQUE_WHITE, 
+			const SDL_Color onHoverBorder_ = SDL_COLOR_ANTIQUE_WHITE)
+			: background(background_), text(text_), border(border_), textBorder(textBorder_),	onHoverBackground(onHoverBkg_), onHoverText(onHoverTxt_), onHoverBorder(onHoverBorder_) { }
 
 	};
 
-
+	///	Background Type storage enum
 	enum class BackgroundType {
 		SolidColour,
 		Image
@@ -489,13 +502,14 @@ namespace ui {
 	public:
 		/// Constructors
 		//  main constructor
+		//	 the Constructor Objects change the way it's called. its scary at first, but powerful (i promise)
 		Button(
 			const Font& font_ = Font{},
 			const SDL_Rect& rect_ = { 0, 0, 0, 0 },
 			const Colour& colour_ = Colour{},
 			const int borderThickness_ = 4
 		) :
-			rect(rect_), font(font_), colour(colour_), borderWidth(borderThickness_) {
+			rect(rect_), font(font_), colour(colour_), buttonBorderSize(borderThickness_) {
 
 			hitbox = { 0,0,0,0 };
 			backgroundType = BackgroundType::SolidColour; //		default is SolidColour (changed with SetBackgroundImage)
@@ -508,12 +522,15 @@ namespace ui {
 			isOn = false;
 			isHovering = false;
 			isPrideful = false;
-			isBoardered = true;
+			isButtonBordered = true;
+			isTextBordered = false;
+			textBorderSize = 2;
 
 			//	colour shenegans
 			backgroundColour = colour_.background;
 			textColour = colour_.text;
-			borderColour = colour_.border;
+			buttonBorderColour = colour_.border;
+			textBorderColour = colour_.textBorder;
 			onHoveringBackgroundColour = colour_.onHoverBackground;
 			onHoveringTextColour = colour_.onHoverText;
 
@@ -530,6 +547,7 @@ namespace ui {
 			buttonTextTexture = nullptr;
 			buttonTextSurface = nullptr;
 			backgroundImageTexture = nullptr;
+			backgroundImageSurface = nullptr;
 		}
 
 
@@ -565,7 +583,6 @@ namespace ui {
 		bool SetBackgroundImage(const char* fileDirectory_, SDL_Renderer* renderer_);
 
 
-
 		/// Private Variables
 		//  a rectangle
 		SDL_Rect rect;
@@ -593,13 +610,14 @@ namespace ui {
 #pragma region styling [tw: aesthetic]
 	public:
 		/// Editable Attributes [ public variables lmao ]
-		SDL_Color borderColour;									//  button's boarder colour
+		SDL_Color buttonBorderColour;						//  button's boarder colour
+		SDL_Color textBorderColour;
 		SDL_Color backgroundColour;							//  button's background colour
 		SDL_Color onHoveringBackgroundColour;			//  button's hover background colour
 		SDL_Color textColour;										//  button's text colour
 		SDL_Color onHoveringTextColour;					//  button's hovering text colour
 
-		BackgroundType backgroundType;
+		BackgroundType backgroundType;					//	button's background type (solid | image)
 
 		int fontSize;														//	button's font size (default : 45)
 		double fontRotation;										//	font rotation (default : 0.0)
@@ -615,13 +633,15 @@ namespace ui {
 		bool isPrideful;													//	change colour on click (default : false)
 		bool isEasilyScared;											//	causes the button to become inactive on click (default : false)
 
-		bool isBoardered;													// enables/disables the border (default : true)
-		int borderWidth;													//	how thick is the border? (default : 4)
+		bool isButtonBordered;									// enables/disables the button border (default : true)
+		bool isTextBordered;										//	enables/disables the text border (default : false)
+		int buttonBorderSize;										//	how thick is the border? (default : 4)
+		int textBorderSize;											//	how thick is the text border (default : 2) (WARNING: UNSTABLE)
 
 	protected:
 		///	Uneditable Attributes
 		bool isHovering;												//	is the mouse hovering over the button
-		const char* backgroundImageDirectory;
+		const char* backgroundImageDirectory;			//	link to the background image path
 
 	public:
 		/// Modifier Methods 
