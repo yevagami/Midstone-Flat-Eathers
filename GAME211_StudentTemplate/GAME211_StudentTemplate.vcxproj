@@ -25,6 +25,7 @@
     <ClCompile Include="ConsistentConsole.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EntityMap.cpp" />
+    <ClCompile Include="FadeTransition.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hitbox.cpp" />
@@ -127,6 +128,7 @@
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FadeTransition.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Citations.hpp" />

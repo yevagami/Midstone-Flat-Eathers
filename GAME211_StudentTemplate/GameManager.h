@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
+#include "FadeTransition.h"
 
 
 
@@ -70,8 +71,6 @@ namespace settings {
 //const int SCREEN_HEIGHT = 860;
 
 
-//	Sound goes in here, the GameManager
-
 
 // Use 1000x600 for less than full screen
 const int SCREEN_WIDTH = 1366;
@@ -94,6 +93,8 @@ private:
 	bool isRunning;
 	class Scene *currentScene;
 	Scene *menuScene;
+
+	std::unique_ptr<FadeTransition> fadeTransition; // frick manual memory management, we quirky pointer
 
 	//	michael's playground ahahhahahaha
 	bool isPaused;
@@ -134,12 +135,24 @@ public:
 
 	void Run();
 	void HandleEvents();
-	void Update(float deltaTime_);
 	void LoadScene( int i_ );
     bool ValidateCurrentScene();
 
 
+	//	Fade IN transition
+	void StartFadeInTransition(const Uint64 fadeTime_) {
+		cc.log(update, "[broken] fade in animation called");
+		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, true);
+		fadeTransition->Start();
+	}
+
+
+	void StartFadeOutTransition(const Uint64 fadeTime_) {
+		cc.log(update, "[broken] fade out animation called");
+		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, false);
+		fadeTransition->Start();
+	}
+
+
 };
 #endif
-
-

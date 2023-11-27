@@ -113,11 +113,29 @@ bool GameManager::OnCreate() {
 void GameManager::Run() {
 	timer->Start();
 
+	StartFadeOutTransition(2000); // 2000 milliseconds (2 seconds) fade out animation
+
+
 	while (isRunning) {
 		timer->UpdateFrameTicks();
 		const float deltaTime = timer->GetDeltaTime();
 
-		Update(deltaTime);
+
+		if(fadeTransition && !fadeTransition->isComplete()) {
+			HandleEvents();	//	prevents lag while transitions are happening (remove this and see how gross it feels when fading)
+			fadeTransition->Update();	//	updates the alpha
+			fadeTransition->Draw();	//	draws the fade
+
+		} else {
+			HandleEvents();
+
+			currentScene->Update(deltaTime);
+			currentScene->Render();
+
+		}
+
+		//	present the stuff to the renderer
+		SDL_RenderPresent(getRenderer());
 
 		/// Keep the event loop running at a proper rate
 		SDL_Delay(timer->GetSleepTime(settings::FPS)); ///60 frames per sec
@@ -146,8 +164,12 @@ void GameManager::HandleEvents() {
 			case SDL_SCANCODE_Q:
 				isRunning = false;	//	quits the game when Q is pressed
 				break;
-			case SDL_SCANCODE_DELETE:
-				isRunning = false;	//	quits the game when DELETE is pressed
+			case SDL_SCANCODE_I:
+				//	testing
+				StartFadeInTransition(2000);
+				break;
+			case SDL_SCANCODE_O:
+				StartFadeOutTransition(2000);
 				break;
 			case SDL_SCANCODE_0:
 				system("cls"); //	clears the console when 0 is pressed
@@ -171,13 +193,6 @@ void GameManager::HandleEvents() {
 		}
 		currentScene->HandleEvents(event);
 	}
-}
-
-void GameManager::Update(const float deltaTime_) {
-	HandleEvents();
-
-	currentScene->Update(deltaTime_);
-	currentScene->Render();
 }
 
 

@@ -43,7 +43,7 @@ bool PlayerBody::OnCreate() {
 
 	//Failsafe incase the programmer forgets the parentScene
 	if (parentScene == nullptr) {
-		std::cout << "You forgot the parentScene for the Player";
+		cc.log(error, "You forgot the parentScene for the Player");
 		return false;
 	}
 

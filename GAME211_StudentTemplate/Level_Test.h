@@ -3,7 +3,7 @@
 #include "Solid.h"
 #include "Enemy.h"
 #include <cstdlib>
-#include <ctime>
+
 class Level_test : public Level{
 private:
 	//Background

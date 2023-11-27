@@ -26,7 +26,8 @@ void Level_test::mobSpawner() {
 	Enemy* ghost = new Enemy (this, Vec3((std::rand() % scaryMaxX + scaryMinX), (std::rand() % scaryMaxY + scaryMinY), 0), Enemy::flash);
 	levelBodies.push_back(ghost);
 	ghost = nullptr;
-	std::cout << "Did i come here?";
+	cc.log(not_error, "Did I come here?");
+	//std::cout << "Did i come here?";
 	
 }
 
