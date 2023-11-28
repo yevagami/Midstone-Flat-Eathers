@@ -120,13 +120,14 @@ void GameManager::Run() {
 		timer->UpdateFrameTicks();
 		const float deltaTime = timer->GetDeltaTime();
 
-
-		if (fadeTransition) {								//	if a fadeTransition unique ptr exists
+		if (fadeTransition) {								//	if a fadeTransition unique_ptr exists
 			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
 
-				currentScene->Update(deltaTime);
+				///	keep the present scene visible
+				//currentScene->Update(deltaTime);
 				currentScene->Render();
 
+				///	render the fade higher in priority
 				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
 				cc.colour(green); cout << "fade time remaining is " << fadeTransition->GetRemainingTime() << "ms"; cc.colour(clear, newline);
 			} else {												// when the fade transition is done...

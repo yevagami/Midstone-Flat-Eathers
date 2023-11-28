@@ -501,7 +501,6 @@ namespace ui {
 	class Button {
 	public:
 		/// Constructors
-		//  main constructor
 		//	 the Constructor Objects change the way it's called. its scary at first, but powerful (i promise)
 		Button(
 			const Font& font_ = Font{},
@@ -550,7 +549,6 @@ namespace ui {
 			backgroundImageSurface = nullptr;
 		}
 
-
 		~Button() { ClearSDLStuff(); }
 
 		/// Public Methods
@@ -568,9 +566,6 @@ namespace ui {
 
 		//		renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
 		bool Render(SDL_Renderer* renderer_);
-
-		bool EnableBackgroundImage(const char* fileDirectory_);
-
 	protected:
 		/// Private Methods
 		//		renders the background component
@@ -636,7 +631,7 @@ namespace ui {
 		bool isButtonBordered;									// enables/disables the button border (default : true)
 		bool isTextBordered;										//	enables/disables the text border (default : false)
 		int buttonBorderSize;										//	how thick is the border? (default : 4)
-		int textBorderSize;											//	how thick is the text border (default : 2) (WARNING: UNSTABLE)
+		int textBorderSize;											//	how thick is the text border (default : 2)
 
 	protected:
 		///	Uneditable Attributes
@@ -659,8 +654,7 @@ namespace ui {
 		void scaleDimensionsIndividually(int newRectHeightScaler_ = 1, int newRectWidthScaler_ = 1);
 		void scaleDimensions(int scaler_ = 1);
 		void centerPosition(int screenWidth_, int screenHeight_);
-
-
+		bool EnableBackgroundImage(const char* fileDirectory_);
 #pragma endregion
 #pragma region utility
 	protected:
@@ -679,12 +673,9 @@ namespace ui {
 				buttonTextSurface = nullptr;
 			}
 		}
-	public:
 		//  is the mouse hovering over the button's dimensions? [true/false]
 		[[nodiscard]] bool isMouseOver(int mouseX_, int mouseY_) const;
-
-
+	public:
+	
 #pragma endregion
-	};
-
-}
+	}; }

@@ -1,7 +1,6 @@
 #include "Menu.h"
 #include <random>
 #include <SDL_image.h>
-
 #include "ConsistentConsole.h"
 
 ConsistentConsole ccMenu(true, "Menu.cpp");
@@ -35,6 +34,7 @@ namespace ui {
 					if (OnLeftClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
 						//	this happens when the button is left clicked
 						OnLeftClick();
+						ccMenu.log(not_error, "button left clicked :l");
 						if (isTogglable) { isOn = !isOn; backgroundColour = !backgroundColour;  ccMenu.log(not_error, "button toggled"); std::cout << isOn << std::endl; }
 						if (isPrideful) { backgroundColour = ~backgroundColour; textColour = !textColour; ccMenu.log(not_error, "button colour change"); }
 						if (isEasilyScared) { isActive = !isActive; }
@@ -44,7 +44,7 @@ namespace ui {
 					if (OnRightClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
 						//	this happens when the button is right clicked
 						OnRightClick();
-						ccMenu.log(not_error, "right clicked :O");
+						ccMenu.log(not_error, "button right clicked :O");
 					}
 				}
 				break;

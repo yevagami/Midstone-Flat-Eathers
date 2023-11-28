@@ -11,17 +11,15 @@
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
 #include "FadeTransition.h"
+#include "FileManager.h"
 
 
-
-	//	global classes
-	inline Sound sound;
+//	global classes
+	inline Sound sound; void InitializeSoundEffects();
 	inline ConsistentConsole cc(true, "GameManager.h");
 	inline PrettyPrinting pp(pink, purple, cyan);
 
-
-	void InitializeSoundEffects();
-
+	#pragma region settings
 namespace settings {
 	inline float MaxVolume = 1.0f;
 	inline float MasterVolume;
@@ -31,12 +29,8 @@ namespace settings {
 
 	inline int FPS;
 
-	inline void SetFPS(const int newFPS_) {
-		if (newFPS_ != 30 || newFPS_ != 60) { return; }
-		settings::FPS = newFPS_;
-	}
-
-	
+	inline void SetFPS(const int newFPS_) { if (newFPS_ != 30 || newFPS_ != 60) { return; } FPS = newFPS_; }
+		
 	inline void SetMusicVolume(const float newMusicVolume_) {
 		if (newMusicVolume_ < 0.0f || newMusicVolume_ > 1.0f) { return; }
 
@@ -64,6 +58,7 @@ namespace settings {
 	}
 
 }
+#pragma endregion
 
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
@@ -94,9 +89,8 @@ private:
 	class Scene *currentScene;
 	Scene *menuScene;
 
-	std::unique_ptr<FadeTransition> fadeTransition; // frick manual memory management, we quirky pointer
-
 	//	michael's playground ahahhahahaha
+	std::unique_ptr<FadeTransition> fadeTransition; // frick manual memory management, we quirky pointer
 	bool isPaused;
 
 	//	settings default values
@@ -154,6 +148,9 @@ public:
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, false);
 		fadeTransition->SetStartTime();
 	}
+
+
+
 
 
 };

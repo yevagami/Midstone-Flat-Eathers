@@ -28,6 +28,8 @@ bool PlayScene::OnCreate(){
 
 	//	load trackers
 	tracker.scary();
+	//	testing a menu at scene level
+	CreatePauseMenu();
 
 
 	//Creating the level
@@ -78,9 +80,7 @@ void PlayScene::Update(const float time){
 	//Keeps track how many enemies are in the level
 	for (auto enemy : currentLevel->levelBodies) {
 		if (enemy->type == Body::ENEMY) {
-			enemycounter++;
-		}
-	}
+			enemycounter++; } }
 
 	std::string enemyCountString = std::to_string(enemycounter); 
 	std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
@@ -107,10 +107,9 @@ void PlayScene::Update(const float time){
 		tracker.tracker3->textColour = ui::SDL_COLOR_SILVER;
 	}
 
+	tracker.trackThis(std::to_string(settings::FPS), tracker.tracker4);
 
 
-
-	//tracker.trackThis(shieldActive, tracker.tracker4);
 }
 
 void PlayScene::Render(){
@@ -122,11 +121,35 @@ void PlayScene::Render(){
 	//render the trackers
 	tracker.render(renderer);
 
+	if(isPaused) {
+		//	main pause menu
+		for (const auto button : allPauseMenuButtons) {
+			button->Render(renderer);
+		}
+
+		//sub pause buttons
+
+		for(const auto button : allSubPauseMenuButtons) {
+			button->Render(renderer);
+		}
+	}
+	
+
 	SDL_RenderPresent(renderer);
 }
 
 void PlayScene::HandleEvents(const SDL_Event& event){
 	player->HandleEvents(event);
+
+	if(isPaused) {
+		for (const auto button : allPauseMenuButtons) {
+			button->HandleEvents(event);
+		}
+		for (const auto button : allSubPauseMenuButtons) {
+			button->HandleEvents(event);
+		}
+	}
+
 }
 
 void PlayScene::CameraFollowPlayer(PlayerBody* p){

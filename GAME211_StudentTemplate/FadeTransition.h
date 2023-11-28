@@ -50,7 +50,7 @@ public:
 
 	//	sets the startTime variable to whatever the current time is (time since SDL was initialized, in a 64 bit manner)
 	void SetStartTime() {
-		startTime = SDL_GetTicks64();
+		startTime = SDL_GetTicks();
 		cout << "start time is: " << startTime << endl;
 	}
 
@@ -61,9 +61,9 @@ public:
 	}
 
 	//	returns the remaining time since the transition has been called
-	[[nodiscard]] Uint64 GetRemainingTime() const {
-		const Uint64 currentTime = SDL_GetTicks64();
-		Uint64 elapsedTime = currentTime - startTime;
+	[[nodiscard]] Uint32 GetRemainingTime() const {
+		const Uint32 currentTime = SDL_GetTicks();
+		Uint32 elapsedTime = currentTime - startTime;
 
 		//	"if elapsed time is greater than or equal to fadeTime, return 0; otherwise, return the progress"
 		return elapsedTime >= fadeTime ? 0 : fadeTime - elapsedTime;
@@ -74,8 +74,8 @@ public:
 	void UpdateAlpha() {
 		cout << "\033[34malpha updating progress: \033[36m" << currentProgress;
 
-		Uint64 currentTime = SDL_GetTicks64();
-		Uint64 elapsedTime = currentTime - startTime;
+		Uint32 currentTime = SDL_GetTicks();
+		Uint32 elapsedTime = currentTime - startTime;
 
 		if(elapsedTime >= fadeTime) {
 			//	the fade is completed
@@ -110,13 +110,15 @@ public:
 
 		//	short delay to hopefully maybe in theory (game theory) prevent flickering
 		//SDL_Delay(60);
+		//SDL_Delay(GetSleepTime(60)); ///60 frames per sec
+
 	}
 
 protected:
 	SDL_Renderer* renderer;
-	Uint64 startTime;
+	Uint32 startTime;
 	float currentProgress;
-	Uint64 fadeTime;
+	Uint32 fadeTime;
 
 	bool fadeIn;
 	int alpha;

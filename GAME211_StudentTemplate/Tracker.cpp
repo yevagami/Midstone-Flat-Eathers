@@ -1,30 +1,36 @@
 #include "Tracker.h"
-
 #include <random>
-
 #include "Menu.h"
 
 void Tracker::trackThis(std::string value_, ui::Button* tracker_) {
 	tracker_->text = std::move(value_);
 }
+
 void Tracker::scary() {
-	int size = 20;
-	tracker1 = new ui::Button(ui::Font{ "", size });
-	tracker2 = new ui::Button(ui::Font{ "", size });
-	tracker3 = new ui::Button(ui::Font{ "", size });
-	tracker4 = new ui::Button(ui::Font{ "", size });
-	tracker5 = new ui::Button(ui::Font{ "", size });
+	using namespace ui; using namespace stolen;
+
+	constexpr int fontSize = 20;
+
+	//	setting up the trackers with default values
+	tracker1 = new Button(Font{ "", fontSize });
+	tracker2 = new Button(Font{ "", fontSize });
+	tracker3 = new Button(Font{ "", fontSize });
+	tracker4 = new Button(Font{ "", fontSize });
+	tracker5 = new Button(Font{ "", fontSize });
+
+	//	into the vector they go
 	allTrackers.emplace_back(tracker1);
 	allTrackers.emplace_back(tracker2);
 	allTrackers.emplace_back(tracker3);
 	allTrackers.emplace_back(tracker4);
 	allTrackers.emplace_back(tracker5);
 
-	for (auto t : allTrackers) {
-		t->isTextBordered = true;
-		t->centerPosition(stolen::SCREEN_WIDTH, stolen::SCREEN_HEIGHT);
-		t->textColour = ui::SDL_COLOR_ANTIQUE_WHITE;
-		t->offsetPosition(-stolen::SCREEN_HEIGHT + 400);
+
+	for (const auto tracker : allTrackers) {
+		tracker->isTextBordered = true;
+		tracker->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		tracker->textColour = SDL_COLOR_ANTIQUE_WHITE;
+		tracker->offsetPosition(-SCREEN_HEIGHT + 400);
 	}
 	tracker2->setPositionRelativeTo(*tracker1, 25);
 	tracker3->setPositionRelativeTo(*tracker2, 25);
@@ -35,7 +41,7 @@ void Tracker::scary() {
 }
 
 void Tracker::unscary() {
-	for (auto tracker : allTrackers) {
+	for (const auto tracker : allTrackers) {
 		delete tracker;
 	}
 }
