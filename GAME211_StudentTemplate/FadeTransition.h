@@ -2,6 +2,11 @@
 #include <SDL_render.h>
 #include <SDL_timer.h>
 
+//	stinky gross iostream
+#include <iostream>
+using std::cout;
+using std::endl;
+
 
 //	
 //	notes from monday night (nov 27th)
@@ -31,19 +36,22 @@ public:
 	FadeTransition(SDL_Renderer* renderer_, const int screenHeight_, const int screenWidth_, const Uint32 fadeTime_, const bool fadingIn_ = true) :
 		renderer(renderer_),
 		startTime(0),
+		currentProgress(0),
 		fadeTime(fadeTime_),
 		fadeIn(fadingIn_),
+		alpha(fadeIn ? 255 : 0),
 		screenHeight(screenHeight_),
 		screenWidth(screenWidth_)
 	{
-		//	sets the initial alpha value based off the fade direction
-		alpha = fadeIn ? 255 : 0; 
+		//	set the renderers blend mode to alpha blending
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	}
 
 
 	//	sets the startTime variable to whatever the current time is (time since SDL was initialized, in a 64 bit manner)
-	void Start() {
+	void SetStartTime() {
 		startTime = SDL_GetTicks64();
+		cout << "start time is: " << startTime << endl;
 	}
 
 
@@ -57,56 +65,61 @@ public:
 		const Uint64 currentTime = SDL_GetTicks64();
 		Uint64 elapsedTime = currentTime - startTime;
 
-		if (elapsedTime >= fadeTime) {
-			return 0; 
-		} else {
-			return fadeTime - elapsedTime;
-		}
+		//	"if elapsed time is greater than or equal to fadeTime, return 0; otherwise, return the progress"
+		return elapsedTime >= fadeTime ? 0 : fadeTime - elapsedTime;
 	}
 
 
-	//	updates the alpha value
-	void Update() {
-		const Uint64 currentTime = SDL_GetTicks64();
+	//	updates the alpha value based off current progress
+	void UpdateAlpha() {
+		cout << "\033[34malpha updating progress: \033[36m" << currentProgress;
+
+		Uint64 currentTime = SDL_GetTicks64();
 		Uint64 elapsedTime = currentTime - startTime;
 
 		if(elapsedTime >= fadeTime) {
 			//	the fade is completed
-			alpha = fadeIn ? 255 : 0; 
-		}
-		else {
-			// calculate the interpolation factor (time = elapsedTime / fadeTime)
-			float t = static_cast<float>(elapsedTime) / static_cast<float>(fadeTime);
-			if(!fadeIn) {
-				t = 1.0f - t;
-			}
+			alpha = fadeIn ? 255 : 0;
+			currentProgress = 1.0f;
+		} else {
+			// calculate the interpolation factor (currentTime = elapsedTime / fadeTime)
+			currentProgress = 
+				static_cast<float>(elapsedTime)
+			/	static_cast<float>(fadeTime);
 
 			//	lerpify the alpha (professional terminology)
-			alpha = static_cast<Uint8>(LerpyLerp(fadeIn ? 0 : 255, fadeIn ? 255 : 0, t));
-		}
+			alpha = 	static_cast<int>(LerpyLerp(fadeIn ? 0 : 255, fadeIn ? 255 : 0, currentProgress));
 
+			cout << "\033[34m | alpha: \033[36m" << alpha << "\033[0m"<< endl;
+		}
 	}
 
-	void Draw() const {
-		//	clear screen
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
+	void Draw() {
+		UpdateAlpha();
+
+		///	we dont clear renderers in this household
+		//	clearing would remove the frame before, making it abruptly begin the fade
+
+		//	create a new rectangle based off the screen Width and Height provided in the constructor
+		const SDL_Rect rektangle = { 0,0,screenWidth, screenHeight };
 
 		//	draw the fading rectangle (wow rectangles are so cool)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
-		const SDL_Rect rektangle = { 0,0,screenWidth, screenHeight };
 		SDL_RenderFillRect(renderer, &rektangle);
-
 		SDL_RenderPresent(renderer);
+
+		//	short delay to hopefully maybe in theory (game theory) prevent flickering
+		//SDL_Delay(60);
 	}
 
 protected:
 	SDL_Renderer* renderer;
 	Uint64 startTime;
+	float currentProgress;
 	Uint64 fadeTime;
 
 	bool fadeIn;
-	Uint8 alpha;
+	int alpha;
 
 	int screenHeight;
 	int screenWidth;

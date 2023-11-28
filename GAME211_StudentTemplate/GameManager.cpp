@@ -22,7 +22,7 @@ void InitializeSoundEffects() {
 	sound.loadSound("gyat", "sound/gyat.wav");
 	sound.loadSound("my move", "sound/once i make my move.wav");
 
-		///	SOUND EFFECTS GROUP HERE
+	///	SOUND EFFECTS GROUP HERE
 	sound.createSoundGroup(type::sfx);	//	creating a sound group for sfx
 
 	sound.addToSoundGroup("blipblip", type::sfx);
@@ -33,7 +33,7 @@ void InitializeSoundEffects() {
 
 	sound.setGroupVolume(type::sfx, settings::SoundEffectVolume); 	//	dont touch this 
 
-		///	MUSIC GROUPS HERE
+	///	MUSIC GROUPS HERE
 	sound.createSoundGroup(type::music);	//	creating a sound group for music
 
 	sound.addToSoundGroup("big powerup", type::music);
@@ -113,7 +113,7 @@ bool GameManager::OnCreate() {
 void GameManager::Run() {
 	timer->Start();
 
-	StartFadeOutTransition(2000); // 2000 milliseconds (2 seconds) fade out animation
+	//StartFadeOutTransition(2000); // 2000 milliseconds (2 seconds) fade out animation
 
 
 	while (isRunning) {
@@ -121,22 +121,20 @@ void GameManager::Run() {
 		const float deltaTime = timer->GetDeltaTime();
 
 
-		if(fadeTransition && !fadeTransition->isComplete()) {
-			HandleEvents();	//	prevents lag while transitions are happening (remove this and see how gross it feels when fading)
-			fadeTransition->Update();	//	updates the alpha
-			fadeTransition->Draw();	//	draws the fade
-
-		} else {
-			HandleEvents();
-
+		if (fadeTransition) {								//	if a fadeTransition unique ptr exists
+			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
+				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
+				cc.colour(green); cout << "fade time remaining is " << fadeTransition->GetRemainingTime() << "ms"; cc.colour(clear, newline);
+			} else {												// when the fade transition is done...
+				fadeTransition.reset();					//	reset the unique pointer (make it nullptr)
+			}
+		}else {
+			//	if theres no fadeTransition in progress, update and render the scene as usual
 			currentScene->Update(deltaTime);
 			currentScene->Render();
-
 		}
-
-		//	present the stuff to the renderer
-		SDL_RenderPresent(getRenderer());
-
+		HandleEvents();
+		
 		/// Keep the event loop running at a proper rate
 		SDL_Delay(timer->GetSleepTime(settings::FPS)); ///60 frames per sec
 	}
@@ -154,8 +152,13 @@ void GameManager::HandleEvents() {
 	//https://www.youtube.com/watch?v=SYrRMr4BaD4&list=PLM7LHX-clszBIGsrh7_3B2Pi74AhMpKhj&index=3
 
 	while (SDL_PollEvent(&event)) {
+
+		//	The events that get handled first. Anything occuring in a handleEvents deeper than this has lower priority
+		//	don't accidentally cause conflicts
+
 		if (event.type == SDL_QUIT) { isRunning = false; }
 		else if (event.type == SDL_KEYDOWN) {
+			//	keyboard event checking
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
 				isPaused = !isPaused;
@@ -191,6 +194,8 @@ void GameManager::HandleEvents() {
 				break;
 			}
 		}
+
+		//	check what events are occuring in the currentScene
 		currentScene->HandleEvents(event);
 	}
 }
@@ -202,7 +207,10 @@ void GameManager::OnDestroy() {
 	if (windowPtr) delete windowPtr;
 	if (timer) delete timer;
 
-	if(menuScene) {
+	//	not needed cuz its unique and self-manages (allegedly)
+	//if (fadeTransition) delete fadeTransition;
+
+	if (menuScene) {
 		menuScene->OnDestroy();
 		delete menuScene;
 	}
@@ -227,6 +235,7 @@ float GameManager::getSceneWidth() { return currentScene->getxAxis(); }
 
 // This might be unfamiliar
 SDL_Renderer* GameManager::getRenderer() {
+	cc.log(not_error, "renderer requested (GameManager.getRenderer();)");
 	// [TODO] might be missing some SDL error checking
 	SDL_Window* window = currentScene->getWindow();
 	SDL_Renderer* renderer = SDL_GetRenderer(window);
@@ -249,9 +258,9 @@ void GameManager::LoadScene(const int i_) {
 	case 3:
 		currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
 		break;
-	//case 4:
-	//	//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
-	//	break;
+		//case 4:
+		//	//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
+		//	break;
 	case 5:
 		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 		break;

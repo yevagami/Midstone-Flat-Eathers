@@ -4,7 +4,7 @@
 
 #include "ConsistentConsole.h"
 
-ConsistentConsole ccMenu(true);
+ConsistentConsole ccMenu(true, "Menu.cpp");
 
 
 namespace ui {

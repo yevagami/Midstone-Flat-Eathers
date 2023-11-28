@@ -5,7 +5,7 @@ using namespace MATH;
 using namespace std;
 
 
-ConsistentConsole ccPrint(true);
+ConsistentConsole ccPrint(false);
 
 
 PrettyPrinting::PrettyPrinting(const char* primary_, const char* secondary_, const char* accent_) {

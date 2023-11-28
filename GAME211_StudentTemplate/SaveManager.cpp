@@ -3,7 +3,7 @@
 #include "PrettyPrinting.h"
 
 //FileManager fmSave;
-ConsistentConsole ccSave(true);
+ConsistentConsole ccSave(true, "SaveManager.cpp");
 SaveState ssSave;
 //PrettyPrinting ppSave; //	lol pp
 

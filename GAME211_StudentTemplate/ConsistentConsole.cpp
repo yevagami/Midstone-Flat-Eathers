@@ -11,8 +11,13 @@
 
 	///	Console Functions
 #pragma region constructor
-ConsistentConsole::ConsistentConsole(bool visibility, bool logToFile_) {
+ConsistentConsole::ConsistentConsole(bool visibility, const char* whereAmI_) {
 	isConsoleTextEnabled = visibility;
+	if(isConsoleTextEnabled) {
+		colour(purple);
+		std::cout <<"Consistent Console Initialized at " << whereAmI_;
+		colour(clear, newline);
+	}
 }
 #pragma endregion
 
@@ -22,6 +27,7 @@ bool ConsistentConsole::log(const char* type_, const char* msg_) {
 	static std::unordered_map<const char*, const char*> types = {
 		{error, red},
 		{update, green},
+		{debug, blue},
 		{warning, yellow},
 		{not_error, purple},
 	}; if (types.find(type_) == types.end()) { return false; }
@@ -37,6 +43,8 @@ bool ConsistentConsole::log(const char* type_, const char* msg_) {
 		specialMessage = "[uh oh] "; }
 	else if (strcmp(type_, "not error") == 0) {
 		specialMessage = ""; }
+	else if (strcmp(type_, "debug") == 0) {
+		specialMessage = "[debug] "; }
 
 	formattedString
 		<< specialMessage
@@ -118,4 +126,5 @@ const char* error = "error";
 const char* not_error = "not error";
 const char* update = "update";
 const char* warning = "warning";
+const char* debug = "debug";
 #pragma endregion

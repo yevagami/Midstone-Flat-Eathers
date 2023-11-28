@@ -5,7 +5,7 @@
 //#include <unordered_map>
 
 
-ConsistentConsole ccFile(true);
+ConsistentConsole ccFile(false, "FileManager.cpp");
 
 
 

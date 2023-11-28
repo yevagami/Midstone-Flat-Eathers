@@ -16,7 +16,7 @@
 
 	//	global classes
 	inline Sound sound;
-	inline ConsistentConsole cc(true);
+	inline ConsistentConsole cc(true, "GameManager.h");
 	inline PrettyPrinting pp(pink, purple, cyan);
 
 
@@ -141,16 +141,18 @@ public:
 
 	//	Fade IN transition
 	void StartFadeInTransition(const Uint64 fadeTime_) {
-		cc.log(update, "[broken] fade in animation called");
+		cc.log(debug, "[testing, buggy] fade in animation called");
+		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, true);
-		fadeTransition->Start();
+		fadeTransition->SetStartTime();
 	}
 
 
 	void StartFadeOutTransition(const Uint64 fadeTime_) {
-		cc.log(update, "[broken] fade out animation called");
+		cc.log(debug, "[testing, buggy] fade out animation called");
+		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, false);
-		fadeTransition->Start();
+		fadeTransition->SetStartTime();
 	}
 
 
