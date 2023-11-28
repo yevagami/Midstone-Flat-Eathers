@@ -123,6 +123,10 @@ void GameManager::Run() {
 
 		if (fadeTransition) {								//	if a fadeTransition unique ptr exists
 			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
+
+				currentScene->Update(deltaTime);
+				currentScene->Render();
+
 				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
 				cc.colour(green); cout << "fade time remaining is " << fadeTransition->GetRemainingTime() << "ms"; cc.colour(clear, newline);
 			} else {												// when the fade transition is done...
