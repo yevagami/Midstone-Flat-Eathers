@@ -52,6 +52,24 @@ public:
     void takeDamage(float amount) override;
     std::string getSelectedAbility() const;
 
+    //  you know what these are. (getters and setters)
+    float getCurrentInvincibilityDuration() const;
+    float getDefaultInvincibilityDuration() const;
+    void setCurrentInvincibilityDuration(float newDuration_);
+    void setCurrentInvincibilityToDefault();
+    void setInvincible(const bool state_) { invincible = state_; }
+
+    float getCurrentDrawMeleeDuration() const;
+    float getDefaultDrawMeleeDuration() const;
+    void setCurrentDrawMeleeDuration(float newDuration_);
+    void setCurrentDrawMeleeToDefault();
+
+    float getCurrentDefence() const;
+    float getDefaultDefence() const;
+    float getMaxDefence() const;
+    void setCurrentDefence(float newDefense_);
+    void setCurrentDefenceToDefault();
+
 
     //state methods
     void state_idle();
@@ -62,15 +80,14 @@ private:
     //Player abilities enum
     enum abilities { melee, shoot, shield };
     abilities selectedAbilities = melee;
-    //Player variables
-    float playerHealth = 250.0f;
-    float playerHealthDefault = 250.0f;
-    float playerHealthMax = 250.0f;
+
+    //  health is managed in Body()
 
     //Defense/Shield ability related variables
-    float playerDefense = 25.0f;
-    float playerDefenseDefault = 25.0f;
-    float playerDefenseMax = 100.0f;
+    float playerDefence = 25.0f;
+    float playerDefenceDefault = 25.0f;
+    float playerDefenceShielded = 75.0f;
+    float playerDefenceMax = 100.0f;
     bool drawShield = false;
 
     //Invincible frames so the player doesn't get hurt every single fram
@@ -85,6 +102,7 @@ private:
     Vec3 mouseDirection = {};
     float meleePower = 50.0f;
     float drawMeleeDuration = 0.3f;
+    float drawMeleeDurationDefault = 0.3f;
     bool drawMelee = false; //Draws a sprite to the screen when the player melees
 
     //shooting variables

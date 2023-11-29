@@ -56,12 +56,12 @@ public:
 
 
 	//	testing a menu [ has to be at scene level >:( ]
+	bool isPaused = false;
 	vector<ui::Button*> allPauseMenuButtons;
 	ui::Button* button1;
 	ui::Button* button2;
 	ui::Button* button3;
 
-	bool isPaused = false;
 	bool settingsOpen = false;
 	vector<ui::Button*> allSubPauseMenuButtons;
 	ui::Button* subButton1;
@@ -112,7 +112,7 @@ public:
 		subButton3->text = "save?";
 
 		cheatButton1->text = "heal";
-		cheatButton2->text = "";
+		cheatButton2->text = "god";
 		cheatButton3->text = "";
 
 		for (const auto button : allPauseMenuButtons) {
@@ -157,23 +157,33 @@ public:
 			button->buttonBorderColour = ui::SDL_COLOR_SLATE_GRAY;
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
-			button->isPrideful = true;
+			//button->isPrideful = true;
 		}
 
 		//	On Left Clicks
 		//	Settings
+		button1->isTogglable = true;
 		button1->SetOnLeftClick([&]() {
+			cc.log(update, "settings menu toggled");
 			//	open settings menu
-			settingsOpen = !settingsOpen;
-
+			if(!button1->isOn) {
+				settingsOpen = true;
+			}else {
+				settingsOpen = false;
+			}
+			//settingsOpen = !settingsOpen;
 			});
 		button2->SetOnLeftClick([&]() {
+			cc.log(update, "resuming game");
 			//	resume game
 			isPaused = false;
-			settingsOpen = false;
-			cheatsOpen = false;
+			//button1->isOn = false;
+			//settingsOpen = false;
+			//subButton2->isOn = false;
+			//cheatsOpen = false;
 			});
 		button3->SetOnLeftClick([&]() {
+			cc.log(update, "quitting game");
 			//quit
 			isRunning = false;
 			
@@ -181,7 +191,8 @@ public:
 		});
 
 		subButton1->SetOnLeftClick([&]() {
-			const int fpsValues[] = { 60, 30, 90 };  // Possible FPS values
+			cc.log(update, "fps changed");
+			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
 			const size_t numFPSValues = sizeof(fpsValues) / sizeof(fpsValues[0]);
 
 			for (size_t i = 0; i < numFPSValues; ++i) {
@@ -192,6 +203,7 @@ public:
 			}
 			});
 		subButton1->SetOnRightClick([&]() {
+			cc.log(update, "fps changed");
 			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
 			const size_t numFPSValues = sizeof(fpsValues) / sizeof(fpsValues[0]);
 
@@ -202,19 +214,41 @@ public:
 				}
 			}
 		});
+		subButton2->isTogglable = true;
 		subButton2->SetOnLeftClick([&]() {
-			cheatsOpen = !cheatsOpen;
+			cc.log(update, "cheat menu toggled");
+			if(!subButton2->isOn) {
+				cheatsOpen = true;
+			}else {
+				cheatsOpen = false;
+			}
 		});
 		subButton3->SetOnLeftClick([&]() {
+			cc.log(update, "not implemented");
 
 		});
 
-
+		//	full heal (default on left, max on right)
 		cheatButton1->SetOnLeftClick([&]() {
+			cc.log(update, "health pack acquired!");
+			player->setCurrentHealthToDefault();
+		});
+		cheatButton1->SetOnRightClick([&]() {
+			cc.log(update, "super heath pack acquired!");
 			player->setCurrentHealthToMax();
 		});
+		//	god
+		cheatButton2->isTogglable = true;
 		cheatButton2->SetOnLeftClick([&]() {
-
+			if(!cheatButton2->isOn) {
+				cc.log(update, "ur invincible!");
+				player->setCurrentInvincibilityDuration(55555);
+				player->setInvincible(true);
+			}else {
+				cc.log(update, "ur no longer invincible");
+				player->setCurrentInvincibilityToDefault();
+				player->setInvincible(false);
+			}
 		});
 		cheatButton3->SetOnLeftClick([&]() {
 

@@ -105,6 +105,7 @@ public:
 	float getCurrentHealth() { return currentHealth; }
 	void setCurrentHealth(float newHealth) { currentHealth = newHealth; }
 	void setCurrentHealthToMax() { currentHealth = maxHealth; }
+	void setCurrentHealthToDefault() { currentHealth = defaultHealth; }
 
 	//Texture related methods
 	virtual void setImage(SDL_Surface* image_) { image = image_; }
@@ -129,6 +130,7 @@ protected:
 	Vec3 accel;
 	Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
 	float maxHealth = 250;
+	float defaultHealth = 100;
 	float currentHealth = 100;
 	float mass;
 	float radius; // for getting near walls

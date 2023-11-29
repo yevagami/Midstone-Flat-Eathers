@@ -94,7 +94,7 @@ void PlayScene::Update(const float time) {
 	if (healthTrackerString > "0") {
 		tracker.tracker1->textColour = ui::SDL_COLOR_DARK_GREEN;
 	}
-	if (healthTrackerString < "0") {
+	if (healthTrackerString <= "0") {
 		tracker.tracker1->textColour = ui::SDL_COLOR_ROSE_TOY;
 	}
 
@@ -110,13 +110,16 @@ void PlayScene::Update(const float time) {
 	else if (abilityTrackerString == "shield") {
 		tracker.tracker3->textColour = ui::SDL_COLOR_SILVER;
 	}
-
+	//max fps showing
 	string fpsString;
 	fpsString = std::to_string(settings::FPS) + " fps";
 	tracker.trackThis(fpsString, tracker.tracker4);
 
+	//	showing pause button
 	tracker.trackThis("P to Pause", tracker.tracker5);
+	//tracker.tracker5->setPositionRelativeTo(*tracker.tracker1, 0, -400);
 
+	tracker.trackThis(std::to_string(player->getCurrentInvincibilityDuration()), tracker.tracker6);
 }
 
 

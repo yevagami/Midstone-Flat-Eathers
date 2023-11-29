@@ -11,7 +11,7 @@ class Tracker;
 
 /// SDL Menu Constants [scary | recommend hiding]
 namespace ui {
-	//	general clamping
+	//	general colour clamping
 	template <typename T>
 	T Clamp(T value_, T min_, T max_);
 

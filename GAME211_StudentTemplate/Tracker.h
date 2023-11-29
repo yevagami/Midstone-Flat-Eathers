@@ -22,8 +22,8 @@ public:
 	//	init all "trackers" (shh, theyre buttons)
 	void scary();
 	//	destroy all trackers
-	void unscary();
-	void render(SDL_Renderer* renderer_);
+	void unscary() const;
+	void render(SDL_Renderer* renderer_) const;
 
 	//	testing
 	static int genRanNum(int min_, int max_);
@@ -35,5 +35,10 @@ public:
 	ui::Button* tracker3;
 	ui::Button* tracker4;
 	ui::Button* tracker5;
+	ui::Button* tracker6;
+	ui::Button* tracker7;
+	ui::Button* tracker8;
+	//	we skip 9 in this household
+	ui::Button* tracker10;
 protected:
 };

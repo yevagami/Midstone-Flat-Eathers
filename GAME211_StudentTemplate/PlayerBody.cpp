@@ -6,8 +6,6 @@
 
 bool PlayerBody::OnCreate() {
 	//Setting the variables
-	maxHealth = playerHealth;
-	currentHealth = maxHealth;
 
 	//Create the melee hitbox
 	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
@@ -17,7 +15,7 @@ bool PlayerBody::OnCreate() {
 	//because they need to be activated and updated in certain circumstances
 	dash_timer = new Clock(dashDuration, false);
 	invincible_timer = new Clock(invincibleDuration, false);
-	drawMelee_timer = new Clock(drawMeleeDuration, false); drawMelee_timer = new Clock(drawMeleeDuration, false);
+	drawMelee_timer = new Clock(drawMeleeDuration, false); //drawMelee_timer = new Clock(drawMeleeDuration, false);
 
 	//These ones will be part of the update pool
 	dash_cooldown = new Clock(dashCooldown, false);
@@ -263,8 +261,14 @@ void PlayerBody::takeDamage(float amount) {
 	if (invincible) { return; }
 	if (amount == 0) return;
 
-	currentHealth -= amount - ((amount * (playerDefense / 100)) * 0.8);
-	std::cout << "Player took damage\n";
+	const double damageTaken = amount - ((amount * (playerDefence / 100)) * 0.8);
+	currentHealth -= static_cast<float>(damageTaken);
+
+	if (currentHealth < 0) {
+		currentHealth = 0; // ensure currentHealth doesn't go below 0
+	}
+
+	std::cout << "Player took " << damageTaken << " damage\n";
 	invincible_timer->Start();
 	invincible = true;
 }
@@ -279,6 +283,63 @@ std::string PlayerBody::getSelectedAbility() const {
 	case shield:
 		return "shield";
 	}
+}
+
+float PlayerBody::getCurrentInvincibilityDuration() const {
+	return invincible_timer->duration;
+}
+
+float PlayerBody::getDefaultInvincibilityDuration() const {
+	return invincibleDurationDefault;
+}
+
+void PlayerBody::setCurrentInvincibilityDuration(const float newDuration_) {
+	invincibleDuration = newDuration_;//	just in case
+	invincible_timer->duration = invincibleDuration;
+}
+
+void PlayerBody::setCurrentInvincibilityToDefault() {
+	invincibleDuration = invincibleDurationDefault;	
+	invincible_timer->duration = invincibleDuration;
+
+}
+
+float PlayerBody::getCurrentDrawMeleeDuration() const {
+	return drawMelee_timer->duration;
+}
+
+float PlayerBody::getDefaultDrawMeleeDuration() const {
+	return drawMeleeDurationDefault;
+}
+
+void PlayerBody::setCurrentDrawMeleeDuration(const float newDuration_) {
+	drawMeleeDuration = newDuration_;	//	just in case
+	drawMelee_timer->duration = drawMeleeDuration;
+}
+
+void PlayerBody::setCurrentDrawMeleeToDefault() {
+	drawMeleeDuration = drawMeleeDurationDefault;	//	just in case
+	drawMelee_timer->duration = drawMeleeDuration;
+}
+
+float PlayerBody::getCurrentDefence() const {
+	return playerDefence;
+}
+
+float PlayerBody::getDefaultDefence() const {
+	return playerDefenceDefault;
+}
+
+float PlayerBody::getMaxDefence() const {
+	return playerDefenceMax;
+}
+
+void PlayerBody::setCurrentDefence(const float newDefense_) {
+	playerDefence = newDefense_;
+}
+
+void PlayerBody::setCurrentDefenceToDefault() {
+	playerDefence = playerDefenceDefault;
 }
 
 
@@ -381,8 +442,8 @@ void PlayerBody::state_attack(float deltaTime_) {
 				if (other->type == ENEMY) {		//on hit enemy
 					//std::cout << "Attacking\n";
 					//cout << "shielding against an enemy\n";
-					if (!isShielding) playerDefense = 75.0f;
-					if (isShielding) playerDefense = playerDefenseDefault;
+					if (!isShielding) setCurrentDefence(playerDefenceShielded);  //playerDefence = 75.0f; rip hard coding
+					if (isShielding) setCurrentDefenceToDefault();  //playerDefence = playerDefenceDefault; dina would be so proud (getter/setter)
 
 					//Basically the same collsion response code as the solid
 					Vec3 otherVel = other->getVel();
