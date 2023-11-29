@@ -167,20 +167,20 @@ void GameManager::HandleEvents() {
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
 				//isPaused = !isPaused;
-				isRunning = false; // for now, eventually this'll enable/disable a menuScene 
+				StartFadeInTransition(1000, [&]() { isRunning = false;	});
 				break;
 			case SDL_SCANCODE_Q:
-				isRunning = false;	//	quits the game when Q is pressed
+				StartFadeInTransition(1000, [&]() { isRunning = false;	});
 				break;
 			case SDL_SCANCODE_END:
-				isRunning = false;
+				StartFadeInTransition(1000, [&]() { isRunning = false;	});
 				break;
 			case SDL_SCANCODE_I:
 				//	testing
-				StartFadeInTransition(2000);
+				StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_O:
-				StartFadeOutTransition(2000);
+				StartFadeOutTransition(500);
 				break;
 			case SDL_SCANCODE_0:
 				system("cls"); //	clears the console when 0 is pressed

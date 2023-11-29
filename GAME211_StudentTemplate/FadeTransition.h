@@ -41,7 +41,7 @@ public:
 		currentProgress(0),
 		fadeTime(fadeTime_),
 		fadeIn(fadingIn_),
-		alpha(fadeIn ? 255 : 0),
+		alpha(fadeIn ? MaxAlpha : MinAlpha),
 		screenHeight(screenHeight_),
 		screenWidth(screenWidth_)
 	{
@@ -57,8 +57,11 @@ public:
 	//	sets the startTime variable to whatever the current time is (time since SDL was initialized, in a 64 bit manner)
 	void SetStartTime() {
 		startTime = SDL_GetTicks();
-		cout << "\033[34mstart time is: \033[36m" << startTime << "\033[0m" << endl;
-		cout << "\033[34mfade FPS is: \033[36m" << currentFPS << "\033[0m" << endl;
+		cout << "\033[34mfade time is: \033[36m" << fadeTime << "\033[34m SDL ticks " << "\033[0m" << endl;
+		cout << "\033[34mstart time is: \033[36m" << startTime << "\033[34m SDL ticks " << "\033[0m" << endl;
+		cout << "\033[34mfade frame rate is: \033[36m" << currentFPS << "\033[34m fps" << "\033[0m" << endl;
+		if (callbackFunction) { cout << "\033[31mcallbackFunction provided" << "\033[0m" << endl; }
+		else { cout << "\033[31mno callbackFunction provided" << "\033[0m" << endl; }
 	}
 
 	// returns true if the elapsed time since the start of the fade transition is greater than or equal to the specified fade time; otherwise return false.
@@ -78,26 +81,29 @@ public:
 
 	//	updates the alpha value based off current progress
 	void UpdateAlpha() {
-		cout << "\033[34malpha updating progress: \033[36m" << currentProgress;
+		// guard clause
+		if (isComplete()) { return; }
 
-		Uint32 currentTime = SDL_GetTicks();
-		Uint32 elapsedTime = currentTime - startTime;
+			cout << "\033[34malpha updating progress: \033[36m" << currentProgress * 100 << "% ";
 
-		if(elapsedTime >= fadeTime) {
-			//	the fade is completed
-			alpha = fadeIn ? 255 : 0;
-			currentProgress = 1.0f;
-		} else {
-			// calculate the interpolation factor (currentTime = elapsedTime / fadeTime)
-			currentProgress = 
-				static_cast<float>(elapsedTime)
-			/	static_cast<float>(fadeTime);
+			Uint32 currentTime = SDL_GetTicks();
+			Uint32 elapsedTime = currentTime - startTime;
 
-			//	lerpify the alpha (professional terminology)
-			alpha = 	static_cast<int>(LerpyLerp(fadeIn ? 0 : 255, fadeIn ? 255 : 0, currentProgress));
+			if (elapsedTime >= fadeTime) {
+				//	the fade is completed
+				alpha = fadeIn ? MaxAlpha : MinAlpha;
+				currentProgress = 1.0f;
+			} else {
+				// calculate the interpolation factor (currentTime = elapsedTime / fadeTime)
+				currentProgress =
+					static_cast<float>(elapsedTime)
+					/ static_cast<float>(fadeTime);
+				//	lerpify the alpha (professional terminology)
+				alpha = static_cast<int>(LerpyLerp(fadeIn ? MinAlpha : MaxAlpha, fadeIn ? MaxAlpha : MinAlpha, currentProgress));
 
-			cout << "\033[34m | alpha: \033[36m" << alpha << "\033[0m"<< endl;
-		}
+
+				cout << "\033[34m| alpha: \033[36m" << alpha << "\033[0m" << endl;
+			}
 	}
 
 	void Draw() {
@@ -107,17 +113,19 @@ public:
 		//	clearing would remove the frame before, making it abruptly begin the fade
 
 		//	create a new rectangle based off the screen Width and Height provided in the constructor
-		const SDL_Rect rektangle = { 0,0,screenWidth, screenHeight };
+		const SDL_Rect getREKTangle = { 0,0,screenWidth, screenHeight };
 
 		//	draw the fading rectangle (wow rectangles are so cool)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
-		SDL_RenderFillRect(renderer, &rektangle);
+		SDL_RenderFillRect(renderer, &getREKTangle);
 		SDL_RenderPresent(renderer);
 
 		//	because im NOT using GameManager's deltaTime... I need to match up the sleep delay with that of deltaTime
-		SDL_Delay(currentFPS);
+		//	its divided by a number for smoothness
+		SDL_Delay(currentFPS / smoothness);
 
-		if(isComplete() && callbackFunction) {
+		if (isComplete() && callbackFunction) {
+			cout << "\033[31mcallbackFunction called" << "\033[0m" << endl;
 			callbackFunction();
 			callbackFunction = nullptr;
 		}
@@ -133,11 +141,14 @@ protected:
 
 	bool fadeIn;
 	int alpha;
+	static const int MaxAlpha = 255;
+	static const int MinAlpha = 0;
 
 	int screenHeight;
 	int screenWidth;
 
 	int currentFPS;
+	int smoothness = 4;
 
 	static float LerpyLerp(const float a_, const float b_, const float t_) {
 		return a_ + t_ * (b_ - a_);

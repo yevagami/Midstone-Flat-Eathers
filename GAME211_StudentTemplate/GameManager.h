@@ -125,9 +125,9 @@ public:
     bool ValidateCurrentScene();
 
 
-	//	Fade IN transition
+	//	Fade IN transition (fade in to black) (yes its confusing)
 	void StartFadeInTransition(const Uint64 fadeTime_, std::function<void()> callback_ = nullptr) {
-		cc.log(debug, "[testing, buggy] fade in animation called");
+		cc.log(debug, "fade in animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true);
 		fadeTransition->SetStartTime();
@@ -137,9 +137,9 @@ public:
 		}
 	}
 
-	//	Fade OUT transition
+	//	Fade OUT transition (fade out from black)
 	void StartFadeOutTransition(const Uint64 fadeTime_, std::function<void()> callback_ = nullptr) {
-		cc.log(debug, "[testing, buggy] fade out animation called");
+		cc.log(debug, "fade out animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false);
 		fadeTransition->SetStartTime();

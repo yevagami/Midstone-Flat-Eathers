@@ -261,8 +261,8 @@ public:
 
 
 		button1->offsetPosition(0,0);											//	mid
-		button2->setPositionRelativeTo(*button1, -100);				//top
-		button3->setPositionRelativeTo(*button1, 100);				//	bottom
+		button2->setPositionRelativeTo(*button1, -100);												//top
+		button3->setPositionRelativeTo(*button1, 100);													//	bottom
 
 		subButton1->offsetPosition(0, 0);
 		subButton2->offsetPosition(-125);
