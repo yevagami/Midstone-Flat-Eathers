@@ -33,8 +33,9 @@ using std::endl;
 class FadeTransition {
 public:
 	//	constructor
-	FadeTransition(SDL_Renderer* renderer_, const int screenHeight_, const int screenWidth_, const Uint32 fadeTime_, const bool fadingIn_ = true) :
+	FadeTransition(SDL_Renderer* renderer_, const int currentFPS_, const int screenHeight_, const int screenWidth_, const Uint32 fadeTime_, const bool fadingIn_ = true) :
 		renderer(renderer_),
+		currentFPS(currentFPS_),
 		startTime(0),
 		currentProgress(0),
 		fadeTime(fadeTime_),
@@ -51,9 +52,9 @@ public:
 	//	sets the startTime variable to whatever the current time is (time since SDL was initialized, in a 64 bit manner)
 	void SetStartTime() {
 		startTime = SDL_GetTicks();
-		cout << "start time is: " << startTime << endl;
+		cout << "\033[34mstart time is: \033[36m" << startTime << "\033[0m" << endl;
+		cout << "\033[34mfade FPS is: \033[36m" << currentFPS << "\033[0m" << endl;
 	}
-
 
 	// returns true if the elapsed time since the start of the fade transition is greater than or equal to the specified fade time; otherwise return false.
 	[[nodiscard]] bool isComplete() const {
@@ -109,9 +110,10 @@ public:
 		SDL_RenderPresent(renderer);
 
 		//	short delay to hopefully maybe in theory (game theory) prevent flickering
+		//	i need to get the FPS in here...
 		//SDL_Delay(60);
 		//SDL_Delay(GetSleepTime(60)); ///60 frames per sec
-
+		SDL_Delay(currentFPS);
 	}
 
 protected:
@@ -125,6 +127,8 @@ protected:
 
 	int screenHeight;
 	int screenWidth;
+
+	int currentFPS;
 
 	static float LerpyLerp(const float a_, const float b_, const float t_) {
 		return a_ + t_ * (b_ - a_);

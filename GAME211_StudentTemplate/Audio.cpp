@@ -52,8 +52,12 @@ void Sound::setGroupVolume(const std::string& groupLabel_, const float volume_) 
 	}
 }
 
-void Sound::createSoundGroup(const std::string& groupLabel_) { soundGroups[groupLabel_] = std::vector<std::string>(); }
+void Sound::createSoundGroup(const std::string& groupLabel_) {
+	soundGroups[groupLabel_] = std::vector<std::string>();
+}
 
 void Sound::addToSoundGroup(const std::string& label_, const std::string& groupLabel_) {
-	if (soundSources.find(label_) != soundSources.end()) { soundGroups[groupLabel_].emplace_back(label_); }
+	if (soundSources.find(label_) != soundSources.end()) {
+		soundGroups[groupLabel_].emplace_back(label_);
+	}
 }

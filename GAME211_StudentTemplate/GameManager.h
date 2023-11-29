@@ -29,7 +29,12 @@ namespace settings {
 
 	inline int FPS;
 
-	inline void SetFPS(const int newFPS_) { if (newFPS_ != 30 || newFPS_ != 60) { return; } FPS = newFPS_; }
+	inline void SetFPS(const int newFPS_) {
+		if (newFPS_ != 30 || newFPS_ != 60) {
+			return;
+		}
+		settings::FPS = newFPS_;
+	}
 		
 	inline void SetMusicVolume(const float newMusicVolume_) {
 		if (newMusicVolume_ < 0.0f || newMusicVolume_ > 1.0f) { return; }
@@ -60,17 +65,17 @@ namespace settings {
 }
 #pragma endregion
 
-
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
 //const int SCREEN_WIDTH = 1540;
 //const int SCREEN_HEIGHT = 860;
-
 
 
 // Use 1000x600 for less than full screen
 const int SCREEN_WIDTH = 1366;
 const int SCREEN_HEIGHT = 768;
 
+//	i moved this here so i can access it from deeper
+inline bool isRunning;
 
 class GameManager {
 private:
@@ -85,7 +90,6 @@ private:
 	/// topic anyway
 	class Window *windowPtr;
 	class Timer *timer;
-	bool isRunning;
 	class Scene *currentScene;
 	Scene *menuScene;
 
@@ -132,25 +136,21 @@ public:
 	void LoadScene( int i_ );
     bool ValidateCurrentScene();
 
-
 	//	Fade IN transition
 	void StartFadeInTransition(const Uint64 fadeTime_) {
 		cc.log(debug, "[testing, buggy] fade in animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, true);
+		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true);
 		fadeTransition->SetStartTime();
 	}
 
-
+	//	Fade OUT transition
 	void StartFadeOutTransition(const Uint64 fadeTime_) {
 		cc.log(debug, "[testing, buggy] fade out animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), getSceneHeight(), getSceneWidth(), fadeTime_, false);
+		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false);
 		fadeTransition->SetStartTime();
 	}
-
-
-
 
 
 };

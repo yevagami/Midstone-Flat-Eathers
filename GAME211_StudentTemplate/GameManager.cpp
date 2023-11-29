@@ -166,11 +166,14 @@ void GameManager::HandleEvents() {
 			//	keyboard event checking
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
-				isPaused = !isPaused;
+				//isPaused = !isPaused;
 				isRunning = false; // for now, eventually this'll enable/disable a menuScene 
 				break;
 			case SDL_SCANCODE_Q:
 				isRunning = false;	//	quits the game when Q is pressed
+				break;
+			case SDL_SCANCODE_END:
+				isRunning = false;
 				break;
 			case SDL_SCANCODE_I:
 				//	testing

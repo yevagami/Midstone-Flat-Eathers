@@ -52,6 +52,7 @@ public:
     void takeDamage(float amount) override;
     std::string getSelectedAbility() const;
 
+
     //state methods
     void state_idle();
     void state_dash(float deltaTime_);
@@ -61,12 +62,11 @@ private:
     //Player abilities enum
     enum abilities { melee, shoot, shield };
     abilities selectedAbilities = melee;
-
     //Player variables
     float playerHealth = 250.0f;
     float playerHealthDefault = 250.0f;
     float playerHealthMax = 250.0f;
-    
+
     //Defense/Shield ability related variables
     float playerDefense = 25.0f;
     float playerDefenseDefault = 25.0f;

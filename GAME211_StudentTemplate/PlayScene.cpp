@@ -1,6 +1,6 @@
 #include "PlayScene.h"
 
-PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
+PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_) {
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
@@ -10,7 +10,7 @@ PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_){
 	currentLevel = nullptr;
 }
 
-bool PlayScene::OnCreate(){
+bool PlayScene::OnCreate() {
 	//SDL window stuff
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
@@ -58,7 +58,7 @@ bool PlayScene::OnCreate(){
 	return true;
 }
 
-void PlayScene::OnDestroy(){
+void PlayScene::OnDestroy() {
 	currentLevel->OnDestroy();
 	delete currentLevel;
 
@@ -69,9 +69,12 @@ void PlayScene::OnDestroy(){
 }
 
 
-void PlayScene::Update(const float time){
-	CameraFollowPlayer(player); //Make the camera follow the player
-	currentLevel->Update(time);
+void PlayScene::Update(const float time) {
+	if (isPaused == false) {
+		CameraFollowPlayer(player); //Make the camera follow the player
+		currentLevel->Update(time);
+	}
+
 
 	//Tracking stuff
 	std::string healthTrackerString = std::to_string(int(round(player->getCurrentHealth())));
@@ -80,39 +83,44 @@ void PlayScene::Update(const float time){
 	//Keeps track how many enemies are in the level
 	for (auto enemy : currentLevel->levelBodies) {
 		if (enemy->type == Body::ENEMY) {
-			enemycounter++; } }
+			enemycounter++;
+		}
+	}
 
-	std::string enemyCountString = std::to_string(enemycounter); 
+	std::string enemyCountString = std::to_string(enemycounter);
 	std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
-	//std::string shieldActive = std::to_string(player->isShielding);
 
 	tracker.trackThis(healthTrackerString, tracker.tracker1);
-
-	if(healthTrackerString > "0") {
+	if (healthTrackerString > "0") {
 		tracker.tracker1->textColour = ui::SDL_COLOR_DARK_GREEN;
 	}
-	if(healthTrackerString < "0") {
+	if (healthTrackerString < "0") {
 		tracker.tracker1->textColour = ui::SDL_COLOR_ROSE_TOY;
 	}
 
 	tracker.trackThis(enemyCountString, tracker.tracker2);
+
 	tracker.trackThis(abilityTrackerString, tracker.tracker3);
-	if(abilityTrackerString == "melee") {
+	if (abilityTrackerString == "melee") {
 		tracker.tracker3->textColour = ui::SDL_COLOR_BANANA_YELLOW;
 	}
-	else if(abilityTrackerString == "shoot") {
+	else if (abilityTrackerString == "shoot") {
 		tracker.tracker3->textColour = ui::SDL_COLOR_LIGHT_BLUE;
 	}
-	else if(abilityTrackerString == "shield") {
+	else if (abilityTrackerString == "shield") {
 		tracker.tracker3->textColour = ui::SDL_COLOR_SILVER;
 	}
 
-	tracker.trackThis(std::to_string(settings::FPS), tracker.tracker4);
+	string fpsString;
+	fpsString = std::to_string(settings::FPS) + " fps";
+	tracker.trackThis(fpsString, tracker.tracker4);
 
+	tracker.trackThis("P to Pause", tracker.tracker5);
 
 }
 
-void PlayScene::Render(){
+
+void PlayScene::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
@@ -121,38 +129,65 @@ void PlayScene::Render(){
 	//render the trackers
 	tracker.render(renderer);
 
-	if(isPaused) {
+	if (isPaused) {
 		//	main pause menu
 		for (const auto button : allPauseMenuButtons) {
 			button->Render(renderer);
 		}
 
 		//sub pause buttons
+		if (settingsOpen) {
+			for (const auto button : allSubPauseMenuButtons) {
+				button->Render(renderer);
+			}
 
-		for(const auto button : allSubPauseMenuButtons) {
-			button->Render(renderer);
+			//	cheat buttons
+			if (cheatsOpen) {
+				for (const auto button : allCheatMenuButtons) {
+					button->Render(renderer);
+				}
+			}
 		}
+
 	}
-	
+
 
 	SDL_RenderPresent(renderer);
 }
 
-void PlayScene::HandleEvents(const SDL_Event& event){
-	player->HandleEvents(event);
+void PlayScene::HandleEvents(const SDL_Event& event) {
 
-	if(isPaused) {
+	if (!isPaused) {
+		player->HandleEvents(event);
+
+	}
+
+	if (event.type == SDL_KEYDOWN) {
+		//	keyboard event checking
+		switch (event.key.keysym.scancode) {
+		case SDL_SCANCODE_P:
+			isPaused = !isPaused;
+			break;
+
+		}
+
+	}
+
+	if (isPaused) {
 		for (const auto button : allPauseMenuButtons) {
 			button->HandleEvents(event);
 		}
 		for (const auto button : allSubPauseMenuButtons) {
 			button->HandleEvents(event);
 		}
+		for (const auto button : allCheatMenuButtons) {
+			button->HandleEvents(event);
+		}
 	}
 
 }
 
-void PlayScene::CameraFollowPlayer(PlayerBody* p){
+void PlayScene::CameraFollowPlayer(PlayerBody* p) {
 	//guard clause to make sure the player exists
 	if (p == nullptr) {
 		return;
