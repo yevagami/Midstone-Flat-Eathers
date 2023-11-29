@@ -107,18 +107,6 @@ private:
 
 	}
 
-	void instanciateMenu(const bool state_) const {
-		if (state_) {
-			//menuScene->OnCreate();
-		} else {
-			//menuScene->OnDestroy();
-		}
-	}
-
-	void loadMenu(const bool enabled_) const {
-		//instanciateMenu(enabled_);
-	}
-
 public:
 	GameManager();
 	~GameManager();
@@ -136,20 +124,29 @@ public:
 	void LoadScene( int i_ );
     bool ValidateCurrentScene();
 
+
 	//	Fade IN transition
-	void StartFadeInTransition(const Uint64 fadeTime_) {
+	void StartFadeInTransition(const Uint64 fadeTime_, std::function<void()> callback_ = nullptr) {
 		cc.log(debug, "[testing, buggy] fade in animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true);
 		fadeTransition->SetStartTime();
+
+		if (callback_) {
+			fadeTransition->SetCallback(callback_);
+		}
 	}
 
 	//	Fade OUT transition
-	void StartFadeOutTransition(const Uint64 fadeTime_) {
+	void StartFadeOutTransition(const Uint64 fadeTime_, std::function<void()> callback_ = nullptr) {
 		cc.log(debug, "[testing, buggy] fade out animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false);
 		fadeTransition->SetStartTime();
+
+		if (callback_) {
+			fadeTransition->SetCallback(callback_);
+		}
 	}
 
 

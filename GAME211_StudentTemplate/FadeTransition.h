@@ -3,6 +3,7 @@
 #include <SDL_timer.h>
 
 //	stinky gross iostream
+#include <functional>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -48,6 +49,10 @@ public:
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	}
 
+	//	add a method to be called upon fade completion
+	void SetCallback(std::function<void()>  callback_) {
+		callbackFunction = std::move(callback_);
+	}
 
 	//	sets the startTime variable to whatever the current time is (time since SDL was initialized, in a 64 bit manner)
 	void SetStartTime() {
@@ -109,11 +114,13 @@ public:
 		SDL_RenderFillRect(renderer, &rektangle);
 		SDL_RenderPresent(renderer);
 
-		//	short delay to hopefully maybe in theory (game theory) prevent flickering
-		//	i need to get the FPS in here...
-		//SDL_Delay(60);
-		//SDL_Delay(GetSleepTime(60)); ///60 frames per sec
+		//	because im NOT using GameManager's deltaTime... I need to match up the sleep delay with that of deltaTime
 		SDL_Delay(currentFPS);
+
+		if(isComplete() && callbackFunction) {
+			callbackFunction();
+			callbackFunction = nullptr;
+		}
 	}
 
 protected:
@@ -121,6 +128,8 @@ protected:
 	Uint32 startTime;
 	float currentProgress;
 	Uint32 fadeTime;
+
+	std::function<void()> callbackFunction;
 
 	bool fadeIn;
 	int alpha;

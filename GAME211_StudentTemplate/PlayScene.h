@@ -2,9 +2,9 @@
 #include "Scene.h"
 #include "PlayerBody.h"
 #include "Level_test.h"
-#include "Menu.h"
 #include "Tracker.h"
 
+#include "Menu.h"
 #include "FileManager.h"
 
 
@@ -32,8 +32,8 @@ private:
 	//Level 
 	Level* currentLevel;
 
-public:
 
+public:
 	//Constructor/destructors
 	PlayScene(SDL_Window* sdlWindow_, GameManager* game_);
 	~PlayScene(){}
@@ -185,7 +185,11 @@ public:
 		button3->SetOnLeftClick([&]() {
 			cc.log(update, "quitting game");
 			//quit
-			isRunning = false;
+			
+			game->StartFadeInTransition(1000, [&]() {
+				isRunning = false;
+
+			});
 			
 
 		});

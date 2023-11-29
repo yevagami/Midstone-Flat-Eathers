@@ -17,36 +17,11 @@ namespace menu {
 
 		~UIManager() { DeleteAllButtons(); }
 
-		void buttonPreset1() {
-			//Button* button1 = new Button(buttonRenderer, Font{ "testing", 45, fontMap.at("comic sans") });
-			//Button* button2 = new Button(buttonRenderer, Font{ "my testing <3", 45, fontMap.at("comic sans") });
-
-			/*AddButtonToScene(*button1);
-			AddButtonToScene(*button2);*/
-
-			for(auto button : buttons) {
-				button->generateHitbox();
-				button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-				button->offsetPosition(-300);
-
-			}
-
+		void createBlankButton(ui::Button* button_) {
 
 		}
 
-
-		//void AddButtonsToScene(const vector<Button*>& listOfButtons_) {
-		//	for (Button* &button : listOfButtons_) {
-		//		buttons.emplace_back(button);
-		//	}
-		//}
-
-
-		void AddButtonToScene(Button &button_) {
-			buttons.emplace_back(&button_);
-		}
-
-		void DeleteAllButtons() {
+		void DeleteAllButtons() const {
 			for (auto* button : buttons) {
 				delete button;
 			}
@@ -61,7 +36,7 @@ namespace menu {
 		}
 
 
-		void UpdateButtons(float deltaTime){
+		void UpdateButtons(float deltaTime) const {
 			for (Button* button : buttons) {
 				button->Update(deltaTime);
 			}
