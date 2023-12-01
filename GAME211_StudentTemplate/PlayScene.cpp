@@ -71,7 +71,6 @@ void PlayScene::OnDestroy() {
 
 void PlayScene::Update(const float time) {
 	if (isPaused == false) {
-		CameraFollowPlayer(player); //Make the camera follow the player
 		currentLevel->Update(time);
 	}
 
@@ -127,6 +126,7 @@ void PlayScene::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
+	CameraFollowPlayer(player); //Make the camera follow the player
 	currentLevel->Render(renderer, projectionMatrix);
 
 	//render the trackers

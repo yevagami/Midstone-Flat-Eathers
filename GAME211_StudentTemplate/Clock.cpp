@@ -9,6 +9,12 @@ Clock::Clock(float duration_, bool isLooping_) {
 	isLooping = isLooping_;
 }
 
+Clock::Clock(float duration_, bool isLooping_, void(*callback_)()) {
+	duration = duration_;
+	isLooping = isLooping_;
+	callback = callback_;
+}
+
 void Clock::Start() {
 	//if the clock has not started, start it
 	if (!hasStarted) { hasStarted = true; }
@@ -22,6 +28,7 @@ void Clock::Update(float deltaTime){
 		//if the timer has elapsed through the duration then it is finished
 		if (timer >= duration) {
 			completed = true;
+			if (callback != nullptr) { callback(); }
 
 			//if the timer is a continuously looping one, reset the timer and start over
 			if (isLooping) {
