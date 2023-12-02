@@ -299,14 +299,14 @@ namespace ui {
 	}
 
 
-	void Button::setPosition(const int newRectY_, const int newRectX_) {
+	void Button::setPosition(const float newRectY_, const float newRectX_) {
 		rect.x = newRectX_;
 		rect.y = newRectY_;
 	}
 
-	void Button::setPositionRelativeTo(const Button& papaButton_, const int yOffset_, const int xOffset_) {
-		const int newY = papaButton_.getY() + yOffset_;
-		const int newX = papaButton_.getX() + xOffset_;
+	void Button::setPositionRelativeTo(const Button& papaButton_, const float yOffset_, const float xOffset_) {
+		const float newY = papaButton_.getY() + yOffset_;
+		const float newX = papaButton_.getX() + xOffset_;
 
 		setPosition(newY, newX);
 	}

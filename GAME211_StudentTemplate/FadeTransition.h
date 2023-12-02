@@ -50,8 +50,8 @@ public:
 	}
 
 	//	add a method to be called upon fade completion
-	void SetCallback(std::function<void()>  callback_) {
-		callbackFunction = std::move(callback_);
+	void SetCallback(const std::function<void()>&  callback_) {
+		callbackFunction = callback_;
 	}
 
 	//	sets the startTime variable to whatever the current time is (time since SDL was initialized, in a 64 bit manner)
@@ -60,8 +60,8 @@ public:
 		cout << "\033[34mfade time is: \033[36m" << fadeTime << "\033[34m SDL ticks " << "\033[0m" << endl;
 		cout << "\033[34mstart time is: \033[36m" << startTime << "\033[34m SDL ticks " << "\033[0m" << endl;
 		cout << "\033[34mfade frame rate is: \033[36m" << currentFPS << "\033[34m fps" << "\033[0m" << endl;
-		if (callbackFunction) { cout << "\033[31mcallbackFunction provided" << "\033[0m" << endl; }
-		else { cout << "\033[31mno callbackFunction provided" << "\033[0m" << endl; }
+	/*	if (callbackFunction) { cout << "\033[31mcallbackFunction provided" << "\033[0m" << endl; }
+		else if (!callbackFunction) { cout << "\033[31mno callbackFunction provided" << "\033[0m" << endl; }*/
 	}
 
 	// returns true if the elapsed time since the start of the fade transition is greater than or equal to the specified fade time; otherwise return false.

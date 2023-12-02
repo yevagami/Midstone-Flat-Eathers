@@ -1,55 +1,6 @@
 #include "GameManager.h"
 #include "scene_list.h"
 
-#pragma region GLOBAL NAMESPACE
-void InitializeSoundEffects() {
-	///	Initialize sound effects here and link them to a label. Then call them from the label in-scene.
-	//		music
-	sound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
-	//		sfx
-	sound.loadSound("wong", "sound/wooooooooooooong.wav");
-	sound.loadSound("flame", "sound/flame.wav");
-	sound.loadSound("space boing", "sound/space boing.wav");
-	sound.loadSound("big powerup", "sound/big powerup.wav");
-	sound.loadSound("blipblip", "sound/blipblip.wav");
-	sound.loadSound("bip", "sound/bip.wav");
-	sound.loadSound("ting", "sound/ting.wav");
-	sound.loadSound("boomp", "sound/boomp.wav");
-	sound.loadSound("dying printer", "sound/dying printer.wav");
-	//		test
-	sound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
-	sound.loadSound("oops", "sound/oops.wav");
-	sound.loadSound("gyat", "sound/gyat.wav");
-	sound.loadSound("my move", "sound/once i make my move.wav");
-
-	///	SOUND EFFECTS GROUP HERE
-	sound.createSoundGroup(type::sfx);	//	creating a sound group for sfx
-
-	sound.addToSoundGroup("blipblip", type::sfx);
-	sound.addToSoundGroup("bip", type::sfx);
-	sound.addToSoundGroup("ting", type::sfx);
-	sound.addToSoundGroup("flame", type::sfx);
-	sound.addToSoundGroup("boomp", type::sfx);
-
-	sound.setGroupVolume(type::sfx, settings::SoundEffectVolume); 	//	dont touch this 
-
-	///	MUSIC GROUPS HERE
-	sound.createSoundGroup(type::music);	//	creating a sound group for music
-
-	sound.addToSoundGroup("big powerup", type::music);
-	sound.addToSoundGroup("wong", type::music);
-	sound.addToSoundGroup("dying printer", type::music);
-	sound.addToSoundGroup("my move", type::music);
-
-	sound.setGroupVolume(type::music, settings::MusicVolume);	//	dont touch this 
-
-	sound.createSoundGroup(type::test);
-	sound.addToSoundGroup("oops", type::test);
-	sound.addToSoundGroup("my bike", type::test);
-	sound.addToSoundGroup("gyat", type::test);
-}
-#pragma endregion
-
 
 GameManager::GameManager() {
 	windowPtr = nullptr;
@@ -71,8 +22,8 @@ bool GameManager::OnCreate() {
 	}
 
 	///	sound
-	InitializeSoundEffects();
-
+	InitMusic();
+	InitSoundEffects();
 
 
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -113,8 +64,6 @@ bool GameManager::OnCreate() {
 void GameManager::Run() {
 	timer->Start();
 
-	//StartFadeOutTransition(2000); // 2000 milliseconds (2 seconds) fade out animation
-
 
 	while (isRunning) {
 		timer->UpdateFrameTicks();
@@ -122,14 +71,13 @@ void GameManager::Run() {
 
 		if (fadeTransition) {								//	if a fadeTransition unique_ptr exists
 			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
-
 				///	keep the present scene visible
-				//currentScene->Update(deltaTime);
 				currentScene->Render();
 
 				///	render the fade higher in priority
 				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
 				cc.colour(green); cout << "fade time remaining is " << fadeTransition->GetRemainingTime() << "ms"; cc.colour(clear, newline);
+
 			} else {												// when the fade transition is done...
 				fadeTransition.reset();					//	reset the unique pointer (make it nullptr)
 			}
@@ -167,13 +115,15 @@ void GameManager::HandleEvents() {
 			switch (event.key.keysym.scancode) {
 			case SDL_SCANCODE_ESCAPE:
 				//isPaused = !isPaused;
-				StartFadeInTransition(1000, [&]() { isRunning = false;	});
+				StartFadeInTransition(1000, [this]() { isRunning = false; });
 				break;
 			case SDL_SCANCODE_Q:
-				StartFadeInTransition(1000, [&]() { isRunning = false;	});
+				StartFadeInTransition(1000, [this]() { isRunning = false;	 });
 				break;
 			case SDL_SCANCODE_END:
-				StartFadeInTransition(1000, [&]() { isRunning = false;	});
+				cc.log(update, "SILENCE!!!");
+				musicSound.stopAllSounds();
+				sfxSound.stopAllSounds();
 				break;
 			case SDL_SCANCODE_I:
 				//	testing

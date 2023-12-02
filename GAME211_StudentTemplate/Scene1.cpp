@@ -138,19 +138,19 @@ bool Scene1::OnCreate() {
 	for (auto* button : allButtons) { button->generateHitbox(); } //	we're going this in the OnCreate because the hitbox needs to be generated after repositioning. this ensures that
 
 	//	what happens when each button is clicked?
-	myStartButton->SetOnLeftClick([&] {
-		cc.log(update, "start pressed"); sound.playSound("flame", false);});
-	myOptionsButton->SetOnLeftClick([&] {cc.log(update, "options pressed");sound.playSound("flame", false); bTestMenu = !bTestMenu; });
-	myExitButton->SetOnLeftClick([&] {cc.log(update, "exit pressed");sound.playSound("big powerup", false); isBopping = !isBopping; });
-	mySmallButton->SetOnLeftClick([&] {cc.log(update, "small pressed");sound.playSound("my bike", false); });
-	myDebugButton->SetOnLeftClick([&] {cc.log(update, "debug pressed | back from the dead!");sound.playSound("gyat"); for (auto const button : allButtons) { button->isActive = true; }});
+	//myStartButton->SetOnLeftClick([&] {
+	//	cc.log(update, "start pressed"); sound.playSound("flame", false);});
+	//myOptionsButton->SetOnLeftClick([&] {cc.log(update, "options pressed");sound.playSound("flame", false); bTestMenu = !bTestMenu; });
+	//myExitButton->SetOnLeftClick([&] {cc.log(update, "exit pressed");sound.playSound("big powerup", false); isBopping = !isBopping; });
+	//mySmallButton->SetOnLeftClick([&] {cc.log(update, "small pressed");sound.playSound("my bike", false); });
+	//myDebugButton->SetOnLeftClick([&] {cc.log(update, "debug pressed | back from the dead!");sound.playSound("gyat"); for (auto const button : allButtons) { button->isActive = true; }});
 
-	mySpookyButton->SetOnLeftClick([&] {cc.log(update, "spooky aahhhH!");sound.playSound("oops", true); });
+	//mySpookyButton->SetOnLeftClick([&] {cc.log(update, "spooky aahhhH!");sound.playSound("oops", true); });
 
 
-	myStartButton->SetOnRightClick([&] {cc.log(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
-	myStartButton->SetOnHover([&] {cc.log(update, "start hOOoOoVErrRRrrrRing"); });
-	myStartButton->SetOnScroll([&](int xxx) {cc.log(update, "start scrolled on (rekt ig)"); cout << xxx << endl; });
+	//myStartButton->SetOnRightClick([&] {cc.log(update, "start RIGHT CLICKED!!!!!!!!!!!!!!!!!!!!!"); });
+	//myStartButton->SetOnHover([&] {cc.log(update, "start hOOoOoVErrRRrrrRing"); });
+	//myStartButton->SetOnScroll([&](int xxx) {cc.log(update, "start scrolled on (rekt ig)"); cout << xxx << endl; });
 
 
 	return true;

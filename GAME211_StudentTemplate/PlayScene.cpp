@@ -119,6 +119,13 @@ void PlayScene::Update(const float time) {
 	//tracker.tracker5->setPositionRelativeTo(*tracker.tracker1, 0, -400);
 
 	tracker.trackThis(std::to_string(player->getCurrentInvincibilityDuration()), tracker.tracker6);
+
+	soundButtonText1->text = std::to_string(settings::MasterVolume);
+	soundButtonText2->text = std::to_string(settings::MusicVolume);
+	soundButtonText3->text = std::to_string(settings::SoundEffectVolume);
+
+
+
 }
 
 
@@ -142,6 +149,17 @@ void PlayScene::Render() {
 		if (settingsOpen) {
 			for (const auto button : allSubPauseMenuButtons) {
 				button->Render(renderer);
+		}
+
+			//sound menu buttons
+			if(soundMenuOpen) {
+				soundButtonText1->setPositionRelativeTo(*soundButton1, 50, -75);
+				soundButtonText2->setPositionRelativeTo(*soundButton2, 50, -75);
+				soundButtonText3->setPositionRelativeTo(*soundButton3, 50, -75);
+
+				for (const auto button : allSoundMenuButtons) {
+					button->Render(renderer);
+				}
 			}
 
 			//	cheat buttons
@@ -184,6 +202,9 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			button->HandleEvents(event);
 		}
 		for (const auto button : allCheatMenuButtons) {
+			button->HandleEvents(event);
+		}
+		for (const auto button : allSoundMenuButtons) {
 			button->HandleEvents(event);
 		}
 	}

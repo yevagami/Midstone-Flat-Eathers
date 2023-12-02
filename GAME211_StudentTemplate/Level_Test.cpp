@@ -2,35 +2,6 @@
 
 //I might have to reorder the methods for organizing purposes
 
-void Level_test::mobSpawner() {
-	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
-	int enemycounter = 0;
-	for (auto enemy : levelBodies) {
-		if (enemy->type == Body::ENEMY) {
-			enemycounter++;
-		}
-		
-	}
-
-	//I changed the limit to be 5 so it's more fun :) -Adriel
-	if (enemycounter >= 5) {
-		return;
-	}
-
-	//This whole section is made to randomise the position of spawned mob. Yes its an int because rand() wants an int. Sorry.
-	int scaryMaxX = (1366.0f / 2.0f) + 128.0f * 4.5f;
-	int scaryMaxY = (768.0f / 2.0f) + 128.0f * 4.5f;
-	int scaryMinX = (1366.0f / 2.0f) - 128.0f * 4.5f;
-	int scaryMinY = (768.0f / 2.0f) - 128.0f * 4.5f;
-	
-	Enemy* ghost = new Enemy (this, Vec3((std::rand() % scaryMaxX + scaryMinX), (std::rand() % scaryMaxY + scaryMinY), 0), Enemy::flash);
-	levelBodies.push_back(ghost);
-	ghost = nullptr;
-	cc.log(not_error, "Did I come here?");
-	//std::cout << "Did i come here?";
-	
-}
-
 bool Level_test::OnCreate(){
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
@@ -121,7 +92,6 @@ bool Level_test::OnCreate(){
 	wall = nullptr;
 
 #pragma endregion
-	
 	return true;
 }
 
@@ -133,8 +103,7 @@ void Level_test::OnDestroy(){
 			continue;
 		}
 		delete body;
-	}
-	levelBodies.clear();
+	} levelBodies.clear();
 
 	if (background) {
 		SDL_DestroyTexture(background);
@@ -159,7 +128,8 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	mobSpawner();
+
+	mobSpawner(10, Enemy::flash);
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector

@@ -454,7 +454,7 @@ namespace ui {
 	/// Font Constructor Object
 	struct Font {
 		std::string fontText;
-		int size;
+		float size;
 		const char* font;
 		int offsetX;
 		int offsetY;
@@ -614,7 +614,7 @@ namespace ui {
 
 		BackgroundType backgroundType;					//	button's background type (solid | image)
 
-		int fontSize;														//	button's font size (default : 45)
+		float fontSize;														//	button's font size (default : 45)
 		double fontRotation;										//	font rotation (default : 0.0)
 		int fontOffsetX;												//	offset x (default : 0)
 		int fontOffsetY;												//	offset y (default : 0)
@@ -640,14 +640,14 @@ namespace ui {
 
 	public:
 		/// Modifier Methods 
-		[[nodiscard]] int getX() const { return rect.x; }
-		[[nodiscard]] int getY() const { return rect.y; }
-		[[nodiscard]] int getH() const { return rect.h; }
-		[[nodiscard]] int getW() const { return rect.w; }
+		[[nodiscard]] float getX() const { return rect.x; }
+		[[nodiscard]] float getY() const { return rect.y; }
+		[[nodiscard]] float getH() const { return rect.h; }
+		[[nodiscard]] float getW() const { return rect.w; }
 
 		void generateHitbox() { hitbox.generateHitbox(rect); }
-		void setPosition(int newRectY_ = 0, int newRectX_ = 0);
-		void setPositionRelativeTo(const Button& papaButton_, int yOffset_ = 0, int xOffset_ = 0);
+		void setPosition(float newRectY_ = 0, float newRectX_ = 0);
+		void setPositionRelativeTo(const Button& papaButton_, float yOffset_ = 0, float xOffset_ = 0);
 		void offsetPosition(int newRectYOffset_ = 0, int newRectXOffset_ = 0);
 		void setDimensions(int newRectHeight_, int newRectWidth_);
 		void setDimensions(const SDL_Rect& rect_);
