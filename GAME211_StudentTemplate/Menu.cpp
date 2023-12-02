@@ -94,10 +94,11 @@ namespace ui {
 
 	auto Button::EnableBackgroundImage(const char* fileDirectory_) -> bool {
 		backgroundImageDirectory = fileDirectory_;
-		backgroundImageSurface = IMG_Load(backgroundImageDirectory);
 		backgroundType = BackgroundType::Image;
 		return true;
 	}
+		
+	
 
 
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
@@ -112,13 +113,27 @@ namespace ui {
 
 				return true;
 			}
-			else if (backgroundType == BackgroundType::Image) {
-				SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface);
-				SDL_RenderCopy(renderer_, renderedTexture, nullptr, &rect);
+
+
+			if (backgroundType == BackgroundType::Image) {
+				SDL_Surface* backgroundImageSurface = IMG_Load(backgroundImageDirectory);
+
+				if(backgroundImageSurface != nullptr) {
+					SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface);
+
+					if (renderedTexture != nullptr) {
+						double angle = 0.0;
+						SDL_Point center = { 0, 0 };
+						SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+						SDL_RenderCopyEx(renderer_, renderedTexture, nullptr, &rect, angle, &center, flip);
+					
+						SDL_DestroyTexture(renderedTexture);
+					}
+					SDL_FreeSurface(backgroundImageSurface);
+				}
 				return true;
 			}
-
-
 		}
 		return true;
 	}

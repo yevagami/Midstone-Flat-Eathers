@@ -146,8 +146,7 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
     //If you don't give it a cutout for a smaller section of the image, it'll just use the entire thing
     //Pretty useful ngl -Adriel
-    SDL_RenderCopyEx(renderer_, texture, cutout, &square,
-        orientationDegrees, nullptr, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer_, texture, cutout, &square, orientationDegrees, nullptr, SDL_FLIP_NONE);
 }
 
 void Body::RenderHitbox(SDL_Renderer* renderer_){
