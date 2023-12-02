@@ -13,7 +13,19 @@ bool PlayerBody::OnCreate() {
 	//Creating timers
 	//Note: these timers will be independent of the clock updating pool 
 	//because they need to be activated and updated in certain circumstances
-	dash_timer = new Clock(dashDuration, false);
+	
+	dash_timer = new Clock(dashDuration, false, [this]() {
+		currentState = idle;
+		canMove = true;
+
+		//set the current and max speed;
+		currentSpeed = walkSpeed;
+		maxSpeed = walkSpeed;
+
+		dash_timer->Reset();
+		//vel = Vec3(); //reset the player's speed and set the state to idle
+	});
+
 	invincible_timer = new Clock(invincibleDuration, false);
 	drawMelee_timer = new Clock(drawMeleeDuration, false); //drawMelee_timer = new Clock(drawMeleeDuration, false);
 
@@ -348,8 +360,7 @@ void PlayerBody::state_idle() { canMove = true;}
 
 void PlayerBody::state_dash(float deltaTime_) {
 	canMove = false; //disables the player's movement input
-	dash_timer->Update(deltaTime_);
-
+	
 	//set the max speed to the dash speed
 	currentSpeed = dashSpeed;
 	maxSpeed = dashSpeed;
@@ -363,19 +374,7 @@ void PlayerBody::state_dash(float deltaTime_) {
 		vel = Vec3(playerDirection.x * currentSpeed, playerDirection.y * currentSpeed, 0.0f);
 	}
 
-	//Resets the timer when the duration has elapsed 
-	if (dash_timer->completed) {
-		//set the current and max speed;
-		currentSpeed = walkSpeed;
-		maxSpeed = walkSpeed;
-
-		//reset the timer and start the cooldown
-		dash_timer->Reset();
-		dash_cooldown->Start();
-		//vel = Vec3(); //reset the player's speed and set the state to idle
-		currentState = idle;
-		canMove = true;
-	}
+	dash_timer->Update(deltaTime_);
 }
 
 void PlayerBody::state_attack(float deltaTime_) {

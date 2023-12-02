@@ -23,9 +23,6 @@ protected:
 
 public:
  
-    //Constructors
-    PlayerBody() {}
-
     //Constructor requiring the bare minimum to make the player function (the player's texture is set internally)
     PlayerBody(Scene* parentScene_, Vec3 pos_, Vec3 scale_, int w_, int h_) {
         parentScene = parentScene_;

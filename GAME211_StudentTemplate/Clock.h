@@ -1,12 +1,12 @@
 #pragma once
 #include <iostream>
+#include <functional>
 
 class Clock{
 public:
 	//Methods
-	Clock();
 	Clock(float duration_, bool isLooping_);
-	Clock(float duration_, bool isLooping_, void (*callback)());
+	Clock(float duration_, bool isLooping_, std::function<void()> callback_);
 	void Update(float deltaTime);
 	void OnDestroy();
 	void Reset();
@@ -18,6 +18,6 @@ public:
 	float timer = 0;
 	bool completed = false;
 	bool isLooping = false;
-	void (*callback)() = nullptr;
+	std::function<void()> callback;
 };
 
