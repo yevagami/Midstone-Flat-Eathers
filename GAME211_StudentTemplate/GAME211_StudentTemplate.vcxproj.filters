@@ -120,9 +120,6 @@
     <ClCompile Include="LogManager.cpp">
       <Filter>Source Files\Saving</Filter>
     </ClCompile>
-    <ClCompile Include="KeybindHandler.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scene3.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -159,14 +156,14 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FadeTransition.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Visualization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,13 +266,7 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteDefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="menu_scaary.hpp">
@@ -283,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="FadeTransition.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\Visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteDefs.h">
+      <Filter>Header Files\Visualization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
