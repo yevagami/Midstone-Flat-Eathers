@@ -546,7 +546,7 @@ namespace ui {
 			buttonTextTexture = nullptr;
 			buttonTextSurface = nullptr;
 			backgroundImageTexture = nullptr;
-			backgroundImageSurface = nullptr;
+			//backgroundImageSurface = nullptr;
 		}
 
 		~Button() { ClearSDLStuff(); }
@@ -593,7 +593,6 @@ namespace ui {
 		SDL_Surface* buttonTextSurface;
 
 		SDL_Texture* backgroundImageTexture;
-		SDL_Surface* backgroundImageSurface;
 
 		BackgroundType backgroundType;					//	button's background type (solid | image)
 

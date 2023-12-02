@@ -180,7 +180,7 @@ public:
 			button->textBorderSize = 1;
 		}
 		subButton4->setPositionRelativeTo(*button1, -12.5, -125);
-		subButton3->EnableBackgroundImage("Texures/daddy.jpg");
+		subButton3->EnableBackgroundImage("Textures/programmer_art/missing_texture.png");
 
 		for (const auto button : allCheatMenuButtons) {
 			button->scaleDimensions(50);
