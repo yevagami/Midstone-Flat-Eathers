@@ -102,7 +102,6 @@ namespace ui {
 
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
 		if (rect.w != 0 && rect.h != 0) {
-
 			if (backgroundType == BackgroundType::SolidColour) {
 				//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
 				const SDL_Color renderColour =
@@ -113,10 +112,10 @@ namespace ui {
 
 				return true;
 			}
-
 			else if (backgroundType == BackgroundType::Image) {
 				SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface);
 				SDL_RenderCopy(renderer_, renderedTexture, nullptr, &rect);
+				return true;
 			}
 
 

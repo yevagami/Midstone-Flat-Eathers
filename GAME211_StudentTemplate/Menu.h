@@ -595,6 +595,8 @@ namespace ui {
 		SDL_Texture* backgroundImageTexture;
 		SDL_Surface* backgroundImageSurface;
 
+		BackgroundType backgroundType;					//	button's background type (solid | image)
+
 		//  a function as variables
 		std::function<void()> OnLeftClick;
 		std::function<void()> OnRightClick;
@@ -611,8 +613,6 @@ namespace ui {
 		SDL_Color onHoveringBackgroundColour;			//  button's hover background colour
 		SDL_Color textColour;										//  button's text colour
 		SDL_Color onHoveringTextColour;					//  button's hovering text colour
-
-		BackgroundType backgroundType;					//	button's background type (solid | image)
 
 		float fontSize;														//	button's font size (default : 45)
 		double fontRotation;										//	font rotation (default : 0.0)

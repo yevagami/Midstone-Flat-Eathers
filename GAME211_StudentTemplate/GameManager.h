@@ -23,13 +23,13 @@
 	namespace settings {
 		inline float MaxVolume = 1.0f;
 		inline float MasterVolume;
-		inline float DefaultMasterVolume = 1.0f;
+		inline float DefaultMasterVolume = 0.5f;
 
 		inline float SoundEffectVolume;
-		inline float DefaultSoundEffectVolume = 1.0f;
+		inline float DefaultSoundEffectVolume = 0.5f;
 
 		inline float MusicVolume;
-		inline float DefaultMusicVolume = 1.0f;
+		inline float DefaultMusicVolume = 0.5f;
 
 		inline int FPS;
 
