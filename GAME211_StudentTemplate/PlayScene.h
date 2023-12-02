@@ -67,6 +67,13 @@ public:
 	ui::Button* subButton1;
 	ui::Button* subButton2;
 	ui::Button* subButton3;
+	ui::Button* subButton4;
+
+	bool soundMenuOpen = false;
+	vector<ui::Button*> allSoundMenuButtons;
+	ui::Button* soundButton1;
+	ui::Button* soundButton2;
+	ui::Button* soundButton3;
 
 	bool cheatsOpen = false;
 	vector<ui::Button*> allCheatMenuButtons;
@@ -74,7 +81,8 @@ public:
 	ui::Button* cheatButton2;
 	ui::Button* cheatButton3;
 
-	void CreatePauseMenu() { //I'll move this when it fully works
+	//I'll move this when it fully works
+	void CreatePauseMenu() { 
 		//	main pause buttons
 		button1 = new ui::Button(ui::Font{}, ui::SDL_Testangle, ui::Colour{});
 		button2 = new ui::Button(ui::Font{}, ui::SDL_Testangle, ui::Colour{});
@@ -84,16 +92,29 @@ public:
 		allPauseMenuButtons.emplace_back(button2);
 		allPauseMenuButtons.emplace_back(button3);
 
-		//	sub pause buttons (options menu)
+		//	sub pause buttons (pause menu -> options menu)
 		subButton1 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
 		subButton2 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
 		subButton3 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
+		subButton4 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
+
 
 		allSubPauseMenuButtons.emplace_back(subButton1);
 		allSubPauseMenuButtons.emplace_back(subButton2);
 		allSubPauseMenuButtons.emplace_back(subButton3);
+		allSubPauseMenuButtons.emplace_back(subButton4);
 
-		//	cheat pause buttons (cheat menu)
+
+		//	sound changing buttons (pause menu -> sound menu)
+		soundButton1 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
+		soundButton2 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
+		soundButton3 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
+
+		allSoundMenuButtons.emplace_back(soundButton1);
+		allSoundMenuButtons.emplace_back(soundButton2);
+		allSoundMenuButtons.emplace_back(soundButton3);
+
+		//	cheat pause buttons (pause menu -> options menu -> cheat menu)
 		cheatButton1 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
 		cheatButton2 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
 		cheatButton3 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
@@ -109,7 +130,13 @@ public:
 
 		subButton1->text = "FPS";
 		subButton2->text = "cheats";
-		subButton3->text = "save?";
+		subButton3->text = "mute uwu";
+		subButton4->text = "sound";
+
+
+		soundButton1->text = "master";
+		soundButton2->text = "music";
+		soundButton3->text = "sfx";
 
 		cheatButton1->text = "heal";
 		cheatButton2->text = "god";
@@ -132,7 +159,7 @@ public:
 		for (const auto button : allSubPauseMenuButtons) {
 			button->scaleDimensions(50);
 			//	centered
-			button->setPositionRelativeTo(*button1, 0, 450);
+			button->setPositionRelativeTo(*button1, -12.5, 450);
 
 			//	universal cosmetics
 			button->fontSize = 25;
@@ -143,11 +170,13 @@ public:
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
 		}
+		subButton4->setPositionRelativeTo(*button1, -12.5, -125);
+
 
 		for (const auto button : allCheatMenuButtons) {
 			button->scaleDimensions(50);
 			//	centered
-			button->setPositionRelativeTo(*button1, 0, 600);
+			button->setPositionRelativeTo(*button1, -12.5, 600);
 
 			//	universal cosmetics
 			button->fontSize = 25;
@@ -158,6 +187,21 @@ public:
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
 			//button->isPrideful = true;
+		}
+
+		for(const auto button : allSoundMenuButtons) {
+			button->scaleDimensions(50);
+			//	centered
+			button->setPositionRelativeTo(*subButton4,0, -125);
+
+			//	universal cosmetics
+			button->fontSize = 25;
+			button->isTextBordered = true;
+			button->textBorderColour = ui::SDL_COLOR_SLATE_GRAY;
+			button->backgroundColour = ui::SDL_COLOR_DARK_SLATE_GRAY;
+			button->buttonBorderColour = ui::SDL_COLOR_SLATE_GRAY;
+			button->buttonBorderSize = 4;
+			button->textBorderSize = 1;
 		}
 
 		//	On Left Clicks
@@ -194,6 +238,15 @@ public:
 
 		});
 
+		subButton4->isTogglable = true;
+		subButton4->SetOnLeftClick([&]() {
+			if (!subButton4->isOn) {
+				soundMenuOpen = true;
+			} else {
+				soundMenuOpen = false;
+			}
+		});
+
 		subButton1->SetOnLeftClick([&]() {
 			cc.log(update, "fps changed");
 			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
@@ -218,6 +271,7 @@ public:
 				}
 			}
 		});
+
 		subButton2->isTogglable = true;
 		subButton2->SetOnLeftClick([&]() {
 			cc.log(update, "cheat menu toggled");
@@ -227,10 +281,40 @@ public:
 				cheatsOpen = false;
 			}
 		});
+
+
 		subButton3->SetOnLeftClick([&]() {
 			cc.log(update, "not implemented");
+			if(settings::MasterVolume != 0.0f) {
+				settings::SetMasterVolume(0.0f);
+			}
+			else {
+				settings::SetMasterVolume(1.0f);
+
+			}
+		});
+
+		subButton3->SetOnRightClick([&]() {
+			sound.playSound("my bike", true);
+		});
+
+		//master v0lume
+		soundButton1->SetOnLeftClick([&]() {
+
 
 		});
+		//music volume
+		soundButton2->SetOnLeftClick([&]() {
+
+
+		});
+		//sfx volume
+		soundButton3->SetOnLeftClick([&]() {
+
+		});
+
+
+
 
 		//	full heal (default on left, max on right)
 		cheatButton1->SetOnLeftClick([&]() {
@@ -260,13 +344,17 @@ public:
 
 
 
-		button1->offsetPosition(0,0);											//	mid
-		button2->setPositionRelativeTo(*button1, -100);												//top
-		button3->setPositionRelativeTo(*button1, 100);													//	bottom
+		button1->offsetPosition(0,0);												//	mid
+		button2->setPositionRelativeTo(*button1, -100);					//top
+		button3->setPositionRelativeTo(*button1, 100);					//	bottom
 
 		subButton1->offsetPosition(0, 0);
 		subButton2->offsetPosition(-125);
 		subButton3->offsetPosition(125);
+
+		soundButton1->offsetPosition(0, 0);
+		soundButton2->offsetPosition(-125);
+		soundButton3->offsetPosition(125);
 
 		cheatButton1->offsetPosition(0, 0);
 		cheatButton2->offsetPosition(-125);
@@ -278,6 +366,7 @@ public:
 		//	make them clickable
 		for (const auto button : allPauseMenuButtons) { button->generateHitbox(); }
 		for (const auto button : allSubPauseMenuButtons) { button->generateHitbox(); }
+		for (const auto button : allSoundMenuButtons) { button->generateHitbox(); }
 		for (const auto button : allCheatMenuButtons) { button->generateHitbox(); }
 	}
 

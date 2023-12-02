@@ -113,8 +113,6 @@ bool GameManager::OnCreate() {
 void GameManager::Run() {
 	timer->Start();
 
-	//StartFadeOutTransition(2000); // 2000 milliseconds (2 seconds) fade out animation
-
 
 	while (isRunning) {
 		timer->UpdateFrameTicks();
@@ -122,14 +120,13 @@ void GameManager::Run() {
 
 		if (fadeTransition) {								//	if a fadeTransition unique_ptr exists
 			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
-
 				///	keep the present scene visible
-				//currentScene->Update(deltaTime);
 				currentScene->Render();
 
 				///	render the fade higher in priority
 				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
 				cc.colour(green); cout << "fade time remaining is " << fadeTransition->GetRemainingTime() << "ms"; cc.colour(clear, newline);
+
 			} else {												// when the fade transition is done...
 				fadeTransition.reset();					//	reset the unique pointer (make it nullptr)
 			}

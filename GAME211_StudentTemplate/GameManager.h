@@ -104,7 +104,6 @@ private:
 		settings::MaxVolume = 1.0f;
 		settings::MusicVolume = 0.5f;
 		settings::SoundEffectVolume = 0.75f;
-
 	}
 
 public:
@@ -126,7 +125,7 @@ public:
 
 
 	//	Fade IN transition (fade in to black) (yes its confusing)
-	void StartFadeInTransition(const Uint64 fadeTime_, std::function<void()> callback_ = nullptr) {
+	void StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr) {
 		cc.log(debug, "fade in animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true);
@@ -138,7 +137,7 @@ public:
 	}
 
 	//	Fade OUT transition (fade out from black)
-	void StartFadeOutTransition(const Uint64 fadeTime_, std::function<void()> callback_ = nullptr) {
+	void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr) {
 		cc.log(debug, "fade out animation called");
 		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
 		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false);

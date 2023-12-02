@@ -142,6 +142,13 @@ void PlayScene::Render() {
 		if (settingsOpen) {
 			for (const auto button : allSubPauseMenuButtons) {
 				button->Render(renderer);
+		}
+
+			//sound menu buttons
+			if(soundMenuOpen) {
+				for (const auto button : allSoundMenuButtons) {
+					button->Render(renderer);
+				}
 			}
 
 			//	cheat buttons
@@ -184,6 +191,9 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			button->HandleEvents(event);
 		}
 		for (const auto button : allCheatMenuButtons) {
+			button->HandleEvents(event);
+		}
+		for (const auto button : allSoundMenuButtons) {
 			button->HandleEvents(event);
 		}
 	}
