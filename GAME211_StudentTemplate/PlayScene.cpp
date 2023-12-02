@@ -85,6 +85,7 @@ void PlayScene::Update(const float time) {
 			enemycounter++;
 		}
 	}
+	
 
 	std::string enemyCountString = std::to_string(enemycounter);
 	std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using

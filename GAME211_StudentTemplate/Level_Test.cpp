@@ -3,6 +3,10 @@
 //I might have to reorder the methods for organizing purposes
 
 bool Level_test::OnCreate(){
+	spawnBounds = { static_cast<int>((1366.0f / 2.0f) - 128.0f * 4.5f),
+							 static_cast<int>((768.0f / 2.0f) - 128.0f * 4.5f),
+							 static_cast<int>(128.0f * 9.0f),
+							 static_cast<int>(128.0f * 9.0f) };
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 	
@@ -114,12 +118,35 @@ void Level_test::OnDestroy(){
 	delete floor;
 }
 
+void Level_test::mobSpawner(const int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds) {
+	Vec3 spawnPosition = {
+		   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
+		   static_cast<float>(std::rand() % spawnBounds.h + spawnBounds.y),
+		   0.0f };
+	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
+	int enemycounter = 0;
+	for (auto enemy : levelBodies) {
+		if (enemy->type == Body::ENEMY) {
+			enemycounter++;
+		}
+	}
+	//I changed the limit to be 5 so it's more fun :) -Adriel
+	if (enemycounter >= maxSpawns_) {
+		return;
+	}
+	Enemy* ghost = new Enemy(this, spawnPosition, subType_);
+	levelBodies.push_back(ghost);
+	ghost = nullptr;
+	cc.log(not_error, "Did I come here?");
+}
+
+
+
 void Level_test::Update(const float time){
 	//Updates the level bodies
 	for(Body* body : levelBodies) {
 		//std::cout << body->type << "\n";
 		body->Update(time);
-
 		//Collision checks
 		for (Body* otherBody : levelBodies) {
 			if (otherBody == body) { continue; }
@@ -128,8 +155,7 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-
-	mobSpawner(10, Enemy::flash);
+	mobSpawner(10, Enemy::flash, spawnBounds);
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
