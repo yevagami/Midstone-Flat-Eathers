@@ -5,7 +5,7 @@
 bool Level_test::OnCreate(){
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
-
+	
 	//Note:
 	//I made the screen size and the physics size the same because it's much easier to use when constructing levels
 #pragma region Creating Level geometry
@@ -92,8 +92,6 @@ bool Level_test::OnCreate(){
 	wall = nullptr;
 
 #pragma endregion
-
-
 	return true;
 }
 

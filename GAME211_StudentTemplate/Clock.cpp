@@ -1,19 +1,18 @@
 #include "Clock.h"
 
-Clock::Clock(){
-	duration = 5;
-}
 
 Clock::Clock(float duration_, bool isLooping_) {
 	duration = duration_;
 	isLooping = isLooping_;
+	callback = nullptr;
 }
 
-Clock::Clock(float duration_, bool isLooping_, void(*callback_)()) {
+Clock::Clock(float duration_, bool isLooping_, std::function<void()> callback_) {
 	duration = duration_;
 	isLooping = isLooping_;
 	callback = callback_;
 }
+
 
 void Clock::Start() {
 	//if the clock has not started, start it

@@ -11,17 +11,39 @@ bool PlayerBody::OnCreate() {
 	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
 
 	//Creating timers
-	//Note: these timers will be independent of the clock updating pool 
-	//because they need to be activated and updated in certain circumstances
-	dash_timer = new Clock(dashDuration, false);
-	invincible_timer = new Clock(invincibleDuration, false);
-	drawMelee_timer = new Clock(drawMeleeDuration, false); //drawMelee_timer = new Clock(drawMeleeDuration, false);
+	dash_timer = new Clock(dashDuration, false, [this]() {
+		if (selectedAbilities == shield) {
+			currentState = attack;
+		}
+		else{
+			currentState = idle;
+		}
+		canMove = true;
 
-	//These ones will be part of the update pool
+		//set the current and max speed;
+		currentSpeed = walkSpeed;
+		maxSpeed = walkSpeed;
+
+		dash_timer->Reset();
+		//vel = Vec3(); //reset the player's speed and set the state to idle
+	});
+	invincible_timer = new Clock(invincibleDuration, false, [this]() {
+		invincible = false;
+		invincible_timer->Reset();
+	});
+	drawMelee_timer = new Clock(drawMeleeDuration, false, [this]() {
+		drawMelee = false;
+		drawMelee_timer->Reset();
+	});
 	dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
+
+	//Pushes the timer to the vector
+	cooldowns.push_back(drawMelee_timer);
+	cooldowns.push_back(dash_timer);
 	cooldowns.push_back(dash_cooldown);
 	cooldowns.push_back(shooting_cooldown);
+	cooldowns.push_back(invincible_timer);
 
 	//set the maxSpeed to the currentSpeed
 	currentSpeed = walkSpeed;
@@ -79,31 +101,39 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 		dash_timer->Start();
 	}
 
-	//melee controls
-	if (SDL_MOUSEBUTTONUP) {
-		if (event.button.button == SDL_BUTTON_LEFT && currentState == idle) {
-			currentState = attack;
+	//attack controlls
+	if (event.type == SDL_MOUSEBUTTONUP) {
+		if (event.button.button == SDL_BUTTON_LEFT) {
+			if (currentState == idle) {
+				currentState = attack;
+			}
+
+			if (selectedAbilities == shield) {
+				cout << isShielding << endl;
+				isShielding = !isShielding;
+				currentState = (isShielding) ? attack : idle;
+				drawShield = isShielding;
+			}
 			//std::cout << "Pressed left\n";
 		}
 	}
 
 	//Switching abilities
-	if (currentState != attack) {
-		switch (event.key.keysym.scancode) {
+	
+	switch (event.key.keysym.scancode) {
 		case SDL_SCANCODE_J:
 			selectedAbilities = melee;
 			break;
-
+		
 		case SDL_SCANCODE_K:
 			selectedAbilities = shoot;
 			break;
-
+		
 		case SDL_SCANCODE_L:
-			isShielding = !isShielding;
 			selectedAbilities = shield;
 			break;
-		}
 	}
+	
 }
 
 void PlayerBody::Update(float deltaTime) {
@@ -127,7 +157,6 @@ void PlayerBody::Update(float deltaTime) {
 	case attack:
 		state_attack(deltaTime);
 		break;
-
 	}
 
 	//update the cooldown timers
@@ -139,23 +168,6 @@ void PlayerBody::Update(float deltaTime) {
 		if (cd->completed) { cd->Reset(); }
 	}
 
-	//Updating the invincible timer
-	if (invincible) {
-		invincible_timer->Update(deltaTime);
-		if (invincible_timer->completed) {
-			invincible = false;
-			invincible_timer->Reset();
-		}
-	}
-
-	//Updating the drawMelee timer
-	if (drawMelee) {
-		drawMelee_timer->Update(deltaTime);
-		if (drawMelee_timer->completed) {
-			drawMelee = false;
-			drawMelee_timer->Reset();
-		}
-	}
 
 	//cap the player's movement speed
 	if (canMove) {
@@ -285,71 +297,16 @@ std::string PlayerBody::getSelectedAbility() const {
 	}
 }
 
-float PlayerBody::getCurrentInvincibilityDuration() const {
-	return invincible_timer->duration;
-}
-
-float PlayerBody::getDefaultInvincibilityDuration() const {
-	return invincibleDurationDefault;
-}
-
-void PlayerBody::setCurrentInvincibilityDuration(const float newDuration_) {
-	invincibleDuration = newDuration_;//	just in case
-	invincible_timer->duration = invincibleDuration;
-}
-
-void PlayerBody::setCurrentInvincibilityToDefault() {
-	invincibleDuration = invincibleDurationDefault;	
-	invincible_timer->duration = invincibleDuration;
-
-}
-
-float PlayerBody::getCurrentDrawMeleeDuration() const {
-	return drawMelee_timer->duration;
-}
-
-float PlayerBody::getDefaultDrawMeleeDuration() const {
-	return drawMeleeDurationDefault;
-}
-
-void PlayerBody::setCurrentDrawMeleeDuration(const float newDuration_) {
-	drawMeleeDuration = newDuration_;	//	just in case
-	drawMelee_timer->duration = drawMeleeDuration;
-}
-
-void PlayerBody::setCurrentDrawMeleeToDefault() {
-	drawMeleeDuration = drawMeleeDurationDefault;	//	just in case
-	drawMelee_timer->duration = drawMeleeDuration;
-}
-
-float PlayerBody::getCurrentDefence() const {
-	return playerDefence;
-}
-
-float PlayerBody::getDefaultDefence() const {
-	return playerDefenceDefault;
-}
-
-float PlayerBody::getMaxDefence() const {
-	return playerDefenceMax;
-}
-
-void PlayerBody::setCurrentDefence(const float newDefense_) {
-	playerDefence = newDefense_;
-}
-
-void PlayerBody::setCurrentDefenceToDefault() {
-	playerDefence = playerDefenceDefault;
-}
 
 
 #pragma region State methods
 void PlayerBody::state_idle() { canMove = true;}
 
 void PlayerBody::state_dash(float deltaTime_) {
-	canMove = false; //disables the player's movement input
-	dash_timer->Update(deltaTime_);
+	isShielding = false;
 
+	canMove = false; //disables the player's movement input
+	
 	//set the max speed to the dash speed
 	currentSpeed = dashSpeed;
 	maxSpeed = dashSpeed;
@@ -361,20 +318,6 @@ void PlayerBody::state_dash(float deltaTime_) {
 	}
 	else {
 		vel = Vec3(playerDirection.x * currentSpeed, playerDirection.y * currentSpeed, 0.0f);
-	}
-
-	//Resets the timer when the duration has elapsed 
-	if (dash_timer->completed) {
-		//set the current and max speed;
-		currentSpeed = walkSpeed;
-		maxSpeed = walkSpeed;
-
-		//reset the timer and start the cooldown
-		dash_timer->Reset();
-		dash_cooldown->Start();
-		//vel = Vec3(); //reset the player's speed and set the state to idle
-		currentState = idle;
-		canMove = true;
 	}
 }
 
@@ -424,6 +367,9 @@ void PlayerBody::state_attack(float deltaTime_) {
 				1.0f,
 				projectilePower
 			);
+			if (VMath::mag(mouseDirection * projectileSpeed) <= 0) {
+				cout << "Huh???\n";
+			}
 			//add it to all spawned objects (to be pushed to levelObjects pool)
 			parentLevel->spawningBodies.push_back(bullet);
 			bullet = nullptr;
@@ -433,31 +379,30 @@ void PlayerBody::state_attack(float deltaTime_) {
 	}
 
 	case shield: {
-		drawShield = true;
+		if (isShielding) {
+			setCurrentDefence(playerDefenceShielded);
+			for (Body* other : parentLevel->levelBodies) {
+				if (other->type == PLAYER) { continue; } // skip the player
+				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
+					if (other->type == ENEMY) {		//on hit enemy
+						//std::cout << "Attacking\n";
+						//Basically the same collsion response code as the solid
+						Vec3 otherVel = other->getVel();
+						Vec3 otherPos = other->getPos();
 
-		//	for all bodies within the level scene
-		for (Body* other : parentLevel->levelBodies) {
-			if (other->type == PLAYER) { continue; } // skip the player
-			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
-				if (other->type == ENEMY) {		//on hit enemy
-					//std::cout << "Attacking\n";
-					//cout << "shielding against an enemy\n";
-					if (!isShielding) setCurrentDefence(playerDefenceShielded);  //playerDefence = 75.0f; rip hard coding
-					if (isShielding) setCurrentDefenceToDefault();  //playerDefence = playerDefenceDefault; dina would be so proud (getter/setter)
+						Vec3 newPos = otherPos + -1 * otherVel * deltaTime_;
+						other->setPos(newPos);
+						other->setVel(Vec3());
 
-					//Basically the same collsion response code as the solid
-					Vec3 otherVel = other->getVel();
-					Vec3 otherPos = other->getPos();
-
-					Vec3 newPos = otherPos + -1 * otherVel * deltaTime_;
-					other->setPos(newPos);
-					other->setVel(Vec3());
-
+					}
 				}
 			}
 		}
+		else {
+			setCurrentDefenceToDefault();
+		}
 		break;
-	}
+		}
 	}
 }
 
