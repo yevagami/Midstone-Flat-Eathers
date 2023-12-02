@@ -50,22 +50,35 @@ public:
     std::string getSelectedAbility() const;
 
     //  you know what these are. (getters and setters)
-    float getCurrentInvincibilityDuration() const;
-    float getDefaultInvincibilityDuration() const;
-    void setCurrentInvincibilityDuration(float newDuration_);
-    void setCurrentInvincibilityToDefault();
+    float getCurrentInvincibilityDuration() const { return invincible_timer->duration; }
+    float getDefaultInvincibilityDuration() const { return invincibleDurationDefault;}
+    void setCurrentInvincibilityDuration(const float newDuration_) {
+        invincibleDuration = newDuration_;//just in case
+        invincible_timer->duration = invincibleDuration;
+    }
+    void setCurrentInvincibilityToDefault() {
+        invincibleDuration = invincibleDurationDefault;
+        invincible_timer->duration = invincibleDuration;
+
+    }
     void setInvincible(const bool state_) { invincible = state_; }
 
-    float getCurrentDrawMeleeDuration() const;
-    float getDefaultDrawMeleeDuration() const;
-    void setCurrentDrawMeleeDuration(float newDuration_);
-    void setCurrentDrawMeleeToDefault();
+    float getCurrentDrawMeleeDuration() const { return drawMelee_timer->duration; }
+    float getDefaultDrawMeleeDuration() const { return drawMeleeDurationDefault; }
+    void setCurrentDrawMeleeDuration(const float newDuration_) {
+        drawMeleeDuration = newDuration_;	//just in case
+        drawMelee_timer->duration = drawMeleeDuration;
+    }
+    void setCurrentDrawMeleeToDefault() {
+        drawMeleeDuration = drawMeleeDurationDefault;	//	just in case
+        drawMelee_timer->duration = drawMeleeDuration;
+    }
 
-    float getCurrentDefence() const;
-    float getDefaultDefence() const;
-    float getMaxDefence() const;
-    void setCurrentDefence(float newDefense_);
-    void setCurrentDefenceToDefault();
+    float getCurrentDefence() const { return playerDefence;}
+    float getDefaultDefence() const { return playerDefenceDefault; }
+    float getMaxDefence() const { return playerDefenceMax; }
+    void setCurrentDefence(const float newDefense_) { playerDefence = newDefense_;}
+    void setCurrentDefenceToDefault() { playerDefence = playerDefenceDefault;}
 
 
     //state methods
@@ -109,7 +122,7 @@ private:
 
     //Idk what this is -Adriel
 public:
-    bool isShielding;
+    bool isShielding = false;
 private:
 
     //timers and cooldowns

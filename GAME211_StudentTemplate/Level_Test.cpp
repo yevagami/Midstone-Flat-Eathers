@@ -159,7 +159,7 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	//mobSpawner();
+	mobSpawner();
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
