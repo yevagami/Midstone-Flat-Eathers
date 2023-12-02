@@ -34,15 +34,15 @@ public:
 
 	///	official irrklang supported volume control
 	void setVolume(float volume_) const;
-	void setGroupVolume(const std::string& groupLabel_, float volume_);
-	void createSoundGroup(const std::string& groupLabel_);
-	void addToSoundGroup(const std::string& label_, const std::string& groupLabel_);
+	//void setGroupVolume(const std::string& groupLabel_, float volume_);
+	//void createSoundGroup(const std::string& groupLabel_);
+	//void addToSoundGroup(const std::string& label_, const std::string& groupLabel_);
 
 	/// groups (manual)
-	std::unordered_map<std::string, std::vector<std::string>> soundGroups; //	not the map of string to vector<string>
-	std::vector<irrklang::ISound*> ambientSounds;
-	std::vector<irrklang::ISound*> sfxSounds;
-	std::vector<irrklang::ISound*> musicSounds;
+	//std::unordered_map<std::string, std::vector<std::string>> soundGroups; //	not the map of string to vector<string>
+	//std::vector<irrklang::ISound*> ambientSounds;
+	//std::vector<irrklang::ISound*> sfxSounds;
+	//std::vector<irrklang::ISound*> musicSounds;
 
 	//	the sound engine... public :O
 	irrklang::ISoundEngine* engine;

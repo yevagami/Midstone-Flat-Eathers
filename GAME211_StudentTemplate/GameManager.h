@@ -15,55 +15,66 @@
 
 
 //	global classes
-	inline Sound sound; void InitializeSoundEffects();
+	inline Sound musicSound;
+	inline Sound sfxSound;
+
+
+#pragma region settings
+	namespace settings {
+		inline float MaxVolume = 1.0f;
+		inline float MasterVolume;
+		inline float DefaultMasterVolume = 1.0f;
+
+		inline float SoundEffectVolume;
+		inline float DefaultSoundEffectVolume = 1.0f;
+		inline float MusicVolume;
+		inline float DefaultMusicVolume = 1.0f;
+
+		inline int FPS;
+
+
+		inline void SetMusicVolume(const float newMusicVolume_) {
+			if (newMusicVolume_ < 0.0f || newMusicVolume_ > 1.0f) { return; }
+
+			MusicVolume = std::min(newMusicVolume_, MasterVolume);
+			musicSound.setVolume(MusicVolume);
+		}
+
+		inline void SetSFXVolume(const float newSFXVolume_) {
+			if (newSFXVolume_ < 0.0f || newSFXVolume_ > 1.0f) { return; }
+
+			SoundEffectVolume = std::min(newSFXVolume_, MasterVolume);
+			sfxSound.setVolume(SoundEffectVolume);
+		}
+
+		inline void SetMasterVolume(const float newMaterVolume_) {
+			if (newMaterVolume_ < 0.0f || newMaterVolume_ > 1.0f) { return; }
+
+			//	compare the newMaster to the MaxVolume and take the lowest
+			MasterVolume = std::min(newMaterVolume_, MaxVolume);
+
+			//update the other volumes cuz the master changed
+			SetMusicVolume(MusicVolume);
+			SetSFXVolume(SoundEffectVolume);
+		}
+
+	}
+#pragma endregion
+
+	inline void InitSoundEffects() {
+		sfxSound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
+
+
+		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
+	}
+	inline void InitMusic() {
+		musicSound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
+
+
+		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
+	}
 	inline ConsistentConsole cc(true, "GameManager.h");
 	inline PrettyPrinting pp(pink, purple, cyan);
-
-	#pragma region settings
-namespace settings {
-	inline float MaxVolume = 1.0f;
-	inline float MasterVolume;
-
-	inline float SoundEffectVolume;
-	inline float MusicVolume;
-
-	inline int FPS;
-
-	inline void SetFPS(const int newFPS_) {
-		if (newFPS_ != 30 || newFPS_ != 60) {
-			return;
-		}
-		settings::FPS = newFPS_;
-	}
-		
-	inline void SetMusicVolume(const float newMusicVolume_) {
-		if (newMusicVolume_ < 0.0f || newMusicVolume_ > 1.0f) { return; }
-
-		MusicVolume = newMusicVolume_;
-		sound.setGroupVolume(type::music, MusicVolume * MasterVolume);
-	}
-
-	inline void SetSFXVolume(const float newSFXVolume_) {
-		if (newSFXVolume_ < 0.0f || newSFXVolume_ > 1.0f) { return; }
-
-		SoundEffectVolume = newSFXVolume_;
-		sound.setGroupVolume(type::sfx, SoundEffectVolume * MasterVolume);
-	}
-
-	inline void SetMasterVolume(const float newMaterVolume_) {
-		if (newMaterVolume_ < 0.0f || newMaterVolume_ > 1.0f) { return; }
-
-		//	compare the newMaster to the MaxVolume and take the lowest
-		MasterVolume = std::min(newMaterVolume_, MaxVolume);
-		sound.setVolume(MasterVolume);
-
-		//update the other volumes cuz the master changed
-		SetMusicVolume(MusicVolume);
-		SetSFXVolume(SoundEffectVolume);
-	}
-
-}
-#pragma endregion
 
 // My display is 1920 x 1080 but the following seems to work best to fill the screen.
 //const int SCREEN_WIDTH = 1540;
@@ -98,12 +109,12 @@ private:
 	bool isPaused;
 
 	//	settings default values
-	void setDefaultSettings() {
+	static void setDefaultSettings() {
 		settings::FPS = 60;
-		settings::MasterVolume = 1.0f;
 		settings::MaxVolume = 1.0f;
-		settings::MusicVolume = 0.5f;
-		settings::SoundEffectVolume = 0.75f;
+		settings::MasterVolume = settings::DefaultMasterVolume;;
+		settings::MusicVolume = settings::DefaultMusicVolume;
+		settings::SoundEffectVolume = settings::DefaultSoundEffectVolume;
 	}
 
 public:

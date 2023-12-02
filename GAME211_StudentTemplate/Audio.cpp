@@ -42,22 +42,22 @@ void Sound::stopAllSounds() const { if (engine) { engine->stopAllSounds(); } }
 
 void Sound::setVolume(const float volume_) const { if (engine) { engine->setSoundVolume(volume_); } }
 
-void Sound::setGroupVolume(const std::string& groupLabel_, const float volume_) {
-	if (soundGroups.find(groupLabel_) != soundGroups.end()) {
-		for (const std::string& soundLabel : soundGroups[groupLabel_]) {
-			if (soundSources.find(soundLabel) != soundSources.end()) {
-				engine->setSoundVolume(volume_);
-			}
-		}
-	}
-}
-
-void Sound::createSoundGroup(const std::string& groupLabel_) {
-	soundGroups[groupLabel_] = std::vector<std::string>();
-}
-
-void Sound::addToSoundGroup(const std::string& label_, const std::string& groupLabel_) {
-	if (soundSources.find(label_) != soundSources.end()) {
-		soundGroups[groupLabel_].emplace_back(label_);
-	}
-}
+//void Sound::setGroupVolume(const std::string& groupLabel_, const float volume_) {
+//	if (soundGroups.find(groupLabel_) != soundGroups.end()) {
+//		for (const std::string& soundLabel : soundGroups[groupLabel_]) {
+//			if (soundSources.find(soundLabel) != soundSources.end()) {
+//				engine->setSoundVolume(volume_);
+//			}
+//		}
+//	}
+//}
+//
+//void Sound::createSoundGroup(const std::string& groupLabel_) {
+//	soundGroups[groupLabel_] = std::vector<std::string>();
+//}
+//
+//void Sound::addToSoundGroup(const std::string& label_, const std::string& groupLabel_) {
+//	if (soundSources.find(label_) != soundSources.end()) {
+//		soundGroups[groupLabel_].emplace_back(label_);
+//	}
+//}

@@ -74,6 +74,10 @@ public:
 	ui::Button* soundButton1;
 	ui::Button* soundButton2;
 	ui::Button* soundButton3;
+	ui::Button* soundButtonText1;
+	ui::Button* soundButtonText2;
+	ui::Button* soundButtonText3;
+
 
 	bool cheatsOpen = false;
 	vector<ui::Button*> allCheatMenuButtons;
@@ -109,10 +113,16 @@ public:
 		soundButton1 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
 		soundButton2 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
 		soundButton3 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
+		soundButtonText1 = new ui::Button(ui::Font{});
+		soundButtonText2 = new ui::Button(ui::Font{});
+		soundButtonText3 = new ui::Button(ui::Font{});
 
 		allSoundMenuButtons.emplace_back(soundButton1);
 		allSoundMenuButtons.emplace_back(soundButton2);
 		allSoundMenuButtons.emplace_back(soundButton3);
+		allSoundMenuButtons.emplace_back(soundButtonText1);
+		allSoundMenuButtons.emplace_back(soundButtonText2);
+		allSoundMenuButtons.emplace_back(soundButtonText3);
 
 		//	cheat pause buttons (pause menu -> options menu -> cheat menu)
 		cheatButton1 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
@@ -132,7 +142,6 @@ public:
 		subButton2->text = "cheats";
 		subButton3->text = "mute uwu";
 		subButton4->text = "sound";
-
 
 		soundButton1->text = "master";
 		soundButton2->text = "music";
@@ -203,6 +212,7 @@ public:
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
 		}
+
 
 		//	On Left Clicks
 		//	Settings
@@ -282,35 +292,36 @@ public:
 			}
 		});
 
-
 		subButton3->SetOnLeftClick([&]() {
 			cc.log(update, "not implemented");
-			if(settings::MasterVolume != 0.0f) {
-				settings::SetMasterVolume(0.0f);
-			}
-			else {
-				settings::SetMasterVolume(1.0f);
-
-			}
+			musicSound.playSound("theme");
 		});
 
 		subButton3->SetOnRightClick([&]() {
-			sound.playSound("my bike", true);
+			sfxSound.playSound("my bike", true);
 		});
 
 		//master v0lume
 		soundButton1->SetOnLeftClick([&]() {
-
-
+			settings::SetMasterVolume(settings::MasterVolume + .10f);
+		});
+		soundButton1->SetOnRightClick([&]() {
+			settings::SetMasterVolume(settings::MasterVolume - .10f);
 		});
 		//music volume
 		soundButton2->SetOnLeftClick([&]() {
-
-
+			settings::SetMusicVolume(settings::MusicVolume + .10f);
 		});
+		soundButton2->SetOnRightClick([&]() {
+			settings::SetMusicVolume(settings::MusicVolume - .10f);
+		});
+
 		//sfx volume
 		soundButton3->SetOnLeftClick([&]() {
-
+			settings::SetSFXVolume(settings::SoundEffectVolume + .10f);
+		});
+		soundButton3->SetOnRightClick([&]() {
+			settings::SetSFXVolume(settings::SoundEffectVolume - .10f);
 		});
 
 
