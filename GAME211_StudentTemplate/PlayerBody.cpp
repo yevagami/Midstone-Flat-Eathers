@@ -25,15 +25,22 @@ bool PlayerBody::OnCreate() {
 		dash_timer->Reset();
 		//vel = Vec3(); //reset the player's speed and set the state to idle
 	});
-
-	invincible_timer = new Clock(invincibleDuration, false);
-	drawMelee_timer = new Clock(drawMeleeDuration, false); //drawMelee_timer = new Clock(drawMeleeDuration, false);
-
-	//These ones will be part of the update pool
+	invincible_timer = new Clock(invincibleDuration, false, [this]() {
+		invincible = false;
+		invincible_timer->Reset();
+	});
+	drawMelee_timer = new Clock(drawMeleeDuration, false, [this]() {
+		drawMelee = false;
+		drawMelee_timer->Reset();
+	});
 	dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
+
+	cooldowns.push_back(drawMelee_timer);
+	cooldowns.push_back(dash_timer);
 	cooldowns.push_back(dash_cooldown);
 	cooldowns.push_back(shooting_cooldown);
+	cooldowns.push_back(invincible_timer);
 
 	//set the maxSpeed to the currentSpeed
 	currentSpeed = walkSpeed;
@@ -151,23 +158,6 @@ void PlayerBody::Update(float deltaTime) {
 		if (cd->completed) { cd->Reset(); }
 	}
 
-	//Updating the invincible timer
-	if (invincible) {
-		invincible_timer->Update(deltaTime);
-		if (invincible_timer->completed) {
-			invincible = false;
-			invincible_timer->Reset();
-		}
-	}
-
-	//Updating the drawMelee timer
-	if (drawMelee) {
-		drawMelee_timer->Update(deltaTime);
-		if (drawMelee_timer->completed) {
-			drawMelee = false;
-			drawMelee_timer->Reset();
-		}
-	}
 
 	//cap the player's movement speed
 	if (canMove) {
@@ -373,8 +363,6 @@ void PlayerBody::state_dash(float deltaTime_) {
 	else {
 		vel = Vec3(playerDirection.x * currentSpeed, playerDirection.y * currentSpeed, 0.0f);
 	}
-
-	dash_timer->Update(deltaTime_);
 }
 
 void PlayerBody::state_attack(float deltaTime_) {
