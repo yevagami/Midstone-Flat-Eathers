@@ -27,28 +27,28 @@
 
 		inline float SoundEffectVolume;
 		inline float DefaultSoundEffectVolume = 1.0f;
-
 		inline float MusicVolume;
 		inline float DefaultMusicVolume = 1.0f;
 
 		inline int FPS;
 
+
 		inline void SetMusicVolume(const float newMusicVolume_) {
-			if (newMusicVolume_ < -0.1f || newMusicVolume_ > 1.0f) { return; }
+			if (newMusicVolume_ < 0.0f || newMusicVolume_ > 1.0f) { return; }
 
 			MusicVolume = std::min(newMusicVolume_, MasterVolume);
 			musicSound.setVolume(MusicVolume);
 		}
 
 		inline void SetSFXVolume(const float newSFXVolume_) {
-			if (newSFXVolume_ < -0.1f || newSFXVolume_ > 1.0f) { return; }
+			if (newSFXVolume_ < 0.0f || newSFXVolume_ > 1.0f) { return; }
 
 			SoundEffectVolume = std::min(newSFXVolume_, MasterVolume);
 			sfxSound.setVolume(SoundEffectVolume);
 		}
 
 		inline void SetMasterVolume(const float newMaterVolume_) {
-			if (newMaterVolume_ < -0.1f || newMaterVolume_ > 1.0f) { return; }
+			if (newMaterVolume_ < 0.0f || newMaterVolume_ > 1.0f) { return; }
 
 			//	compare the newMaster to the MaxVolume and take the lowest
 			MasterVolume = std::min(newMaterVolume_, MaxVolume);

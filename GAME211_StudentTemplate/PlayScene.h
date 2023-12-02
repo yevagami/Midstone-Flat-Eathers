@@ -140,7 +140,7 @@ public:
 
 		subButton1->text = "FPS";
 		subButton2->text = "cheats";
-		subButton3->text = "test";
+		subButton3->text = "mute uwu";
 		subButton4->text = "sound";
 
 		soundButton1->text = "master";
@@ -212,7 +212,6 @@ public:
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
 		}
-
 
 
 		//	On Left Clicks
@@ -297,6 +296,7 @@ public:
 			cc.log(update, "not implemented");
 			musicSound.playSound("theme");
 		});
+
 		subButton3->SetOnRightClick([&]() {
 			sfxSound.playSound("my bike", true);
 		});
@@ -323,6 +323,7 @@ public:
 		soundButton3->SetOnRightClick([&]() {
 			settings::SetSFXVolume(settings::SoundEffectVolume - .10f);
 		});
+
 
 
 
