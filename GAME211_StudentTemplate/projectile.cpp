@@ -16,7 +16,9 @@ Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, i
 
 	type = PROJECTILE;
 	power = power_;
-	duration_timer = new Clock(duration, false);
+	duration_timer = new Clock(duration, false, [this]() {
+		if (!destroyFlag) { destroyFlag = true; }
+	});
 	duration_timer->Start();
 }
 
@@ -29,7 +31,9 @@ Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, i
 	image = image_;
 	texture = SDL_CreateTextureFromSurface(parentLevel->getParentScene()->getRenderer(), image);
 	type = PROJECTILE;
-	duration_timer = new Clock(duration, false);
+	duration_timer = new Clock(duration, false, [this](){
+		if (!destroyFlag) { destroyFlag = true; }
+	});
 	duration_timer->Start();
 }
 
@@ -37,13 +41,10 @@ Projectile::Projectile(Level* parentLevel_, Vec3 pos_, Vec3 vel_, Vec3 scale_, i
 void Projectile::Update(float deltaTime){
 	//Updates the timer
 	duration_timer->Update(deltaTime);
-
-	//Once the time is up and it isn't yet marked for deletion, do it
-	if (duration_timer->completed && !destroyFlag) {
-		destroyFlag = true;
-	}
-
 	Body::Update(deltaTime);
+	if (VMath::mag(vel) == 0) {
+		cout << "Huh???\n";
+	}
 }
 
 void Projectile::OnCollide(Body* other, float deltaTime){

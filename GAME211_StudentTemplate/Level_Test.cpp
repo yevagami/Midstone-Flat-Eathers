@@ -34,7 +34,7 @@ void Level_test::mobSpawner() {
 bool Level_test::OnCreate(){
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
-
+	
 	//Note:
 	//I made the screen size and the physics size the same because it's much easier to use when constructing levels
 #pragma region Creating Level geometry
@@ -121,7 +121,7 @@ bool Level_test::OnCreate(){
 	wall = nullptr;
 
 #pragma endregion
-
+	
 	return true;
 }
 
@@ -159,7 +159,7 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	mobSpawner();
+	//mobSpawner();
 
 	//Bodies that are in queue for spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector

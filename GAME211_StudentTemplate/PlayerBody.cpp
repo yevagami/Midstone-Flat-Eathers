@@ -11,9 +11,6 @@ bool PlayerBody::OnCreate() {
 	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
 
 	//Creating timers
-	//Note: these timers will be independent of the clock updating pool 
-	//because they need to be activated and updated in certain circumstances
-	
 	dash_timer = new Clock(dashDuration, false, [this]() {
 		currentState = idle;
 		canMove = true;
@@ -36,6 +33,7 @@ bool PlayerBody::OnCreate() {
 	dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
 
+	//Pushes the timer to the vector
 	cooldowns.push_back(drawMelee_timer);
 	cooldowns.push_back(dash_timer);
 	cooldowns.push_back(dash_cooldown);
@@ -411,6 +409,9 @@ void PlayerBody::state_attack(float deltaTime_) {
 				1.0f,
 				projectilePower
 			);
+			if (VMath::mag(mouseDirection * projectileSpeed) <= 0) {
+				cout << "Huh???\n";
+			}
 			//add it to all spawned objects (to be pushed to levelObjects pool)
 			parentLevel->spawningBodies.push_back(bullet);
 			bullet = nullptr;
