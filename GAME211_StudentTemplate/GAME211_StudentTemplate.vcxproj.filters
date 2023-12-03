@@ -165,6 +165,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Visualization</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="SpriteDefs.h">
       <Filter>Header Files\Visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
