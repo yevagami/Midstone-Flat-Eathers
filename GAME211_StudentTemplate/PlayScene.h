@@ -53,7 +53,8 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	SDL_Renderer* getRenderer() { return renderer; }
 
-
+	bool isDead = false;
+	bool hasGameoverHappened = false;
 
 	//	testing a menu [ has to be at scene level >:( ]
 	bool isPaused = false;
@@ -258,27 +259,25 @@ public:
 
 		subButton1->SetOnLeftClick([&]() {
 			cc.log(update, "fps changed");
-			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
-			const size_t numFPSValues = sizeof(fpsValues) / sizeof(fpsValues[0]);
-
-			for (size_t i = 0; i < numFPSValues; ++i) {
-				if (settings::FPS == fpsValues[i]) {
-					settings::FPS = fpsValues[(i + numFPSValues - 1) % numFPSValues];
-					break;
-				}
-			}
-			});
-		subButton1->SetOnRightClick([&]() {
-			cc.log(update, "fps changed");
-			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
-			const size_t numFPSValues = sizeof(fpsValues) / sizeof(fpsValues[0]);
+			constexpr int fpsValues[] = { 30, 60, 90, 120 };  // possible FPS values
+			constexpr size_t numFPSValues = std::size(fpsValues);
 
 			for (size_t i = 0; i < numFPSValues; ++i) {
 				if (settings::FPS == fpsValues[i]) {
 					settings::FPS = fpsValues[(i + 1) % numFPSValues];
-					break;
-				}
-			}
+					break;	}	}
+
+			});
+		subButton1->SetOnRightClick([&]() {
+			cc.log(update, "fps changed");
+			constexpr int fpsValues[] = { 30, 60, 90, 120 };  // possible FPS values
+			constexpr size_t numFPSValues = std::size(fpsValues);
+
+			for (size_t i = 0; i < numFPSValues; ++i) {
+				if (settings::FPS == fpsValues[i]) {
+					settings::FPS = fpsValues[(i + numFPSValues - 1) % numFPSValues];
+					break; } }
+
 		});
 
 		subButton2->isTogglable = true;
@@ -296,14 +295,10 @@ public:
 
 			musicSound.playSound("gyat");
 
-			subButton3->backgroundImageDirectory = "Textures/programmer_art/5e39c9d0d5385f237012f04d8036a230.jpg";
-
 		});
+
 		subButton3->SetOnRightClick([&]() {
 			sfxSound.playSound("my bike", true);
-
-			subButton3->backgroundImageDirectory = "Textures/programmer_art/199527204be2840a18389c3739d093a8.jpg";
-
 
 		});
 

@@ -39,7 +39,7 @@
 		inline bool isRunning;
 
 		inline void SetMusicVolume(const float newMusicVolume_) {
-			if (newMusicVolume_ < -0.1f || newMusicVolume_ > 1.0f) { return; }
+			if (newMusicVolume_ < -0.0f || newMusicVolume_ > 1.0f) { return; }
 
 
 			MusicVolume = std::min(newMusicVolume_, MasterVolume);
@@ -47,7 +47,7 @@
 		}
 
 		inline void SetSFXVolume(const float newSFXVolume_) {
-			if (newSFXVolume_ < -0.1f || newSFXVolume_ > 1.0f) { return; }
+			if (newSFXVolume_ < -0.0f || newSFXVolume_ > 1.0f) { return; }
 
 
 			SoundEffectVolume = std::min(newSFXVolume_, MasterVolume);
@@ -55,7 +55,7 @@
 		}
 
 		inline void SetMasterVolume(const float newMaterVolume_) {
-			if (newMaterVolume_ < -0.1f || newMaterVolume_ > 1.0f) { return; }
+			if (newMaterVolume_ < -0.0f || newMaterVolume_ > 1.0f) { return; }
 
 			//	compare the newMaster to the MaxVolume and take the lowest
 			MasterVolume = std::min(newMaterVolume_, MaxVolume);
@@ -67,26 +67,6 @@
 	}
 #pragma endregion
 
-	inline void InitSoundEffects() {
-		// DEBUG sound effects here
-		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.ogg");
-		//sound effects here
-		sfxSound.loadSound("gunshot", "sound/gunshot.ogg");
-
-		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
-	}
-
-	inline void InitMusic() {
-		// DEBUG sound effects here
-		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
-		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
-		//sound effects here
-
-
-
-
-		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
-	}
 
 
 
@@ -147,8 +127,41 @@ public:
 	void StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
 
 	//	Fade OUT transition (fade out from black)
-	void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
+	//void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
 
+	//	loading sound effects to be used in the scenes
+	static void LoadSoundEffects() {
+		// DEBUG sound effects here
+		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.ogg");
+
+		//sound effects here
+		sfxSound.loadSound("gameover", "sound/gameover.ogg");
+
+
+
+
+
+		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
+	}
+
+	//	loading music to be used in the scenes
+	static void LoadMusic() {
+		// DEBUG sound effects here
+		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
+		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
+		//sound effects here
+
+
+
+
+		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
+	}
+
+	void quitPls() {
+		while(settings::isRunning == true) {
+			settings::isRunning = false;
+		}
+	}
 
 };
 #endif

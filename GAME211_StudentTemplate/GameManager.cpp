@@ -22,8 +22,8 @@ bool GameManager::OnCreate() {
 	}
 
 	///	sound
-	InitMusic();
-	InitSoundEffects();
+	LoadMusic();
+	LoadSoundEffects();
 
 
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -72,11 +72,9 @@ void GameManager::Run() {
 		if (fadeTransition) {								//	if a fadeTransition unique_ptr exists
 			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
 				///	keep the present scene visible
-				currentScene->Render();
-
+				//currentScene->Render();
 				///	render the fade higher in priority
 				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
-				cc.colour(green); cout << "fade time remaining is " << fadeTransition->GetRemainingTime() << "ms"; cc.colour(clear, newline);
 
 			} else {												// when the fade transition is done...
 				fadeTransition.reset();					//	reset the unique pointer (make it nullptr)
@@ -109,7 +107,7 @@ void GameManager::HandleEvents() {
 		//	The events that get handled first. Anything occuring in a handleEvents deeper than this has lower priority
 		//	don't accidentally cause conflicts
 
-		if (event.type == SDL_QUIT) { settings::isRunning = false; }
+		if (event.type == SDL_QUIT) { quitPls(); }
 		else if (event.type == SDL_KEYDOWN) {
 			//	keyboard event checking
 			switch (event.key.keysym.scancode) {  // NOLINT(clang-diagnostic-switch-enum)
@@ -118,10 +116,10 @@ void GameManager::HandleEvents() {
 				break;
 			case SDL_SCANCODE_ESCAPE:
 				//isPaused = !isPaused;
-				StartFadeInTransition(1000, [this]() { settings::isRunning = false; });
+				StartFadeInTransition(1000, [this]() { quitPls(); });
 				break;
 			case SDL_SCANCODE_Q:
-				StartFadeInTransition(1000, [this]() { settings::isRunning = false;	 });
+				StartFadeInTransition(1000, [this]() { quitPls();	 });
 				break;
 			case SDL_SCANCODE_END:
 				cc.log(update, "SILENCE!!!");
@@ -133,7 +131,7 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_O:
-				StartFadeOutTransition(500);
+				//StartFadeOutTransition(500);
 				break;
 			case SDL_SCANCODE_0:
 				system("cls");  // NOLINT(concurrency-mt-unsafe)
@@ -245,21 +243,15 @@ bool GameManager::ValidateCurrentScene() {
 void GameManager::StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_) {
 	cc.log(debug, "fade in animation called");
 	//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true);
+	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true, callback_);
 	fadeTransition->SetStartTime();
 
-	if (callback_) {
-		fadeTransition->SetCallback(callback_);
-	}
+
 }
 
-void GameManager::StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_) {
-	cc.log(debug, "fade out animation called");
-	//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false);
-	fadeTransition->SetStartTime();
-
-	if (callback_) {
-		fadeTransition->SetCallback(callback_);
-	}
-}
+//void GameManager::StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_) {
+//	cc.log(debug, "fade out animation called");
+//	//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
+//	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false, callback_);
+//	fadeTransition->SetStartTime();
+//}

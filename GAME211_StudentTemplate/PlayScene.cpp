@@ -74,12 +74,14 @@ void PlayScene::OnDestroy() {
 
 
 void PlayScene::Update(const float time) {
-	if (isPaused == false) {
+	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
 	}
 
-
-
+	if(isDead == true && hasGameoverHappened == false) {
+		sfxSound.playSound("gameover");
+		hasGameoverHappened = true;
+	}
 
 
 	int enemycounter = 0;
@@ -91,7 +93,7 @@ void PlayScene::Update(const float time) {
 	} std::string enemyCountString = std::to_string(enemycounter);
 
 
-	///	Trackers
+	///	Trackers [DEBUG THINGS]
 	//	"P to Pause"
 	tracker.trackThis("P to Pause", tracker.tracker1);
 
@@ -103,8 +105,8 @@ void PlayScene::Update(const float time) {
 
 
 
-	///	MENU / USER INTERFACE
-	std::string healthTrackerString = std::to_string(int(round(player->getCurrentHealth())));
+	///	MENU / USER INTERFACE [ trackers, but live ]
+	const std::string healthTrackerString = std::to_string(static_cast<int>(round(player->getCurrentHealth())));
 
 	UI_health->text = healthTrackerString;
 	if (healthTrackerString > "0") {
@@ -114,7 +116,7 @@ void PlayScene::Update(const float time) {
 		UI_health->textColour = ui::SDL_COLOR_ROSE_TOY;
 	}
 
-	std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
+	const std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
 	UI_abilityText->text = abilityTrackerString;
 	if (abilityTrackerString == "melee") {
 		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/199527204be2840a18389c3739d093a8.jpg";
@@ -128,10 +130,21 @@ void PlayScene::Update(const float time) {
 
 
 
+
+
+
+	if(player->getCurrentHealth() == 0.0f) {
+		isDead = true;
+	}
+
+
 	//	pause menu things
-	soundButtonText1->text = std::to_string(settings::MasterVolume);
-	soundButtonText2->text = std::to_string(settings::MusicVolume);
-	soundButtonText3->text = std::to_string(settings::SoundEffectVolume);
+	if(isPaused) {
+		soundButtonText1->text = std::to_string(settings::MasterVolume);
+		soundButtonText2->text = std::to_string(settings::MusicVolume);
+		soundButtonText3->text = std::to_string(settings::SoundEffectVolume);
+	}
+
 }
 
 
