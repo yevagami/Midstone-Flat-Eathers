@@ -59,7 +59,6 @@ public:
     void setCurrentInvincibilityToDefault() {
         invincibleDuration = invincibleDurationDefault;
         invincible_timer->duration = invincibleDuration;
-
     }
     void setInvincible(const bool state_) { invincible = state_; }
 
@@ -105,7 +104,9 @@ private:
     float invincibleDurationDefault = 1.5f;
     bool invincible = false;
 
+    //Sprite stuff
     Sprite playerSpriteSheet;
+    SDL_Rect currentSprite;
 
     //melee variables
     Hitbox* meleeHitbox = nullptr;

@@ -21,6 +21,7 @@ public:
 	~Sprite() {};
 	bool autoLoadSprites(); // cut up images into many small rectangles that are 128 x 128; store them into the spriteStorage vector
 	bool loadSpriteFromRect(int x_, int y_, int w_, int h_); // give it a specific rectangle so you can get a specific part of the spriteSheet 
+	bool loadSpriteFromRectInARow(int x_, int y_, int w_, int h_, int amount);
 	void onDestroy();
 };
 #endif

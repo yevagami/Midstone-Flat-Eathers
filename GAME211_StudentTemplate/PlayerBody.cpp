@@ -51,14 +51,14 @@ bool PlayerBody::OnCreate() {
 	currentState = idle;
 
 	//Load the sprite sheet
-	playerSpriteSheet = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+	playerSpriteSheet = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
 	if (!playerSpriteSheet.autoLoadSprites()) {
 		std::cout << "Error in the sprite sheet\n";
 		return false;
 	}
 	image = playerSpriteSheet.image;
 	texture = playerSpriteSheet.texture;
-	cutout = &playerSpriteSheet.spriteStorage[Player];
+	currentSprite = playerSpriteSheet.spriteStorage[Player_Neutral];
 
 
 	//Failsafe incase the programmer forgets the parentScene
@@ -199,6 +199,27 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
 	}
 
+
+	//Switching the sprites
+	//Up
+	if (playerDirection.x == 0 && playerDirection.y == 1) {
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Up];}
+
+	//Down
+	if (playerDirection.x == 0 && playerDirection.y == -1) {
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Down];
+	}
+
+	//Left
+	if (playerDirection.x == -1 && playerDirection.y == 0) {
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Left];
+	}
+	
+	//Right
+	if (playerDirection.x == 1 && playerDirection.y == 0) {
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Right];
+	}
+	cutout = &currentSprite;
 	Body::Render(renderer_, projectionMatrix_);
 }
 

@@ -6,6 +6,7 @@ using namespace std;
 class Animation{
 	vector<SDL_Rect> Frames;
 	SDL_Rect currentFrame;
+	int currentFrameIndex = 0;
 	float interval;
 	float isLooping;
 	float isPaused;

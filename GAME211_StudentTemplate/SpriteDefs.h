@@ -22,4 +22,12 @@
 		ouch = 12
 	};
 
+	enum PlayerTest {
+		Player_Neutral = 0,
+		Player_Left = 6,
+		Player_Right = 12,
+		Player_Up = 18,
+		Player_Down = 24
+	};
+
 #endif
