@@ -5,7 +5,7 @@
 GameManager::GameManager() {
 	windowPtr = nullptr;
 	timer = nullptr;
-	isRunning = true;
+	settings::isRunning = true;
 	isPaused = false;
 	currentScene = nullptr;
 	menuScene = nullptr;
@@ -65,7 +65,7 @@ void GameManager::Run() {
 	timer->Start();
 
 
-	while (isRunning) {
+	while (settings::isRunning) {
 		timer->UpdateFrameTicks();
 		const float deltaTime = timer->GetDeltaTime();
 
@@ -109,16 +109,19 @@ void GameManager::HandleEvents() {
 		//	The events that get handled first. Anything occuring in a handleEvents deeper than this has lower priority
 		//	don't accidentally cause conflicts
 
-		if (event.type == SDL_QUIT) { isRunning = false; }
+		if (event.type == SDL_QUIT) { settings::isRunning = false; }
 		else if (event.type == SDL_KEYDOWN) {
 			//	keyboard event checking
-			switch (event.key.keysym.scancode) {
+			switch (event.key.keysym.scancode) {  // NOLINT(clang-diagnostic-switch-enum)
+			case SDL_SCANCODE_UNKNOWN:
+				cc.log(error, "wtf did you press???");
+				break;
 			case SDL_SCANCODE_ESCAPE:
 				//isPaused = !isPaused;
-				StartFadeInTransition(1000, [this]() { isRunning = false; });
+				StartFadeInTransition(1000, [this]() { settings::isRunning = false; });
 				break;
 			case SDL_SCANCODE_Q:
-				StartFadeInTransition(1000, [this]() { isRunning = false;	 });
+				StartFadeInTransition(1000, [this]() { settings::isRunning = false;	 });
 				break;
 			case SDL_SCANCODE_END:
 				cc.log(update, "SILENCE!!!");
@@ -133,7 +136,7 @@ void GameManager::HandleEvents() {
 				StartFadeOutTransition(500);
 				break;
 			case SDL_SCANCODE_0:
-				system("cls"); //	clears the console when 0 is pressed
+				system("cls");  // NOLINT(concurrency-mt-unsafe)
 				break;
 			case SDL_SCANCODE_1:
 				LoadScene(1);
@@ -159,7 +162,7 @@ void GameManager::HandleEvents() {
 }
 
 
-GameManager::~GameManager() {}
+GameManager::~GameManager() = default;
 
 void GameManager::OnDestroy() {
 	if (windowPtr) delete windowPtr;
@@ -228,7 +231,7 @@ void GameManager::LoadScene(const int i_) {
 	}
 
 	// using ValidateCurrentScene() to safely run OnCreate
-	if (!ValidateCurrentScene()) { isRunning = false; }
+	if (!ValidateCurrentScene()) { settings::isRunning = false; }
 	std::cout << "Now loading: " << currentScene->name << std::endl;
 }
 

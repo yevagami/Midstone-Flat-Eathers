@@ -240,7 +240,7 @@ public:
 			//quit
 			
 			game->StartFadeInTransition(1000, [&]() {
-				isRunning = false;
+				settings::isRunning = false;
 
 			});
 			

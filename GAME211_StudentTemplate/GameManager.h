@@ -18,6 +18,8 @@
 //	global classes
 	inline Sound musicSound;
 	inline Sound sfxSound;
+	inline ConsistentConsole cc(true, "GameManager.h");
+	inline PrettyPrinting pp(pink, purple, cyan);
 
 
 #pragma region settings
@@ -33,6 +35,8 @@
 		inline float DefaultMusicVolume = 0.5f;
 
 		inline int FPS;
+
+		inline bool isRunning;
 
 		inline void SetMusicVolume(const float newMusicVolume_) {
 			if (newMusicVolume_ < -0.1f || newMusicVolume_ > 1.0f) { return; }
@@ -64,37 +68,33 @@
 #pragma endregion
 
 	inline void InitSoundEffects() {
-		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.wav");
-		sfxSound.loadSound("gunshotTest", "sound/gunshot.mp3");
-
+		// DEBUG sound effects here
+		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.ogg");
 		//sound effects here
+		sfxSound.loadSound("gunshot", "sound/gunshot.ogg");
 
 		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
 	}
 
 	inline void InitMusic() {
-		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).wav");
-		musicSound.loadSound("gyat", "sound/test/gyat.wav");
+		// DEBUG sound effects here
+		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
+		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
+		//sound effects here
 
-	
+
+
 
 		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
 	}
 
-	inline ConsistentConsole cc(true, "GameManager.h");
-	inline PrettyPrinting pp(pink, purple, cyan);
-
-// My display is 1920 x 1080 but the following seems to work best to fill the screen.
-//const int SCREEN_WIDTH = 1540;
-//const int SCREEN_HEIGHT = 860;
 
 
 // Use 1000x600 for less than full screen
 const int SCREEN_WIDTH = 1366;
 const int SCREEN_HEIGHT = 768;
 
-//	i moved this here so i can access it from deeper
-inline bool isRunning;
+
 
 class GameManager {
 private:

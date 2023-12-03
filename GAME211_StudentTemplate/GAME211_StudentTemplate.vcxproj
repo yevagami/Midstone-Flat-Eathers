@@ -26,7 +26,6 @@
     <ClCompile Include="ConsistentConsole.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EntityMap.cpp" />
-    <ClCompile Include="FadeTransition.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hitbox.cpp" />
@@ -71,7 +70,6 @@
     <ClInclude Include="Level_test.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="menu_scaary.hpp" />
     <ClInclude Include="SpriteDefs.h" />
     <ClInclude Include="Tracker.h" />
     <ClInclude Include="PlayerBody.h" />

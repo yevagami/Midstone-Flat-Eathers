@@ -30,6 +30,9 @@ using std::endl;
 //	it doesnt seem to EVER update the alpha value... it sets it once, creates the rectangle, waits the time, then releases the rectangle :thinking:
 
 
+//	dec 1
+//	it works now lol amazing hahahhahahha im so good at programming
+
 
 class FadeTransition {
 public:

@@ -119,21 +119,22 @@ void Level_test::OnDestroy(){
 }
 
 void Level_test::mobSpawner(const int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds) {
-	Vec3 spawnPosition = {
-		   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
-		   static_cast<float>(std::rand() % spawnBounds.h + spawnBounds.y),
-		   0.0f };
 	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
-	int enemycounter = 0;
-	for (auto enemy : levelBodies) {
+	int activeEnemyCount = 0;
+	for (const Body* enemy : levelBodies) {
 		if (enemy->type == Body::ENEMY) {
 			enemycounter++;
-		}
-	}
-	//I changed the limit to be 5 so it's more fun :) -Adriel
-	if (enemycounter >= maxSpawns_) {
-		return;
-	}
+		} }
+
+	//	guard clause
+	if (enemycounter >= maxSpawns_) { return; }
+
+	//	spawn here based off the spawn bounds (randomize a point within the spawnbounds
+	Vec3 spawnPosition = {
+	   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
+	   static_cast<float>(std::rand() % spawnBounds.h + spawnBounds.y),
+	   0.0f };
+
 	Enemy* ghost = new Enemy(this, spawnPosition, subType_);
 	levelBodies.push_back(ghost);
 	ghost = nullptr;
@@ -194,7 +195,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		//body->RenderHitbox(renderer_);
+		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

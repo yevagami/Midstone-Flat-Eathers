@@ -8,7 +8,7 @@ bool PlayerBody::OnCreate() {
 	//Setting the variables
 
 	//Create the melee hitbox
-	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
+	meleeHitbox = new Hitbox(98,98, pos.x, pos.y);
 
 	//Creating timers
 	dash_timer = new Clock(dashDuration, false, [this]() {
