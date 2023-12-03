@@ -7,6 +7,7 @@ bool Level_test::OnCreate(){
 							 static_cast<int>((768.0f / 2.0f) - 128.0f * 4.5f),
 							 static_cast<int>(128.0f * 9.0f),
 							 static_cast<int>(128.0f * 9.0f) };
+
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 	
@@ -99,7 +100,7 @@ bool Level_test::OnCreate(){
 	return true;
 }
 
-void Level_test::waveSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds)
+void Level_test::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds)
 {
 	Vec3 spawnPosition = {
 		   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
@@ -152,12 +153,10 @@ void Level_test::OnDestroy(){
 	delete floor;
 }
 
-
-
-void Level_test::mobSpawner(int maxSpawns_) {
+void Level_test::waveSpawner(int maxWaves_) {
 	std::cout << waveCleared;
-	for (int i = 0; i < maxSpawns_; i++) {
-		waveSpawner(10, Enemy::flash, spawnBounds);
+	for (int i = 0; i < maxWaves_; i++) {
+		mobSpawner(10, Enemy::flash, spawnBounds);
 		if (waveCleared) {
 			return;
 		}
@@ -180,7 +179,7 @@ void Level_test::Update(const float time){
 		}
 	}
 	
-	mobSpawner(10);
+	waveSpawner(10);
 	
 
 	//Bodies that are in queue for  spawning will now be placed into the main body vector

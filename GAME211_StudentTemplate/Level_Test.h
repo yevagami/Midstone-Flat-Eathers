@@ -12,10 +12,10 @@ private:
 
 public:
 
-	int enemycounter = 0;
+	int enemyCounter = 0;
 	int maxEnemies;
-	int mobskilled = 0;
-	int mobs_per_wave;
+	int mobsKilled = 0;
+	int mobsPerWave = 10;
 	bool waveCleared = false;
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
 
@@ -25,8 +25,8 @@ public:
 	int enemiesOnTheLevel = 0;
 	int enemiesKilled = 0;
 	//Method that spawns the enemies
-	void mobSpawner(int maxSpawns_ = 5);
-	void waveSpawner(int maxSpawns_ = 5, Enemy::subType subType_ = Enemy::flash, SDL_Rect spawnBounds = SDL_Rect());
+	void waveSpawner(int maxWaves_ = 5);
+	void mobSpawner(int maxSpawns_ = 5, Enemy::subType subType_ = Enemy::flash, SDL_Rect spawnBounds = SDL_Rect());
 
 	bool OnCreate() override;
 	void OnDestroy() override;
