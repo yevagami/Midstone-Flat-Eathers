@@ -117,7 +117,6 @@ void Level_test::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect sp
 	if (enemycounter >= maxSpawns_) {
 		return;
 	}
-	enemiesOnTheLevel++;
 
 	 //first play it will be 10
 	if (enemiesOnTheLevel > 10 && enemiesOnTheLevel <= 20) {
@@ -154,13 +153,27 @@ void Level_test::OnDestroy(){
 }
 
 void Level_test::waveSpawner(int maxWaves_) {
-	std::cout << waveCleared;
-	for (int i = 0; i < maxWaves_; i++) {
+	std::cout << waveCleared << endl;
+
+	//Spawn mobs in a new wave
+	if (waveCleared && currentWave <= maxWaves_) {
+		currentWave++;
 		mobSpawner(10, Enemy::flash, spawnBounds);
-		if (waveCleared) {
-			return;
+		waveCleared = false;
+	}
+
+
+	//Check if wave has been cleared
+	//Check if the amount of enemies in the level is 0
+	//therefore a wave has been cleared
+	int enemycounter = 0;
+	for (auto enemy : levelBodies) {
+		if (enemy->type == Body::ENEMY) {
+			enemycounter++;
 		}
 	}
+
+	if (enemycounter <= 0) { waveCleared = true;}
 }
 
 
@@ -181,7 +194,6 @@ void Level_test::Update(const float time){
 	
 	waveSpawner(10);
 	
-
 	//Bodies that are in queue for  spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
 	//while you are iterating over it

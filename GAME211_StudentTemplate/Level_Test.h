@@ -10,13 +10,15 @@ private:
 	//Floor
 	Body* floor = nullptr;
 
-public:
-
-	int enemyCounter = 0;
-	int maxEnemies;
+	//Wave related variables
+	int maxEnemies = 10;
 	int mobsKilled = 0;
 	int mobsPerWave = 10;
 	bool waveCleared = false;
+	int currentWave = 0;
+
+public:
+
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
 
 
