@@ -653,7 +653,7 @@ namespace ui {
 		void scaleDimensionsIndividually(int newRectHeightScaler_ = 1, int newRectWidthScaler_ = 1);
 		void scaleDimensions(int scaler_ = 1);
 		void centerPosition(int screenWidth_, int screenHeight_);
-		bool EnableBackgroundImage(const char* fileDirectory_);
+		bool EnableBackgroundImage(const char* fileDirectory_ = "");
 #pragma endregion
 #pragma region utility
 	protected:

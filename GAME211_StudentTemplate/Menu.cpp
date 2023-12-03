@@ -93,7 +93,10 @@ namespace ui {
 	}
 
 	auto Button::EnableBackgroundImage(const char* fileDirectory_) -> bool {
-		backgroundImageDirectory = fileDirectory_;
+		if(fileDirectory_ != "") {
+			backgroundImageDirectory = fileDirectory_;
+		}
+
 		backgroundType = BackgroundType::Image;
 		return true;
 	}

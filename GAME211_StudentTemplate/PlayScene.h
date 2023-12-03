@@ -386,5 +386,43 @@ public:
 		for (const auto button : allCheatMenuButtons) { button->generateHitbox(); }
 	}
 
+
+	vector<ui::Button*> allUIElements;
+	ui::Button* UI_health;
+	ui::Button* UI_abilityText;
+	ui::Button* UI_abilitySprite;
+
+	void GUI() {
+		UI_health = new ui::Button(ui::Font{"", 35});
+		UI_abilitySprite = new ui::Button(ui::Font{}, ui::SDL_Square);
+		UI_abilityText = new ui::Button(ui::Font{"", 25});
+
+		allUIElements.emplace_back(UI_health);
+		allUIElements.emplace_back(UI_abilitySprite);
+		allUIElements.emplace_back(UI_abilityText);
+
+		for(auto element : allUIElements) {
+			element->isTextBordered = true;
+			//element->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+			element->textColour = ui::SDL_COLOR_ANTIQUE_WHITE;
+			element->textBorderColour = ui::SDL_COLOR_BLACK;
+			element->backgroundColour = ui::SDL_COLOR_DARK_SLATE_GRAY;
+			element->buttonBorderColour = ui::SDL_COLOR_BLACK;
+			element->buttonBorderSize = 4;
+			element->textBorderSize = 2;
+		}
+
+		UI_abilitySprite->EnableBackgroundImage();
+		UI_abilitySprite->scaleDimensions(50);
+		UI_abilitySprite->setPosition(SCREEN_HEIGHT - 100, SCREEN_WIDTH - 100);
+		UI_abilityText->setPositionRelativeTo(*UI_abilitySprite, -25, 50);
+
+		UI_health->setPositionRelativeTo(*UI_abilitySprite, -75, 50);
+		//UI_health->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		//UI_health->offsetPosition(-SCREEN_HEIGHT + 400);
+
+
+	}
 };
 
