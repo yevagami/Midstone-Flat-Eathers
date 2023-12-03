@@ -99,6 +99,40 @@ bool Level_test::OnCreate(){
 	return true;
 }
 
+void Level_test::waveSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds)
+{
+	Vec3 spawnPosition = {
+		   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
+		   static_cast<float>(std::rand() % spawnBounds.h + spawnBounds.y),
+		   0.0f };
+	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
+	int enemycounter = 0;
+	for (auto enemy : levelBodies) {
+		if (enemy->type == Body::ENEMY) {
+			enemycounter++;
+		}
+	}
+	//I changed the limit to be 5 so it's more fun :) -Adriel
+	if (enemycounter >= maxSpawns_) {
+		return;
+	}
+	enemiesOnTheLevel++;
+
+	 //first play it will be 10
+	if (enemiesOnTheLevel > 10 && enemiesOnTheLevel <= 20) {
+		std::cout << enemiesOnTheLevel << endl;
+		Enemy* ghost = new Enemy(this, spawnPosition, subType_);
+		levelBodies.push_back(ghost);
+		ghost = nullptr;
+		//cc.log(not_error, "Did I come here?");
+		
+	}
+	//else if (enemiesOnTheLevel >= 20) {
+		//waveCleared = true;
+	//}
+	
+}
+
 void Level_test::OnDestroy(){
 	//Destroys everything except the player
 	for (Body* body : levelBodies) {
@@ -118,27 +152,16 @@ void Level_test::OnDestroy(){
 	delete floor;
 }
 
-void Level_test::mobSpawner(const int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds) {
-	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
-	int activeEnemyCount = 0;
-	for (const Body* enemy : levelBodies) {
-		if (enemy->type == Body::ENEMY) {
-			enemycounter++;
-		} }
 
-	//	guard clause
-	if (enemycounter >= maxSpawns_) { return; }
 
-	//	spawn here based off the spawn bounds (randomize a point within the spawnbounds
-	Vec3 spawnPosition = {
-	   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
-	   static_cast<float>(std::rand() % spawnBounds.h + spawnBounds.y),
-	   0.0f };
-
-	Enemy* ghost = new Enemy(this, spawnPosition, subType_);
-	levelBodies.push_back(ghost);
-	ghost = nullptr;
-	cc.log(not_error, "Did I come here?");
+void Level_test::mobSpawner(int maxSpawns_) {
+	std::cout << waveCleared;
+	for (int i = 0; i < maxSpawns_; i++) {
+		waveSpawner(10, Enemy::flash, spawnBounds);
+		if (waveCleared) {
+			return;
+		}
+	}
 }
 
 
@@ -156,15 +179,18 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	mobSpawner(10, Enemy::flash, spawnBounds);
+	
+	mobSpawner(10);
+	
 
-	//Bodies that are in queue for spawning will now be placed into the main body vector
+	//Bodies that are in queue for  spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
 	//while you are iterating over it
 	if (!spawningBodies.empty()) {
 		for (Body* spawn : spawningBodies) {
 			levelBodies.push_back(spawn);
 			spawn = nullptr;
+
 		}
 		spawningBodies.clear();
 	}

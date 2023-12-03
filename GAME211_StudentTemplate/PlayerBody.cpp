@@ -141,7 +141,9 @@ void PlayerBody::Update(float deltaTime) {
 	updateMeleeHitbox(); //Gets the direction of the mouse relative to the player's position
 
 	//If the destroy flag has been set, the player is now dead
-	if (currentHealth <= 0) { std::cout << "YOU ARE DEAD \n"; }
+	
+	//FOR NOW REMOVED
+	//if (currentHealth <= 0) { std::cout << "YOU ARE DEAD \n"; }
 
 	//state machine
 	switch (currentState) {
