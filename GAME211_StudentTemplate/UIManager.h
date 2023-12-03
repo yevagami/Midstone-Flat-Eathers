@@ -17,9 +17,7 @@ namespace menu {
 
 		~UIManager() { DeleteAllButtons(); }
 
-		void createBlankButton(ui::Button* button_) {
 
-		}
 
 		void DeleteAllButtons() const {
 			for (auto* button : buttons) {

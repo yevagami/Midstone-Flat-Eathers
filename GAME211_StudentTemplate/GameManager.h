@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "Scene.h"
 
+
 #include "Audio.h"
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
@@ -36,12 +37,14 @@
 		inline void SetMusicVolume(const float newMusicVolume_) {
 			if (newMusicVolume_ < -0.1f || newMusicVolume_ > 1.0f) { return; }
 
+
 			MusicVolume = std::min(newMusicVolume_, MasterVolume);
 			musicSound.setVolume(MusicVolume);
 		}
 
 		inline void SetSFXVolume(const float newSFXVolume_) {
 			if (newSFXVolume_ < -0.1f || newSFXVolume_ > 1.0f) { return; }
+
 
 			SoundEffectVolume = std::min(newSFXVolume_, MasterVolume);
 			sfxSound.setVolume(SoundEffectVolume);
@@ -53,7 +56,6 @@
 			//	compare the newMaster to the MaxVolume and take the lowest
 			MasterVolume = std::min(newMaterVolume_, MaxVolume);
 
-			//update the other volumes cuz the master changed
 			SetMusicVolume(MusicVolume);
 			SetSFXVolume(SoundEffectVolume);
 		}
@@ -69,6 +71,7 @@
 
 		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
 	}
+
 	inline void InitMusic() {
 		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).wav");
 		musicSound.loadSound("gyat", "sound/test/gyat.wav");
@@ -77,6 +80,7 @@
 
 		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
 	}
+
 	inline ConsistentConsole cc(true, "GameManager.h");
 	inline PrettyPrinting pp(pink, purple, cyan);
 
