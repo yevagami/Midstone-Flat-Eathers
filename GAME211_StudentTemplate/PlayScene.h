@@ -180,7 +180,6 @@ public:
 			button->textBorderSize = 1;
 		}
 		subButton4->setPositionRelativeTo(*button1, -12.5, -125);
-		subButton3->EnableBackgroundImage("Textures/programmer_art/missing_texture.png");
 
 		for (const auto button : allCheatMenuButtons) {
 			button->scaleDimensions(50);
@@ -293,11 +292,19 @@ public:
 		});
 
 		subButton3->SetOnLeftClick([&]() {
-			cc.log(update, "not implemented");
-			musicSound.playSound("theme");
+			cc.log(update, "TEST BUTTON - does nothing important lmao");
+
+			musicSound.playSound("gyat");
+
+			subButton3->backgroundImageDirectory = "Textures/programmer_art/5e39c9d0d5385f237012f04d8036a230.jpg";
+
 		});
 		subButton3->SetOnRightClick([&]() {
 			sfxSound.playSound("my bike", true);
+
+			subButton3->backgroundImageDirectory = "Textures/programmer_art/199527204be2840a18389c3739d093a8.jpg";
+
+
 		});
 
 		//master v0lume
@@ -354,8 +361,8 @@ public:
 
 
 		button1->offsetPosition(0,0);												//	mid
-		button2->setPositionRelativeTo(*button1, -100);					//top
-		button3->setPositionRelativeTo(*button1, 100);					//	bottom
+		button2->setPositionRelativeTo(*button1, -100);													//top
+		button3->setPositionRelativeTo(*button1, 100);														//	bottom
 
 		subButton1->offsetPosition(0, 0);
 		subButton2->offsetPosition(-125);
