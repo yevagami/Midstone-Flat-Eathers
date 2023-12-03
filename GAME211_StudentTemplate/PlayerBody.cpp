@@ -184,6 +184,17 @@ void PlayerBody::Update(float deltaTime) {
 	// Update position, call Update from base class
 	// Note that would update velocity too, and rotation motion
 	Body::Update(deltaTime);
+	if (VMath::mag(vel) >= 0.01f) {
+		currentIntervalTimer += deltaTime;
+		if (currentIntervalTimer >= frameInterval) {
+			currentSpriteIndex = (currentSpriteIndex + 1 > 5) ? 0 : currentSpriteIndex + 1;
+			currentIntervalTimer = 0.0f;
+		}
+	}
+	else {
+		currentIntervalTimer = 0.0f;
+		currentSpriteIndex = 0;
+	}
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
@@ -199,26 +210,29 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
 	}
 
-
+	
 	//Switching the sprites
 	//Up
 	if (playerDirection.x == 0 && playerDirection.y == 1) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Up];}
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Up + currentSpriteIndex];}
 
 	//Down
 	if (playerDirection.x == 0 && playerDirection.y == -1) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Down];
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Down + currentSpriteIndex];
 	}
 
 	//Left
 	if (playerDirection.x == -1 && playerDirection.y == 0) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Left];
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Left + currentSpriteIndex];
 	}
 	
 	//Right
 	if (playerDirection.x == 1 && playerDirection.y == 0) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Right];
+		currentSprite = playerSpriteSheet.spriteStorage[Player_Right + currentSpriteIndex];
 	}
+
+
+
 	cutout = &currentSprite;
 	Body::Render(renderer_, projectionMatrix_);
 }

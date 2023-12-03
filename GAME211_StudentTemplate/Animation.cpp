@@ -1,13 +1,12 @@
 #include "Animation.h"
+AnimationController::AnimationController() {
 
-void Animation::NextFrame() {
-	currentFrameIndex++;
-	if(currentFrameIndex > Frames.size() - 1){
-		currentFrameIndex = 0;
-	}
-	currentFrame = Frames[currentFrameIndex];
 }
 
-void Animation::PlayAnimation(float deltaTime) {
+AnimationController::~AnimationController() {
+	
+}
 
+void AnimationController::UpdateAnimationController(float deltaTime) {
+	delete update_timer;
 }

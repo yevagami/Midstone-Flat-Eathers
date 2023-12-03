@@ -120,6 +120,7 @@ void PlayScene::Update(const float time) {
 	//tracker.tracker5->setPositionRelativeTo(*tracker.tracker1, 0, -400);
 
 	tracker.trackThis(std::to_string(player->getCurrentInvincibilityDuration()), tracker.tracker6);
+	tracker.trackThis(std::to_string(SDL_GetTicks()), tracker.tracker7);
 
 	soundButtonText1->text = std::to_string(settings::MasterVolume);
 	soundButtonText2->text = std::to_string(settings::MusicVolume);

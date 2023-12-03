@@ -107,6 +107,9 @@ private:
     //Sprite stuff
     Sprite playerSpriteSheet;
     SDL_Rect currentSprite;
+    int currentSpriteIndex = 0;
+    float frameInterval = 0.5f;
+    float currentIntervalTimer = 0.0f;
 
     //melee variables
     Hitbox* meleeHitbox = nullptr;
