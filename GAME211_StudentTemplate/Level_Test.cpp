@@ -191,10 +191,9 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	
+
 	waveSpawner(10);
 	
-	//Bodies that are in queue for  spawning will now be placed into the main body vector
 	//c++ doesn't like it when you are pushing something to a vector
 	//while you are iterating over it
 	if (!spawningBodies.empty()) {

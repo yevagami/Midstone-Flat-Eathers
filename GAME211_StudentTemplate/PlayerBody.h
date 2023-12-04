@@ -13,6 +13,7 @@
 #include "Clock.h"
 #include <vector>
 #include "SpriteDefs.h"
+#include "Animation.h"
 
 class Solid;
 class Scene;
@@ -59,7 +60,6 @@ public:
     void setCurrentInvincibilityToDefault() {
         invincibleDuration = invincibleDurationDefault;
         invincible_timer->duration = invincibleDuration;
-
     }
     void setInvincible(const bool state_) { invincible = state_; }
 
@@ -86,6 +86,9 @@ public:
     void state_dash(float deltaTime_);
     void state_attack(float deltaTime_);
 
+    //Public variables
+    bool isShielding = false;
+
 private:
     //Player abilities enum
     enum abilities { melee, shoot, shield };
@@ -105,7 +108,28 @@ private:
     float invincibleDurationDefault = 1.5f;
     bool invincible = false;
 
+    //Sprite stuff
     Sprite playerSpriteSheet;
+    SDL_Rect currentSprite;
+    int currentSpriteIndex = 0;
+    float frameInterval = 0.5f;
+    float currentIntervalTimer = 0.0f;
+
+    //animations
+    AnimationController* animController;
+
+    //Standing animations
+    Animation anim_up;
+    Animation anim_down;
+    Animation anim_left;
+    Animation anim_right;
+
+    //Walking animations
+    Animation anim_walk_up;
+    Animation anim_walk_down;
+    Animation anim_walk_left;
+    Animation anim_walk_right;
+    void LoadAnimations();
 
     //melee variables
     Hitbox* meleeHitbox = nullptr;
@@ -119,11 +143,6 @@ private:
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
     float projectilePower = 50.0f;
-
-    //Idk what this is -Adriel
-public:
-    bool isShielding = false;
-private:
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for
