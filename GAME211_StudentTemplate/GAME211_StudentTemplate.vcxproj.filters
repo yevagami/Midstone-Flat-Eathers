@@ -165,6 +165,9 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mob_Spawner.cpp">
+      <Filter>Source Files\Scene\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mob_Spawner.h">
+      <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

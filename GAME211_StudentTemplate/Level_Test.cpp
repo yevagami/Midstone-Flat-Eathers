@@ -3,11 +3,7 @@
 //I might have to reorder the methods for organizing purposes
 
 bool Level_test::OnCreate(){
-	spawnBounds = { static_cast<int>((1366.0f / 2.0f) - 128.0f * 4.5f),
-							 static_cast<int>((768.0f / 2.0f) - 128.0f * 4.5f),
-							 static_cast<int>(128.0f * 9.0f),
-							 static_cast<int>(128.0f * 9.0f) };
-
+	
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 	
@@ -100,37 +96,6 @@ bool Level_test::OnCreate(){
 	return true;
 }
 
-void Level_test::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds)
-{
-	Vec3 spawnPosition = {
-		   static_cast<float>(std::rand() % spawnBounds.w + spawnBounds.x),
-		   static_cast<float>(std::rand() % spawnBounds.h + spawnBounds.y),
-		   0.0f };
-	//checks if there is an enemy on the level, if no enemy exit the loop and create one.  
-	int enemycounter = 0;
-	for (auto enemy : levelBodies) {
-		if (enemy->type == Body::ENEMY) {
-			enemycounter++;
-		}
-	}
-	//I changed the limit to be 5 so it's more fun :) -Adriel
-	if (enemycounter >= maxSpawns_) {
-		return;
-	}
-
-	 //first play it will be 10
-	std::cout << enemiesOnTheLevel << endl;
-	Enemy* ghost = new Enemy(this, spawnPosition, subType_);
-	levelBodies.push_back(ghost);
-	ghost = nullptr;
-	//cc.log(not_error, "Did I come here?");
-		
-	
-	//else if (enemiesOnTheLevel >= 20) {
-		//waveCleared = true;
-	//}
-	
-}
 
 void Level_test::OnDestroy(){
 	//Destroys everything except the player
@@ -151,36 +116,10 @@ void Level_test::OnDestroy(){
 	delete floor;
 }
 
-void Level_test::waveSpawner(int maxWaves_) {
-	//Spawn mobs in a new wave
-	if ((waveCompleted || !waveStarted) && currentWave < maxWaves_) {
-		cout << "NEW WAVE BABY!!!\n";
-		currentWave++;
-		for (int i = 0; i < mobsPerWave; i++) {
-			mobSpawner(mobsPerWave, Enemy::flash, spawnBounds);
-		}
-		waveStarted = true;
-		waveCompleted = false;
-	}
-
-
-	//Check if wave has been cleared
-	//Check if the amount of enemies in the level is 0
-	//therefore a wave has been cleared
-	int enemycounter = 0;
-	for (auto enemy : levelBodies) {
-		if (enemy->type == Body::ENEMY) {
-			enemycounter++;
-		}
-	}
-
-	if (enemycounter <= 0) { waveCompleted = true;}
-}
-
-
 
 void Level_test::Update(const float time){
-	waveSpawner(10);
+	//waveSpawner(10);
+	newMobSpawner->waveSpawner(10);
 
 	//Updates the level bodies
 	for(Body* body : levelBodies) {
