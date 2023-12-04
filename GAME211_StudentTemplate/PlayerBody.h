@@ -117,7 +117,7 @@ private:
     float currentIntervalTimer = 0.0f;
 
     //animations
-    AnimationController animController;
+    AnimationController* animController;
     Animation anim_idle;
     Animation anim_walk_up;
     Animation anim_walk_down;

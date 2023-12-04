@@ -23,5 +23,6 @@ public:
 	bool loadSpriteFromRect(int x_, int y_, int w_, int h_); // give it a specific rectangle so you can get a specific part of the spriteSheet 
 	bool loadSpriteFromRectInARow(int x_, int y_, int w_, int h_, int amount);
 	void onDestroy();
+	void deleteSprites() { spriteStorage.clear(); }
 };
 #endif

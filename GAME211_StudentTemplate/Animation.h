@@ -11,16 +11,23 @@ public:
 	float interval; //The duration between frames
 	bool isLooping; //If the animation loops or not
 	int frameDuration; //How many frames are in the animation
+	const char* name;
 
 	void SetFrames(vector<SDL_Rect> Frames_) { Frames = Frames_; } //Set the frames in the animation
 	vector<SDL_Rect> GetFrames() { return Frames; }
 
 	Animation(){}
-	Animation(vector<SDL_Rect> Frames_, float interval_, int frameDuration_, bool isLooping_ = true) {
+	Animation(const char* name_, vector<SDL_Rect> Frames_, float interval_, int frameDuration_, bool isLooping_ = true) {
 		Frames = Frames_;
 		interval = interval_;
 		frameDuration = frameDuration_;
 		isLooping = isLooping_;
+		name = name_;
+	}
+
+	//For organizing purposes
+	bool operator==(const Animation &other) const {
+		return this->name == other.name;
 	}
 };
 

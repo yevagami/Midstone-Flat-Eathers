@@ -187,19 +187,33 @@ void PlayerBody::Update(float deltaTime) {
 	// Update position, call Update from base class
 	// Note that would update velocity too, and rotation motion
 	Body::Update(deltaTime);
-	if (VMath::mag(vel) >= 0.01f) {
-		currentIntervalTimer += deltaTime;
-		if (currentIntervalTimer >= frameInterval) {
-			currentSpriteIndex = (currentSpriteIndex + 1 > 5) ? 0 : currentSpriteIndex + 1;
-			currentIntervalTimer = 0.0f;
-		}
+
+
+	#pragma region Animation stuff
+	//Switching the sprites
+	//Up
+	if (playerDirection.x == 0 && playerDirection.y == 1) {
+		animController->PlayAnimation(anim_walk_up);
 	}
-	else {
-		currentIntervalTimer = 0.0f;
-		currentSpriteIndex = 0;
+	//Down
+	if (playerDirection.x == 0 && playerDirection.y == -1) {
 	}
 
-	animController.UpdateAnimationController(deltaTime);
+	//Left
+	if (playerDirection.x == -1 && playerDirection.y == 0) {
+	}
+
+	//Right
+	if (playerDirection.x == 1 && playerDirection.y == 0) {
+	}
+
+	//Default Idle (for testing)
+	if (playerDirection.x == 0 && playerDirection.y == 0) {
+		//animController->PlayAnimation(anim_idle);
+	}
+	#pragma endregion
+
+	animController->UpdateAnimationController(deltaTime);
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
@@ -215,28 +229,7 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
 	}
 
-	
-	//Switching the sprites
-	//Up
-	if (playerDirection.x == 0 && playerDirection.y == 1) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Up + currentSpriteIndex];}
-
-	//Down
-	if (playerDirection.x == 0 && playerDirection.y == -1) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Down + currentSpriteIndex];
-	}
-
-	//Left
-	if (playerDirection.x == -1 && playerDirection.y == 0) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Left + currentSpriteIndex];
-	}
-	
-	//Right
-	if (playerDirection.x == 1 && playerDirection.y == 0) {
-		currentSprite = playerSpriteSheet.spriteStorage[Player_Right + currentSpriteIndex];
-	}
-
-	cutout = animController.GetCurrentFrame();
+	cutout = animController->GetCurrentFrame();
 	Body::Render(renderer_, projectionMatrix_);
 }
 
@@ -260,12 +253,11 @@ void PlayerBody::OnDestroy() {
 	//Cleanup stuff
 	for (Clock* item : cooldowns) { delete item; }
 	cooldowns.clear();
-	dash_timer = nullptr;
-	dash_cooldown = nullptr;
 
-	delete dash_timer;
-	delete invincible_timer;
-	delete drawMelee_timer;
+	//Cleanup for the sprites and animations
+	playerSpriteSheet.onDestroy();
+	idleSpriteSheet.onDestroy();
+	delete animController;
 
 	Body::OnDestroy();
 }
@@ -444,12 +436,20 @@ void PlayerBody::state_attack(float deltaTime_) {
 #pragma endregion
 
 void PlayerBody::LoadAnimations() {
-	animController = AnimationController();
-	idleSpriteSheet = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
-	if (!idleSpriteSheet.loadSpriteFromRectInARow(0, 0, 128, 128, 6)) {
+	animController = new AnimationController();
+	Sprite temp = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
+	if (!temp.loadSpriteFromRectInARow(0, 0, 128, 128, 6)) {
 		cout << "Idle sprite did not render properly" << endl;
 		return;
 	};
-	anim_idle = Animation(idleSpriteSheet.spriteStorage, 0.5f, 6, true);
-	animController.PlayAnimation(anim_idle);
+	anim_idle = Animation("idle", temp.spriteStorage, 0.5f, 6, true);
+
+	temp.deleteSprites();
+	if (!temp.loadSpriteFromRectInARow(0, 128 * 3, 128, 128, 6)) {
+		cout << "Idle sprite did not render properly" << endl;
+		return;
+	};
+	anim_walk_up = Animation("walk_up", temp.spriteStorage, 0.5f, 6, true);
+
+	animController->PlayAnimation(anim_idle);
 }
