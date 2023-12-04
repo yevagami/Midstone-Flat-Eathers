@@ -131,7 +131,7 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_O:
-				//StartFadeOutTransition(500);
+				musicSound.playSound("overworld music");
 				break;
 			case SDL_SCANCODE_0:
 				system("cls");  // NOLINT(concurrency-mt-unsafe)

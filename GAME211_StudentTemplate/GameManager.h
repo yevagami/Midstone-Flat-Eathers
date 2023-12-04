@@ -136,8 +136,8 @@ public:
 
 		//sound effects here
 		sfxSound.loadSound("gameover", "sound/gameover.ogg");
-
-
+		sfxSound.loadSound("gunshot", "sound/gun-shot.ogg");
+		sfxSound.loadSound("slash", "sound/slash.ogg");
 
 
 
@@ -151,7 +151,11 @@ public:
 		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
 		//sound effects here
 
-
+		musicSound.loadSound("ominous music", "sound/drone-background-music.ogg");
+		musicSound.loadSound("overworld music", "sound/exploration-music-loop.ogg");
+		musicSound.loadSound("chiptune-y music", "sound/game-soundtrack-4.ogg");
+		musicSound.loadSound("retro epic music", "sound/game-soundtrack-5.ogg");
+		musicSound.loadSound("chill background music", "sound/lofi-fusion-background-music.ogg");
 
 
 		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
