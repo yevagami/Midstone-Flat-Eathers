@@ -66,6 +66,29 @@ bool Sprite::loadSpriteFromRect(int x_, int y_, int w_, int h_)
 	return true;
 }
 
+bool Sprite::loadSpriteFromRectInARow(int x_, int y_, int w_, int h_, int amount) {
+	if (image == nullptr) {
+		std::cout << "The image has been missing or broken." << "\n";
+		return false;
+	}
+
+	if (texture == nullptr) {
+		std::cout << "The texture has been missing or broken." << "\n";
+		return false;
+	}
+
+	for (int i = 0; i < amount; i++) {
+		SDL_Rect r3;
+		r3.x = x_ + (128 * i);
+		r3.y = y_;
+		r3.w = w_;
+		r3.h = h_;
+		spriteStorage.push_back(r3);
+	}
+
+	return true;
+}
+
 // destroys the image and spriteSheet; clean up memory used to not cause memory leaks
 
 void Sprite::onDestroy()

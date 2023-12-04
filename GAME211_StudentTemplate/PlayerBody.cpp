@@ -51,14 +51,14 @@ bool PlayerBody::OnCreate() {
 	currentState = idle;
 
 	//Load the sprite sheet
-	playerSpriteSheet = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+	playerSpriteSheet = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
 	if (!playerSpriteSheet.autoLoadSprites()) {
 		std::cout << "Error in the sprite sheet\n";
 		return false;
 	}
 	image = playerSpriteSheet.image;
 	texture = playerSpriteSheet.texture;
-	cutout = &playerSpriteSheet.spriteStorage[Player];
+	currentSprite = playerSpriteSheet.spriteStorage[Player_Neutral];
 
 
 	//Failsafe incase the programmer forgets the parentScene
@@ -66,6 +66,9 @@ bool PlayerBody::OnCreate() {
 		cc.log(error, "You forgot the parentScene for the Player");
 		return false;
 	}
+
+	//Loads the sprite animations
+	LoadAnimations();
 
 	return true;
 }
@@ -186,6 +189,9 @@ void PlayerBody::Update(float deltaTime) {
 	// Update position, call Update from base class
 	// Note that would update velocity too, and rotation motion
 	Body::Update(deltaTime);
+
+	//Update the animation controller
+	animController->UpdateAnimationController(deltaTime);
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
@@ -201,6 +207,52 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
 	}
 
+#pragma region Animation stuff
+	//Switching the sprites
+	//Default Idle (for testing)
+	if (VMath::mag(vel) > 0.001) {
+		//Up
+		if (playerDirection.x == 0 && playerDirection.y == 1) {
+			animController->PlayAnimation(anim_walk_up);
+		}
+		//Down
+		if (playerDirection.x == 0 && playerDirection.y == -1) {
+			animController->PlayAnimation(anim_walk_down);
+		}
+
+		//Left
+		if (playerDirection.x == -1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_walk_left);
+		}
+
+		//Right
+		if (playerDirection.x == 1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_walk_right);
+		}
+	}
+	else {
+		//Up
+		if (playerDirection.x == 0 && playerDirection.y == 1) {
+			animController->PlayAnimation(anim_up);
+		}
+		//Down
+		if (playerDirection.x == 0 && playerDirection.y == -1) {
+			animController->PlayAnimation(anim_down);
+		}
+
+		//Left
+		if (playerDirection.x == -1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_left);
+		}
+
+		//Right
+		if (playerDirection.x == 1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_right);
+		}
+	}
+#pragma endregion
+
+	cutout = animController->GetCurrentFrame();
 	Body::Render(renderer_, projectionMatrix_);
 }
 
@@ -224,12 +276,10 @@ void PlayerBody::OnDestroy() {
 	//Cleanup stuff
 	for (Clock* item : cooldowns) { delete item; }
 	cooldowns.clear();
-	dash_timer = nullptr;
-	dash_cooldown = nullptr;
 
-	delete dash_timer;
-	delete invincible_timer;
-	delete drawMelee_timer;
+	//Cleanup for the sprites and animations
+	playerSpriteSheet.onDestroy();
+	delete animController;
 
 	Body::OnDestroy();
 }
@@ -298,8 +348,6 @@ std::string PlayerBody::getSelectedAbility() const {
 		return "shield";
 	}
 }
-
-
 
 #pragma region State methods
 void PlayerBody::state_idle() { canMove = true; }
@@ -415,5 +463,42 @@ void PlayerBody::state_attack(float deltaTime_) {
 	}
 	}
 }
-
 #pragma endregion
+
+void PlayerBody::LoadAnimations() {
+	//Create an animation controller
+	animController = new AnimationController();
+
+	//Load the animations
+
+	//Left
+	Sprite temp = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Left, 128, 128, 6)) { cout << "Left sprite did not load properly" << endl; return;};
+	anim_walk_left = Animation("player_walk_left", temp.spriteStorage, 0.2f, 6, true);
+	anim_left = Animation("player_left", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//Right
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Right, 128, 128, 6)) { cout << "Right sprite did not load properly" << endl; return; };
+	anim_walk_right = Animation("player_walk_right", temp.spriteStorage, 0.2f, 6, true);
+	anim_right = Animation("player_right", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//Up
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Up, 128, 128, 6)) { cout << "Up sprite did not load properly" << endl; return; };
+	anim_walk_up = Animation("player_walk_up", temp.spriteStorage, 0.2f, 6, true);
+	anim_up = Animation("player_up", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//Down
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Down, 128, 128, 6)) { cout << "Down sprite did not load properly" << endl; return; };
+	anim_walk_down = Animation("player_walk_down", temp.spriteStorage, 0.2f, 6, true);
+	anim_down = Animation("player_down", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//This is called to cleanup the SDL_Surface and SDL_Texture
+	temp.onDestroy();
+
+	//By default the player looks up
+	animController->PlayAnimation(anim_up);
+}

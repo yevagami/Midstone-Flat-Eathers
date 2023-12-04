@@ -129,9 +129,6 @@ void PlayScene::Update(const float time) {
 
 
 
-
-
-
 	if(player->getCurrentHealth() == 0.0f) {
 		isDead = true;
 	}
