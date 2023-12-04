@@ -121,6 +121,7 @@ private:
 
     //Sprite stuff
     Sprite playerSpriteSheet;
+    Sprite effectSpriteSheet;
     SDL_Rect currentSprite;
     int currentSpriteIndex = 0;
     float frameInterval = 0.5f;

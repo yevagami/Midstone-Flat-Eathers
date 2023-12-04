@@ -50,7 +50,7 @@ bool PlayerBody::OnCreate() {
 	maxSpeed = currentSpeed;
 	currentState = idle;
 
-	//Load the sprite sheet
+	//Load the player sprite sheet
 	playerSpriteSheet = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
 	if (!playerSpriteSheet.autoLoadSprites()) {
 		std::cout << "Error in the sprite sheet\n";
@@ -60,6 +60,11 @@ bool PlayerBody::OnCreate() {
 	texture = playerSpriteSheet.texture;
 	currentSprite = playerSpriteSheet.spriteStorage[Player_Neutral];
 
+	effectSpriteSheet = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+	if (!effectSpriteSheet.autoLoadSprites()) {
+		std::cout << "Error in the effect sprite sheet\n";
+		return false;
+	}
 
 	//Failsafe incase the programmer forgets the parentScene
 	if (parentScene == nullptr) {
@@ -197,19 +202,19 @@ void PlayerBody::Update(float deltaTime) {
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	//Drawing the melee sprite
 	if (drawMelee) {
-		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
-		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[ouch], &Rect);
+		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123};
+		SDL_RenderCopy(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[ouch], &Rect);
 	}
 
 	//Drawing the shield sprite
 	if (drawShield) {
-		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
-		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
+		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123 };
+		SDL_RenderCopy(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[melee_strike], &Rect);
 	}
 
 #pragma region Animation stuff
-	//Switching the sprites
-	//Default Idle (for testing)
+	//Switching the animations that are being played depending on the direction and the state
+	//If you are moving, your animations will also move
 	if (VMath::mag(vel) > 0.001) {
 		//Up
 		if (playerDirection.x == 0 && playerDirection.y == 1) {
@@ -252,6 +257,7 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	}
 #pragma endregion
 
+	//The cutout sets which 
 	cutout = animController->GetCurrentFrame();
 	Body::Render(renderer_, projectionMatrix_);
 }
@@ -279,6 +285,7 @@ void PlayerBody::OnDestroy() {
 
 	//Cleanup for the sprites and animations
 	playerSpriteSheet.onDestroy();
+	effectSpriteSheet.onDestroy();
 	delete animController;
 
 	Body::OnDestroy();
