@@ -67,6 +67,9 @@ bool PlayerBody::OnCreate() {
 		return false;
 	}
 
+	//Loads the sprite animations
+	LoadAnimations();
+
 	return true;
 }
 
@@ -195,6 +198,8 @@ void PlayerBody::Update(float deltaTime) {
 		currentIntervalTimer = 0.0f;
 		currentSpriteIndex = 0;
 	}
+
+	animController.UpdateAnimationController(deltaTime);
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
@@ -231,9 +236,7 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		currentSprite = playerSpriteSheet.spriteStorage[Player_Right + currentSpriteIndex];
 	}
 
-
-
-	cutout = &currentSprite;
+	cutout = animController.GetCurrentFrame();
 	Body::Render(renderer_, projectionMatrix_);
 }
 
@@ -331,8 +334,6 @@ std::string PlayerBody::getSelectedAbility() const {
 		return "shield";
 	}
 }
-
-
 
 #pragma region State methods
 void PlayerBody::state_idle() { canMove = true;}
@@ -440,5 +441,15 @@ void PlayerBody::state_attack(float deltaTime_) {
 		}
 	}
 }
-
 #pragma endregion
+
+void PlayerBody::LoadAnimations() {
+	animController = AnimationController();
+	idleSpriteSheet = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
+	if (!idleSpriteSheet.loadSpriteFromRectInARow(0, 0, 128, 128, 6)) {
+		cout << "Idle sprite did not render properly" << endl;
+		return;
+	};
+	anim_idle = Animation(idleSpriteSheet.spriteStorage, 0.5f, 6, true);
+	animController.PlayAnimation(anim_idle);
+}

@@ -86,7 +86,7 @@ bool Sprite::loadSpriteFromRectInARow(int x_, int y_, int w_, int h_, int amount
 		spriteStorage.push_back(r3);
 	}
 
-	return false;
+	return true;
 }
 
 // destroys the image and spriteSheet; clean up memory used to not cause memory leaks
