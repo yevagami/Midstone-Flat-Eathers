@@ -180,6 +180,8 @@ void Level_test::waveSpawner(int maxWaves_) {
 
 
 void Level_test::Update(const float time){
+	waveSpawner(10);
+
 	//Updates the level bodies
 	for(Body* body : levelBodies) {
 		//std::cout << body->type << "\n";
@@ -192,8 +194,6 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-
-	waveSpawner(10);
 	
 	//c++ doesn't like it when you are pushing something to a vector
 	//while you are iterating over it
@@ -232,7 +232,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 
