@@ -5,7 +5,6 @@ Enemy::Enemy(Level* parentLevel_, Vec3 pos_, subType type_) {
 	parentLevel = parentLevel_;
 	pos = pos_;
 	currentHealth = enemyDefintions[type_].health;
-	maxHealth = currentHealth;
 	enemyMoveSpeed = enemyDefintions[type_].moveSpeed;
 	enemyPower = enemyDefintions[type_].power;
 	image = enemyDefintions[type_].image;

@@ -3,7 +3,7 @@
 #include <SDL_image.h>
 #include "ConsistentConsole.h"
 
-ConsistentConsole ccMenu(true, "Menu.cpp");
+ConsistentConsole ccMenu(false, "Menu.cpp");
 
 
 namespace ui {
@@ -125,11 +125,10 @@ namespace ui {
 					SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface);
 
 					if (renderedTexture != nullptr) {
-						double angle = 0.0;
 						SDL_Point center = { 0, 0 };
 						SDL_RendererFlip flip = SDL_FLIP_NONE;
 
-						SDL_RenderCopyEx(renderer_, renderedTexture, nullptr, &rect, angle, &center, flip);
+						SDL_RenderCopyEx(renderer_, renderedTexture, nullptr, &rect, backgroundImageRotationAngle, &center, flip);
 					
 						SDL_DestroyTexture(renderedTexture);
 					}

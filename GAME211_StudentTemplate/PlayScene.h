@@ -150,7 +150,7 @@ public:
 
 		cheatButton1->text = "heal";
 		cheatButton2->text = "god";
-		cheatButton3->text = "";
+		cheatButton3->text = "stronk";
 
 		for (const auto button : allPauseMenuButtons) {
 			//	centered
@@ -293,12 +293,13 @@ public:
 		subButton3->SetOnLeftClick([&]() {
 			cc.log(update, "TEST BUTTON - does nothing important lmao");
 
-			musicSound.playSound("gyat");
+			player->takeDamage(50);
+			//musicSound.playSound("gyat");
 
 		});
 
 		subButton3->SetOnRightClick([&]() {
-			sfxSound.playSound("my bike", true);
+			//sfxSound.playSound("my bike", true);
 
 		});
 
@@ -349,8 +350,24 @@ public:
 				player->setInvincible(false);
 			}
 		});
-		cheatButton3->SetOnLeftClick([&]() {
 
+		cheatButton3->SetOnLeftClick([&]() {
+			if(player->getCurrentMeleeDamage() == player->getDefaultMeleeDamage()) {
+				player->setCurrentMeleeDamage(500);
+				cc.log(update, "you are strong!", std::to_string(player->getCurrentMeleeDamage()));
+			} else {
+				player->setCurrentMeleeDamageToDefault();
+				cc.log(update, "you are default.", std::to_string(player->getCurrentMeleeDamage()));
+			}
+		});
+		cheatButton3->SetOnRightClick([&]() {
+			if (player->getCurrentProjectileDamage() == player->getDefaultProjectileDamage()) {
+				player->setCurrentProjectileDamage(500);
+				cc.log(update, "you are strong!", std::to_string(player->getCurrentProjectileDamage()));
+			} else {
+				player->setCurrentProjectileDamageToDefault();
+				cc.log(update, "you are default.", std::to_string(player->getCurrentProjectileDamage()));
+			}
 		});
 
 

@@ -524,6 +524,7 @@ namespace ui {
 			isButtonBordered = true;
 			isTextBordered = false;
 			textBorderSize = 2;
+			backgroundImageRotationAngle = 0.0;
 
 			//	colour shenegans
 			backgroundColour = colour_.background;
@@ -613,6 +614,7 @@ namespace ui {
 		SDL_Color textColour;										//  button's text colour
 		SDL_Color onHoveringTextColour;					//  button's hovering text colour
 		const char* backgroundImageDirectory;			//	  link to the background image path
+		double backgroundImageRotationAngle;			//	  the background image's rotation angle ( default : 0.0)
 
 		float fontSize;														//	button's font size (default : 45)
 		double fontRotation;										//	font rotation (default : 0.0)

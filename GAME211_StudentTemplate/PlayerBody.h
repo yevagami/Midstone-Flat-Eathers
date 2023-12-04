@@ -80,6 +80,17 @@ public:
     void setCurrentDefence(const float newDefense_) { playerDefence = newDefense_;}
     void setCurrentDefenceToDefault() { playerDefence = playerDefenceDefault;}
 
+    float getCurrentMeleeDamage() const { return meleePowerCurrent; }
+    float getDefaultMeleeDamage() const { return meleePowerDefault; }
+    void setCurrentMeleeDamage(const float newMeleeDamage_) {  meleePowerCurrent = newMeleeDamage_; }
+    void setCurrentMeleeDamageToDefault() {  meleePowerCurrent = meleePowerDefault; }
+	float getCurrentProjectileDamage() const { return projectilePowerCurrent; }
+	float getDefaultProjectileDamage() const { return projectilePowerDefault; }
+    void setCurrentProjectileDamage(const float newProjectileDamage_) {  projectilePowerCurrent = newProjectileDamage_; }
+    void setCurrentProjectileDamageToDefault() {  projectilePowerCurrent = projectilePowerDefault; }
+
+
+
 
     //state methods
     void state_idle();
@@ -134,7 +145,8 @@ private:
     //melee variables
     Hitbox* meleeHitbox = nullptr;
     Vec3 mouseDirection = {};
-    float meleePower = 50.0f;
+    float meleePowerCurrent = 50.0f;
+    float meleePowerDefault = 50.0f;
     float drawMeleeDuration = 0.3f;
     float drawMeleeDurationDefault = 0.3f;
     bool drawMelee = false; //Draws a sprite to the screen when the player melees
@@ -142,7 +154,8 @@ private:
     //shooting variables
     float projectileSpeed = 2500.0f;
     float shootingCooldown = 0.2f;
-    float projectilePower = 50.0f;
+    float projectilePowerCurrent = 50.0f;
+    float projectilePowerDefault = 50.0f;
 
     //timers and cooldowns
     Clock* dash_timer = nullptr; //how long the player can dash for

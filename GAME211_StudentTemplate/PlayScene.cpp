@@ -109,10 +109,15 @@ void PlayScene::Update(const float time) {
 	const std::string healthTrackerString = std::to_string(static_cast<int>(round(player->getCurrentHealth())));
 
 	UI_health->text = healthTrackerString;
-	if (healthTrackerString > "0") {
+	if (std::stoi(healthTrackerString) > player->getMaxHealth() / 2 && std::stoi(healthTrackerString) <= player->getMaxHealth()) {
 		UI_health->textColour = ui::SDL_COLOR_DARK_GREEN;
 	}
-	if (healthTrackerString <= "0") {
+
+	if (std::stoi(healthTrackerString) > 20 && std::stoi(healthTrackerString) <= player->getMaxHealth() / 2) {
+		UI_health->textColour = ui::SDL_COLOR_BANANA_YELLOW;
+	}
+	
+	if (std::stoi(healthTrackerString) <= 20) {
 		UI_health->textColour = ui::SDL_COLOR_ROSE_TOY;
 	}
 
@@ -135,6 +140,7 @@ void PlayScene::Update(const float time) {
 
 	if(player->getCurrentHealth() == 0.0f) {
 		//isDead = true;
+		cc.log(update, "you died lmao");
 	}
 
 

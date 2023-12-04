@@ -394,7 +394,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//on hit solid,pretty much useless -Adriel
 				if (other->type == ENEMY) {		//on hit enemy
 					//std::cout << "You hit an enemy\n";
-					other->takeDamage(meleePower);
+					other->takeDamage(getCurrentMeleeDamage());
 				}
 			}
 		}
@@ -421,7 +421,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 				Vec3(0.3f, 0.3f, 0.3f),
 				128 * 0.3f, 128 * 0.3f,
 				1.0f,
-				projectilePower
+				getCurrentProjectileDamage()
 			);
 			if (VMath::mag(mouseDirection * projectileSpeed) <= 0) {
 				cout << "Huh???\n";

@@ -100,9 +100,10 @@ public:
 	virtual float getOrientation() { return orientation; }
 	virtual float getRotation() { return rotation; }
 	virtual float getAngular() { return angular; }
-	Level* getParentLevel() { return parentLevel; }
+	Level* getParentLevel() const { return parentLevel; }
 	void setParentLevel(Level* parentLevel_) { parentLevel = parentLevel_; }
-	float getCurrentHealth() { return currentHealth; }
+	float getCurrentHealth() const { return currentHealth; }
+	float getMaxHealth() const { return maxHealth; }
 	void setCurrentHealth(float newHealth) { currentHealth = newHealth; }
 	void setCurrentHealthToMax() { currentHealth = maxHealth; }
 	void setCurrentHealthToDefault() { currentHealth = defaultHealth; }
@@ -129,9 +130,9 @@ protected:
 	Vec3 vel;
 	Vec3 accel;
 	Vec3 scale = Vec3(1.0f, 1.0f, 1.0f);
-	float maxHealth = 250;
-	float defaultHealth = 100;
-	float currentHealth = 100;
+	const float maxHealth = 200;
+	float defaultHealth = 200;
+	float currentHealth = 200;
 	float mass;
 	float radius; // for getting near walls
 	float orientation; // facing this direction
