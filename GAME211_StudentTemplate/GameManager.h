@@ -98,7 +98,7 @@ private:
 
 	//	settings default values
 	static void setDefaultSettings() {
-		settings::FPS = 60;
+		settings::FPS = 120;
 		settings::MaxVolume = 1.0f;
 		settings::MasterVolume = settings::DefaultMasterVolume;;
 		settings::MusicVolume = settings::DefaultMusicVolume;

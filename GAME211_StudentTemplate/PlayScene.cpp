@@ -72,7 +72,6 @@ void PlayScene::OnDestroy() {
 	delete player;
 }
 
-
 void PlayScene::Update(const float time) {
 	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
