@@ -19,7 +19,7 @@ void AnimationController::UpdateAnimationController(float deltaTime) {
 
 
 void AnimationController::PlayAnimation(Animation newAnimation) {
-	cout << "Playing: " << newAnimation.name << endl;
+	//cout << "Playing: " << newAnimation.name << endl;
 	if (currentAnimation == newAnimation) {
 		return;
 	}
