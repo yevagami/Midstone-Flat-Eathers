@@ -119,7 +119,7 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(1000, [this]() { quitPls(); });
 				break;
 			case SDL_SCANCODE_Q:
-				StartFadeInTransition(1000, [this]() { quitPls();	 });
+				StartFadeInTransition(1000, [this]() { quitPls(); });
 				break;
 			case SDL_SCANCODE_END:
 				cc.log(update, "SILENCE!!!");
@@ -138,16 +138,16 @@ void GameManager::HandleEvents() {
 				system("cls");  // NOLINT(concurrency-mt-unsafe)
 				break;
 			case SDL_SCANCODE_1:
-				LoadScene(1);
+				//LoadScene(1);
 				break;
 			case SDL_SCANCODE_2:
-				LoadScene(2);
+				//LoadScene(2);
 				break;
 			case SDL_SCANCODE_3:
-				LoadScene(3);
+				//LoadScene(3);
 				break;
 			case SDL_SCANCODE_4:
-				LoadScene(4);
+				//LoadScene(4);
 				break;
 
 			default:

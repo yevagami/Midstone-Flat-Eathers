@@ -118,13 +118,16 @@ void PlayScene::Update(const float time) {
 	const std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
 	UI_abilityText->text = abilityTrackerString;
 	if (abilityTrackerString == "melee") {
-		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/199527204be2840a18389c3739d093a8.jpg";
+		//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/199527204be2840a18389c3739d093a8.jpg";
+		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/sword.png";
 	}
 	else if (abilityTrackerString == "shoot") {
-		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/5e39c9d0d5385f237012f04d8036a230.jpg";
+		//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/5e39c9d0d5385f237012f04d8036a230.jpg";
+		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/gun.png";
 	}
 	else if (abilityTrackerString == "shield") {
-		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/daddy.jpg";
+		//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/daddy.jpg";
+		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/shield.png";
 	}
 
 

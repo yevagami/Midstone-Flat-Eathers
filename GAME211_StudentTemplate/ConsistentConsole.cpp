@@ -21,7 +21,7 @@ ConsistentConsole::ConsistentConsole(bool visibility, const char* whereAmI_) {
 }
 #pragma endregion
 
-bool ConsistentConsole::log(const char* type_, const char* msg_) {
+bool ConsistentConsole::log(const char* type_, const char* msg_, const std::string& variable_) {
 	if (!isConsoleTextEnabled) { return false; }
 
 	static std::unordered_map<const char*, const char*> types = {
@@ -49,6 +49,8 @@ bool ConsistentConsole::log(const char* type_, const char* msg_) {
 	formattedString
 		<< specialMessage
 		<< "[" << msg_ << "]";
+
+	if(!variable_.empty()) { formattedString << " " << "[" << variable_ << "]"; }
 
 	std::cout << formattedString.str() << std::endl;
 	

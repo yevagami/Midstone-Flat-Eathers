@@ -1,20 +1,5 @@
 #pragma once
-
-/// <summary>
-/// The Console Message Management Class
-/// 
-///		Constructor:
-/// - visibility = true (default state)
-/// 
-///		Main Methods:
-/// - log (type, message)
-/// - colour (colour)
-/// - colour (colour, modifier)
-/// 
-///		Goals:
-/// - cleaning up the console with consistency, colours, and confetti! (sans confetti)
-/// - allow for console messages to be togglable (visibility)
-/// </summary>
+#include <string>
 
 class ConsistentConsole {
 	//	Console Consistency!!! oh, the beauty of cc...
@@ -26,7 +11,7 @@ public:
 
 	///	Methods
 	//	error, warning, not_error, debug, or update. then a message for context. ez.
-	bool log(const char* type_ , const char* msg_);
+	bool log(const char* type_ , const char* msg_, const std::string& variable_ = "");
 	//	colour options: red, blue, green, purple, cyan, yellow, pink, clear
 	inline bool colour(const char* colour_);
 	//	added modifier options: clear, newline, indent, blink, bold, italic
