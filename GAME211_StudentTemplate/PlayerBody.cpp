@@ -8,14 +8,14 @@ bool PlayerBody::OnCreate() {
 	//Setting the variables
 
 	//Create the melee hitbox
-	meleeHitbox = new Hitbox(64, 64, pos.x, pos.y);
+	meleeHitbox = new Hitbox(98, 98, pos.x, pos.y);
 
 	//Creating timers
 	dash_timer = new Clock(dashDuration, false, [this]() {
 		if (selectedAbilities == shield) {
 			currentState = attack;
 		}
-		else{
+		else {
 			currentState = idle;
 		}
 		canMove = true;
@@ -26,15 +26,15 @@ bool PlayerBody::OnCreate() {
 
 		dash_timer->Reset();
 		//vel = Vec3(); //reset the player's speed and set the state to idle
-	});
+		});
 	invincible_timer = new Clock(invincibleDuration, false, [this]() {
 		invincible = false;
 		invincible_timer->Reset();
-	});
+		});
 	drawMelee_timer = new Clock(drawMeleeDuration, false, [this]() {
 		drawMelee = false;
 		drawMelee_timer->Reset();
-	});
+		});
 	dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
 
@@ -94,7 +94,6 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 			if (currentState != attack) {
 				currentState = idle;
 			}
-
 		}
 	}
 
@@ -118,33 +117,36 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 				drawShield = isShielding;
 			}
 			//std::cout << "Pressed left\n";
-		}
-	}
+		} }
 
 	//Switching abilities
-	
-	switch (event.key.keysym.scancode) {
+	if (event.type == SDL_KEYDOWN) { //	KEY DOWN ONLY
+		switch (event.key.keysym.scancode) {
 		case SDL_SCANCODE_J:
+			sfxSound.playSound("my bike"); //	debug sound effect
 			selectedAbilities = melee;
 			break;
-		
+
 		case SDL_SCANCODE_K:
+			sfxSound.playSound("my bike"); //	debug sound effect
 			selectedAbilities = shoot;
 			break;
-		
+
 		case SDL_SCANCODE_L:
+			sfxSound.playSound("my bike"); //	debug sound effect
 			selectedAbilities = shield;
 			break;
-	}
-	
-}
+
+		} } }
 
 void PlayerBody::Update(float deltaTime) {
 	updateMouseDir(); //Update the melee hitbox
 	updateMeleeHitbox(); //Gets the direction of the mouse relative to the player's position
 
 	//If the destroy flag has been set, the player is now dead
-	if (currentHealth <= 0) { std::cout << "YOU ARE DEAD \n"; }
+
+	//FOR NOW REMOVED
+	//if (currentHealth <= 0) { std::cout << "YOU ARE DEAD \n"; }
 
 	//state machine
 	switch (currentState) {
@@ -195,10 +197,10 @@ void PlayerBody::Update(float deltaTime) {
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	//Drawing the melee sprite
 	if (drawMelee) {
-		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64};
+		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[ouch], &Rect);
 	}
-	
+
 	//Drawing the shield sprite
 	if (drawShield) {
 		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
@@ -348,13 +350,13 @@ std::string PlayerBody::getSelectedAbility() const {
 }
 
 #pragma region State methods
-void PlayerBody::state_idle() { canMove = true;}
+void PlayerBody::state_idle() { canMove = true; }
 
 void PlayerBody::state_dash(float deltaTime_) {
 	isShielding = false;
 
 	canMove = false; //disables the player's movement input
-	
+
 	//set the max speed to the dash speed
 	currentSpeed = dashSpeed;
 	maxSpeed = dashSpeed;
@@ -371,13 +373,16 @@ void PlayerBody::state_dash(float deltaTime_) {
 
 void PlayerBody::state_attack(float deltaTime_) {
 	switch (selectedAbilities) {
-	case melee:{
+	case melee: {
+		sfxSound.playSound("slash");
 		//Stops the shield sprite from rendering
 		//Yes, this is a hotfix -Adriel
-		drawShield = false;
+		if (isShielding) {
+			drawShield = false; isShielding = false;
+		}
 
 		//Draw the melee sprite only when we haven't done it yet
-		if (!drawMelee) { 
+		if (!drawMelee) {
 			drawMelee = true;
 			drawMelee_timer->Start();
 		}
@@ -398,8 +403,11 @@ void PlayerBody::state_attack(float deltaTime_) {
 	}
 
 	case shoot: {
+		sfxSound.playSound("gunshot");
 		//Yes, this is a hotfix again -Adriel
-		drawShield = false;
+		if (isShielding) {
+			drawShield = false; isShielding = false;
+		}
 
 		//cooldown check! (if its on cooldown, leave)
 		if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
@@ -429,6 +437,8 @@ void PlayerBody::state_attack(float deltaTime_) {
 	case shield: {
 		if (isShielding) {
 			setCurrentDefence(playerDefenceShielded);
+			//sfxSound.playSound("slash"); // ear destroying
+
 			for (Body* other : parentLevel->levelBodies) {
 				if (other->type == PLAYER) { continue; } // skip the player
 				if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //	if the melee hitbox hits the otherBody hitbox
@@ -450,7 +460,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 			setCurrentDefenceToDefault();
 		}
 		break;
-		}
+	}
 	}
 }
 #pragma endregion

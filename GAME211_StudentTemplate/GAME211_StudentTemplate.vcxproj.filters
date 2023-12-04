@@ -159,9 +159,6 @@
     <ClCompile Include="Tracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FadeTransition.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Visualization</Filter>
     </ClCompile>
@@ -270,9 +267,6 @@
       <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="Tracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="menu_scaary.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FadeTransition.h">

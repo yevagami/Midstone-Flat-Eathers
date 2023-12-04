@@ -53,7 +53,8 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	SDL_Renderer* getRenderer() { return renderer; }
 
-
+	bool isDead = false;
+	bool hasGameoverHappened = false;
 
 	//	testing a menu [ has to be at scene level >:( ]
 	bool isPaused = false;
@@ -180,7 +181,6 @@ public:
 			button->textBorderSize = 1;
 		}
 		subButton4->setPositionRelativeTo(*button1, -12.5, -125);
-		subButton3->EnableBackgroundImage("Textures/programmer_art/missing_texture.png");
 
 		for (const auto button : allCheatMenuButtons) {
 			button->scaleDimensions(50);
@@ -241,7 +241,7 @@ public:
 			//quit
 			
 			game->StartFadeInTransition(1000, [&]() {
-				isRunning = false;
+				settings::isRunning = false;
 
 			});
 			
@@ -259,27 +259,25 @@ public:
 
 		subButton1->SetOnLeftClick([&]() {
 			cc.log(update, "fps changed");
-			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
-			const size_t numFPSValues = sizeof(fpsValues) / sizeof(fpsValues[0]);
-
-			for (size_t i = 0; i < numFPSValues; ++i) {
-				if (settings::FPS == fpsValues[i]) {
-					settings::FPS = fpsValues[(i + numFPSValues - 1) % numFPSValues];
-					break;
-				}
-			}
-			});
-		subButton1->SetOnRightClick([&]() {
-			cc.log(update, "fps changed");
-			const int fpsValues[] = { 60, 30, 90 };  // possible FPS values
-			const size_t numFPSValues = sizeof(fpsValues) / sizeof(fpsValues[0]);
+			constexpr int fpsValues[] = { 30, 60, 90, 120 };  // possible FPS values
+			constexpr size_t numFPSValues = std::size(fpsValues);
 
 			for (size_t i = 0; i < numFPSValues; ++i) {
 				if (settings::FPS == fpsValues[i]) {
 					settings::FPS = fpsValues[(i + 1) % numFPSValues];
-					break;
-				}
-			}
+					break;	}	}
+
+			});
+		subButton1->SetOnRightClick([&]() {
+			cc.log(update, "fps changed");
+			constexpr int fpsValues[] = { 30, 60, 90, 120 };  // possible FPS values
+			constexpr size_t numFPSValues = std::size(fpsValues);
+
+			for (size_t i = 0; i < numFPSValues; ++i) {
+				if (settings::FPS == fpsValues[i]) {
+					settings::FPS = fpsValues[(i + numFPSValues - 1) % numFPSValues];
+					break; } }
+
 		});
 
 		subButton2->isTogglable = true;
@@ -293,11 +291,15 @@ public:
 		});
 
 		subButton3->SetOnLeftClick([&]() {
-			cc.log(update, "not implemented");
-			musicSound.playSound("theme");
+			cc.log(update, "TEST BUTTON - does nothing important lmao");
+
+			musicSound.playSound("gyat");
+
 		});
+
 		subButton3->SetOnRightClick([&]() {
 			sfxSound.playSound("my bike", true);
+
 		});
 
 		//master v0lume
@@ -354,8 +356,8 @@ public:
 
 
 		button1->offsetPosition(0,0);												//	mid
-		button2->setPositionRelativeTo(*button1, -100);					//top
-		button3->setPositionRelativeTo(*button1, 100);					//	bottom
+		button2->setPositionRelativeTo(*button1, -100);													//top
+		button3->setPositionRelativeTo(*button1, 100);														//	bottom
 
 		subButton1->offsetPosition(0, 0);
 		subButton2->offsetPosition(-125);
@@ -379,5 +381,43 @@ public:
 		for (const auto button : allCheatMenuButtons) { button->generateHitbox(); }
 	}
 
+
+	vector<ui::Button*> allUIElements;
+	ui::Button* UI_health;
+	ui::Button* UI_abilityText;
+	ui::Button* UI_abilitySprite;
+
+	void GUI() {
+		UI_health = new ui::Button(ui::Font{"", 35});
+		UI_abilitySprite = new ui::Button(ui::Font{}, ui::SDL_Square);
+		UI_abilityText = new ui::Button(ui::Font{"", 25});
+
+		allUIElements.emplace_back(UI_health);
+		allUIElements.emplace_back(UI_abilitySprite);
+		allUIElements.emplace_back(UI_abilityText);
+
+		for(auto element : allUIElements) {
+			element->isTextBordered = true;
+			//element->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+			element->textColour = ui::SDL_COLOR_ANTIQUE_WHITE;
+			element->textBorderColour = ui::SDL_COLOR_BLACK;
+			element->backgroundColour = ui::SDL_COLOR_DARK_SLATE_GRAY;
+			element->buttonBorderColour = ui::SDL_COLOR_BLACK;
+			element->buttonBorderSize = 4;
+			element->textBorderSize = 2;
+		}
+
+		UI_abilitySprite->EnableBackgroundImage();
+		UI_abilitySprite->scaleDimensions(50);
+		UI_abilitySprite->setPosition(SCREEN_HEIGHT - 100, SCREEN_WIDTH - 100);
+		UI_abilityText->setPositionRelativeTo(*UI_abilitySprite, -25, 50);
+
+		UI_health->setPositionRelativeTo(*UI_abilitySprite, -75, 50);
+		//UI_health->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		//UI_health->offsetPosition(-SCREEN_HEIGHT + 400);
+
+
+	}
 };
 

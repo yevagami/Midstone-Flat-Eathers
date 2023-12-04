@@ -17,9 +17,7 @@ namespace menu {
 
 		~UIManager() { DeleteAllButtons(); }
 
-		void createBlankButton(ui::Button* button_) {
 
-		}
 
 		void DeleteAllButtons() const {
 			for (auto* button : buttons) {
@@ -37,6 +35,8 @@ namespace menu {
 
 
 		void UpdateButtons(float deltaTime) const {
+
+
 			for (Button* button : buttons) {
 				button->Update(deltaTime);
 			}
@@ -52,9 +52,23 @@ namespace menu {
 		}
 
 
+		void ExistPls() {
+
+			health = new Button(Font{});
+
+
+		}
+
+
 	private:
 		SDL_Renderer* buttonRenderer;
 		std::vector<Button*> buttons;
+
+		Button* health;
+		Button* abilitySprite;
+
+
+
 	};
 
 }

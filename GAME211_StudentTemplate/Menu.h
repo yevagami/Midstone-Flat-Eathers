@@ -612,6 +612,7 @@ namespace ui {
 		SDL_Color onHoveringBackgroundColour;			//  button's hover background colour
 		SDL_Color textColour;										//  button's text colour
 		SDL_Color onHoveringTextColour;					//  button's hovering text colour
+		const char* backgroundImageDirectory;			//	  link to the background image path
 
 		float fontSize;														//	button's font size (default : 45)
 		double fontRotation;										//	font rotation (default : 0.0)
@@ -635,7 +636,6 @@ namespace ui {
 	protected:
 		///	Uneditable Attributes
 		bool isHovering;												//	is the mouse hovering over the button
-		const char* backgroundImageDirectory;			//	link to the background image path
 
 	public:
 		/// Modifier Methods 
@@ -653,7 +653,7 @@ namespace ui {
 		void scaleDimensionsIndividually(int newRectHeightScaler_ = 1, int newRectWidthScaler_ = 1);
 		void scaleDimensions(int scaler_ = 1);
 		void centerPosition(int screenWidth_, int screenHeight_);
-		bool EnableBackgroundImage(const char* fileDirectory_);
+		bool EnableBackgroundImage(const char* fileDirectory_ = "");
 #pragma endregion
 #pragma region utility
 	protected:

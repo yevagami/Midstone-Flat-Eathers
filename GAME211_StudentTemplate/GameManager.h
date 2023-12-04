@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "Scene.h"
 
+
 #include "Audio.h"
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
@@ -17,6 +18,8 @@
 //	global classes
 	inline Sound musicSound;
 	inline Sound sfxSound;
+	inline ConsistentConsole cc(true, "GameManager.h");
+	inline PrettyPrinting pp(pink, purple, cyan);
 
 
 #pragma region settings
@@ -33,27 +36,30 @@
 
 		inline int FPS;
 
+		inline bool isRunning;
+
 		inline void SetMusicVolume(const float newMusicVolume_) {
-			if (newMusicVolume_ < -0.1f || newMusicVolume_ > 1.0f) { return; }
+			if (newMusicVolume_ < -0.0f || newMusicVolume_ > 1.0f) { return; }
+
 
 			MusicVolume = std::min(newMusicVolume_, MasterVolume);
 			musicSound.setVolume(MusicVolume);
 		}
 
 		inline void SetSFXVolume(const float newSFXVolume_) {
-			if (newSFXVolume_ < -0.1f || newSFXVolume_ > 1.0f) { return; }
+			if (newSFXVolume_ < -0.0f || newSFXVolume_ > 1.0f) { return; }
+
 
 			SoundEffectVolume = std::min(newSFXVolume_, MasterVolume);
 			sfxSound.setVolume(SoundEffectVolume);
 		}
 
 		inline void SetMasterVolume(const float newMaterVolume_) {
-			if (newMaterVolume_ < -0.1f || newMaterVolume_ > 1.0f) { return; }
+			if (newMaterVolume_ < -0.0f || newMaterVolume_ > 1.0f) { return; }
 
 			//	compare the newMaster to the MaxVolume and take the lowest
 			MasterVolume = std::min(newMaterVolume_, MaxVolume);
 
-			//update the other volumes cuz the master changed
 			SetMusicVolume(MusicVolume);
 			SetSFXVolume(SoundEffectVolume);
 		}
@@ -61,32 +67,14 @@
 	}
 #pragma endregion
 
-	inline void InitSoundEffects() {
-		sfxSound.loadSound("my bike", "sound/wait till you see me on my bike.wav");
 
-
-		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
-	}
-	inline void InitMusic() {
-		musicSound.loadSound("theme", "sound/19. Select Position (Wii Sports).wav");
-
-
-		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
-	}
-	inline ConsistentConsole cc(true, "GameManager.h");
-	inline PrettyPrinting pp(pink, purple, cyan);
-
-// My display is 1920 x 1080 but the following seems to work best to fill the screen.
-//const int SCREEN_WIDTH = 1540;
-//const int SCREEN_HEIGHT = 860;
 
 
 // Use 1000x600 for less than full screen
 const int SCREEN_WIDTH = 1366;
 const int SCREEN_HEIGHT = 768;
 
-//	i moved this here so i can access it from deeper
-inline bool isRunning;
+
 
 class GameManager {
 private:
@@ -110,7 +98,7 @@ private:
 
 	//	settings default values
 	static void setDefaultSettings() {
-		settings::FPS = 60;
+		settings::FPS = 120;
 		settings::MaxVolume = 1.0f;
 		settings::MasterVolume = settings::DefaultMasterVolume;;
 		settings::MusicVolume = settings::DefaultMusicVolume;
@@ -136,29 +124,48 @@ public:
 
 
 	//	Fade IN transition (fade in to black) (yes its confusing)
-	void StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr) {
-		cc.log(debug, "fade in animation called");
-		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true);
-		fadeTransition->SetStartTime();
-
-		if (callback_) {
-			fadeTransition->SetCallback(callback_);
-		}
-	}
+	void StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
 
 	//	Fade OUT transition (fade out from black)
-	void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr) {
-		cc.log(debug, "fade out animation called");
-		//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-		fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false);
-		fadeTransition->SetStartTime();
+	//void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
 
-		if (callback_) {
-			fadeTransition->SetCallback(callback_);
-		}
+	//	loading sound effects to be used in the scenes
+	static void LoadSoundEffects() {
+		// DEBUG sound effects here
+		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.ogg");
+
+		//sound effects here
+		sfxSound.loadSound("gameover", "sound/gameover.ogg");
+		sfxSound.loadSound("gunshot", "sound/gun-shot.ogg");
+		sfxSound.loadSound("slash", "sound/slash.ogg");
+		sfxSound.loadSound("item equip", "sound/518850__mrickey13__item-equip.mp3");
+
+
+		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
 	}
 
+	//	loading music to be used in the scenes
+	static void LoadMusic() {
+		// DEBUG sound effects here
+		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
+		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
+		//sound effects here
+
+		musicSound.loadSound("ominous music", "sound/drone-background-music.ogg");
+		musicSound.loadSound("overworld music", "sound/exploration-music-loop.ogg");
+		musicSound.loadSound("chiptune-y music", "sound/game-soundtrack-4.ogg");
+		musicSound.loadSound("retro epic music", "sound/game-soundtrack-5.ogg");
+		musicSound.loadSound("chill background music", "sound/lofi-fusion-background-music.ogg");
+		musicSound.loadSound("battle music", "sound/Shin Megami Tensei Battle Theme PS1.mp3");
+
+		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
+	}
+
+	void quitPls() {
+		while(settings::isRunning == true) {
+			settings::isRunning = false;
+		}
+	}
 
 };
 #endif

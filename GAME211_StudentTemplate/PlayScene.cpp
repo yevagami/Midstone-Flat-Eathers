@@ -28,8 +28,11 @@ bool PlayScene::OnCreate() {
 
 	//	load trackers
 	tracker.scary();
-	//	testing a menu at scene level
+
+
+	//	USER INTERFACE
 	CreatePauseMenu();
+	GUI();
 
 
 	//Creating the level
@@ -46,6 +49,7 @@ bool PlayScene::OnCreate() {
 		128.0f,
 		128.0f
 	);
+
 	if (!player->OnCreate()) {
 		std::cout << "Something went wrong with the Player object\n";
 		return false;
@@ -68,65 +72,74 @@ void PlayScene::OnDestroy() {
 	delete player;
 }
 
-
 void PlayScene::Update(const float time) {
-	if (isPaused == false) {
+	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
 	}
 
+	if(isDead == true && hasGameoverHappened == false) {
+		sfxSound.playSound("gameover");
+		hasGameoverHappened = true;
+	}
 
-	//Tracking stuff
-	std::string healthTrackerString = std::to_string(int(round(player->getCurrentHealth())));
+
 	int enemycounter = 0;
-
 	//Keeps track how many enemies are in the level
 	for (auto enemy : currentLevel->levelBodies) {
 		if (enemy->type == Body::ENEMY) {
 			enemycounter++;
 		}
-	}
-	
+	} std::string enemyCountString = std::to_string(enemycounter);
 
-	std::string enemyCountString = std::to_string(enemycounter);
-	std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
 
-	tracker.trackThis(healthTrackerString, tracker.tracker1);
+	///	Trackers [DEBUG THINGS]
+	//	"P to Pause"
+	tracker.trackThis("P to Pause", tracker.tracker1);
+
+	//max fps showing
+	const string fpsString = std::to_string(settings::FPS) + " fps";
+	tracker.trackThis(fpsString, tracker.tracker2);
+
+
+
+
+
+	///	MENU / USER INTERFACE [ trackers, but live ]
+	const std::string healthTrackerString = std::to_string(static_cast<int>(round(player->getCurrentHealth())));
+
+	UI_health->text = healthTrackerString;
 	if (healthTrackerString > "0") {
-		tracker.tracker1->textColour = ui::SDL_COLOR_DARK_GREEN;
+		UI_health->textColour = ui::SDL_COLOR_DARK_GREEN;
 	}
 	if (healthTrackerString <= "0") {
-		tracker.tracker1->textColour = ui::SDL_COLOR_ROSE_TOY;
+		UI_health->textColour = ui::SDL_COLOR_ROSE_TOY;
 	}
 
-	tracker.trackThis(enemyCountString, tracker.tracker2);
-
-	tracker.trackThis(abilityTrackerString, tracker.tracker3);
+	const std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
+	UI_abilityText->text = abilityTrackerString;
 	if (abilityTrackerString == "melee") {
-		tracker.tracker3->textColour = ui::SDL_COLOR_BANANA_YELLOW;
+		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/199527204be2840a18389c3739d093a8.jpg";
 	}
 	else if (abilityTrackerString == "shoot") {
-		tracker.tracker3->textColour = ui::SDL_COLOR_LIGHT_BLUE;
+		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/5e39c9d0d5385f237012f04d8036a230.jpg";
 	}
 	else if (abilityTrackerString == "shield") {
-		tracker.tracker3->textColour = ui::SDL_COLOR_SILVER;
+		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/daddy.jpg";
 	}
-	//max fps showing
-	string fpsString;
-	fpsString = std::to_string(settings::FPS) + " fps";
-	tracker.trackThis(fpsString, tracker.tracker4);
-
-	//	showing pause button
-	tracker.trackThis("P to Pause", tracker.tracker5);
-	//tracker.tracker5->setPositionRelativeTo(*tracker.tracker1, 0, -400);
-
-	tracker.trackThis(std::to_string(player->getCurrentInvincibilityDuration()), tracker.tracker6);
-	tracker.trackThis(std::to_string(SDL_GetTicks()), tracker.tracker7);
-
-	soundButtonText1->text = std::to_string(settings::MasterVolume);
-	soundButtonText2->text = std::to_string(settings::MusicVolume);
-	soundButtonText3->text = std::to_string(settings::SoundEffectVolume);
 
 
+
+	if(player->getCurrentHealth() == 0.0f) {
+		isDead = true;
+	}
+
+
+	//	pause menu things
+	if(isPaused) {
+		soundButtonText1->text = std::to_string(settings::MasterVolume);
+		soundButtonText2->text = std::to_string(settings::MusicVolume);
+		soundButtonText3->text = std::to_string(settings::SoundEffectVolume);
+	}
 
 }
 
@@ -141,6 +154,12 @@ void PlayScene::Render() {
 	//render the trackers
 	tracker.render(renderer);
 
+	//	gui
+	for(auto element : allUIElements) {
+		element->Render(renderer);
+	}
+
+	//	pause menu
 	if (isPaused) {
 		//	main pause menu
 		for (const auto button : allPauseMenuButtons) {
@@ -173,7 +192,6 @@ void PlayScene::Render() {
 		}
 
 	}
-
 
 	SDL_RenderPresent(renderer);
 }
@@ -211,6 +229,9 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 		}
 	}
 
+	for (auto element : allUIElements) {
+		element->HandleEvents(event);
+	}
 }
 
 void PlayScene::CameraFollowPlayer(PlayerBody* p) {

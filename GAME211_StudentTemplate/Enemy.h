@@ -44,6 +44,9 @@ private:
 	float enemyPower;
 	Body* playerReference = nullptr;
 
+
+	float enemyHitboxW = 98.0f;
+	float enemyHitboxH = 128.0f;
 	//Map contain multiple enemy definitions
 	std::unordered_map<subType, enemyVariables> enemyDefintions{
 		{subType::flash, enemyVariables{
@@ -51,8 +54,8 @@ private:
 			100.0f,
 			IMG_Load("Textures/programmer_art/enemy.png"),
 			35.0f,
-			128.0f,
-			128.0f
+			enemyHitboxW,
+			enemyHitboxH
 		}},
 
 		{subType::miracle, enemyVariables{
@@ -60,8 +63,8 @@ private:
 			1500.0f,
 			IMG_Load("Textures/programmer_art/enemy.png"),
 			20.0f,
-			128.0f,
-			128.0f
+			enemyHitboxW,
+			enemyHitboxH
 		}},
 
 		{subType::strong, enemyVariables{
@@ -69,8 +72,8 @@ private:
 			750.0f,
 			IMG_Load("Textures/programmer_art/enemy.png"),
 			50.0f,
-			128.0f,
-			128.0f
+			enemyHitboxW,
+			enemyHitboxH
 		}},
 
 	};
