@@ -119,14 +119,13 @@ void Level_test::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect sp
 	}
 
 	 //first play it will be 10
-	if (enemiesOnTheLevel > 10 && enemiesOnTheLevel <= 20) {
-		std::cout << enemiesOnTheLevel << endl;
-		Enemy* ghost = new Enemy(this, spawnPosition, subType_);
-		levelBodies.push_back(ghost);
-		ghost = nullptr;
-		//cc.log(not_error, "Did I come here?");
+	std::cout << enemiesOnTheLevel << endl;
+	Enemy* ghost = new Enemy(this, spawnPosition, subType_);
+	levelBodies.push_back(ghost);
+	ghost = nullptr;
+	//cc.log(not_error, "Did I come here?");
 		
-	}
+	
 	//else if (enemiesOnTheLevel >= 20) {
 		//waveCleared = true;
 	//}
@@ -153,13 +152,15 @@ void Level_test::OnDestroy(){
 }
 
 void Level_test::waveSpawner(int maxWaves_) {
-	std::cout << waveCleared << endl;
-
 	//Spawn mobs in a new wave
-	if (waveCleared && currentWave <= maxWaves_) {
+	if ((waveCompleted || !waveStarted) && currentWave < maxWaves_) {
+		cout << "NEW WAVE BABY!!!\n";
 		currentWave++;
-		mobSpawner(10, Enemy::flash, spawnBounds);
-		waveCleared = false;
+		for (int i = 0; i < mobsPerWave; i++) {
+			mobSpawner(mobsPerWave, Enemy::flash, spawnBounds);
+		}
+		waveStarted = true;
+		waveCompleted = false;
 	}
 
 
@@ -173,7 +174,7 @@ void Level_test::waveSpawner(int maxWaves_) {
 		}
 	}
 
-	if (enemycounter <= 0) { waveCleared = true;}
+	if (enemycounter <= 0) { waveCompleted = true;}
 }
 
 

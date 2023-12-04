@@ -77,6 +77,7 @@ void PlayScene::Update(const float time) {
 		currentLevel->Update(time);
 	}
 
+	
 	if(isDead == true && hasGameoverHappened == false) {
 		sfxSound.playSound("gameover");
 		hasGameoverHappened = true;
@@ -133,7 +134,7 @@ void PlayScene::Update(const float time) {
 
 
 	if(player->getCurrentHealth() == 0.0f) {
-		isDead = true;
+		//isDead = true;
 	}
 
 

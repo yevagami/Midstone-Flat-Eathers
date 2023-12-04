@@ -393,7 +393,7 @@ void PlayerBody::state_attack(float deltaTime_) {
 			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //if the melee hitbox hits the otherBody hitbox
 				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//on hit solid,pretty much useless -Adriel
 				if (other->type == ENEMY) {		//on hit enemy
-					std::cout << "You hit an enemy\n";
+					//std::cout << "You hit an enemy\n";
 					other->takeDamage(meleePower);
 				}
 			}

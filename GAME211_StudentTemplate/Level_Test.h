@@ -11,11 +11,10 @@ private:
 	Body* floor = nullptr;
 
 	//Wave related variables
-	int maxEnemies = 10;
-	int mobsKilled = 0;
 	int mobsPerWave = 10;
-	bool waveCleared = false;
+	bool waveCompleted = false;
 	int currentWave = 0;
+	bool waveStarted = false;
 
 public:
 
