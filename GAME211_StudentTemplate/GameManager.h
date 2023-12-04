@@ -138,7 +138,7 @@ public:
 		sfxSound.loadSound("gameover", "sound/gameover.ogg");
 		sfxSound.loadSound("gunshot", "sound/gun-shot.ogg");
 		sfxSound.loadSound("slash", "sound/slash.ogg");
-
+		sfxSound.loadSound("item equip", "sound/518850__mrickey13__item-equip.mp3");
 
 
 		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
@@ -156,7 +156,7 @@ public:
 		musicSound.loadSound("chiptune-y music", "sound/game-soundtrack-4.ogg");
 		musicSound.loadSound("retro epic music", "sound/game-soundtrack-5.ogg");
 		musicSound.loadSound("chill background music", "sound/lofi-fusion-background-music.ogg");
-
+		musicSound.loadSound("battle music", "sound/Shin Megami Tensei Battle Theme PS1.mp3");
 
 		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
 	}
