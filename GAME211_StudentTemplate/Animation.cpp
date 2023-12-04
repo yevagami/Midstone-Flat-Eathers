@@ -4,7 +4,6 @@ AnimationController::AnimationController() {
 	update_timer = new Clock(0.1f, true, [this](){
 		currentFrameIndex = (currentFrameIndex + 1 >= currentAnimation.frameDuration) ? 0 : currentFrameIndex + 1;
 		currentFrame = &currentAnimation.Frames[currentFrameIndex];
-		cout << "Next frame\n";
 	});
 }
 
@@ -15,12 +14,12 @@ AnimationController::~AnimationController() {
 void AnimationController::UpdateAnimationController(float deltaTime) {
 	if (!isPaused) {
 		update_timer->Update(deltaTime);
-		cout << update_timer->timer << endl;
 	}
 }
 
 
 void AnimationController::PlayAnimation(Animation newAnimation) {
+	cout << "Playing: " << newAnimation.name << endl;
 	if (currentAnimation == newAnimation) {
 		return;
 	}

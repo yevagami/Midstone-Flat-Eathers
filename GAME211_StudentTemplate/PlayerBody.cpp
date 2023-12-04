@@ -188,31 +188,7 @@ void PlayerBody::Update(float deltaTime) {
 	// Note that would update velocity too, and rotation motion
 	Body::Update(deltaTime);
 
-
-	#pragma region Animation stuff
-	//Switching the sprites
-	//Up
-	if (playerDirection.x == 0 && playerDirection.y == 1) {
-		animController->PlayAnimation(anim_walk_up);
-	}
-	//Down
-	if (playerDirection.x == 0 && playerDirection.y == -1) {
-	}
-
-	//Left
-	if (playerDirection.x == -1 && playerDirection.y == 0) {
-	}
-
-	//Right
-	if (playerDirection.x == 1 && playerDirection.y == 0) {
-	}
-
-	//Default Idle (for testing)
-	if (playerDirection.x == 0 && playerDirection.y == 0) {
-		//animController->PlayAnimation(anim_idle);
-	}
-	#pragma endregion
-
+	//Update the animation controller
 	animController->UpdateAnimationController(deltaTime);
 }
 
@@ -228,6 +204,51 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,64, 64 };
 		SDL_RenderCopy(parentScene->getRenderer(), playerSpriteSheet.texture, &playerSpriteSheet.spriteStorage[melee_strike], &Rect);
 	}
+
+#pragma region Animation stuff
+	//Switching the sprites
+	//Default Idle (for testing)
+	if (VMath::mag(vel) > 0.001) {
+		//Up
+		if (playerDirection.x == 0 && playerDirection.y == 1) {
+			animController->PlayAnimation(anim_walk_up);
+		}
+		//Down
+		if (playerDirection.x == 0 && playerDirection.y == -1) {
+			animController->PlayAnimation(anim_walk_down);
+		}
+
+		//Left
+		if (playerDirection.x == -1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_walk_left);
+		}
+
+		//Right
+		if (playerDirection.x == 1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_walk_right);
+		}
+	}
+	else {
+		//Up
+		if (playerDirection.x == 0 && playerDirection.y == 1) {
+			animController->PlayAnimation(anim_up);
+		}
+		//Down
+		if (playerDirection.x == 0 && playerDirection.y == -1) {
+			animController->PlayAnimation(anim_down);
+		}
+
+		//Left
+		if (playerDirection.x == -1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_left);
+		}
+
+		//Right
+		if (playerDirection.x == 1 && playerDirection.y == 0) {
+			animController->PlayAnimation(anim_right);
+		}
+	}
+#pragma endregion
 
 	cutout = animController->GetCurrentFrame();
 	Body::Render(renderer_, projectionMatrix_);
@@ -256,7 +277,6 @@ void PlayerBody::OnDestroy() {
 
 	//Cleanup for the sprites and animations
 	playerSpriteSheet.onDestroy();
-	idleSpriteSheet.onDestroy();
 	delete animController;
 
 	Body::OnDestroy();
@@ -436,20 +456,39 @@ void PlayerBody::state_attack(float deltaTime_) {
 #pragma endregion
 
 void PlayerBody::LoadAnimations() {
+	//Create an animation controller
 	animController = new AnimationController();
+
+	//Load the animations
+
+	//Left
 	Sprite temp = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
-	if (!temp.loadSpriteFromRectInARow(0, 0, 128, 128, 6)) {
-		cout << "Idle sprite did not render properly" << endl;
-		return;
-	};
-	anim_idle = Animation("idle", temp.spriteStorage, 0.5f, 6, true);
-
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Left, 128, 128, 6)) { cout << "Left sprite did not load properly" << endl; return;};
+	anim_walk_left = Animation("player_walk_left", temp.spriteStorage, 0.2f, 6, true);
+	anim_left = Animation("player_left", temp.spriteStorage[0], 0.0f, 0, false);
 	temp.deleteSprites();
-	if (!temp.loadSpriteFromRectInARow(0, 128 * 3, 128, 128, 6)) {
-		cout << "Idle sprite did not render properly" << endl;
-		return;
-	};
-	anim_walk_up = Animation("walk_up", temp.spriteStorage, 0.5f, 6, true);
 
-	animController->PlayAnimation(anim_idle);
+	//Right
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Right, 128, 128, 6)) { cout << "Right sprite did not load properly" << endl; return; };
+	anim_walk_right = Animation("player_walk_right", temp.spriteStorage, 0.2f, 6, true);
+	anim_right = Animation("player_right", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//Up
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Up, 128, 128, 6)) { cout << "Up sprite did not load properly" << endl; return; };
+	anim_walk_up = Animation("player_walk_up", temp.spriteStorage, 0.2f, 6, true);
+	anim_up = Animation("player_up", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//Down
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Down, 128, 128, 6)) { cout << "Down sprite did not load properly" << endl; return; };
+	anim_walk_down = Animation("player_walk_down", temp.spriteStorage, 0.2f, 6, true);
+	anim_down = Animation("player_down", temp.spriteStorage[0], 0.0f, 0, false);
+	temp.deleteSprites();
+
+	//This is called to cleanup the SDL_Surface and SDL_Texture
+	temp.onDestroy();
+
+	//By default the player looks up
+	animController->PlayAnimation(anim_up);
 }

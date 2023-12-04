@@ -15,10 +15,18 @@ public:
 
 	void SetFrames(vector<SDL_Rect> Frames_) { Frames = Frames_; } //Set the frames in the animation
 	vector<SDL_Rect> GetFrames() { return Frames; }
+	Animation() {};
 
-	Animation(){}
 	Animation(const char* name_, vector<SDL_Rect> Frames_, float interval_, int frameDuration_, bool isLooping_ = true) {
 		Frames = Frames_;
+		interval = interval_;
+		frameDuration = frameDuration_;
+		isLooping = isLooping_;
+		name = name_;
+	}
+
+	Animation(const char* name_, SDL_Rect Frame_, float interval_, int frameDuration_, bool isLooping_ = true) {
+		Frames.push_back(Frame_);
 		interval = interval_;
 		frameDuration = frameDuration_;
 		isLooping = isLooping_;

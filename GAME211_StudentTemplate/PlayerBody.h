@@ -110,7 +110,6 @@ private:
 
     //Sprite stuff
     Sprite playerSpriteSheet;
-    Sprite idleSpriteSheet;
     SDL_Rect currentSprite;
     int currentSpriteIndex = 0;
     float frameInterval = 0.5f;
@@ -118,7 +117,14 @@ private:
 
     //animations
     AnimationController* animController;
-    Animation anim_idle;
+
+    //Standing animations
+    Animation anim_up;
+    Animation anim_down;
+    Animation anim_left;
+    Animation anim_right;
+
+    //Walking animations
     Animation anim_walk_up;
     Animation anim_walk_down;
     Animation anim_walk_left;
