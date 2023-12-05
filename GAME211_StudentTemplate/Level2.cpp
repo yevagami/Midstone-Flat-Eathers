@@ -109,8 +109,9 @@ void Level2::OnDestroy() {
 
 	if (background) {
 		SDL_DestroyTexture(background);
-		delete background;
+		background = nullptr;
 	}
+	delete background;
 
 	floor->OnDestroy();
 	delete floor;
