@@ -118,8 +118,12 @@ void Level_test::OnDestroy(){
 
 
 void Level_test::Update(const float time){
-	//waveSpawner(10);
-	newMobSpawner->waveSpawner(10);
+	
+	newMobSpawner->waveSpawner(1);
+	if (newMobSpawner->levelWon) {
+		canSwitchTheScene = true;
+		std::cout << canSwitchTheScene;
+	}
 
 	//Updates the level bodies
 	for(Body* body : levelBodies) {

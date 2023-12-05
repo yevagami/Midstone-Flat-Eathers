@@ -8,6 +8,8 @@ class Mob_Spawner {
 	//	a reference to the level this spawner exists in
 	Level* parentLevel;
 
+	//win condition
+	
 	//	number of mobs spawned per wave
 	int mobsPerWave = 10;
 	//	is the wave completed?
@@ -18,6 +20,7 @@ class Mob_Spawner {
 	bool waveStarted = false;
 public:
 	SDL_Rect spawnBounds;
+	bool levelWon = false;
 	int enemiesOnTheLevel = 0;
 	int enemiesKilled = 0;
 	Mob_Spawner(Level* parentLevel_);

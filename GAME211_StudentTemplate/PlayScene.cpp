@@ -36,7 +36,10 @@ bool PlayScene::OnCreate() {
 
 
 	//Creating the level
-	currentLevel = new Level2(this);
+	currentLevel = new Level_test(this);
+	
+
+
 	if (!currentLevel->OnCreate()) {
 		std::cout << "Something went wrong with the Level\n";
 	}
@@ -73,6 +76,12 @@ void PlayScene::OnDestroy() {
 }
 
 void PlayScene::Update(const float time) {
+
+	if (currentLevel->canSwitchTheScene) {
+		//switch scenes here
+		std::cout << "Scene switched\n";
+	}
+
 	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
 	}
