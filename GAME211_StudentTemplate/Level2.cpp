@@ -1,17 +1,17 @@
-#include "Level_Test.h"
+#include "Level2.h"
 
 //I might have to reorder the methods for organizing purposes
 
-bool Level_test::OnCreate(){
-	
-	//Creating the background
+bool Level2::OnCreate() {
+
+	///Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
-	
+
 	//Note:
 	//I made the screen size and the physics size the same because it's much easier to use when constructing levels
 #pragma region Creating Level geometry
 	//Creating the floor
-	floor = new Body(this, Vec3((1366.0f / 2.0f), 768.0f / 2.0f, 0.0f), Vec3(10.0f, 10.0f, 10.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/tile_floor_red.png"));
+	floor = new Body(this, Vec3((1366.0f / 2.0f), 768.0f / 2.0f, 0.0f), Vec3(2.0f, 2.0f, 2.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/bottom_level_2.png"));
 
 
 	//creating the walls
@@ -22,29 +22,29 @@ bool Level_test::OnCreate(){
 		Vec3(12.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_2.png")
 	);
 	levelBodies.push_back(wall);
 	//Accent to make the wall look nicer, also by default bodies don't have collision
-	Body* tiles= new Body(
+	Body* tiles = new Body(
 		this,
 		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 4.5, 0.0f),
 		Vec3(11.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+		IMG_Load("Textures/programmer_art/tile_bottom_level_2.png")
 	);
 	levelBodies.push_back(tiles);
 
 
 	//Right wall
-	 wall = new Solid(
+	wall = new Solid(
 		this,
 		Vec3(1366.0f / 2.0f + 128 * 5.5, 768.0f / 2.0f + 128 * 0.5, 0.0f),
 		Vec3(1.0f, 9.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_2.png")
 	);
 	levelBodies.push_back(wall);
 	//Accent
@@ -54,7 +54,7 @@ bool Level_test::OnCreate(){
 		Vec3(1.0f, 6.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+		IMG_Load("Textures/programmer_art/tile_bottom_level_2.png")
 	);
 	levelBodies.push_back(tiles);
 
@@ -65,7 +65,7 @@ bool Level_test::OnCreate(){
 		Vec3(1.0f, 9.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_2.png")
 	);
 	levelBodies.push_back(wall);
 	//Accent
@@ -75,7 +75,7 @@ bool Level_test::OnCreate(){
 		Vec3(1.0f, 6.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+		IMG_Load("Textures/programmer_art/tile_bottom_level_2.png")
 	);
 	levelBodies.push_back(tiles);
 
@@ -86,7 +86,7 @@ bool Level_test::OnCreate(){
 		Vec3(10.0f, 5.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+		IMG_Load("Textures/programmer_art/tile_bottom_level_2.png")
 	);
 	levelBodies.push_back(wall);
 
@@ -97,7 +97,7 @@ bool Level_test::OnCreate(){
 }
 
 
-void Level_test::OnDestroy(){
+void Level2::OnDestroy() {
 	//Destroys everything except the player
 	for (Body* body : levelBodies) {
 		if (body->type == body->PLAYER) {
@@ -117,16 +117,12 @@ void Level_test::OnDestroy(){
 }
 
 
-void Level_test::Update(const float time){
-	
-	newMobSpawner->waveSpawner(1);
-	if (newMobSpawner->levelWon) {
-		canSwitchTheScene = true;
-		std::cout << canSwitchTheScene;
-	}
+void Level2::Update(const float time) {
+	//waveSpawner(10);
+	newMobSpawner->waveSpawner(10);
 
 	//Updates the level bodies
-	for(Body* body : levelBodies) {
+	for (Body* body : levelBodies) {
 		//std::cout << body->type << "\n";
 		body->Update(time);
 		//Collision checks
@@ -137,7 +133,7 @@ void Level_test::Update(const float time){
 			}
 		}
 	}
-	
+
 	//c++ doesn't like it when you are pushing something to a vector
 	//while you are iterating over it
 	if (!spawningBodies.empty()) {
@@ -169,7 +165,7 @@ void Level_test::Update(const float time){
 	trashBodies.clear();
 }
 
-void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
+void Level2::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	SDL_RenderCopy(parentScene->getRenderer(), background, nullptr, nullptr); //render the background
 	floor->Render(renderer_, projectionMatrix_); //render the floor
 
@@ -179,7 +175,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 	}
 }
 
-void Level_test::HandleEvents(const SDL_Event& event){
+void Level2::HandleEvents(const SDL_Event& event) {
 	for (Body* body : levelBodies) {
 		body->HandleEvents(event);
 	}

@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include "Mob_Spawner.h" 
 
-class Level_test : public Level{
+class Level2 : public Level {
 private:
 	//Background
 	SDL_Texture* background = nullptr;
@@ -14,11 +14,11 @@ private:
 
 public:
 	Mob_Spawner* newMobSpawner = new Mob_Spawner(this);
-	Level_test(Scene* parentScene_) : Level(parentScene_) {}
+	Level2(Scene* parentScene_) : Level(parentScene_) {}
 
 	//Method that spawns the enemies
-	
-	
+
+
 	bool OnCreate() override;
 	void OnDestroy() override;
 	void Update(const float time) override;

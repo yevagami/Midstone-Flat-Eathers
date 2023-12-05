@@ -168,6 +168,9 @@
     <ClCompile Include="Mob_Spawner.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="Level2.cpp">
+      <Filter>Source Files\Scene\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h">
@@ -285,6 +288,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Mob_Spawner.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2.h">
       <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
   </ItemGroup>

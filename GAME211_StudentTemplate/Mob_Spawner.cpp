@@ -74,5 +74,10 @@ void Mob_Spawner::waveSpawner(int maxWaves_) {
 		}
 	}
 
-	if (enemycounter <= 0) { waveCompleted = true; }
+	if (enemycounter <= 0) { 
+		waveCompleted = true;
+	}
+	if (currentWave == maxWaves_ && waveCompleted == true) {
+		levelWon = true;
+	}
 }
