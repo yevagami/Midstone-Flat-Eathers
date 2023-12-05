@@ -117,6 +117,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 
 			if (selectedAbilities == shield) {
 				cout << isShielding << endl;
+				sfxSound.playSound("shield");
 				isShielding = !isShielding;
 				currentState = (isShielding) ? attack : idle;
 				drawShield = isShielding;
@@ -128,17 +129,17 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 	if (event.type == SDL_KEYDOWN) { //	KEY DOWN ONLY
 		switch (event.key.keysym.scancode) {
 		case SDL_SCANCODE_J:
-			sfxSound.playSound("my bike"); //	debug sound effect
+			sfxSound.playSound("equip"); //	debug sound effect
 			selectedAbilities = melee;
 			break;
 
 		case SDL_SCANCODE_K:
-			sfxSound.playSound("my bike"); //	debug sound effect
+			sfxSound.playSound("equip"); //	debug sound effect
 			selectedAbilities = shoot;
 			break;
 
 		case SDL_SCANCODE_L:
-			sfxSound.playSound("my bike"); //	debug sound effect
+			sfxSound.playSound("equip"); //	debug sound effect
 			selectedAbilities = shield;
 			break;
 

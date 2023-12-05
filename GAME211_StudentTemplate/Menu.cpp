@@ -117,7 +117,6 @@ namespace ui {
 				return true;
 			}
 
-
 			if (backgroundType == BackgroundType::Image) {
 				SDL_Surface* backgroundImageSurface = IMG_Load(backgroundImageDirectory);
 
@@ -126,10 +125,8 @@ namespace ui {
 
 					if (renderedTexture != nullptr) {
 						SDL_Point center = { 0, 0 };
-						SDL_RendererFlip flip = SDL_FLIP_NONE;
+						SDL_RenderCopyEx(renderer_, renderedTexture, nullptr, &rect, backgroundImageRotationAngle, &center, SDL_FLIP_NONE);
 
-						SDL_RenderCopyEx(renderer_, renderedTexture, nullptr, &rect, backgroundImageRotationAngle, &center, flip);
-					
 						SDL_DestroyTexture(renderedTexture);
 					}
 					SDL_FreeSurface(backgroundImageSurface);

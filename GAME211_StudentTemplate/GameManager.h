@@ -135,10 +135,11 @@ public:
 		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.ogg");
 
 		//sound effects here
-		sfxSound.loadSound("gameover", "sound/gameover.ogg");
-		sfxSound.loadSound("gunshot", "sound/gun-shot.ogg");
-		sfxSound.loadSound("slash", "sound/slash.ogg");
-		sfxSound.loadSound("item equip", "sound/518850__mrickey13__item-equip.mp3");
+		sfxSound.loadSound("gameover", "sound/unnormalized/gameover.ogg");
+		sfxSound.loadSound("gunshot", "sound/unnormalized/gun-shot.ogg");
+		sfxSound.loadSound("slash", "sound/unnormalized/slash.ogg");
+		sfxSound.loadSound("equip", "sound/unnormalized/item-equip.ogg");
+		sfxSound.loadSound("shield", "sound/unnormalized/shieldmaiden.ogg");
 
 
 		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
@@ -151,12 +152,12 @@ public:
 		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
 		//sound effects here
 
-		musicSound.loadSound("ominous music", "sound/drone-background-music.ogg");
-		musicSound.loadSound("overworld music", "sound/exploration-music-loop.ogg");
-		musicSound.loadSound("chiptune-y music", "sound/game-soundtrack-4.ogg");
-		musicSound.loadSound("retro epic music", "sound/game-soundtrack-5.ogg");
-		musicSound.loadSound("chill background music", "sound/lofi-fusion-background-music.ogg");
-		musicSound.loadSound("battle music", "sound/Shin Megami Tensei Battle Theme PS1.mp3");
+		musicSound.loadSound("ominous music", "sound/unnormalized/drone-background-music.ogg");
+		musicSound.loadSound("overworld music", "sound/unnormalized/exploration-music-loop.ogg");
+		musicSound.loadSound("chiptune-y music", "sound/unnormalized/game-soundtrack-4.ogg");
+		musicSound.loadSound("retro epic music", "sound/unnormalized/game-soundtrack-5.ogg");
+		musicSound.loadSound("chill background music", "sound/unnormalized/lofi-fusion-background-music.ogg");
+		musicSound.loadSound("battle music", "sound/unnormalized/battle-theme.ogg");
 
 		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
 	}
