@@ -18,7 +18,8 @@ public:
 	enum subType {
 		flash = 0, 
 		miracle = 1, 
-		strong = 2
+		strong = 2,
+		mybike = 3
 	};
 	
 	//constructors
@@ -51,7 +52,7 @@ private:
 	std::unordered_map<subType, enemyVariables> enemyDefintions{
 		{subType::flash, enemyVariables{
 			225.0f,
-			200.0f,
+			150.0f,
 			"Textures/programmer_art/enemyangy.png",
 			35.0f,
 			enemyHitboxW,
@@ -72,6 +73,15 @@ private:
 			50.0f,
 			"Textures/programmer_art/enemyadriel.png",
 			86.25f,
+			enemyHitboxW,
+			enemyHitboxH
+		}},
+
+		{subType::mybike, enemyVariables{
+			350.0f,
+			250.0f,
+			"Textures/programmer_art/enemymybike.png",
+			25.0f,
 			enemyHitboxW,
 			enemyHitboxH
 		}},

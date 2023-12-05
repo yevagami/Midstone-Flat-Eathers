@@ -17,8 +17,6 @@ public:
 	Level_test(Scene* parentScene_) : Level(parentScene_) {}
 
 	//Method that spawns the enemies
-	
-	
 	bool OnCreate() override;
 	void OnDestroy() override;
 	void Update(const float time) override;

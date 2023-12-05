@@ -18,7 +18,7 @@ Enemy::subType Mob_Spawner::randomEnemy() {
 	const int numSubtypes = 3;
 
 	// apply a uniform distribution to generate a random value within the subtype range
-	std::uniform_int_distribution<> distrib(0, numSubtypes - 1);
+	std::uniform_int_distribution<> distrib(0, numSubtypes);
 
 	// generate a random subtype value
 	int randomValue = distrib(gen);
