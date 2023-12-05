@@ -15,12 +15,10 @@ Enemy::subType Mob_Spawner::randomEnemy() {
 	// use the Mersenne Twister engine with the random device as a seed
 	std::mt19937 gen(rd());
 
-	//	define the range of subtypes using the first and last subtype values
-	int min_ = static_cast<int>(Enemy::subType::FIRST_SUBTYPE);
-	int max_ = static_cast<int>(Enemy::subType::LAST_SUBTYPE);
+	const int numSubtypes = 3;
 
 	// apply a uniform distribution to generate a random value within the subtype range
-	std::uniform_int_distribution<> distrib(min_, max_);
+	std::uniform_int_distribution<> distrib(0, numSubtypes - 1);
 
 	// generate a random subtype value
 	int randomValue = distrib(gen);
@@ -60,7 +58,7 @@ void Mob_Spawner::waveSpawner(int maxWaves_) {
 		cout << "NEW WAVE BABY!!!\n";
 		currentWave++;
 		for (int i = 0; i < mobsPerWave; i++) {
-			mobSpawner(mobsPerWave, Enemy::flash, spawnBounds);
+			mobSpawner(mobsPerWave, Enemy::subType::flash, spawnBounds);
 		}
 		waveStarted = true;
 		waveCompleted = false;
