@@ -58,7 +58,8 @@ void Mob_Spawner::waveSpawner(int maxWaves_) {
 		cout << "NEW WAVE BABY!!!\n";
 		currentWave++;
 		for (int i = 0; i < mobsPerWave; i++) {
-			mobSpawner(mobsPerWave, Enemy::subType::flash, spawnBounds);
+			//mobSpawner(mobsPerWave, Enemy::subType::flash, spawnBounds);
+			mobSpawner(mobsPerWave, randomEnemy(), spawnBounds);
 		}
 		waveStarted = true;
 		waveCompleted = false;

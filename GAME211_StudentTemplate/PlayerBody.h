@@ -90,8 +90,6 @@ public:
     void setCurrentProjectileDamageToDefault() {  projectilePowerCurrent = projectilePowerDefault; }
 
 
-
-
     //state methods
     void state_idle();
     void state_dash(float deltaTime_);

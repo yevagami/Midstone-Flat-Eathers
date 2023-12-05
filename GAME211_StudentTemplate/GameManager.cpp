@@ -119,9 +119,11 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(1000, [this]() { quitPls(); });
 				break;
 			case SDL_SCANCODE_Q:
+				//	testing
 				StartFadeInTransition(1000, [this]() { quitPls(); });
 				break;
 			case SDL_SCANCODE_END:
+				//	testing
 				cc.log(update, "SILENCE!!!");
 				musicSound.stopAllSounds();
 				sfxSound.stopAllSounds();
@@ -131,25 +133,14 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_O:
+				//	testing
 				musicSound.playSound("ominous music");
 				//sfxSound.playSound("slash");
 				break;
-			case SDL_SCANCODE_0:
+			case SDL_SCANCODE_C:
+				//	testing
 				system("cls");  // NOLINT(concurrency-mt-unsafe)
 				break;
-			case SDL_SCANCODE_1:
-				//LoadScene(1);
-				break;
-			case SDL_SCANCODE_2:
-				//LoadScene(2);
-				break;
-			case SDL_SCANCODE_3:
-				//LoadScene(3);
-				break;
-			case SDL_SCANCODE_4:
-				//LoadScene(4);
-				break;
-
 			default:
 				break;
 			}

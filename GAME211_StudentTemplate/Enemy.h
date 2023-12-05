@@ -50,28 +50,28 @@ private:
 	//Map contain multiple enemy definitions
 	std::unordered_map<subType, enemyVariables> enemyDefintions{
 		{subType::flash, enemyVariables{
-			250.0f,
-			100.0f,
-			IMG_Load("Textures/programmer_art/enemy.png"),
+			225.0f,
+			200.0f,
+			IMG_Load("Textures/programmer_art/enemyangy.png"),
 			35.0f,
 			enemyHitboxW,
 			enemyHitboxH
 		}},
 
 		{subType::miracle, enemyVariables{
-			175.0f,
-			1500.0f,
-			IMG_Load("Textures/programmer_art/enemy.png"),
-			20.0f,
+			75.0f,
+			300.0f,
+			IMG_Load("Textures/programmer_art/enemyuwu.png"),
+			10.0f,
 			enemyHitboxW,
 			enemyHitboxH
 		}},
 
 		{subType::strong, enemyVariables{
-			500.0f,
-			750.0f,
-			IMG_Load("Textures/programmer_art/enemy.png"),
+			350.0f,
 			50.0f,
+			IMG_Load("Textures/programmer_art/enemyadriel.png"),
+			86.25f,
 			enemyHitboxW,
 			enemyHitboxH
 		}},
