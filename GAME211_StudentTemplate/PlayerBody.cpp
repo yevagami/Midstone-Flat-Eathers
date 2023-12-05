@@ -340,7 +340,7 @@ void PlayerBody::takeDamage(float amount) {
 		currentHealth = 0; // ensure currentHealth doesn't go below 0
 	}
 
-	std::cout << "Player took " << damageTaken << " damage\n";
+	cc.log(not_error, "player took damage", std::to_string(damageTaken));
 	invincible_timer->Start();
 	invincible = true;
 }
@@ -399,9 +399,9 @@ void PlayerBody::state_attack(float deltaTime_) {
 		for (Body* other : parentLevel->levelBodies) {
 			if (other->type == PLAYER) { continue; } // skip the player
 			if (other->getHitbox()->collisionCheck(meleeHitbox)) {  //if the melee hitbox hits the otherBody hitbox
-				if (other->type == SOLID) { std::cout << "You hit a solid\n"; }	//on hit solid,pretty much useless -Adriel
+				if (other->type == SOLID) { cc.log(not_error, "you hit a solid"); }	//on hit solid,pretty much useless -Adriel
 				if (other->type == ENEMY) {		//on hit enemy
-					//std::cout << "You hit an enemy\n";
+					//cc.log(not_error, "you hit an enemy!");
 					other->takeDamage(getCurrentMeleeDamage());
 				}
 			}

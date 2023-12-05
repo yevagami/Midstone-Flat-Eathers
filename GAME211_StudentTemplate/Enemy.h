@@ -52,7 +52,7 @@ private:
 		{subType::flash, enemyVariables{
 			225.0f,
 			200.0f,
-			IMG_Load("Textures/programmer_art/enemyangy.png"),
+			"Textures/programmer_art/enemyangy.png",
 			35.0f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -61,7 +61,7 @@ private:
 		{subType::miracle, enemyVariables{
 			75.0f,
 			300.0f,
-			IMG_Load("Textures/programmer_art/enemyuwu.png"),
+			"Textures/programmer_art/enemyuwu.png",
 			10.0f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -70,7 +70,7 @@ private:
 		{subType::strong, enemyVariables{
 			350.0f,
 			50.0f,
-			IMG_Load("Textures/programmer_art/enemyadriel.png"),
+			"Textures/programmer_art/enemyadriel.png",
 			86.25f,
 			enemyHitboxW,
 			enemyHitboxH

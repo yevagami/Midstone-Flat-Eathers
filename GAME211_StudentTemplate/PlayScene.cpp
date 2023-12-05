@@ -41,7 +41,7 @@ bool PlayScene::OnCreate() {
 
 
 	if (!currentLevel->OnCreate()) {
-		std::cout << "Something went wrong with the Level\n";
+		cc.log(error, "something went wrong with the Level OnCreate");
 	}
 
 	//Creating the player body
@@ -54,7 +54,7 @@ bool PlayScene::OnCreate() {
 	);
 
 	if (!player->OnCreate()) {
-		std::cout << "Something went wrong with the Player object\n";
+		cc.log(error, "something went wrong in the Player Object");
 		return false;
 	};
 
@@ -76,14 +76,13 @@ void PlayScene::OnDestroy() {
 }
 
 void PlayScene::Update(const float time) {
-
-	if (currentLevel->canSwitchTheScene) {
-		//switch scenes here
-		std::cout << "Scene switched\n";
-	}
-
 	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
+
+		if (currentLevel->canSwitchTheScene) {
+			//switch scenes here
+			cc.log(update, "scenes switched");
+		}
 	}
 
 	

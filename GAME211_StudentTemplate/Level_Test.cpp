@@ -113,7 +113,7 @@ void Level_test::OnDestroy(){
 		SDL_DestroyTexture(background);
 		background = nullptr;
 	}
-	delete background;
+	delete &background;
 
 	floor->OnDestroy();
 	delete floor;
@@ -125,7 +125,7 @@ void Level_test::Update(const float time){
 	newMobSpawner->waveSpawner(1);
 	if (newMobSpawner->levelWon) {
 		canSwitchTheScene = true;
-		std::cout << canSwitchTheScene;
+		cc.log(update, "level is finished");
 	}
 
 	//Updates the level bodies
