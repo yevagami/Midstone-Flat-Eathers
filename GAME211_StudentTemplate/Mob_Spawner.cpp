@@ -1,10 +1,30 @@
 #include "Mob_Spawner.h"
+#include <random>
+
 Mob_Spawner::Mob_Spawner(Level* parentLevel_) {
 	parentLevel = parentLevel_;
-	 spawnBounds = { static_cast<int>((1366.0f / 2.0f) - 128.0f * 4.5f),
-							 static_cast<int>((768.0f / 2.0f) - 128.0f * 4.5f),
-							 static_cast<int>(128.0f * 9.0f),
-							 static_cast<int>(128.0f * 9.0f) };
+	spawnBounds = { static_cast<int>((1366.0f / 2.0f) - 128.0f * 4.5f),
+							static_cast<int>((768.0f / 2.0f) - 128.0f * 4.5f),
+							static_cast<int>(128.0f * 9.0f),
+							static_cast<int>(128.0f * 9.0f) };
+}
+
+Enemy::subType Mob_Spawner::randomEnemy() {
+	//	create a random device for generating numbers
+	std::random_device rd;
+	// use the Mersenne Twister engine with the random device as a seed
+	std::mt19937 gen(rd());
+
+	const int numSubtypes = 3;
+
+	// apply a uniform distribution to generate a random value within the subtype range
+	std::uniform_int_distribution<> distrib(0, numSubtypes - 1);
+
+	// generate a random subtype value
+	int randomValue = distrib(gen);
+
+	// convert the random value back to the subType enum
+	return static_cast<Enemy::subType>(randomValue);
 }
 
 void Mob_Spawner::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds) {
@@ -38,7 +58,7 @@ void Mob_Spawner::waveSpawner(int maxWaves_) {
 		cout << "NEW WAVE BABY!!!\n";
 		currentWave++;
 		for (int i = 0; i < mobsPerWave; i++) {
-			mobSpawner(mobsPerWave, Enemy::flash, spawnBounds);
+			mobSpawner(mobsPerWave, Enemy::subType::flash, spawnBounds);
 		}
 		waveStarted = true;
 		waveCompleted = false;

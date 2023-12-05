@@ -134,6 +134,7 @@ protected:
 
 	bool fadeIn;
 	int alpha;
+
 	static const int MaxAlpha = 255;
 	static const int MinAlpha = 0;
 
