@@ -104,13 +104,16 @@ void Level_test::OnDestroy(){
 			body = nullptr;
 			continue;
 		}
+		body->OnDestroy();
 		delete body;
-	} levelBodies.clear();
+	} 
+	levelBodies.clear();
 
 	if (background) {
 		SDL_DestroyTexture(background);
-		delete background;
+		background = nullptr;
 	}
+	delete background;
 
 	floor->OnDestroy();
 	delete floor;

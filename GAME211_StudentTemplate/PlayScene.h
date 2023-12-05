@@ -54,8 +54,10 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	SDL_Renderer* getRenderer() { return renderer; }
 
+	//Game loop stuff
 	bool isDead = false;
 	bool hasGameoverHappened = false;
+	void ChangeLevel(Level* newLevel_);
 
 	//	testing a menu [ has to be at scene level >:( ]
 	bool isPaused = false;

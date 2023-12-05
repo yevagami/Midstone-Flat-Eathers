@@ -6,7 +6,7 @@
 struct enemyVariables {
 	float health;
 	float moveSpeed;
-	SDL_Surface* image;
+	std::string imagePath;
 	float power;
 	float w;
 	float h;
@@ -52,7 +52,7 @@ private:
 		{subType::flash, enemyVariables{
 			250.0f,
 			100.0f,
-			IMG_Load("Textures/programmer_art/enemy.png"),
+			"Textures/programmer_art/enemy.png",
 			35.0f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -61,7 +61,7 @@ private:
 		{subType::miracle, enemyVariables{
 			175.0f,
 			1500.0f,
-			IMG_Load("Textures/programmer_art/enemy.png"),
+			"Textures/programmer_art/enemy.png",
 			20.0f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -70,7 +70,7 @@ private:
 		{subType::strong, enemyVariables{
 			500.0f,
 			750.0f,
-			IMG_Load("Textures/programmer_art/enemy.png"),
+			"Textures/programmer_art/enemy.png",
 			50.0f,
 			enemyHitboxW,
 			enemyHitboxH

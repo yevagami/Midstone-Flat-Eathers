@@ -36,7 +36,7 @@ bool PlayScene::OnCreate() {
 
 
 	//Creating the level
-	currentLevel = new Level2(this);
+	currentLevel = new Level_test(this);
 	if (!currentLevel->OnCreate()) {
 		std::cout << "Something went wrong with the Level\n";
 	}
@@ -220,9 +220,16 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			isPaused = !isPaused;
 			break;
 
-		}
+		case SDL_SCANCODE_0:
+			ChangeLevel(new Level2(this));
+			break;
 
+		case SDL_SCANCODE_9:
+			ChangeLevel(new Level_test(this));
+			break;
+		}
 	}
+
 
 	if (isPaused) {
 		for (const auto button : allPauseMenuButtons) {
@@ -242,6 +249,19 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 	for (auto element : allUIElements) {
 		element->HandleEvents(event);
 	}
+}
+
+void PlayScene::ChangeLevel(Level* newLevel_) {
+	//Destroys the level
+	currentLevel->OnDestroy();
+	delete currentLevel;
+
+	//Set the new level to be the current level
+	currentLevel = newLevel_;
+
+	//Throw the player into the new level
+	player->setParentLevel(newLevel_);
+	currentLevel->levelBodies.push_back(player);
 }
 
 void PlayScene::CameraFollowPlayer(PlayerBody* p) {

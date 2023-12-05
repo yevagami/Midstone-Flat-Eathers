@@ -7,7 +7,7 @@ Enemy::Enemy(Level* parentLevel_, Vec3 pos_, subType type_) {
 	currentHealth = enemyDefintions[type_].health;
 	enemyMoveSpeed = enemyDefintions[type_].moveSpeed;
 	enemyPower = enemyDefintions[type_].power;
-	image = enemyDefintions[type_].image;
+	image = IMG_Load(enemyDefintions[type_].imagePath.c_str());
 	texture = SDL_CreateTextureFromSurface(parentLevel->getParentScene()->getRenderer(), image);
 	type = ENEMY;
 	Body::LoadHitbox(enemyDefintions[type_].w, enemyDefintions[type_].h);
