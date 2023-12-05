@@ -30,6 +30,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Level1.cpp" />
+    <ClCompile Include="Level2.cpp" />
     <ClCompile Include="Level_test.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="KeybindHandler.h" />
     <ClInclude Include="Level1.h" />
+    <ClInclude Include="Level2.h" />
     <ClInclude Include="Level_test.h" />
     <ClInclude Include="LogManager.h" />
     <ClInclude Include="Menu.h" />

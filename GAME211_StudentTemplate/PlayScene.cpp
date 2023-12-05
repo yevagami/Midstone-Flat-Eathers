@@ -36,7 +36,7 @@ bool PlayScene::OnCreate() {
 
 
 	//Creating the level
-	currentLevel = new Level_test(this);
+	currentLevel = new Level2(this);
 	if (!currentLevel->OnCreate()) {
 		std::cout << "Something went wrong with the Level\n";
 	}

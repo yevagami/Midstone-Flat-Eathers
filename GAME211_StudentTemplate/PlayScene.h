@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "PlayerBody.h"
 #include "Level_test.h"
+#include "Level2.h"
 #include "Tracker.h"
 
 #include "Menu.h"
