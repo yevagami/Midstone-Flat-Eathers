@@ -131,8 +131,8 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_O:
-				//musicSound.playSound("ominous music");
-				sfxSound.playSound("slash");
+				musicSound.playSound("ominous music");
+				//sfxSound.playSound("slash");
 				break;
 			case SDL_SCANCODE_0:
 				system("cls");  // NOLINT(concurrency-mt-unsafe)

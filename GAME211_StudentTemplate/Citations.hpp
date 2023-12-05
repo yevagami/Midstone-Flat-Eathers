@@ -36,3 +36,8 @@
 //		"makes it easier for them appear and reappear"
 //		"object pools take care of the vectors, removing from vectors while looping, etc" - you arent really removing it, just changing its state to not-live"
 //	https://gameprogrammingpatterns.com/object-pool.html
+
+
+
+//https://quuxplusone.github.io/blog/2022/01/23/dont-const-all-the-things/
+//
