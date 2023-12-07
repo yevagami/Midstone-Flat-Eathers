@@ -140,7 +140,13 @@ public:
 		sfxSound.loadSound("slash", "sound/unnormalized/slash.ogg");
 		sfxSound.loadSound("equip", "sound/unnormalized/item-equip.ogg");
 		sfxSound.loadSound("shield", "sound/unnormalized/shieldmaiden.ogg");
-
+		sfxSound.loadSound("select", "sound/select-sound-121244.mp3");
+		sfxSound.loadSound("accept", "sound/interface-124464.mp3");
+		sfxSound.loadSound("error", "sound/error-when-entering-the-game-menu-132111.mp3");
+		sfxSound.loadSound("poof", "sound/poof-80161.mp3");
+		sfxSound.loadSound("enemy ded", "sound/death-103830.mp3");
+		sfxSound.loadSound("enemy hurt", "sound/hurt_c_08-102842.mp3");
+		sfxSound.loadSound("oof", "sound/oof-sound-effect-147492.mp3");
 
 		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
 	}
