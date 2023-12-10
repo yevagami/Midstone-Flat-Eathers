@@ -5,12 +5,17 @@
 GameManager::GameManager() {
 	windowPtr = nullptr;
 	timer = nullptr;
-	settings::isRunning = true;
+	options::isRunning = true;
 	isPaused = false;
 	currentScene = nullptr;
 	menuScene = nullptr;
 
-	setDefaultSettings();
+	if(!file.isEmpty(options::settingsFileDirectory)) {
+		options::LoadAllSettigns(options::settingsFileContents);
+	}
+	else {
+		options::ApplyDefaultSettings();
+	}
 }
 
 
@@ -21,9 +26,12 @@ bool GameManager::OnCreate() {
 		return false;
 	}
 
+
 	///	sound
 	LoadMusic();
 	LoadSoundEffects();
+
+	
 
 
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -65,7 +73,7 @@ void GameManager::Run() {
 	timer->Start();
 
 
-	while (settings::isRunning) {
+	while (options::isRunning) {
 		timer->UpdateFrameTicks();
 		const float deltaTime = timer->GetDeltaTime();
 
@@ -87,7 +95,7 @@ void GameManager::Run() {
 		HandleEvents();
 		
 		/// Keep the event loop running at a proper rate
-		SDL_Delay(timer->GetSleepTime(settings::FPS)); ///60 frames per sec
+		SDL_Delay(timer->GetSleepTime(options::FPS)); ///60 frames per sec
 	}
 }
 
@@ -116,11 +124,11 @@ void GameManager::HandleEvents() {
 				break;
 			case SDL_SCANCODE_ESCAPE:
 				//isPaused = !isPaused;
-				StartFadeInTransition(1000, [this]() { quitPls(); });
+				StartFadeInTransition(1000, [this]() { quitPls(); }, [this]() { savePls(); });
 				break;
 			case SDL_SCANCODE_Q:
 				//	testing
-				StartFadeInTransition(1000, [this]() { quitPls(); });
+				StartFadeInTransition(1000, [this]() { quitPls(); }, [this]() { savePls(); });
 				break;
 			case SDL_SCANCODE_END:
 				//	testing
@@ -221,7 +229,7 @@ void GameManager::LoadScene(const int i_) {
 	}
 
 	// using ValidateCurrentScene() to safely run OnCreate
-	if (!ValidateCurrentScene()) { settings::isRunning = false; }
+	if (!ValidateCurrentScene()) { options::isRunning = false; }
 	std::cout << "Now loading: " << currentScene->name << std::endl;
 }
 
@@ -232,10 +240,10 @@ bool GameManager::ValidateCurrentScene() {
 	return true;
 }
 
-void GameManager::StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_) {
+void GameManager::StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_, const std::function<void()>& callfront_) {
 	cc.log(debug, "fade in animation called");
 	//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true, callback_);
+	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), options::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, true, callback_, callfront_);
 	fadeTransition->SetStartTime();
 
 
@@ -244,6 +252,6 @@ void GameManager::StartFadeInTransition(const Uint64 fadeTime_, const std::funct
 //void GameManager::StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_) {
 //	cc.log(debug, "fade out animation called");
 //	//	create a fadeTransition using the current window's renderer, current screen height, current screen width, the fade time, and fade type
-//	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), settings::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false, callback_);
+//	fadeTransition = std::make_unique<FadeTransition>(getRenderer(), options::FPS, getSceneHeight(), getSceneWidth(), fadeTime_, false, callback_);
 //	fadeTransition->SetStartTime();
 //}

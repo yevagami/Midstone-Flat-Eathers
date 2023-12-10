@@ -10,7 +10,7 @@ protected:
 	Scene* parentScene = nullptr;
 
 public:
-	bool canSwitchTheScene = false;
+	bool canSwitchTheScene = false; //flag to tell the Scene to change the level
 	Level(Scene* parentScene_) { parentScene = parentScene_; }
 	//The vectors where all the bodies will be stored and updated and destroyed 
 	//"Aka the mortuary" -Diana Astafyeva

@@ -76,7 +76,6 @@ void PlayScene::Update(const float time) {
 	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
 	}
-
 	
 	if(isDead == true && hasGameoverHappened == false) {
 		sfxSound.playSound("gameover");
@@ -98,7 +97,7 @@ void PlayScene::Update(const float time) {
 	tracker.trackThis("P to Pause", tracker.tracker1);
 
 	//max fps showing
-	const string fpsString = std::to_string(settings::FPS) + " fps";
+	const string fpsString = std::to_string(options::FPS) + " fps";
 	tracker.trackThis(fpsString, tracker.tracker2);
 
 
@@ -146,9 +145,9 @@ void PlayScene::Update(const float time) {
 
 	//	pause menu things
 	if(isPaused) {
-		soundButtonText1->text = std::to_string(settings::MasterVolume);
-		soundButtonText2->text = std::to_string(settings::MusicVolume);
-		soundButtonText3->text = std::to_string(settings::SoundEffectVolume);
+		soundButtonText1->text = std::to_string(options::MasterVolume);
+		soundButtonText2->text = std::to_string(options::MusicVolume);
+		soundButtonText3->text = std::to_string(options::SoundEffectVolume);
 	}
 
 }

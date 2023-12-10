@@ -5,7 +5,7 @@
 //#include <unordered_map>
 
 
-ConsistentConsole ccFile(false, "FileManager.cpp");
+ConsistentConsole ccFile(true, "FileManager.cpp");
 
 
 
@@ -236,8 +236,7 @@ string FileManager::scanVectorFor(const vector<string> vector, const char* varia
 	return "";
 }
 
-
-vector<string> FileManager::replaceValue(const char* variableName_, const char* newValue_, vector<string>& vectorS) {
+vector<string> FileManager::replaceValue(const char* variableName_, const string& newValue_, const vector<string>& vectorS) {
 	string variableName = variableName_;
 	string newValue = newValue_;
 	vector<string> result;
@@ -269,7 +268,7 @@ vector<string> FileManager::replaceValue(const char* variableName_, const char* 
 }
 
 
-string FileManager::stringReformat(const char* variableName, const char* value) {
+string FileManager::stringReformat(const char* variableName, const string& value) {
 	string result;
 	result += variableName;
 

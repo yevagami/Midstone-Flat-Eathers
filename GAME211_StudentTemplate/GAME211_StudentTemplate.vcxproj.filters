@@ -171,6 +171,9 @@
     <ClCompile Include="Level2.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="Level2.h">
       <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

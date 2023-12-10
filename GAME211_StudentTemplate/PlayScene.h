@@ -144,7 +144,7 @@ public:
 
 		subButton1->text = "FPS";
 		subButton2->text = "cheats";
-		subButton3->text = "test";
+		subButton3->text = "save?";
 		subButton4->text = "sound";
 
 		soundButton1->text = "master";
@@ -243,12 +243,10 @@ public:
 			cc.log(update, "quitting game");
 			//quit
 			
-			game->StartFadeInTransition(1000, [&]() {
-				settings::isRunning = false;
-
-			});
+			game->StartFadeInTransition(1000, 
+				[&]() { game->quitPls();},
+				[&]() { game->savePls();} );
 			
-
 		});
 
 		subButton4->isTogglable = true;
@@ -266,8 +264,8 @@ public:
 			constexpr size_t numFPSValues = std::size(fpsValues);
 
 			for (size_t i = 0; i < numFPSValues; ++i) {
-				if (settings::FPS == fpsValues[i]) {
-					settings::FPS = fpsValues[(i + 1) % numFPSValues];
+				if (options::FPS == fpsValues[i]) {
+					options::FPS = fpsValues[(i + 1) % numFPSValues];
 					break;	}	}
 
 			});
@@ -277,8 +275,8 @@ public:
 			constexpr size_t numFPSValues = std::size(fpsValues);
 
 			for (size_t i = 0; i < numFPSValues; ++i) {
-				if (settings::FPS == fpsValues[i]) {
-					settings::FPS = fpsValues[(i + numFPSValues - 1) % numFPSValues];
+				if (options::FPS == fpsValues[i]) {
+					options::FPS = fpsValues[(i + numFPSValues - 1) % numFPSValues];
 					break; } }
 
 		});
@@ -296,7 +294,11 @@ public:
 		subButton3->SetOnLeftClick([&]() {
 			cc.log(update, "TEST BUTTON - does nothing important lmao");
 
-			player->takeDamage(50);
+
+			options::SaveAllSettigns();
+
+
+			//player->takeDamage(50);
 			//musicSound.playSound("gyat");
 
 		});
@@ -308,25 +310,25 @@ public:
 
 		//master v0lume
 		soundButton1->SetOnLeftClick([&]() {
-			settings::SetMasterVolume(settings::MasterVolume + .10f);
+			options::SetMasterVolume(options::MasterVolume + .10f);
 		});
 		soundButton1->SetOnRightClick([&]() {
-			settings::SetMasterVolume(settings::MasterVolume - .10f);
+			options::SetMasterVolume(options::MasterVolume - .10f);
 		});
 		//music volume
 		soundButton2->SetOnLeftClick([&]() {
-			settings::SetMusicVolume(settings::MusicVolume + .10f);
+			options::SetMusicVolume(options::MusicVolume + .10f);
 		});
 		soundButton2->SetOnRightClick([&]() {
-			settings::SetMusicVolume(settings::MusicVolume - .10f);
+			options::SetMusicVolume(options::MusicVolume - .10f);
 		});
 
 		//sfx volume
 		soundButton3->SetOnLeftClick([&]() {
-			settings::SetSFXVolume(settings::SoundEffectVolume + .10f);
+			options::SetSFXVolume(options::SoundEffectVolume + .10f);
 		});
 		soundButton3->SetOnRightClick([&]() {
-			settings::SetSFXVolume(settings::SoundEffectVolume - .10f);
+			options::SetSFXVolume(options::SoundEffectVolume - .10f);
 		});
 
 

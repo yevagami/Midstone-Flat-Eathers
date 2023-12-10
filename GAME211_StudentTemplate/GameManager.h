@@ -12,7 +12,6 @@
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
 #include "FadeTransition.h"
-#include "FileManager.h"
 
 
 //	global classes
@@ -20,19 +19,19 @@
 	inline Sound sfxSound;
 	inline ConsistentConsole cc(true, "GameManager.h");
 	inline PrettyPrinting pp(pink, purple, cyan);
+	inline FileManager file;
 
 
 #pragma region settings
-	namespace settings {
-		inline float MaxVolume = 1.0f;
+	namespace options {
+		inline const char* settingsFileDirectory = "SaveData/settings.txt";
+		inline vector<string> settingsFileContents;
+
+		inline constexpr float MaxVolume = 1.0f;
 		inline float MasterVolume;
-		inline float DefaultMasterVolume = 0.5f;
-
-		inline float SoundEffectVolume;
-		inline float DefaultSoundEffectVolume = 0.5f;
-
 		inline float MusicVolume;
-		inline float DefaultMusicVolume = 0.5f;
+		inline float SoundEffectVolume;
+
 
 		inline int FPS;
 
@@ -45,7 +44,6 @@
 			MusicVolume = std::min(newMusicVolume_, MasterVolume);
 			musicSound.setVolume(MusicVolume);
 		}
-
 		inline void SetSFXVolume(const float newSFXVolume_) {
 			if (newSFXVolume_ < -0.0f || newSFXVolume_ > 1.0f) { return; }
 
@@ -53,7 +51,6 @@
 			SoundEffectVolume = std::min(newSFXVolume_, MasterVolume);
 			sfxSound.setVolume(SoundEffectVolume);
 		}
-
 		inline void SetMasterVolume(const float newMaterVolume_) {
 			if (newMaterVolume_ < -0.0f || newMaterVolume_ > 1.0f) { return; }
 
@@ -64,7 +61,82 @@
 			SetSFXVolume(SoundEffectVolume);
 		}
 
+		inline void ApplyDefaultSettings() {
+			float DefaultMasterVolume = 0.5f;
+			float DefaultSoundEffectVolume = 0.5f;
+			float DefaultMusicVolume = 0.5f;
+			int DefaultFPS = 60;
+
+			FPS = DefaultFPS;
+
+			MasterVolume = DefaultMasterVolume;
+			MusicVolume = DefaultMusicVolume;
+			SoundEffectVolume = DefaultSoundEffectVolume;
+
+		}
+
+		inline bool SaveAllSettigns() {
+			if (file.fileCheck(settingsFileDirectory)) {
+				string newFps = std::to_string(options::FPS);
+				string newMastV = std::to_string(options::MasterVolume);
+				string newMusV = std::to_string(options::MusicVolume);
+				string newSfxV = std::to_string(options::SoundEffectVolume);
+
+				if(settingsFileContents.empty()) {
+					newFps = file.stringReformat("fps", newFps);
+					newMastV = file.stringReformat("mastervolume", newMastV);
+					newMusV = file.stringReformat("musicvolume", newMusV);
+					newSfxV = file.stringReformat("sfxvolume", newSfxV);
+
+					settingsFileContents.emplace_back(newFps);
+					settingsFileContents.emplace_back(newMastV);
+					settingsFileContents.emplace_back(newMusV);
+					settingsFileContents.emplace_back(newSfxV);
+				} else {
+					settingsFileContents = file.replaceValue("fps", newFps, settingsFileContents);
+					settingsFileContents = file.replaceValue("mastervolume", newMastV, settingsFileContents);
+					settingsFileContents = file.replaceValue("musicvolume", newMusV, settingsFileContents);
+					settingsFileContents = file.replaceValue("sfxvolume", newSfxV, settingsFileContents);
+				}
+
+				if (file.fileWrite(settingsFileContents, settingsFileDirectory)) {
+					if(cc.getConsoleState()) {
+						for (const string& settings : settingsFileContents) { cc.log(update, "setting saved", settings); }
+					}
+					return true;
+				}
+			}
+			return false;
+		}
+		inline void LoadAllSettigns(vector<string>& superVector_) {
+			superVector_ = file.parseTHIS(settingsFileDirectory);
+
+			//	1. read
+			string newFps = file.isWhat("fps", superVector_);
+			string newMasterVolume = file.isWhat("mastervolume", superVector_);
+			string newMusicVolume = file.isWhat("musicvolume", superVector_);
+			string newSfxVolume = file.isWhat("sfxvolume", superVector_);
+
+			//	2. write
+			FPS = stoi(newFps);
+			MasterVolume = stof(newMasterVolume);
+			MusicVolume = stof(newMusicVolume);
+			SoundEffectVolume = stof(newSfxVolume);
+		}
+
+		inline bool loadSettingToVector(vector<string>& superVector_) {
+			if(file.fileCheck(settingsFileDirectory)) {
+				file.fileLoadToVector(superVector_, settingsFileDirectory);
+				return true;
+
+			}
+			return false;
+		}
+
+
+
 	}
+
 #pragma endregion
 
 
@@ -96,15 +168,6 @@ private:
 	std::unique_ptr<FadeTransition> fadeTransition; // frick manual memory management, we quirky pointer
 	bool isPaused;
 
-	//	settings default values
-	static void setDefaultSettings() {
-		settings::FPS = 120;
-		settings::MaxVolume = 1.0f;
-		settings::MasterVolume = settings::DefaultMasterVolume;;
-		settings::MusicVolume = settings::DefaultMusicVolume;
-		settings::SoundEffectVolume = settings::DefaultSoundEffectVolume;
-	}
-
 public:
 	GameManager();
 	~GameManager();
@@ -124,40 +187,42 @@ public:
 
 
 	//	Fade IN transition (fade in to black) (yes its confusing)
-	void StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
+	void StartFadeInTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr, const std::function<void()>& callfront_ = nullptr);
 
 	//	Fade OUT transition (fade out from black)
 	//void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
 
+
 	//	loading sound effects to be used in the scenes
 	static void LoadSoundEffects() {
-		// DEBUG sound effects here
+		// DEBUG sound effects here - Michael
 		sfxSound.loadSound("my bike", "sound/test/wait till you see me on my bike.ogg");
 
-		//sound effects here
+		//	load audio into the sfx SuperMap(tm)
 		sfxSound.loadSound("gameover", "sound/unnormalized/gameover.ogg");
 		sfxSound.loadSound("gunshot", "sound/unnormalized/gun-shot.ogg");
 		sfxSound.loadSound("slash", "sound/unnormalized/slash.ogg");
 		sfxSound.loadSound("equip", "sound/unnormalized/item-equip.ogg");
 		sfxSound.loadSound("shield", "sound/unnormalized/shieldmaiden.ogg");
-		sfxSound.loadSound("select", "sound/select-sound-121244.mp3");
-		sfxSound.loadSound("accept", "sound/interface-124464.mp3");
-		sfxSound.loadSound("error", "sound/error-when-entering-the-game-menu-132111.mp3");
-		sfxSound.loadSound("poof", "sound/poof-80161.mp3");
-		sfxSound.loadSound("enemy ded", "sound/death-103830.mp3");
-		sfxSound.loadSound("enemy hurt", "sound/hurt_c_08-102842.mp3");
-		sfxSound.loadSound("oof", "sound/oof-sound-effect-147492.mp3");
+		sfxSound.loadSound("select", "sound/unnormalized/menu select.ogg");
+		sfxSound.loadSound("accept", "sound/unnormalized/interface.ogg");
+		sfxSound.loadSound("error", "sound/unnormalized/menu error.ogg");
+		sfxSound.loadSound("poof", "sound/unnormalized/poof.ogg");
+		sfxSound.loadSound("death", "sound/unnormalized/death.ogg"); // changed the label 
+		sfxSound.loadSound("hurt", "sound/unnormalized/hurt.ogg");	//	changed the label
+		sfxSound.loadSound("oof", "sound/unnormalized/oof.ogg");
 
-		sfxSound.setVolume(settings::SoundEffectVolume);	//	dont touch this 
+
+		//	set the sfx irrklang engine to the current sound effect volume
+		sfxSound.setVolume(options::SoundEffectVolume);	//	dont touch this 
 	}
 
-	//	loading music to be used in the scenes
 	static void LoadMusic() {
-		// DEBUG sound effects here
+		// DEBUG sound effects - Michael
 		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
 		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
-		//sound effects here
 
+		//load audio into the music SuperMap(tm) here
 		musicSound.loadSound("ominous music", "sound/unnormalized/drone-background-music.ogg");
 		musicSound.loadSound("overworld music", "sound/unnormalized/exploration-music-loop.ogg");
 		musicSound.loadSound("chiptune-y music", "sound/unnormalized/game-soundtrack-4.ogg");
@@ -165,13 +230,20 @@ public:
 		musicSound.loadSound("chill background music", "sound/unnormalized/lofi-fusion-background-music.ogg");
 		musicSound.loadSound("battle music", "sound/unnormalized/battle-theme.ogg");
 
-		musicSound.setVolume(settings::MusicVolume);	//	dont touch this 
+
+		//	set the music irrklang engine to the current music volume
+		musicSound.setVolume(options::MusicVolume);	//	dont touch this 
 	}
 
-	void quitPls() {
-		while(settings::isRunning == true) {
-			settings::isRunning = false;
+	//	while the game's running... STOP RUNNING
+	static void quitPls() {
+		while(options::isRunning == true) {
+			options::isRunning = false;
 		}
+	}
+
+	static void savePls() { 
+		options::SaveAllSettigns();
 	}
 
 };

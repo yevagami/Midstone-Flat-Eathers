@@ -57,7 +57,7 @@ public:
 	//	replace the variable's value in the file with a provided newValue
 	bool replaceValue(const char* variable, const char* newValue, const char* fileDirectory);
 	//	replace the variable's value in the vector with a provided newValue
-	vector<string> replaceValue(const char* variableName_, const char* newValue_, vector<string>& vectorS);
+	vector<string> replaceValue(const char* variableName_, const string& newValue_, const vector<string>& vectorS);
 
 		/// File-Based Operations
 	//	scans the file for the search variable and value. if the value in the file == the provided value, return true
@@ -84,7 +84,7 @@ public:
 	string scanVectorFor(const vector<string> vector, const char* variableName_);
 		///	Basic String Manipulation
 	// formats the provided information into a Fancy Formatted String:tm:
-	string stringReformat(const char* variableName, const char* value);
+	string stringReformat(const char* variableName, const string& value);
 };
 
 //	entity maps in EntityMap.h

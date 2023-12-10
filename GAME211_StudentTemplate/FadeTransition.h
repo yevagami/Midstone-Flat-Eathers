@@ -35,17 +35,25 @@ using std::endl;
 class FadeTransition {
 public:
 	//	constructor
-	FadeTransition(SDL_Renderer* renderer_, const int currentFPS_, const int screenHeight_, const int screenWidth_, const Uint32 fadeTime_, const bool fadingIn_ = true, const std::function<void()>&callback_ = nullptr) :
+	FadeTransition(SDL_Renderer* renderer_, 
+		const int currentFPS_, 
+		const int screenHeight_, 
+		const int screenWidth_, 
+		const Uint32 fadeTime_,
+		const bool fadingIn_ = true, 
+		const std::function<void()>&callback_ = nullptr, 
+		const std::function<void()>&callfront_ = nullptr) :
 		renderer(renderer_),
-		currentFPS(currentFPS_),
 		startTime(0),
 		currentProgress(0),
 		fadeTime(fadeTime_),
+		callbackFunction(callback_),
+		callfrontFunction(callfront_),
 		fadeIn(fadingIn_),
 		alpha(fadeIn ? MaxAlpha : MinAlpha),
 		screenHeight(screenHeight_),
 		screenWidth(screenWidth_),
-		callbackFunction(callback_)
+		currentFPS(currentFPS_)
 	{
 		//	set the renderers blend mode to alpha blending
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -57,8 +65,13 @@ public:
 		cout << "\033[34mfade time is: \033[36m" << fadeTime << "\033[34m SDL ticks " << "\033[0m" << endl;
 		cout << "\033[34mstart time is: \033[36m" << startTime << "\033[34m SDL ticks " << "\033[0m" << endl;
 		cout << "\033[34mfade frame rate is: \033[36m" << currentFPS << "\033[34m fps" << "\033[0m" << endl;
+
+		if (callfrontFunction) { cout << "\033[31mcall'front'Function provided" << "\033[0m" << endl; }
+		else if (!callfrontFunction) { cout << "\033[31mno call'front'Function provided" << "\033[0m" << endl; }
+
 		if (callbackFunction) { cout << "\033[31mcallbackFunction provided" << "\033[0m" << endl; }
 		else if (!callbackFunction) { cout << "\033[31mno callbackFunction provided" << "\033[0m" << endl; }
+
 	}
 
 	// returns true if the elapsed time since the start of the fade transition is greater than or equal to the specified fade time; otherwise return false.
@@ -101,6 +114,12 @@ public:
 	}
 
 	void Draw() {
+		if(callfrontFunction) {
+			cout << "\033[31mcallfrontFunction called" << "\033[0m" << endl;
+			callfrontFunction();
+			callfrontFunction = nullptr;
+		}
+
 		while (!isComplete()) {
 			UpdateAlpha();
 
@@ -131,6 +150,7 @@ protected:
 	Uint32 fadeTime;
 
 	std::function<void()> callbackFunction;
+	std::function<void()> callfrontFunction;
 
 	bool fadeIn;
 	int alpha;
