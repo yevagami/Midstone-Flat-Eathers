@@ -151,6 +151,9 @@ void GameManager::HandleEvents() {
 				//	testing
 				system("cls");  // NOLINT(concurrency-mt-unsafe)
 				break;
+			case SDL_SCANCODE_L:
+				//	load the menu scene
+				LoadScene(1);
 			default:
 				break;
 			}
@@ -211,22 +214,22 @@ void GameManager::LoadScene(const int i_) {
 
 	switch (i_) {
 	case 1:
-		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
+		//currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
 		break;
 	case 2:
-		currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
+		//currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
 		break;
 	case 3:
-		currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
+		//currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
 		break;
 		//case 4:
 		//	//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
 		//	break;
-	case 5:
-		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
+	case 4:
 		break;
 	default:
-		currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
+		//currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
 		break;
 	}
 
