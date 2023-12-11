@@ -51,16 +51,16 @@ bool PlayerBody::OnCreate() {
 	currentState = idle;
 
 	//Load the player sprite sheet
-	playerSpriteSheet = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
+	playerSpriteSheet = Sprite("Textures/programmer_art/player_sheet_final.png", parentScene->getRenderer());
 	if (!playerSpriteSheet.autoLoadSprites()) {
 		std::cout << "Error in the sprite sheet\n";
 		return false;
 	}
 	image = playerSpriteSheet.image;
 	texture = playerSpriteSheet.texture;
-	currentSprite = playerSpriteSheet.spriteStorage[Player_Neutral];
+	currentSprite = playerSpriteSheet.spriteStorage[Player_Down];
 
-	effectSpriteSheet = Sprite("Textures/programmer_art/sprite_sheet.png", parentScene->getRenderer());
+	effectSpriteSheet = Sprite("Textures/programmer_art/player_effects_sheet.png", parentScene->getRenderer());
 	if (!effectSpriteSheet.autoLoadSprites()) {
 		std::cout << "Error in the effect sprite sheet\n";
 		return false;
@@ -198,20 +198,52 @@ void PlayerBody::Update(float deltaTime) {
 
 	//Update the animation controller
 	animController->UpdateAnimationController(deltaTime);
+	attackAnimController->UpdateAnimationController(deltaTime);
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
-	//Drawing the melee sprite
+	////Drawing the melee sprite
+	//if (drawMelee) {
+	//	SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123};
+	//	SDL_RenderCopy(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[ouch], &Rect);
+	//}
+
+
+	//Drawing the abilities
+	Vec3 meleeRectInScreen = parentScene->getProjectionMatrix() * Vec3();
+	SDL_Rect meleeRect{ meleeHitbox->x, meleeHitbox->y, 98, 98 };
+	float angle = atan2f(mouseDirection.y, mouseDirection.x);
+	angle = angle * 180 / 3.14159;
+
 	if (drawMelee) {
-		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123};
-		SDL_RenderCopy(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[ouch], &Rect);
+		attackAnimController->PlayAnimation(anim_slash);
+	}
+	else {
+		attackAnimController->PlayAnimation(anim_sword);
 	}
 
-	//Drawing the shield sprite
 	if (drawShield) {
-		SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123 };
-		SDL_RenderCopy(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[melee_strike], &Rect);
+		attackAnimController->PlayAnimation(anim_shield);
 	}
+	//cout << angle << endl;
+	SDL_RendererFlip flip = (angle > 90.0f || angle < -90.0f) ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
+	SDL_RenderCopyEx(parentScene->getRenderer() , effectSpriteSheet.texture, attackAnimController->GetCurrentFrame(), &meleeRect, -angle, nullptr, flip);
+	//switch(selectedAbilities) {
+	//case melee: {
+	//	SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[Sword], &meleeRect, -angle, nullptr, flip);
+	//	break;
+	//}
+	//case shoot: {
+	//	SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[Gun], &meleeRect, -angle, nullptr, flip);
+	//	break;
+	//}
+	//}
+
+	////Drawing the shield sprite
+	//if (drawShield) {
+	//	SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123 };
+	//	SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[Shield], &Rect, -angle, nullptr, flip);
+	//}
 
 #pragma region Animation stuff
 	//Switching the animations that are being played depending on the direction and the state
@@ -287,7 +319,12 @@ void PlayerBody::OnDestroy() {
 	//Cleanup for the sprites and animations
 	playerSpriteSheet.onDestroy();
 	effectSpriteSheet.onDestroy();
+
+	//Deleting the animation controllers
 	delete animController;
+	delete attackAnimController;
+
+	cc.log(update, "Deleting PlayerBody");
 
 	Body::OnDestroy();
 }
@@ -318,8 +355,8 @@ void PlayerBody::updateMeleeHitbox() {
 	//From the mouse direction, sets the hitbox location in screenSpace
 	Matrix4 projectionMat = parentScene->getProjectionMatrix();
 	Vec3 hitboxPos = Vec3(
-		pos.x + (mouseDirection.x * (meleeHitbox->w + 32.0f)),
-		pos.y + (mouseDirection.y * (meleeHitbox->h + 32.0f)),
+		pos.x + (mouseDirection.x * (meleeHitbox->w + 16.0f)),
+		pos.y + (mouseDirection.y * (meleeHitbox->h + 16.0f)),
 		0.0f
 	);
 	Vec3 hitboxPosScreen = projectionMat * hitboxPos;
@@ -422,11 +459,12 @@ void PlayerBody::state_attack(float deltaTime_) {
 			shooting_cooldown->Start(); // start the cooldown timer
 			//create a new bullet projectile
 			Vec3 bulletStartPosition = parentScene->getInverseMatrix() * Vec3(meleeHitbox->x, meleeHitbox->y, 0.0f);
+			
 			Projectile* bullet = new Projectile(
 				parentLevel,
 				bulletStartPosition,
 				mouseDirection * projectileSpeed,
-				Vec3(0.3f, 0.3f, 0.3f),
+				Vec3(1.0f, 1.0f, 1.0f),
 				128 * 0.3f, 128 * 0.3f,
 				1.0f,
 				getCurrentProjectileDamage()
@@ -476,37 +514,61 @@ void PlayerBody::state_attack(float deltaTime_) {
 void PlayerBody::LoadAnimations() {
 	//Create an animation controller
 	animController = new AnimationController();
+	attackAnimController = new AnimationController();
 
-	//Load the animations
+	//Load the walking animations
 
 	//Left
-	Sprite temp = Sprite("Textures/programmer_art/player_sheet.png", parentScene->getRenderer());
-	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Left, 128, 128, 6)) { cout << "Left sprite did not load properly" << endl; return;};
-	anim_walk_left = Animation("player_walk_left", temp.spriteStorage, 0.2f, 6, true);
-	anim_left = Animation("player_left", temp.spriteStorage[0], 0.0f, 0, false);
+	Sprite temp = Sprite("Textures/programmer_art/player_sheet_final.png", parentScene->getRenderer());
+	if (!temp.loadSpriteFromRectInARow(128, 128 * Player_Left, 128, 128, 6)) { cout << "Left sprite did not load properly" << endl; return;};
+	anim_walk_left = Animation("player_walk_left", temp.spriteStorage, 0.1f, 6, true);
+	anim_left = Animation("player_left", SDL_Rect{ 0, 128 * Player_Left, 128, 128 }, 0.0f, 0, false);
 	temp.deleteSprites();
 
 	//Right
-	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Right, 128, 128, 6)) { cout << "Right sprite did not load properly" << endl; return; };
-	anim_walk_right = Animation("player_walk_right", temp.spriteStorage, 0.2f, 6, true);
-	anim_right = Animation("player_right", temp.spriteStorage[0], 0.0f, 0, false);
+	if (!temp.loadSpriteFromRectInARow(128, 128 * Player_Right, 128, 128, 6)) { cout << "Right sprite did not load properly" << endl; return; };
+	anim_walk_right = Animation("player_walk_right", temp.spriteStorage, 0.1f, 6, true);
+	anim_right = Animation("player_right", SDL_Rect{ 0, 128 * Player_Right, 128, 128 }, 0.0f, 0, false);
 	temp.deleteSprites();
 
 	//Up
-	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Up, 128, 128, 6)) { cout << "Up sprite did not load properly" << endl; return; };
-	anim_walk_up = Animation("player_walk_up", temp.spriteStorage, 0.2f, 6, true);
-	anim_up = Animation("player_up", temp.spriteStorage[0], 0.0f, 0, false);
+	if (!temp.loadSpriteFromRectInARow(128, 128 * Player_Up, 128, 128, 6)) { cout << "Up sprite did not load properly" << endl; return; };
+	anim_walk_up = Animation("player_walk_up", temp.spriteStorage, 0.1f, 6, true);
+	anim_up = Animation("player_up", SDL_Rect{ 0, 128 * Player_Up, 128, 128 }, 0.0f, 0, false);
 	temp.deleteSprites();
 
 	//Down
-	if (!temp.loadSpriteFromRectInARow(0, 128 * Player_Down, 128, 128, 6)) { cout << "Down sprite did not load properly" << endl; return; };
-	anim_walk_down = Animation("player_walk_down", temp.spriteStorage, 0.2f, 6, true);
-	anim_down = Animation("player_down", temp.spriteStorage[0], 0.0f, 0, false);
+	if (!temp.loadSpriteFromRectInARow(128, 128 * Player_Down, 128, 128, 6)) { cout << "Down sprite did not load properly" << endl; return; };
+	anim_walk_down = Animation("player_walk_down", temp.spriteStorage, 0.1f, 6, true);
+	anim_down = Animation("player_down", SDL_Rect{ 0, 128 * Player_Down, 128, 128 }, 0.0f, 0, false);
 	temp.deleteSprites();
 
 	//This is called to cleanup the SDL_Surface and SDL_Texture
 	temp.onDestroy();
 
+	//Load the static sprites
+	temp = Sprite("Textures/programmer_art/player_effects_sheet.png", parentScene->getRenderer());
+	if(!temp.autoLoadSprites()) { cc.log(error, "Effects sheet fail to load"); return; }
+	anim_sword = Animation("player_sword", temp.spriteStorage[Sword], 0.0f, 0.0f, false);
+	anim_gun = Animation("player_gun", temp.spriteStorage[Gun], 0.0f, 0.0f, false);
+	anim_shield = Animation("player_shield", temp.spriteStorage[Shield], 0.0f, 0.0f, false);
+	temp.deleteSprites();
+
+	//Load the slash sprite
+	if (!temp.loadSpriteFromRectInARow(0, 128, 128, 128, 5)) { cout << "Slash sprite did not load properly" << endl; return; };
+	anim_slash = Animation("player_sword_slash", temp.spriteStorage, 0.1f, 5, true);
+	temp.deleteSprites();
+
+	//Load the shooting sprite
+	if (!temp.loadSpriteFromRectInARow(0, 128 * Gun, 128, 128, 4)) { cout << "Gun sprite did not load properly" << endl; return; };
+	anim_shoot = Animation("player_gun_shoot", temp.spriteStorage, 0.15f, 4, true);
+	temp.deleteSprites();
+	
+	temp.onDestroy();
+
 	//By default the player looks up
 	animController->PlayAnimation(anim_up);
+
+	//By default the player has the sword
+	attackAnimController->PlayAnimation(anim_sword);
 }

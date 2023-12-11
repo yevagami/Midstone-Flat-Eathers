@@ -22,12 +22,18 @@
 		ouch = 12
 	};
 
-	enum PlayerTest {
-		Player_Neutral = 0,
-		Player_Left = 1,
-		Player_Right = 2,
-		Player_Up = 3,
-		Player_Down = 4
+	enum PlayerWalking {
+		Player_Down = 0,
+		Player_Up = 1,
+		Player_Left = 2,
+		Player_Right = 3
+	};
+	
+	enum PlayerAttacks {
+		Gun  = 0,
+		Shield = 4,
+		Sword = 5,
+		Bullet = 10
 	};
 
 #endif

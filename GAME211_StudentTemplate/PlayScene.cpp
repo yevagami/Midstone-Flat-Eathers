@@ -45,7 +45,7 @@ bool PlayScene::OnCreate() {
 	player = new PlayerBody(
 		this,
 		Vec3(xAxis * 0.5f, yAxis * 0.5f, 0.0f),
-		Vec3(1.0f, 1.0f, 1.0f),
+		Vec3(1.1f,1.1f, 1.1f),
 		128.0f,
 		128.0f
 	);

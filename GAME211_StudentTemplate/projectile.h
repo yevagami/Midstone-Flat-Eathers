@@ -18,6 +18,7 @@ public:
 	void Update(float deltaTime) override;
 	void OnCollide(Body* other, float deltaTime) override;
 	void OnDestroy() override;
+	void Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) override;
 
 private:
 	float power;

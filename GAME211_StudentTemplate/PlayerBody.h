@@ -127,6 +127,7 @@ private:
 
     //animations
     AnimationController* animController;
+    AnimationController* attackAnimController;
 
     //Standing animations
     Animation anim_up;
@@ -139,6 +140,14 @@ private:
     Animation anim_walk_down;
     Animation anim_walk_left;
     Animation anim_walk_right;
+
+    //Attack animations
+    Animation anim_slash;
+    Animation anim_sword;
+    Animation anim_shoot;
+    Animation anim_gun;
+    Animation anim_shield;
+    SDL_Rect* attackAnimCutout = nullptr;
     void LoadAnimations();
 
     //melee variables
@@ -146,7 +155,7 @@ private:
     Vec3 mouseDirection = {};
     float meleePowerCurrent = 50.0f;
     float meleePowerDefault = 50.0f;
-    float drawMeleeDuration = 0.3f;
+    float drawMeleeDuration = 0.6f;
     float drawMeleeDurationDefault = 0.3f;
     bool drawMelee = false; //Draws a sprite to the screen when the player melees
 
