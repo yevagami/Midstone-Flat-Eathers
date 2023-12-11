@@ -1,5 +1,9 @@
 #include "GameManager.h"
+#include "MemoryManager.h"
+
 #include "scene_list.h"
+
+
 
 
 GameManager::GameManager() {
@@ -140,10 +144,8 @@ void GameManager::HandleEvents() {
 				//	testing
 				StartFadeInTransition(500);
 				break;
-			case SDL_SCANCODE_O:
-				//	testing
-				musicSound.playSound("ominous music");
-				//sfxSound.playSound("slash");
+			case SDL_SCANCODE_M:
+				isMemorySpammingActive = !isMemorySpammingActive;
 				break;
 			case SDL_SCANCODE_C:
 				//	testing
