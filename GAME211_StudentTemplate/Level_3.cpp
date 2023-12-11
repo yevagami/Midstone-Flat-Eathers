@@ -11,254 +11,377 @@ bool Level_3::OnCreate() {
 	//I made the screen size and the physics size the same because it's much easier to use when constructing levels
 #pragma region Creating Level geometry
 	//Creating the floor
-	floor = new Body(this, Vec3((1366.0f / 2.0f), 768.0f / 2.0f, 0.0f), Vec3(10.0f, 10.0f, 10.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/tile_floor_red.png"));
+	floor = new Body(this, Vec3((1366.0f / 2.0f), 768.0f / 2.0f, 0.0f), Vec3(60.0f, 30.0f, 10.0f), 1.0f, 1.0f, IMG_Load("Textures/programmer_art/tile_floor_level_3.png"));
 
 
 	//creating the walls
 	// UP RIGHT BOX
 	//top 
+	//Accent to make the wall look nicer, also by default bodies don't have collision
+	Body* tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 5.5 - 100, 0.0f),
+		Vec3(17.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	Solid* wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 5.5, 0.0f),
 		Vec3(17.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
+
+	
+
 	//right
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) + 1025.0f, 768.0f / 2.0f + 128 * 5.5 - 400, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) + 1025.0f, 768.0f / 2.0f + 128 * 5.5 - 300, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
+
+	
+
 	//left
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 1025.0f, 768.0f / 2.0f + 128 * 5.5 - 400, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 1025.0f, 768.0f / 2.0f + 128 * 5.5 - 300, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
+
+
+
 	//bottom
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 720, 768.0f / 2.0f + 110, 0.0f),
+		Vec3(4.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 720, 768.0f / 2.0f + 210, 0.0f),
 		Vec3(4.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
+
 	//bottom
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) + 600, 768.0f / 2.0f + 110, 0.0f),
+		Vec3(6.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) + 600, 768.0f / 2.0f + 210, 0.0f),
 		Vec3(6.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 
 	//UP LEFT BOX
 	//top
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 1900.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 400, 0.0f),
+		Vec3(13.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 1900.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 300, 0.0f),
 		Vec3(13.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 	//left
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 2670.0f, 768.0f / 2.0f + 128 * 5.5 - 545, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 2670.0f, 768.0f / 2.0f + 128 * 5.5 - 445, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
+
+
+	
 	//bottom
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 2400.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 870, 0.0f),
+		Vec3(5.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 2400.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 770, 0.0f),
 		Vec3(5.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 	//right
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 1670.0f, 768.0f / 2.0f + 128 * 5.5 - 545, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 1670.0f, 768.0f / 2.0f + 128 * 5.5 - 445, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 
 	// right hallway
+
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 2400.0f, 768.0f / 2.0f + 128 * 5.5 - 1000, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 2400.0f, 768.0f / 2.0f + 128 * 5.5 - 900, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 
 	//BOTTOM BOX
 
 	//bottom1
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 2100.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 1328, 0.0f),
+		Vec3(4.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+	
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 2100.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 1228, 0.0f),
 		Vec3(4.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 	// left
+
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 1910.0f, 768.0f / 2.0f + 128 * 5.5 - 1400, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 1910.0f, 768.0f / 2.0f + 128 * 5.5 - 1300, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 	//lowest bottom
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 1215.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 1725, 0.0f),
+		Vec3(10.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 1215.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 1625, 0.0f),
 		Vec3(10.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 	//right
+
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 520.0f, 768.0f / 2.0f + 128 * 5.5 - 1400, 0.0f),
+		Vec3(1.0f, 4.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
+	tiles = new Body( //rendering here bcause otherwise not pretty overlap of textures 
+		this,
+		Vec3((1366.0f / 2.0f) + 70.0f, 768.0f - 500.0f / 2.0f + 128 * 5.5 - 1300, 0.0f),
+		Vec3(10.0f, 1.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 520.0f, 768.0f / 2.0f + 128 * 5.5 - 1300, 0.0f),
 		Vec3(1.0f, 4.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 	
 	//LEFT BOTTOM BOX
 	//right
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) + 650.0f, 768.0f / 2.0f + 128 * 5.5 - 900, 0.0f),
+		Vec3(1.0f, 5.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) + 650.0f, 768.0f / 2.0f + 128 * 5.5 - 800, 0.0f),
 		Vec3(1.0f, 5.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
+
 	//bottom
+	
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) + 70.0f , 768.0f - 500.0f / 2.0f + 128 * 5.5 - 1200, 0.0f),
 		Vec3(10.0f, 1.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 
 	//MIDDLE 
+	tiles = new Body(
+		this,
+		Vec3((1366.0f / 2.0f) - 1100.0f, 768.0f / 2.0f + 128 * 5.5 - 1100, 0.0f),
+		Vec3(1.0f, 2.0f, 1.0f),
+		128,
+		128,
+		IMG_Load("Textures/programmer_art/tile_bottom_level_3.png")
+	);
+	levelBodies.push_back(tiles);
+
 	wall = new Solid(
 		this,
 		Vec3((1366.0f / 2.0f) - 1100.0f, 768.0f / 2.0f + 128 * 5.5 - 1000, 0.0f),
 		Vec3(1.0f, 2.0f, 1.0f),
 		128,
 		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
-	);
-	levelBodies.push_back(wall);
-
-
-	//Accent to make the wall look nicer, also by default bodies don't have collision
-	/*Body* tiles = new Body(
-		this,
-		Vec3((1366.0f / 2.0f), 768.0f / 2.0f + 128 * 4.5, 0.0f),
-		Vec3(11.0f, 1.0f, 1.0f),
-		128,
-		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
-	);
-	levelBodies.push_back(tiles);*/
-
-
-	//Right wall
-	/*wall = new Solid(
-		this,
-		Vec3(1366.0f / 2.0f + 128 * 5.5, 768.0f / 2.0f + 128 * 0.5, 0.0f),
-		Vec3(1.0f, 9.0f, 1.0f),
-		128,
-		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
-	);
-	levelBodies.push_back(wall);
-	//Accent
-	tiles = new Body(
-		this,
-		Vec3(1366.0f / 2.0f + 128 * 5.5, 768.0f / 2.0f - 128 * 7, 0.0f),
-		Vec3(1.0f, 6.0f, 1.0f),
-		128,
-		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
-	);
-	levelBodies.push_back(tiles);
-
-	//Left wall
-	wall = new Solid(
-		this,
-		Vec3(1366.0f / 2.0f - 128 * 5.5, 768.0f / 2.0f + 128 * 0.5, 0.0f),
-		Vec3(1.0f, 9.0f, 1.0f),
-		128,
-		128,
-		IMG_Load("Textures/programmer_art/tile_roof_red.png")
-	);
-	levelBodies.push_back(wall);
-	//Accent
-	tiles = new Body(
-		this,
-		Vec3(1366.0f / 2.0f - 128 * 5.5, 768.0f / 2.0f - 128 * 7, 0.0f),
-		Vec3(1.0f, 6.0f, 1.0f),
-		128,
-		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
-	);
-	levelBodies.push_back(tiles);
-
-	//Bottom wall
-	wall = new Solid(
-		this,
-		Vec3((1366.0f / 2.0f), 768.0f / 2.0f - 128 * 7.5, 0.0f),
-		Vec3(10.0f, 5.0f, 1.0f),
-		128,
-		128,
-		IMG_Load("Textures/programmer_art/tile_bottom_red.png")
+		IMG_Load("Textures/programmer_art/tile_roof_level_3.png")
 	);
 	levelBodies.push_back(wall);
 
@@ -347,11 +470,11 @@ void Level_3::Update(const float time) {
 
 void Level_3::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	SDL_RenderCopy(parentScene->getRenderer(), background, nullptr, nullptr); //render the background
-	//floor->Render(renderer_, projectionMatrix_); //render the floor
+	floor->Render(renderer_, projectionMatrix_); //render the floor
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 
