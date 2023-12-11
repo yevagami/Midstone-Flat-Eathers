@@ -25,10 +25,6 @@ public:
 		}
 	}
 
-	void* operator new(size_t size_);
-
-	void operator delete(void* memory_) noexcept;
-
 #pragma region Console Management Lite
 	//	this method is for readability and so i can make complexish coloury things
 	static void log(const char* action_, const size_t size_ = 0);
@@ -48,6 +44,9 @@ public:
 #pragma endregion
 };
 
+void* operator new(size_t size_);
+
+void operator delete(void* memory_);
 
 ///	THE IMPORTANT PART... that's broken
 

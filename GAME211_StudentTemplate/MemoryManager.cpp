@@ -4,16 +4,16 @@ size_t MemoryManager::allocationCount = 0;
 size_t MemoryManager::totalAllocatedMemory = 0;
 std::unordered_map<void*, size_t> MemoryManager::memoryMap;
 
-void* MemoryManager::operator new(size_t size_) {
+void* operator new(size_t size_) {
 	//	memory allocation
 	void* memory = malloc(size_);
 
 	//	tracking and management
 	if (memory) {
-		allocationCount++;
-		totalAllocatedMemory += size_;
-		memoryMap[memory] = size_;
-		log("Allocated", size_);
+		MemoryManager::allocationCount++;
+		MemoryManager::totalAllocatedMemory += size_;
+		MemoryManager::memoryMap[memory] = size_;
+		MemoryManager::log("Allocated", size_);
 	}
 	else {
 		//	failed memory allocation
@@ -23,15 +23,15 @@ void* MemoryManager::operator new(size_t size_) {
 	return memory;
 }
 
-void MemoryManager::operator delete(void* memory_) noexcept {
+void operator delete(void* memory_) {
 	//	if theres memory
 	if (memory_) {
 		//	find the spot in the map the memory is associated to (tracking and management)
-		if (const auto it = memoryMap.find(memory_); it != memoryMap.end()) {
-			allocationCount--;
-			totalAllocatedMemory -= it->second;
-			log("Deallocated", it->second);
-			memoryMap.erase(it);
+		if (const auto it = MemoryManager::memoryMap.find(memory_); it != MemoryManager::memoryMap.end()) {
+			MemoryManager::allocationCount--;
+			MemoryManager::totalAllocatedMemory -= it->second;
+			MemoryManager::log("Deallocated", it->second);
+			MemoryManager::memoryMap.erase(it);
 
 			//	the memory deallocation
 			free(memory_);
