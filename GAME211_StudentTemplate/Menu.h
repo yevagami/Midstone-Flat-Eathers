@@ -433,8 +433,9 @@ namespace ui {
 	///	Font struct: purely for the constructor. allows the constructor to be called simply but with more power if needed
 	///	Colour struct: purely for the constructor. ^
 	///	Background Type enum class: literally just an enum.
+	///	Button class: everything else. 
 
-	// comic sans, open sans, gothic, heebo, roboto, ubuntu, verdana, wingdings, lobster, ransom
+	// all the availible fonts
 	static const std::unordered_map<const char*, const char*> fontMap = {
 			{"comic sans", "fonts/COMIC.TTF"},
 			{"open sans", "fonts/OpenSans-Regular.ttf"},
@@ -447,24 +448,27 @@ namespace ui {
 			{"lobster", "fonts/Lobster-Regular.ttf"},
 			{"ransom", "fonts/ransom.ttf"},
 			{"comic serif", "fonts/Comic_Serif_Pro.otf"},
-			{"", ""},
+			{"helvetica roman", "fonts/Helvetica Roman.ttf"},
+			{"helvetica neue", "fonts/Helvetica Neue Medium.ttf"},
 
 	};
 
-	/// Font Constructor Object
+	// Font Constructor Object
 	struct Font {
 		std::string fontText;
-		float size;
+		int size;
 		const char* font;
 		int offsetX;
 		int offsetY;
 		double rotation;
 
-		// ReSharper disable once CppParameterMayBeConst
-		// ReSharper disable once CppNonExplicitConvertingConstructor
 		Font(
-			std::string fontText_ = "", int size_ = 45,
-			const char* font_ = fontMap.at("comic sans"), const int x_ = 0, const int y_ = 0, const double rot_ = 0.0)
+			std::string fontText_ = "", 
+			const int size_ = 45,
+			const char* font_ = fontMap.at("helvetica neue"),
+			const int x_ = 0, 
+			const int y_ = 0, 
+			const double rot_ = 0.0)
 			: fontText(std::move(fontText_)), size(size_), font(font_), offsetX(x_), offsetY(y_), rotation(rot_) { }
 
 	};
@@ -523,6 +527,7 @@ namespace ui {
 			isPrideful = false;
 			isButtonBordered = true;
 			isTextBordered = false;
+			isSensitiveToHovering = true;
 			textBorderSize = 2;
 			backgroundImageRotationAngle = 0.0;
 
@@ -557,13 +562,15 @@ namespace ui {
 		void HandleEvents(const SDL_Event& event_);
 		//		for animations, hover effects, and live-things
 		void Update(float deltaTime_);
-		//		sets a callback function for when events occur
+
+		//		event callbacks
+		void SetOnInteractionCallback(const std::function<void()>& onInteract_);
 		void SetOnLeftClick(const std::function<void()>& onClick_);
 		void SetOnRightClick(const std::function<void()>& onClick_);
-		void SetOnHover(const std::function<void()>& onHover_);
 		void SetOnScroll(const std::function<void(int scrollInt_)>& onScroll_);
+		void SetOnHover(const std::function<void()>& onHover_);
 
-		friend class Tracker;
+		friend class ::Tracker;
 
 		//		renders the 'beauton' components (its ironic theres a text class and yet the renderer takes the components needed to make text)
 		bool Render(SDL_Renderer* renderer_);
@@ -582,22 +589,19 @@ namespace ui {
 		/// Private Variables
 		//  a rectangle
 		SDL_Rect rect;
-		//	  a hitbox
-		Hitbox hitbox;
-		//  Font Container
-		Font font;
-		//	  Colour container
-		Colour colour;
+		Hitbox hitbox;		//	  a hitbox
+		Font font;				//  Font Constructor Container
+		Colour colour;		//	  Colour Constructor Container
 
 		TTF_Font* buttonTextFont;
 		SDL_Texture* buttonTextTexture;
 		SDL_Surface* buttonTextSurface;
 
+		BackgroundType backgroundType;					//	button's background type (solid | image)
 		SDL_Texture* backgroundImageTexture;
 
-		BackgroundType backgroundType;					//	button's background type (solid | image)
-
 		//  a function as variables
+		std::function<void()> OnInteractionCallback;
 		std::function<void()> OnLeftClick;
 		std::function<void()> OnRightClick;
 		std::function<void()> OnHover;
@@ -629,6 +633,7 @@ namespace ui {
 		bool isTextCentered;										//  is text centered flag (default : true)
 		bool isPrideful;													//	change colour on click (default : false)
 		bool isEasilyScared;											//	causes the button to become inactive on click (default : false)
+		bool isSensitiveToHovering;								//	does the button care when its being hovered over (default : true)
 
 		bool isButtonBordered;									// enables/disables the button border (default : true)
 		bool isTextBordered;										//	enables/disables the text border (default : false)
@@ -655,7 +660,7 @@ namespace ui {
 		void scaleDimensionsIndividually(int newRectHeightScaler_ = 1, int newRectWidthScaler_ = 1);
 		void scaleDimensions(int scaler_ = 1);
 		void centerPosition(int screenWidth_, int screenHeight_);
-		bool EnableBackgroundImage(const char* fileDirectory_ = "");
+		void EnableBackgroundImage(const char* fileDirectory_ = "");
 #pragma endregion
 #pragma region utility
 	protected:

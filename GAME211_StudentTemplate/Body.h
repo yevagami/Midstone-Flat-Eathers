@@ -142,6 +142,8 @@ protected:
 	Hitbox* hitbox;
 	Transform transform;	//	constructor list struct
 
+
+
 	//Texture stuff
 	SDL_Surface* image = nullptr;
 	SDL_Texture* texture = nullptr;

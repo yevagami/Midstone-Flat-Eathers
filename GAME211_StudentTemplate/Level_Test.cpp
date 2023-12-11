@@ -121,8 +121,8 @@ void Level_test::OnDestroy(){
 
 
 void Level_test::Update(const float time){
-	
 	newMobSpawner->waveSpawner(3);
+
 
 	if (newMobSpawner->levelWon) {
 		canSwitchTheScene = true;

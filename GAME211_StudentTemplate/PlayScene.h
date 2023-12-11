@@ -55,12 +55,18 @@ public:
 	Matrix4 getInverseMatrix() { return inverseProjection; }
 	SDL_Renderer* getRenderer() { return renderer; }
 
+
 	//Game loop stuff
 	bool isDead = false;
 	bool hasGameoverHappened = false;
 	void ChangeLevel(Level* newLevel_);
 
-	//	testing a menu [ has to be at scene level >:( ]
+
+	std::vector<std::string> musicList;
+	void playRandomMusic();
+
+
+	///	menu		 [ has to be at scene level >:( ]
 	bool isPaused = false;
 	vector<ui::Button*> allPauseMenuButtons;
 	ui::Button* button1;
@@ -168,9 +174,16 @@ public:
 			button->buttonBorderColour = ui::SDL_COLOR_SLATE_GRAY;
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 2;
+
+			//	anything that happens on an interact
+			button->SetOnInteractionCallback([&]() {
+				sfxSound.playSound("select");
+			});
+
 		}
 
 		for (const auto button : allSubPauseMenuButtons) {
+			//	change scale (cuz theyre small squares)
 			button->scaleDimensions(50);
 			//	centered
 			button->setPositionRelativeTo(*button1, -12.5, 450);
@@ -183,10 +196,17 @@ public:
 			button->buttonBorderColour = ui::SDL_COLOR_SLATE_GRAY;
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
+
+			//	anything that happens on an interact
+			button->SetOnInteractionCallback([&]() {
+				sfxSound.playSound("select");
+				});
+
 		}
 		subButton4->setPositionRelativeTo(*button1, -12.5, -125);
 
 		for (const auto button : allCheatMenuButtons) {
+			//	change scale (cuz theyre small squares)
 			button->scaleDimensions(50);
 			//	centered
 			button->setPositionRelativeTo(*button1, -12.5, 600);
@@ -200,9 +220,16 @@ public:
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
 			//button->isPrideful = true;
+
+			//	anything that happens on an interact
+			button->SetOnInteractionCallback([&]() {
+				sfxSound.playSound("select");
+				});
+
 		}
 
 		for(const auto button : allSoundMenuButtons) {
+			//	change scale (cuz theyre small squares)
 			button->scaleDimensions(50);
 			//	centered
 			button->setPositionRelativeTo(*subButton4,0, -125);
@@ -215,6 +242,12 @@ public:
 			button->buttonBorderColour = ui::SDL_COLOR_SLATE_GRAY;
 			button->buttonBorderSize = 4;
 			button->textBorderSize = 1;
+
+			//	anything that happens on an interact
+			button->SetOnInteractionCallback([&]() {
+				sfxSound.playSound("select");
+				});
+
 		}
 
 
@@ -229,24 +262,19 @@ public:
 			}else {
 				settingsOpen = false;
 			}
-			//settingsOpen = !settingsOpen;
-			});
+		});
+
 		button2->SetOnLeftClick([&]() {
 			cc.log(update, "resuming game");
-			//	resume game
 			isPaused = false;
-			//button1->isOn = false;
-			//settingsOpen = false;
-			//subButton2->isOn = false;
-			//cheatsOpen = false;
 			});
+
 		button3->SetOnLeftClick([&]() {
 			cc.log(update, "quitting game");
-			//quit
-			
-			game->StartFadeInTransition(1000, 
-				[&]() { game->quitPls();},
-				[&]() { game->savePls();} );
+			game->StartFadeInTransition(1000,
+				//	because those GM methods are static, we dont want to call them through a reference, therefore GameManager::
+				[&]() { GameManager::quitPls();},
+				[&]() { GameManager::savePls();} );
 			
 		});
 
@@ -270,6 +298,7 @@ public:
 					break;	}	}
 
 			});
+
 		subButton1->SetOnRightClick([&]() {
 			cc.log(update, "fps changed");
 			constexpr int fpsValues[] = { 30, 60, 90, 120 };  // possible FPS values
@@ -293,20 +322,13 @@ public:
 		});
 
 		subButton3->SetOnLeftClick([&]() {
-			cc.log(update, "TEST BUTTON - does nothing important lmao");
-
-
+			cc.log(update, "save button pressed");
 			options::SaveAllSettigns();
-
-
-			//player->takeDamage(50);
-			//musicSound.playSound("gyat");
-
 		});
 
 		subButton3->SetOnRightClick([&]() {
-			//sfxSound.playSound("my bike", true);
-
+			cc.log(update, "default settings applied");
+			options::ApplyDefaultSettings();
 		});
 
 		//master v0lume
@@ -323,7 +345,6 @@ public:
 		soundButton2->SetOnRightClick([&]() {
 			options::SetMusicVolume(options::MusicVolume - .10f);
 		});
-
 		//sfx volume
 		soundButton3->SetOnLeftClick([&]() {
 			options::SetSFXVolume(options::SoundEffectVolume + .10f);
@@ -356,24 +377,23 @@ public:
 				player->setInvincible(false);
 			}
 		});
-
+		cheatButton3->isTogglable = true;
 		cheatButton3->SetOnLeftClick([&]() {
-			if(player->getCurrentMeleeDamage() == player->getDefaultMeleeDamage()) {
-				player->setCurrentMeleeDamage(500);
-				cc.log(update, "you are strong!", std::to_string(player->getCurrentMeleeDamage()));
+			if(!cheatButton3->isOn) {
+				constexpr int stronkness = 500;
+				player->setCurrentMeleeDamage(stronkness);
+				player->setCurrentProjectileDamage(stronkness);
+				cc.log(update, "your melee attacks are stronger!", std::to_string(player->getCurrentMeleeDamage()));
+				cc.log(update, "your projectiles are stronger!!", std::to_string(player->getCurrentProjectileDamage()));
 			} else {
 				player->setCurrentMeleeDamageToDefault();
-				cc.log(update, "you are default.", std::to_string(player->getCurrentMeleeDamage()));
+				player->setCurrentProjectileDamageToDefault();
+				cc.log(update, "your melee attacks are default", std::to_string(player->getCurrentMeleeDamage()));
+				cc.log(update, "your projectiles are default", std::to_string(player->getCurrentProjectileDamage()));
 			}
 		});
 		cheatButton3->SetOnRightClick([&]() {
-			if (player->getCurrentProjectileDamage() == player->getDefaultProjectileDamage()) {
-				player->setCurrentProjectileDamage(500);
-				cc.log(update, "you are strong!", std::to_string(player->getCurrentProjectileDamage()));
-			} else {
-				player->setCurrentProjectileDamageToDefault();
-				cc.log(update, "you are default.", std::to_string(player->getCurrentProjectileDamage()));
-			}
+
 		});
 
 
@@ -393,8 +413,6 @@ public:
 		cheatButton1->offsetPosition(0, 0);
 		cheatButton2->offsetPosition(-125);
 		cheatButton3->offsetPosition(125);
-
-		
 
 
 		//	make them clickable
@@ -421,6 +439,7 @@ public:
 
 		for(auto element : allUIElements) {
 			element->isTextBordered = true;
+			element->isSensitiveToHovering = false;
 			//element->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 			element->textColour = ui::SDL_COLOR_ANTIQUE_WHITE;
@@ -435,6 +454,7 @@ public:
 		UI_abilitySprite->scaleDimensions(50);
 		UI_abilitySprite->setPosition(SCREEN_HEIGHT - 100, SCREEN_WIDTH - 100);
 		UI_abilityText->setPositionRelativeTo(*UI_abilitySprite, -25, 50);
+
 
 		UI_health->setPositionRelativeTo(*UI_abilitySprite, -75, 50);
 		//UI_health->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);

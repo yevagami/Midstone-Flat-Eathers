@@ -1,4 +1,6 @@
 #pragma once
+#include <functional>
+
 #include "Body.h"
 #include <unordered_map>
 
@@ -35,10 +37,15 @@ public:
 	void OnDestroy() override;
 	void takeDamage(float amount) override;
 
+	void SetOnDeath(const std::function<void()>& onDeath_);
+	void SetOnHurt(const std::function<void()>& onOuchie_);
+
 private:
 	//enemy states
 	enum states { idle, walk, followPlayer };
 	states currentState = followPlayer;
+	std::function<void()> OnDeath;
+	std::function<void()> OnHurt;
 
 	//Enemy specific variables
 	float enemyMoveSpeed;

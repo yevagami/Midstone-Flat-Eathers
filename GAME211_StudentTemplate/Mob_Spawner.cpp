@@ -47,6 +47,14 @@ void Mob_Spawner::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect s
 
 	std::cout << enemiesOnTheLevel << endl;
 	Enemy* ghost = new Enemy(parentLevel, spawnPosition, subType_);
+
+
+	ghost->SetOnDeath([&]() {
+		sfxSound.playSound("death");
+	});
+	ghost->SetOnHurt([&]() {
+		sfxSound.playSound("hurt");
+	});
 	parentLevel->levelBodies.push_back(ghost);
 	ghost = nullptr;
 
@@ -55,6 +63,7 @@ void Mob_Spawner::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect s
 void Mob_Spawner::waveSpawner(int maxWaves_) {
 
 	if ((waveCompleted || !waveStarted) && currentWave < maxWaves_) {
+
 		cout << "NEW WAVE BABY!!!\n";
 		currentWave++;
 		for (int i = 0; i < mobsPerWave; i++) {
@@ -77,7 +86,10 @@ void Mob_Spawner::waveSpawner(int maxWaves_) {
 	if (enemycounter <= 0) { 
 		waveCompleted = true;
 	}
-	if (currentWave == maxWaves_ && waveCompleted == true) {
+	if (currentWave == maxWaves_ && waveCompleted == true && levelWon == false) {
+		sfxSound.stopAllSounds();
+		sfxSound.playSound("success fanfare");
+
 		levelWon = true;
 	}
 }

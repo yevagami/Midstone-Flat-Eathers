@@ -1,4 +1,5 @@
 #include "Audio.h"
+#include <algorithm>
 
 
 void Sound::loadSound(const std::string& label_, const char* soundFile_) {
@@ -36,4 +37,19 @@ void Sound::stopSound(const std::string& label_) {
 void Sound::stopAllSounds() const { if (engine) { engine->stopAllSounds(); } }
 
 void Sound::setVolume(const float volume_) const { if (engine) { engine->setSoundVolume(volume_); } }
+
+bool Sound::isPlaying() const {
+	for(const auto& pair : soundSources) {
+		if(engine->isCurrentlyPlaying(pair.second)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Sound::isPlayingExperimental() const {
+	return std::any_of(soundSources.begin(), soundSources.end(),
+		[this](const auto& pair) { return engine->isCurrentlyPlaying(pair.second); });
+}
 

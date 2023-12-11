@@ -54,8 +54,17 @@ void Enemy::takeDamage(float amount){
 	if (amount == 0) return;
 
 	currentHealth -= amount;
-	if (currentHealth <= 0) { destroyFlag = true; }
+	if (OnHurt) OnHurt(); 
+
+	if (currentHealth <= 0) {
+		if (OnDeath) OnDeath(); 
+
+		destroyFlag = true;
+	}
 }
+
+void Enemy::SetOnDeath(const std::function<void()>& onDeath_) { OnDeath = onDeath_; }
+void Enemy::SetOnHurt(const std::function<void()>& onOuchie_) { OnHurt = onOuchie_; }
 
 void Enemy::state_idle(){
 	//Find the player and set it to the playerReference if not already

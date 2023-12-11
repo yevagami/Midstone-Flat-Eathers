@@ -76,6 +76,15 @@ void PlayScene::Update(const float time) {
 	if (isPaused == false && isDead == false) {
 		currentLevel->Update(time);
 	}
+
+
+	//	constantly changing music
+	if(currentLevel->canSwitchTheScene == true) {
+		musicSound.stopAllSounds();
+	}
+	if (!musicSound.isPlayingExperimental() && options::MusicVolume >= 0.1 && currentLevel->canSwitchTheScene == false) {
+		playRandomMusic();
+	}
 	
 	if(isDead == true && hasGameoverHappened == false) {
 		sfxSound.playSound("gameover");
@@ -84,8 +93,8 @@ void PlayScene::Update(const float time) {
 
 	///	Trackers [DEBUG THINGS]
 
-	int enemycounter = 0;
 	if(isPaused == false && isDead == false) {
+		int enemycounter = 0;
 		//Keeps track how many enemies are in the level
 		for (const auto& enemy : currentLevel->levelBodies) {
 			if (enemy->type == Body::ENEMY) {
@@ -93,9 +102,9 @@ void PlayScene::Update(const float time) {
 			}
 		}
 		tracker.trackThis("P to Pause", tracker.tracker1);
+		tracker.trackThis(std::to_string(enemycounter) + " enemies left", tracker.tracker3);
 	}
 	tracker.trackThis(std::to_string(options::FPS) + " fps", tracker.tracker2);
-	tracker.trackThis(std::to_string(enemycounter) + " enemies left", tracker.tracker3);
 
 
 
@@ -138,8 +147,6 @@ void PlayScene::Update(const float time) {
 			cc.log(update, "you died lmao");
 		}
 	}
-	
-
 
 	//	pause menu things
 	if(isPaused) {
@@ -260,6 +267,20 @@ void PlayScene::ChangeLevel(Level* newLevel_) {
 	//Throw the player into the new level
 	player->setParentLevel(newLevel_);
 	currentLevel->levelBodies.push_back(player);
+}
+
+void PlayScene::playRandomMusic() {
+	if(musicList.empty()) {
+		for (const auto& pair : musicSound.soundSources) {
+			musicList.push_back(pair.first);
+		}
+	}
+
+	const std::size_t randomIndex = std::rand() % musicList.size();
+	const std::string& randomMusic = musicList[randomIndex];
+	cc.log(not_error, "currently playing", randomMusic);
+	musicSound.playSound(randomMusic);
+
 }
 
 void PlayScene::CameraFollowPlayer(PlayerBody* p) {

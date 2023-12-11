@@ -10,19 +10,22 @@ namespace ui {
 #pragma region Core Methods
 	void Button::HandleEvents(const SDL_Event& event_) {
 		if (isActive) {
-
 			switch (event_.type) {
 
 				//	hovering events
 			case SDL_MOUSEMOTION:
+				if(!isSensitiveToHovering) break;
+
 				if (isMouseOver(event_.motion.x, event_.motion.y)) {
-					Uint32 currentTime = SDL_GetTicks();
 					isHovering = true;
 
 					//	if theres an OnHover method AND its off cooldown
-					if (OnHover && currentTime - lastHoverTime >= 1000) {
-						OnHover();
-						lastHoverTime = currentTime;
+					if(OnHover) {
+						const Uint32 currentTime = SDL_GetTicks();
+						if (currentTime - lastHoverTime >= 1000) {
+							OnHover();
+							lastHoverTime = currentTime;
+						}
 					}
 				}
 				else { isHovering = false; }
@@ -30,6 +33,8 @@ namespace ui {
 
 				//	clicking events
 			case SDL_MOUSEBUTTONDOWN:
+				if (OnInteractionCallback) OnInteractionCallback();
+
 				if (event_.button.button == SDL_BUTTON_LEFT) {
 					if (OnLeftClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
 						//	this happens when the button is left clicked
@@ -41,6 +46,8 @@ namespace ui {
 					}
 				}
 				else if (event_.button.button == SDL_BUTTON_RIGHT) {
+					if (OnInteractionCallback) OnInteractionCallback();
+
 					if (OnRightClick && hitbox.collisionClickCheck(event_.motion.x, event_.motion.y)) {
 						//	this happens when the button is right clicked
 						OnRightClick();
@@ -65,9 +72,9 @@ namespace ui {
 	}
 
 
+	// ReSharper disable once CppMemberFunctionMayBeStatic
 	void Button::Update(float deltaTime_) { }
-
-
+	void Button::SetOnInteractionCallback(const std::function<void()>& onInteract_ ) { OnInteractionCallback = onInteract_; }
 	void Button::SetOnLeftClick(const std::function<void()>& onClick_) { OnLeftClick = onClick_; }
 	void Button::SetOnRightClick(const std::function<void()>& onClick_) { OnRightClick = onClick_; }
 	void Button::SetOnHover(const std::function<void()>& onHover_) { OnHover = onHover_; }
@@ -92,20 +99,17 @@ namespace ui {
 		//	(returning true because the initial condition checks to see if the button is enabled. a disabled button isnt an error with rendering, so we're return true)
 	}
 
-	auto Button::EnableBackgroundImage(const char* fileDirectory_) -> bool {
+	void Button::EnableBackgroundImage(const char* fileDirectory_)  {
 		if(fileDirectory_ != "") {
 			backgroundImageDirectory = fileDirectory_;
 		}
 
 		backgroundType = BackgroundType::Image;
-		return true;
 	}
 		
-	
-
-
 	bool Button::RenderBackground(SDL_Renderer* renderer_) const {
 		if (rect.w != 0 && rect.h != 0) {
+			///	SOLID COLOURED BACKGROUNDS
 			if (backgroundType == BackgroundType::SolidColour) {
 				//	if isHovering, backgroundColour is divided by the onHoveringBackgroundColour
 				const SDL_Color renderColour =
@@ -117,14 +121,11 @@ namespace ui {
 				return true;
 			}
 
+			///	IMAGE BACKGROUNDS
 			if (backgroundType == BackgroundType::Image) {
-				SDL_Surface* backgroundImageSurface = IMG_Load(backgroundImageDirectory);
-
-				if(backgroundImageSurface != nullptr) {
-					SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface);
-
-					if (renderedTexture != nullptr) {
-						SDL_Point center = { 0, 0 };
+				if(SDL_Surface* backgroundImageSurface = IMG_Load(backgroundImageDirectory); backgroundImageSurface != nullptr) {
+					if (SDL_Texture* renderedTexture = SDL_CreateTextureFromSurface(renderer_, backgroundImageSurface); renderedTexture != nullptr) {
+						constexpr SDL_Point center = { 0, 0 };
 						SDL_RenderCopyEx(renderer_, renderedTexture, nullptr, &rect, backgroundImageRotationAngle, &center, SDL_FLIP_NONE);
 
 						SDL_DestroyTexture(renderedTexture);
@@ -279,22 +280,15 @@ namespace ui {
 		}
 #pragma endregion
 
-
 		SDL_RenderCopyEx(renderer_, buttonTextTexture, nullptr, &textRect, fontRotation, nullptr, SDL_FLIP_NONE);
 		return true;
 	}
 #pragma endregion
 #pragma endregion
 #pragma region aesthetics
-	bool Button::isMouseOver(int mouseX_, int mouseY_) const {
+	bool Button::isMouseOver(const int mouseX_, const int mouseY_) const {
 		return mouseX_ >= rect.x && mouseX_ <= (rect.x + rect.w) &&
 			mouseY_ >= rect.y && mouseY_ <= (rect.y + rect.h);
-	}
-
-
-	void Button::centerPosition(const int screenWidth_, const int screenHeight_) {
-		rect.x = (screenWidth_ - rect.w) / 2;
-		rect.y = (screenHeight_ - rect.h) / 2;
 	}
 
 	bool Button::SetBackgroundImage(const char* fileDirectory_, SDL_Renderer* renderer_) {
@@ -311,6 +305,10 @@ namespace ui {
 		return true;
 	}
 
+	void Button::centerPosition(const int screenWidth_, const int screenHeight_) {
+		rect.x = (screenWidth_ - rect.w) / 2;
+		rect.y = (screenHeight_ - rect.h) / 2;
+	}
 
 	void Button::setPosition(const float newRectY_, const float newRectX_) {
 		rect.x = newRectX_;
@@ -324,18 +322,15 @@ namespace ui {
 		setPosition(newY, newX);
 	}
 
-
 	void Button::offsetPosition(const int newRectYOffset_, const int newRectXOffset_) {
 		rect.x += newRectXOffset_;
 		rect.y += newRectYOffset_;
 	}
 
-
 	void Button::setDimensions(const int newRectHeight_, const int newRectWidth_) {
 		rect.w = newRectWidth_;
 		rect.h = newRectHeight_;
 	}
-
 
 	void Button::setDimensions(const SDL_Rect& rect_) {
 		rect.w = rect_.w;
@@ -344,12 +339,10 @@ namespace ui {
 		rect.y = rect_.y;
 	}
 
-
 	void Button::scaleDimensionsIndividually(const int newRectHeightScaler_, const int newRectWidthScaler_) {
 		rect.h = rect.h * newRectHeightScaler_;
 		rect.w = rect.w * newRectWidthScaler_;
 	}
-
 
 	void Button::scaleDimensions(const int scaler_) {
 		rect.w = rect.w * scaler_;

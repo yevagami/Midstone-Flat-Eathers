@@ -208,6 +208,7 @@ public:
 		sfxSound.loadSound("death", "sound/unnormalized/death.ogg"); // changed the label 
 		sfxSound.loadSound("hurt", "sound/unnormalized/hurt.ogg");	//	changed the label
 		sfxSound.loadSound("oof", "sound/unnormalized/oof.ogg");
+		sfxSound.loadSound("success fanfare", "sound/unnormalized/success fanfare.ogg");
 
 
 		//	set the sfx irrklang engine to the current sound effect volume

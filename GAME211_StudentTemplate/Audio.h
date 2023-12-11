@@ -4,8 +4,11 @@
 #include <string>
 
 
-class Sound {
-public:
+struct Sound {
+
+	//	dec 11/23
+	//	update: its all public now... dont shoot urself in the foot with the power
+
 	Sound
 	() : engine(nullptr) {
 		//  create the "irrKlang device"
@@ -30,9 +33,11 @@ public:
 	///	official irrklang supported volume control
 	void setVolume(float volume_) const;
 
+	bool isPlaying() const;
+	bool isPlayingExperimental() const;
+
 	//	the sound engine... public :O
 	irrklang::ISoundEngine* engine;
 
-private:
 	std::unordered_map<std::string, irrklang::ISoundSource*> soundSources;
 };
