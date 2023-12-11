@@ -15,6 +15,11 @@
 //  it tracks alllocations and deallocations.
 //  i tried memory leak tracking but it breaks ahahhahah
 
+
+//  notes for me later:
+//  the map is what broke everything
+//  for some reason it refuses to be initalized/used when extern/static/inline. which is rude
+
 inline extern size_t totalMemory = 0;
 inline extern bool isMemorySpammingActive = false;
 
