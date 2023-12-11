@@ -37,7 +37,6 @@
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mob_Spawner.cpp" />
-    <ClCompile Include="settings.cpp" />
     <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -77,7 +76,6 @@
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mob_Spawner.h" />
-    <ClInclude Include="settings.h" />
     <ClInclude Include="SpriteDefs.h" />
     <ClInclude Include="Tracker.h" />
     <ClInclude Include="PlayerBody.h" />

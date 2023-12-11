@@ -82,65 +82,63 @@ void PlayScene::Update(const float time) {
 		hasGameoverHappened = true;
 	}
 
+	///	Trackers [DEBUG THINGS]
 
 	int enemycounter = 0;
-	//Keeps track how many enemies are in the level
-	for (auto enemy : currentLevel->levelBodies) {
-		if (enemy->type == Body::ENEMY) {
-			enemycounter++;
+	if(isPaused == false && isDead == false) {
+		//Keeps track how many enemies are in the level
+		for (const auto& enemy : currentLevel->levelBodies) {
+			if (enemy->type == Body::ENEMY) {
+				enemycounter++;
+			}
 		}
-	} std::string enemyCountString = std::to_string(enemycounter);
-
-
-	///	Trackers [DEBUG THINGS]
-	//	"P to Pause"
-	tracker.trackThis("P to Pause", tracker.tracker1);
-
-	//max fps showing
-	const string fpsString = std::to_string(options::FPS) + " fps";
-	tracker.trackThis(fpsString, tracker.tracker2);
-
-
+		tracker.trackThis("P to Pause", tracker.tracker1);
+	}
+	tracker.trackThis(std::to_string(options::FPS) + " fps", tracker.tracker2);
+	tracker.trackThis(std::to_string(enemycounter) + " enemies left", tracker.tracker3);
 
 
 
 	///	MENU / USER INTERFACE [ trackers, but live ]
-	const std::string healthTrackerString = std::to_string(static_cast<int>(round(player->getCurrentHealth())));
+	if(isPaused == false && isDead == false) {
+		const std::string healthTrackerString = std::to_string(static_cast<int>(round(player->getCurrentHealth())));
 
-	UI_health->text = healthTrackerString;
-	if (std::stoi(healthTrackerString) > player->getMaxHealth() / 2 && std::stoi(healthTrackerString) <= player->getMaxHealth()) {
-		UI_health->textColour = ui::SDL_COLOR_DARK_GREEN;
-	}
+		UI_health->text = healthTrackerString;
+		if (std::stoi(healthTrackerString) > player->getMaxHealth() / 2 && std::stoi(healthTrackerString) <= player->getMaxHealth()) {
+			UI_health->textColour = ui::SDL_COLOR_DARK_GREEN;
+		}
 
-	if (std::stoi(healthTrackerString) > 20 && std::stoi(healthTrackerString) <= player->getMaxHealth() / 2) {
-		UI_health->textColour = ui::SDL_COLOR_BANANA_YELLOW;
+		if (std::stoi(healthTrackerString) > 20 && std::stoi(healthTrackerString) <= player->getMaxHealth() / 2) {
+			UI_health->textColour = ui::SDL_COLOR_BANANA_YELLOW;
+		}
+
+		if (std::stoi(healthTrackerString) <= 20) {
+			UI_health->textColour = ui::SDL_COLOR_ROSE_TOY;
+		}
+
+		const std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
+		UI_abilityText->text = abilityTrackerString;
+		if (abilityTrackerString == "melee") {
+			//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/childeicken.jpg";
+			UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/sword.png";
+		}
+		else if (abilityTrackerString == "shoot") {
+			//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/kleelegs.jpg";
+			UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/gun.png";
+		}
+		else if (abilityTrackerString == "shield") {
+			//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/baldzhongli.jpg";
+			UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/shield.png";
+		}
+
+
+
+		if (player->getCurrentHealth() == 0.0f) {
+			//isDead = true;
+			cc.log(update, "you died lmao");
+		}
 	}
 	
-	if (std::stoi(healthTrackerString) <= 20) {
-		UI_health->textColour = ui::SDL_COLOR_ROSE_TOY;
-	}
-
-	const std::string abilityTrackerString = player->getSelectedAbility(); //Keeps track on the ability that the player is using
-	UI_abilityText->text = abilityTrackerString;
-	if (abilityTrackerString == "melee") {
-		//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/childeicken.jpg";
-		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/sword.png";
-	}
-	else if (abilityTrackerString == "shoot") {
-		//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/kleelegs.jpg";
-		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/gun.png";
-	}
-	else if (abilityTrackerString == "shield") {
-		//UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/baldzhongli.jpg";
-		UI_abilitySprite->backgroundImageDirectory = "Textures/programmer_art/shield.png";
-	}
-
-
-
-	if(player->getCurrentHealth() == 0.0f) {
-		//isDead = true;
-		cc.log(update, "you died lmao");
-	}
 
 
 	//	pause menu things

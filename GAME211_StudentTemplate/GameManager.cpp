@@ -145,7 +145,7 @@ void GameManager::HandleEvents() {
 				StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_M:
-				isMemorySpammingActive = !isMemorySpammingActive;
+				MemoryManager::isMemorySpammingActive = !MemoryManager::isMemorySpammingActive;
 				break;
 			case SDL_SCANCODE_C:
 				//	testing

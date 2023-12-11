@@ -43,12 +43,6 @@
     <Filter Include="Source Files\Visualization">
       <UniqueIdentifier>{4ace3d17-f637-4f62-962f-e40b966cc0c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Misc">
-      <UniqueIdentifier>{24596bf9-e7ef-420c-9089-382efa884ecb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Misc">
-      <UniqueIdentifier>{07ad6976-5c36-4876-b38f-15c1694f2073}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{9b61642b-8f4b-4f38-8843-5cc700767ac2}</UniqueIdentifier>
     </Filter>
@@ -69,6 +63,12 @@
     </Filter>
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{f9cd07e4-f280-4b09-b995-48fce41bcaf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{24596bf9-e7ef-420c-9089-382efa884ecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{07ad6976-5c36-4876-b38f-15c1694f2073}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,13 +103,10 @@
       <Filter>Source Files\Body</Filter>
     </ClCompile>
     <ClCompile Include="PrettyPrinting.cpp">
-      <Filter>Source Files\Misc</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="ConsistentConsole.cpp">
-      <Filter>Source Files\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Source Files\Scene</Filter>
@@ -156,9 +153,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
-    <ClCompile Include="Tracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Visualization</Filter>
     </ClCompile>
@@ -171,11 +165,14 @@
     <ClCompile Include="Level2.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="settings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MemoryManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Tracker.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,13 +210,10 @@
       <Filter>Header Files\Body</Filter>
     </ClInclude>
     <ClInclude Include="ConsistentConsole.h">
-      <Filter>Header Files\Misc</Filter>
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="PrettyPrinting.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Scene2.h">
       <Filter>Header Files\Scene</Filter>
@@ -234,7 +228,7 @@
       <Filter>Header Files\Saving</Filter>
     </ClInclude>
     <ClInclude Include="KeybindHandler.h">
-      <Filter>Header Files\Misc</Filter>
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Scene3.h">
       <Filter>Header Files\Scene</Filter>
@@ -278,12 +272,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
-    <ClInclude Include="Tracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FadeTransition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Header Files\Visualization</Filter>
     </ClInclude>
@@ -299,11 +287,17 @@
     <ClInclude Include="Level2.h">
       <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeTransition.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Tracker.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

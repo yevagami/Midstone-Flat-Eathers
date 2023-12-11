@@ -32,7 +32,6 @@
 		inline float MusicVolume;
 		inline float SoundEffectVolume;
 
-
 		inline int FPS;
 
 		inline bool isRunning;
@@ -138,8 +137,6 @@
 	}
 
 #pragma endregion
-
-
 
 
 // Use 1000x600 for less than full screen
