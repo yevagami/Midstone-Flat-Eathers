@@ -63,15 +63,15 @@ public:
     }
     void setInvincible(const bool state_) { invincible = state_; }
 
-    float getCurrentDrawMeleeDuration() const { return drawMelee_timer->duration; }
+    float getCurrentDrawMeleeDuration() const { return drawAttack_timer->duration; }
     float getDefaultDrawMeleeDuration() const { return drawMeleeDurationDefault; }
     void setCurrentDrawMeleeDuration(const float newDuration_) {
-        drawMeleeDuration = newDuration_;	//just in case
-        drawMelee_timer->duration = drawMeleeDuration;
+        drawAttackDuration = newDuration_;	//just in case
+        drawAttack_timer->duration = drawAttackDuration;
     }
     void setCurrentDrawMeleeToDefault() {
-        drawMeleeDuration = drawMeleeDurationDefault;	//	just in case
-        drawMelee_timer->duration = drawMeleeDuration;
+        drawAttackDuration = drawMeleeDurationDefault;	//	just in case
+        drawAttack_timer->duration = drawAttackDuration;
     }
 
     float getCurrentDefence() const { return playerDefence;}
@@ -162,9 +162,9 @@ private:
     Vec3 mouseDirection = {};
     float meleePowerCurrent = 50.0f;
     float meleePowerDefault = 50.0f;
-    float drawMeleeDuration = 0.6f;
-    float drawMeleeDurationDefault = 0.3f;
-    bool drawMelee = false; //Draws a sprite to the screen when the player melees
+    float drawAttackDuration = 0.6f;
+    float drawMeleeDurationDefault = 0.6f;
+    bool drawAttack = false; //Plays the respective attack animation for a set duration of time
 
     //shooting variables
     float projectileSpeed = 2500.0f;
@@ -177,7 +177,7 @@ private:
     Clock* dash_cooldown = nullptr; //how long before the player can dash again
     Clock* shooting_cooldown = nullptr; //how long before the player can shoot again
     Clock* invincible_timer = nullptr; //how long before the player can take damage again
-    Clock* drawMelee_timer = nullptr;  //how long the melee sprite would stay on screen for
+    Clock* drawAttack_timer = nullptr;  //how long the attack animation would stay on screen for
     std::vector<Clock*> cooldowns; //list of cooldowns to update
 
     //dashing variables

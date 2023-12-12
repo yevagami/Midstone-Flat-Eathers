@@ -31,15 +31,16 @@ bool PlayerBody::OnCreate() {
 		invincible = false;
 		invincible_timer->Reset();
 		});
-	drawMelee_timer = new Clock(drawMeleeDuration, false, [this]() {
-		drawMelee = false;
-		drawMelee_timer->Reset();
+	drawAttack_timer = new Clock(drawAttackDuration, false, [this]() {
+		drawAttack = false;
+		drawAttack_timer->Reset();
+		drawShield = false;
 		});
 	dash_cooldown = new Clock(dashCooldown, false);
 	shooting_cooldown = new Clock(shootingCooldown, false);
 
 	//Pushes the timer to the vector
-	cooldowns.push_back(drawMelee_timer);
+	cooldowns.push_back(drawAttack_timer);
 	cooldowns.push_back(dash_timer);
 	cooldowns.push_back(dash_cooldown);
 	cooldowns.push_back(shooting_cooldown);
@@ -109,21 +110,28 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 	}
 
 	//attack controlls
-	if (event.type == SDL_MOUSEBUTTONUP) {
-		if (event.button.button == SDL_BUTTON_LEFT) {
-			if (currentState == idle) {
-				currentState = attack;
-			}
+	if (event.key.repeat == 0 && event.type == SDL_MOUSEBUTTONDOWN) {
+		if (currentState == idle) {
+			currentState = attack;
+		}
 
-			if (selectedAbilities == shield) {
+		if (selectedAbilities == shield) {
+			if (!drawShield) {
+				isShielding = true;
 				cout << isShielding << endl;
 				sfxSound.playSound("shield");
-				isShielding = !isShielding;
-				currentState = (isShielding) ? attack : idle;
-				drawShield = isShielding;
+				currentState =  attack;
+
 			}
-			//std::cout << "Pressed left\n";
-		} }
+			else {
+				isShielding = false;
+				cout << isShielding << endl;
+				sfxSound.playSound("shield");
+				currentState = idle;
+			}
+		}
+		//std::cout << "Pressed left\n";
+	}
 
 	//Switching abilities
 	if (event.type == SDL_KEYDOWN) { //	KEY DOWN ONLY
@@ -143,7 +151,9 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 			selectedAbilities = shield;
 			break;
 
-		} } }
+		} 
+	} 
+}
 
 void PlayerBody::Update(float deltaTime) {
 	
@@ -163,7 +173,7 @@ void PlayerBody::Update(float deltaTime) {
 
 	case dash:
 		state_dash(deltaTime);
-		drawShield = false;
+		isShielding = false;
 		break;
 
 	case attack:
@@ -203,48 +213,47 @@ void PlayerBody::Update(float deltaTime) {
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
-	////Drawing the melee sprite
-	//if (drawMelee) {
-	//	SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123};
-	//	SDL_RenderCopy(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[ouch], &Rect);
-	//}
-
-
-	//Drawing the abilities
+	//Get the angle to face the direction of the mouse
 	Vec3 meleeRectInScreen = parentScene->getProjectionMatrix() * Vec3();
 	SDL_Rect meleeRect{ meleeHitbox->x, meleeHitbox->y, 98, 98 };
 	float angle = atan2f(mouseDirection.y, mouseDirection.x);
 	angle = angle * 180 / 3.14159;
 
-	if (drawMelee) {
-		attackAnimController->PlayAnimation(anim_slash);
+
+	if (drawAttack) {
+		switch (selectedAbilities) {
+		case melee:
+			attackAnimController->PlayAnimation(anim_slash);
+			break;
+		case shoot:
+			attackAnimController->PlayAnimation(anim_shoot);
+			break;
+		}
 	}
 	else {
-		attackAnimController->PlayAnimation(anim_sword);
+		switch (selectedAbilities) {
+		case melee:
+			attackAnimController->PlayAnimation(anim_sword);
+			break;
+		case shoot:
+			attackAnimController->PlayAnimation(anim_gun);
+			break;
+		}
 	}
 
-	if (drawShield) {
-		attackAnimController->PlayAnimation(anim_shield);
-	}
-	//cout << angle << endl;
+	
+	attackAnimCutout = attackAnimController->GetCurrentFrame();
 	SDL_RendererFlip flip = (angle > 90.0f || angle < -90.0f) ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
-	SDL_RenderCopyEx(parentScene->getRenderer() , effectSpriteSheet.texture, attackAnimController->GetCurrentFrame(), &meleeRect, -angle, nullptr, flip);
-	//switch(selectedAbilities) {
-	//case melee: {
-	//	SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[Sword], &meleeRect, -angle, nullptr, flip);
-	//	break;
-	//}
-	//case shoot: {
-	//	SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[Gun], &meleeRect, -angle, nullptr, flip);
-	//	break;
-	//}
-	//}
-
-	////Drawing the shield sprite
-	//if (drawShield) {
-	//	SDL_Rect Rect{ meleeHitbox->x, meleeHitbox->y,100, 123 };
-	//	SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, &effectSpriteSheet.spriteStorage[Shield], &Rect, -angle, nullptr, flip);
-	//}
+	
+	if (selectedAbilities != shield) {
+		SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, attackAnimCutout, &meleeRect, -angle, nullptr, flip);
+	}
+	if (isShielding) {
+		attackAnimController->PlayAnimation(anim_shield);
+		SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, attackAnimController->GetCurrentFrame(), &meleeRect, -angle, nullptr, flip);
+	}
+	
+	
 
 #pragma region Animation stuff
 	//Switching the animations that are being played depending on the direction and the state
@@ -425,13 +434,13 @@ void PlayerBody::state_attack(float deltaTime_) {
 		//Stops the shield sprite from rendering
 		//Yes, this is a hotfix -Adriel
 		if (isShielding) {
-			drawShield = false; isShielding = false;
+			isShielding = false;
 		}
 
 		//Draw the melee sprite only when we haven't done it yet
-		if (!drawMelee) {
-			drawMelee = true;
-			drawMelee_timer->Start();
+		if (!drawAttack) {
+			drawAttack = true;
+			drawAttack_timer->Start();
 		}
 
 		//Check for all the bodies in the scene and comparing it to the melee hitbox
@@ -453,7 +462,12 @@ void PlayerBody::state_attack(float deltaTime_) {
 		sfxSound.playSound("gunshot");
 		//Yes, this is a hotfix again -Adriel
 		if (isShielding) {
-			drawShield = false; isShielding = false;
+			isShielding = false;
+		}
+
+		if (!drawAttack) {
+			drawAttack = true;
+			drawAttack_timer->Start();
 		}
 
 		//cooldown check! (if its on cooldown, leave)
@@ -484,6 +498,12 @@ void PlayerBody::state_attack(float deltaTime_) {
 
 	case shield: {
 		if (isShielding) {
+			drawShield = true;
+			if (!drawAttack) {
+				drawAttack = true;
+				drawAttack_timer->Start();
+			}
+
 			setCurrentDefence(playerDefenceShielded);
 			//sfxSound.playSound("slash"); // ear destroying
 

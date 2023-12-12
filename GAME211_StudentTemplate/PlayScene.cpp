@@ -254,7 +254,13 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			currentLevelString = "Level_test";
 			ChangeLevel(new Level_test(this));
 			break;
-			;
+
+		case SDL_SCANCODE_8:
+			menuMusicSound.stopAllSounds();
+			musicSound.stopAllSounds();
+			currentLevelString = "Level_MainMenu";
+			ChangeLevel(new Level_MainMenu(this));
+			break;
 		}
 	}
 
