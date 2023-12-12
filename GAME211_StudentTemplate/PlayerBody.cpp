@@ -114,7 +114,12 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 		if (currentState == idle) {
 			currentState = attack;
 		}
-
+		
+		//For some reason this thing broke again
+		//So I fixed it using a delay that is used for drawing the other animations on screen
+		//Cause I don't want to make a new timer
+		//This is the Nuclear fix 
+		//Hope it doesn't break
 		if (selectedAbilities == shield) {
 			if (!drawShield) {
 				isShielding = true;
