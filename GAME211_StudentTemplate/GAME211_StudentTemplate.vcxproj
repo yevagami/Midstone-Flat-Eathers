@@ -37,7 +37,6 @@
     <ClCompile Include="Level_test.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mob_Spawner.cpp" />
     <ClCompile Include="Tracker.cpp" />

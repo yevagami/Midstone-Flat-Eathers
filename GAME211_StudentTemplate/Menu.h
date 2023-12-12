@@ -528,6 +528,7 @@ namespace ui {
 			isButtonBordered = true;
 			isTextBordered = false;
 			isSensitiveToHovering = true;
+			isHandlingEvents = true;
 			textBorderSize = 2;
 			backgroundImageRotationAngle = 0.0;
 
@@ -634,6 +635,7 @@ namespace ui {
 		bool isPrideful;													//	change colour on click (default : false)
 		bool isEasilyScared;											//	causes the button to become inactive on click (default : false)
 		bool isSensitiveToHovering;								//	does the button care when its being hovered over (default : true)
+		bool isHandlingEvents;										//	does the button handle events (default : true)
 
 		bool isButtonBordered;									// enables/disables the button border (default : true)
 		bool isTextBordered;										//	enables/disables the text border (default : false)

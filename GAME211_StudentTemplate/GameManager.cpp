@@ -12,6 +12,8 @@ GameManager::GameManager() {
 	options::isRunning = true;
 	isPaused = false;
 	currentScene = nullptr;
+
+	GameName = "Daemon Crawlers";
 	//menuScene = nullptr;
 
 	//	loading settings.
@@ -162,6 +164,7 @@ void GameManager::Update(float deltaTime_) {
 			///	keep the present scene visible
 			//currentScene->Render();
 			///	render the fade higher in priority
+			//currentScene->Update(deltaTime_);
 			fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
 		} else {												// when the fade transition is done...
 			fadeTransition.reset();					//	reset the unique pointer (make it nullptr)

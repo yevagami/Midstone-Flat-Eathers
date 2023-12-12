@@ -160,6 +160,7 @@ private:
 	//class Scene *menuScene;
 
 
+
 	//	michael's playground ahahhahahaha
 	std::unique_ptr<FadeTransition> fadeTransition; // frick manual memory management, we quirky pointer
 
@@ -168,6 +169,9 @@ private:
 	bool isPaused;
 
 public:
+
+	std::string GameName;
+
 	GameManager();
 	~GameManager();
 	bool OnCreate();

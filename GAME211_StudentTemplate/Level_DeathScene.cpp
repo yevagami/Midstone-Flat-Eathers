@@ -27,7 +27,7 @@ bool Level_DeathScreen::OnCreate() {
     name = "Gameover";
     isDeathScreenHere = true;
 
-    deathText = new Button(Font{ "default", 75 });
+    deathText = new Button(Font{ randomizeDeathMessage(), 75 });
 
     deathText->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
     deathText->offsetPosition(-100);
@@ -59,12 +59,12 @@ void Level_DeathScreen::OnDestroy() {
 
 void Level_DeathScreen::Update(const float time_) {
 
-    if (isDeathScreenHere) {
-        isDeathScreenHere = false;
-        deathString = randomizeDeathMessage();
-        cc.log(debug, "death text is ", deathString);
-        deathText->text = deathString;
-    }
+    //if (isDeathScreenHere) {
+    //    isDeathScreenHere = false;
+    //    deathString = randomizeDeathMessage();
+    //    cc.log(debug, "death text is ", deathString);
+    //    deathText->text = deathString;
+    //}
 
 
 }

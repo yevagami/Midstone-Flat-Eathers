@@ -30,73 +30,22 @@ bool SceneUI::OnCreate() {
 	isGameStarted = false;
 
 
+	//	the background lmao
+	shhh = new Button(Font{}, SDL_Testangle);
+	shhh->isButtonBordered = false;
+	shhh->isSensitiveToHovering = false;
+	shhh->isHandlingEvents = false;
+	shhh->EnableBackgroundImage("Textures/programmer_art/hellishBackground.png");
+	shhh->offsetPosition(-10, -10);
+	shhh->scaleDimensionsIndividually(11, 11);
+
+
 	//	the text
-	text1 = new Button(Font{ "the world is !!FLAT!!", 100 });
+	text1 = new Button(Font{ game->GameName, 100 });
 	text2 = new Button(Font{ "Adriel, Michael, Diana, Helen", 25 });
 
 	allTexts.emplace_back(text1);
 	allTexts.emplace_back(text2);
-
-	for (const auto& text : allTexts) {
-		text->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-		text->textColour = SDL_COLOR_ANTIQUE_WHITE;
-		text->isTextBordered = true;
-	}
-
-	text1->offsetPosition(-285);
-	text2->setPositionRelativeTo(*text1, 55);
-
-
-	//	the buttons
-	PlayButton = new Button(Font{ "Play Game" }, SDL_Testangle, Colour{});
-	QuitButton = new Button(Font{ "Quit Game" }, SDL_Testangle, Colour{});
-	SettingsButton = new Button{ Font{"Settings"}, SDL_Testangle, Colour{} };
-
-	allButtons.emplace_back(PlayButton);
-	allButtons.emplace_back(QuitButton);
-	allButtons.emplace_back(SettingsButton);
-
-
-	for (const auto& button : allButtons) {
-		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-		button->backgroundColour = SDL_COLOR_FOREST_GREEN;
-		button->buttonBorderColour = SDL_COLOR_BLACK;
-
-		button->SetOnInteractionCallback([&]() {
-			sfxSound.playSound("select");
-			});
-	}
-	PlayButton->setPositionRelativeTo(*SettingsButton, -100);
-	SettingsButton->offsetPosition();
-	QuitButton->setPositionRelativeTo(*SettingsButton, 100);
-
-	PlayButton->SetOnLeftClick([&]() {
-		cc.log(debug, "in game theory this should send us to a dif level");
-		isGameStarted = true;
-		});
-
-	SettingsButton->isTogglable = true;
-	SettingsButton->SetOnLeftClick([&]() {
-
-		if(!SettingsButton->isOn) {
-			cc.log(debug, "settings menu opened");
-			settingsOpen = true;
-		}else {
-			cc.log(debug, "settings menu closed");
-			settingsOpen = false;
-		}
-	});
-
-
-	QuitButton->SetOnLeftClick([&]() {
-		cc.log(debug, "quit game");
-
-		game->StartFadeInTransition(1000,
-			[&]() { GameManager::quitPls(); },
-			[&]() { GameManager::savePls(); });
-		});
-
 
 	//	sub pause buttons (pause menu -> options menu)
 	subButton1 = new ui::Button(ui::Font{}, ui::SDL_Square, ui::Colour{});
@@ -133,6 +82,53 @@ bool SceneUI::OnCreate() {
 	soundButton3->text = "sfx";
 
 
+
+
+
+
+	for (const auto& text : allTexts) {
+		text->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		text->isTextBordered = true;
+	}
+
+	text1->textColour = SDL_COLOR_CRIMSON_RED;
+	text1->textBorderSize = 4;
+	text1->offsetPosition(-285);
+	text2->textColour = SDL_COLOR_CRIMSON_RED << SDL_White50;
+	text2->setPositionRelativeTo(*text1, 55);
+
+
+	//	the buttons
+	PlayButton = new Button(Font{ "Play Game" }, SDL_Testangle, Colour{});
+	QuitButton = new Button(Font{ "Quit Game" }, SDL_Testangle, Colour{});
+	SettingsButton = new Button{ Font{"Settings"}, SDL_Testangle, Colour{} };
+
+	allButtons.emplace_back(PlayButton);
+	allButtons.emplace_back(QuitButton);
+	allButtons.emplace_back(SettingsButton);
+
+
+	for (const auto& button : allButtons) {
+		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		button->backgroundColour = SDL_COLOR_CRIMSON_RED;
+		button->buttonBorderColour = SDL_COLOR_BLACK;
+		button->textColour = SDL_COLOR_BLACK;
+		button->textBorderColour = SDL_COLOR_BLACK;
+		button->textBorderSize = 1;
+
+
+		button->SetOnInteractionCallback([&]() {
+			sfxSound.playSound("select");
+			});
+	}
+	PlayButton->setPositionRelativeTo(*SettingsButton, -100);
+	SettingsButton->offsetPosition();
+	QuitButton->setPositionRelativeTo(*SettingsButton, 100);
+
+
+
+
 	for (const auto button : allSubPauseMenuButtons) {
 		//	change scale (cuz theyre small squares)
 		button->scaleDimensions(50);
@@ -141,9 +137,10 @@ bool SceneUI::OnCreate() {
 
 		//	universal cosmetics
 		button->fontSize = 25;
-		button->isTextBordered = true;
-		button->backgroundColour = SDL_COLOR_FOREST_GREEN;
+		button->isTextBordered = false;
+		button->backgroundColour = SDL_COLOR_CRIMSON_RED;
 		button->buttonBorderColour = SDL_COLOR_BLACK;
+		button->textColour = SDL_COLOR_BLACK;
 		button->textBorderColour = ui::SDL_COLOR_BLACK;
 		button->buttonBorderSize = 4;
 		button->textBorderSize = 1;
@@ -165,19 +162,21 @@ bool SceneUI::OnCreate() {
 
 		//	universal cosmetics
 		button->fontSize = 25;
-		button->isTextBordered = true;
-		button->backgroundColour = SDL_COLOR_FOREST_GREEN;
+		button->isTextBordered = false;
+		button->backgroundColour = SDL_COLOR_CRIMSON_RED;
 		button->buttonBorderColour = SDL_COLOR_BLACK;
+		button->textColour = SDL_COLOR_BLACK;
 		button->textBorderColour = ui::SDL_COLOR_BLACK;
 		button->buttonBorderSize = 4;
-		button->textBorderSize = 1;
 
 		//	anything that happens on an interact
 		button->SetOnInteractionCallback([&]() {
 			sfxSound.playSound("select");
 			});
-
 	}
+	soundButtonText1->textColour = SDL_COLOR_ANTIQUE_WHITE;
+	soundButtonText2->textColour = SDL_COLOR_ANTIQUE_WHITE;
+	soundButtonText3->textColour = SDL_COLOR_ANTIQUE_WHITE;
 
 	subButton4->isTogglable = true;
 	subButton4->SetOnLeftClick([&]() {
@@ -201,6 +200,34 @@ bool SceneUI::OnCreate() {
 			}
 		}
 
+		});
+
+
+	PlayButton->SetOnLeftClick([&]() {
+		cc.log(debug, "in game theory this should send us to a dif level");
+		isGameStarted = true;
+		});
+
+	SettingsButton->isTogglable = true;
+	SettingsButton->SetOnLeftClick([&]() {
+
+		if (!SettingsButton->isOn) {
+			cc.log(debug, "settings menu opened");
+			settingsOpen = true;
+		}
+		else {
+			cc.log(debug, "settings menu closed");
+			settingsOpen = false;
+		}
+		});
+
+
+	QuitButton->SetOnLeftClick([&]() {
+		cc.log(debug, "quit game");
+
+		game->StartFadeInTransition(1000,
+			[&]() { GameManager::quitPls(); },
+			[&]() { GameManager::savePls(); });
 		});
 
 	subButton1->SetOnRightClick([&]() {
@@ -267,15 +294,6 @@ bool SceneUI::OnCreate() {
 	//	make them clickable
 	for (const auto button : allSubPauseMenuButtons) { button->generateHitbox(); }
 	for (const auto button : allSoundMenuButtons) { button->generateHitbox(); }
-
-
-
-	//	the background lmao
-	shhh = new Button(Font{}, SDL_Testangle);
-	shhh->isButtonBordered = false;
-	shhh->backgroundColour = SDL_COLOR_GOLDEN_STREAM / SDL_COLOR_BLACK;
-	shhh->offsetPosition(-10, -10);
-	shhh->scaleDimensionsIndividually(11, 11);
 
 
 

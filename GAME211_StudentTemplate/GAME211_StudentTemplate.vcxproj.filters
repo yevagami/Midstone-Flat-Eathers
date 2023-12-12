@@ -162,9 +162,6 @@
     <ClCompile Include="Level2.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryManager.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Tracker.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>

@@ -9,7 +9,7 @@ ConsistentConsole ccMenu(false, "Menu.cpp");
 namespace ui {
 #pragma region Core Methods
 	void Button::HandleEvents(const SDL_Event& event_) {
-		if (isActive) {
+		if (isActive && isHandlingEvents) {
 			switch (event_.type) {
 
 				//	hovering events

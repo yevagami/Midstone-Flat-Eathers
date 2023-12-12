@@ -160,10 +160,12 @@ void PlayScene::Update(const float time) {
 	if (player->getCurrentHealth() <= 0.0f && isDead == false &&hasGameoverHappened == false) {
 		GameManager::stopAllMusic();
 
-
 		sfxSound.playSound("gameover");
 		isDead = true;
 		hasGameoverHappened = true;
+		game->StartFadeInTransition(1000, [&]() {
+			ChangeLevel(new Level_DeathScreen(this));
+		});
 	}
 
 	if (currentLevel->canSwitchTheScene == true || isDead) {
@@ -195,13 +197,16 @@ void PlayScene::Render() {
 	tracker.render(renderer);
 
 	//	gui
-	for (auto element : allUIElements) {
-		element->Render(renderer);
+	if(currentLevel->name != "Gameover") {
+		for (auto element : allUIElements) {
+			element->Render(renderer);
+		}
 	}
 
 
+
 	//	pause menu
-	if (isPaused) {
+	if (isPaused && currentLevel->name != "Gameover") {
 		//	main pause menu
 		for (const auto button : allPauseMenuButtons) {
 			button->Render(renderer);
