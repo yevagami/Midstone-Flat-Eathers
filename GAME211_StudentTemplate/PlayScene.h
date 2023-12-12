@@ -34,7 +34,7 @@ private:
 	//Level 
 	Level* currentLevel;
 	std::string currentLevelString;
-
+	bool nextLevelFlag = false;
 
 public:
 	//Constructor/destructors
@@ -61,6 +61,18 @@ public:
 	bool isDead = false;
 	bool hasGameoverHappened = false;
 	void ChangeLevel(Level* newLevel_);
+
+	//Level switching stuff
+	//Warning: nuclear fix
+	Level* nextLevel;
+	void QueueNextLevel(Level* nextLevel_) {
+		if (!nextLevelFlag) { nextLevelFlag = true; }
+		if (nextLevel != nullptr) {
+			cc.log(error, "A level is already in queue");
+			return;
+		}
+		nextLevel = nextLevel_;
+	}
 
 	///	menu		 [ has to be at scene level >:( ]
 	bool isPaused = false;

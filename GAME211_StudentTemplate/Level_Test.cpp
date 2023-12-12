@@ -95,6 +95,13 @@ bool Level_test::OnCreate(){
 
 #pragma endregion
 
+	Trigger* newTrigger = new Trigger(this, Vec3(1366.0f / 2.0f, 768.0f / 2.0f + 500, 0.0f), 128, 128, [this]() {
+			PlayScene* playScenePointer = dynamic_cast<PlayScene*>(parentScene);
+			if (playScenePointer != nullptr) {
+				playScenePointer->QueueNextLevel(new Level1(parentScene));
+			}
+		});
+	levelBodies.push_back(newTrigger);
 	return true;
 }
 

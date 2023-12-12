@@ -173,8 +173,12 @@ void PlayScene::Update(const float time) {
 	if (isDead == true && player->getCurrentHealth() > 0.0f) {
 		isDead = false;
 	}
-
-
+	
+	if (nextLevelFlag) {
+		ChangeLevel(nextLevel);
+		nextLevel = nullptr;
+		nextLevelFlag = false;
+	}
 }
 
 
