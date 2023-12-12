@@ -399,6 +399,7 @@ bool Level_3::OnCreate() {
 		}
 		});
 	levelBodies.push_back(nextLevelTrigger);
+	nextLevelTrigger = nullptr;
 #pragma endregion
 	return true;
 }
@@ -429,7 +430,7 @@ void Level_3::OnDestroy() {
 
 void Level_3::Update(const float time) {
 
-	newMobSpawner->waveSpawner(3);
+	newMobSpawner->waveSpawner(2);
 
 	if (newMobSpawner->levelWon) {
 		canSwitchTheScene = true;

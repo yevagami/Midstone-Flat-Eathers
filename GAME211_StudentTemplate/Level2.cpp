@@ -102,6 +102,8 @@ bool Level2::OnCreate() {
 			}
 		}
 		});
+	levelBodies.push_back(nextLevelTrigger);
+	nextLevelTrigger = nullptr;
 
 	wall = nullptr;
 
@@ -133,7 +135,7 @@ void Level2::OnDestroy() {
 
 void Level2::Update(const float time) {
 	//waveSpawner(10);
-	newMobSpawner->waveSpawner(10);
+	newMobSpawner->waveSpawner(2);
 
 	//Updates the level bodies
 	for (Body* body : levelBodies) {
