@@ -175,9 +175,11 @@ void PlayScene::Update(const float time) {
 	}
 	
 	if (nextLevelFlag) {
-		ChangeLevel(nextLevel);
-		nextLevel = nullptr;
-		nextLevelFlag = false;
+		game->StartFadeInTransition(1000, [this]() { 
+			ChangeLevel(nextLevel); 
+			nextLevel = nullptr;
+			nextLevelFlag = false;
+		});
 	}
 }
 
