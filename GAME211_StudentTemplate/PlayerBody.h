@@ -88,7 +88,12 @@ public:
 	float getDefaultProjectileDamage() const { return projectilePowerDefault; }
     void setCurrentProjectileDamage(const float newProjectileDamage_) {  projectilePowerCurrent = newProjectileDamage_; }
     void setCurrentProjectileDamageToDefault() {  projectilePowerCurrent = projectilePowerDefault; }
-
+    void AddHealth(float amount) {
+        currentHealth += amount;
+        if (currentHealth > maxHealth) {
+            currentHealth = maxHealth;
+        }
+    }
 
     //state methods
     void state_idle();
@@ -97,6 +102,8 @@ public:
 
     //Public variables
     bool isShielding = false;
+    int killCount = 0;
+    int points = 0;
 
 private:
     //Player abilities enum

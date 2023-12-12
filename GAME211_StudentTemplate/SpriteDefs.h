@@ -19,7 +19,9 @@
 		projectile = 9,
 		melee_strike = 10,
 		boom = 11,
-		ouch = 12
+		ouch = 12,
+		health = 13,
+		points = 14
 	};
 
 	enum PlayerWalking {

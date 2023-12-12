@@ -40,7 +40,8 @@ public:
 		SOLID = 1, 
 		PROJECTILE = 2, 
 		PLAYER = 3,
-		ENEMY = 4
+		ENEMY = 4,
+		DROP = 5
 	};
 	TYPE type = BODY;
 

@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Level.h"
+#include "PlayerBody.h"
 
 Enemy::Enemy(Level* parentLevel_, Vec3 pos_, subType type_) {
 	parentLevel = parentLevel_;
@@ -60,6 +61,11 @@ void Enemy::takeDamage(float amount){
 		if (OnDeath) OnDeath(); 
 
 		destroyFlag = true;
+	
+		if (playerReference != nullptr) {
+			playerReference->killCount += 1;
+			playerReference->points += 100;
+		}
 	}
 }
 
@@ -71,7 +77,7 @@ void Enemy::state_idle(){
 	if (playerReference == nullptr) {
 		for (Body* body : parentLevel->levelBodies) {
 			if (body->type == PLAYER) {
-				playerReference = body;
+				playerReference = dynamic_cast<PlayerBody*>(body);
 			}
 		}
 	}

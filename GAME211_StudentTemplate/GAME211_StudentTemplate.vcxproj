@@ -24,6 +24,7 @@
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="ConsistentConsole.cpp" />
+    <ClCompile Include="Drop.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EntityMap.cpp" />
     <ClCompile Include="FileManager.cpp" />
@@ -58,6 +59,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Drop.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FadeTransition.h" />
     <ClInclude Include="Level.h" />

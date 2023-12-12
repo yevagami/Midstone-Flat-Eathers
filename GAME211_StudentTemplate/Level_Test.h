@@ -2,6 +2,7 @@
 #include "Level.h"
 #include "Solid.h"
 #include "Enemy.h"
+#include "Drop.h"
 #include "Mob_Spawner.h" 
 
 class Level_test : public Level{

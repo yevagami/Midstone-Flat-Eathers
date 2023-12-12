@@ -103,3 +103,4 @@ void Sprite::onDestroy()
 	}
 	renderer = nullptr;
 }
+ 

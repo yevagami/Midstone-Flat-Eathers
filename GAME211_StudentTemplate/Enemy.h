@@ -14,6 +14,7 @@ struct enemyVariables {
 	float h;
 };
 
+class PlayerBody;
 class Enemy : public Body{
 public:
 	//Enemy type definitions
@@ -50,7 +51,7 @@ private:
 	//Enemy specific variables
 	float enemyMoveSpeed;
 	float enemyPower;
-	Body* playerReference = nullptr;
+	PlayerBody* playerReference = nullptr;
 
 
 	float enemyHitboxW = 98.0f;

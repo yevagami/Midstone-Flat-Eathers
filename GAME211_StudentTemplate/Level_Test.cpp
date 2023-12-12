@@ -93,6 +93,17 @@ bool Level_test::OnCreate(){
 	wall = nullptr;
 
 #pragma endregion
+
+	Drop* healthPacks = new Drop(
+		this,
+		Vec3(1366 / 2 + 50.0f, 768.0f / 2 + 50.0f, 0.0f),
+		Vec3(1.0f, 1.0f, 1.0f),
+		128, 128,
+		Drop::DropType::HEALTH
+	);
+	levelBodies.push_back(healthPacks);
+	healthPacks = nullptr;
+
 	return true;
 }
 

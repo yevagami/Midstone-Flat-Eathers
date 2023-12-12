@@ -146,6 +146,7 @@ void PlayerBody::HandleEvents(const SDL_Event& event) {
 		} } }
 
 void PlayerBody::Update(float deltaTime) {
+	
 	updateMouseDir(); //Update the melee hitbox
 	updateMeleeHitbox(); //Gets the direction of the mouse relative to the player's position
 
@@ -316,10 +317,6 @@ void PlayerBody::OnDestroy() {
 	for (Clock* item : cooldowns) { delete item; }
 	cooldowns.clear();
 
-	//Cleanup for the sprites and animations
-	playerSpriteSheet.onDestroy();
-	effectSpriteSheet.onDestroy();
-
 	//Deleting the animation controllers
 	delete animController;
 	delete attackAnimController;
@@ -327,10 +324,15 @@ void PlayerBody::OnDestroy() {
 	cc.log(update, "Deleting PlayerBody");
 
 	Body::OnDestroy();
+
+	//Cleanup for the sprites and animations
+	//Note: no need to call on destroy on the player's sprite since the player already points to the object and Body::ondestroy() already destroys that 
+	//playerSpriteSheet.onDestroy();
+	effectSpriteSheet.onDestroy();
 }
 
+
 PlayerBody::~PlayerBody() {
-	OnDestroy();
 }
 
 void PlayerBody::updateMouseDir() {

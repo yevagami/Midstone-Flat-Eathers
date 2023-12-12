@@ -13,6 +13,7 @@ public:
 	const char* name = "";
     class GameManager* game = NULL;
 
+
 	Scene()
 	{} 
 
