@@ -52,7 +52,7 @@ private:
 	//Enemy specific variables
 	float enemyMoveSpeed;
 	float enemyPower;
-	float maxDrops = 3;
+	float maxDrops = 2;
 	PlayerBody* playerReference = nullptr;
 	float enemyChaseDistance = 500.0f;
 
@@ -63,7 +63,7 @@ private:
 		{subType::flash, enemyVariables{
 			225.0f,
 			150.0f,
-			"Textures/programmer_art/enemyangy.png",
+			"Textures/programmer_art/enemy_nyar.png",
 			35.0f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -72,7 +72,7 @@ private:
 		{subType::miracle, enemyVariables{
 			75.0f,
 			300.0f,
-			"Textures/programmer_art/enemyuwu.png",
+			"Textures/programmer_art/enemy_gurr.png",
 			10.0f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -81,7 +81,7 @@ private:
 		{subType::strong, enemyVariables{
 			350.0f,
 			50.0f,
-			"Textures/programmer_art/enemyadriel.png",
+			"Textures/programmer_art/enemy_power.png",
 			86.25f,
 			enemyHitboxW,
 			enemyHitboxH
@@ -90,7 +90,7 @@ private:
 		{subType::mybike, enemyVariables{
 			350.0f,
 			250.0f,
-			"Textures/programmer_art/enemymybike.png",
+			"Textures/programmer_art/enemy_pix.png",
 			25.0f,
 			enemyHitboxW,
 			enemyHitboxH

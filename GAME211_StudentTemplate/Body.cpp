@@ -97,7 +97,7 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
     if (isActive) {
         //Failsafe incase the programmer forgets to add a texture to the body
         if (texture == nullptr && type != TRIGGER) {
-            std::cout << "You forgot a texture\n";
+            cc.log(error, "You forgot a texture");
         }
 
 
@@ -111,9 +111,18 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
         // Scale the image, in case the .png file is too big or small
         //If a cutout was provided, scale the image based on it
         //Otherwise use the image's dimensions
+
+
         if (cutout == nullptr) {
-            w = image->w * scale.x;
-            h = image->h * scale.y;
+            if (image == nullptr) {
+                cc.log(error, "You forgot the image");
+                w = 0;
+                h = 0;
+            }
+            else {
+                w = image->w * scale.x;
+                h = image->h * scale.y;
+            }
         }
         else {
             w = cutout->w * scale.x;
@@ -137,7 +146,7 @@ void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
         //If you don't give it a cutout for a smaller section of the image, it'll just use the entire thing
         //Pretty useful ngl -Adriel
-        SDL_RenderCopyEx(renderer_, texture, cutout, &square, orientationDegrees, nullptr, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(renderer_, texture, cutout, &square, orientationDegrees, nullptr, flip);
     }
 }
 

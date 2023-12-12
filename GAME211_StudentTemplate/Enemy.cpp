@@ -38,6 +38,10 @@ void Enemy::Update(float time){
 		break;
 	}
 
+	float angle = atan2f(vel.y, vel.x);
+	angle = angle * 180.0f / M_PI;
+	flip = (angle > 90.0f || angle < -90.0f) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
 	Body::Update(time);
 }
 
