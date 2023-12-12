@@ -174,9 +174,6 @@
     <ClCompile Include="Level_3.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
-    <ClCompile Include="Level_MainMenu.cpp">
-      <Filter>Source Files\Scene\Levels</Filter>
-    </ClCompile>
     <ClCompile Include="Drop.cpp">
       <Filter>Source Files\Body</Filter>
     </ClCompile>
@@ -185,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="Trigger.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_DeathScene.cpp">
+      <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,9 +311,6 @@
     <ClInclude Include="Level_3.h">
       <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
-    <ClInclude Include="Level_MainMenu.h">
-      <Filter>Header Files\Scene\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="Drop.h">
       <Filter>Header Files\Body</Filter>
     </ClInclude>
@@ -324,6 +321,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Level_List.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level_DeathScreen.h">
       <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
   </ItemGroup>
