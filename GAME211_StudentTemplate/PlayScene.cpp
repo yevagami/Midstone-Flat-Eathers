@@ -25,7 +25,6 @@ bool PlayScene::OnCreate() {
 
 	//Set the name of the scene for organizing purposes
 	name = "PlayScene";
-
 	//	scene changing flags
 	isGameStarted = true;
 	isMainMenuOpen = false;
@@ -41,7 +40,6 @@ bool PlayScene::OnCreate() {
 
 	//Creating the level
 	currentLevel = new Level_test(this);
-	currentLevelString = "Level_test";
 	if (!currentLevel->OnCreate()) {
 		std::cout << "Something went wrong with the Level\n";
 	}
@@ -98,8 +96,8 @@ void PlayScene::Update(const float time) {
 		}
 		tracker.trackThis("P to Pause", tracker.tracker1);
 		tracker.trackThis(std::to_string(enemycounter) + " enemies left", tracker.tracker3);
-		if (currentLevelString != "") {
-			tracker.trackThis("current level: " + currentLevelString, tracker.tracker4);
+		if (currentLevel->name != "") {
+			tracker.trackThis("current level: " + currentLevel->name, tracker.tracker4);
 		}
 	}
 	tracker.trackThis(std::to_string(options::FPS) + " fps", tracker.tracker2);
@@ -251,29 +249,24 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			break;
 
 		case SDL_SCANCODE_0:
-			currentLevelString = "Level2";
 			ChangeLevel(new Level2(this));
 			break;
 
 		case SDL_SCANCODE_9:
-			currentLevelString = "Level_test";
 			ChangeLevel(new Level_test(this));
 			break;
 
 		case SDL_SCANCODE_8:
 			menuMusicSound.stopAllSounds();
 			musicSound.stopAllSounds();
-			currentLevelString = "Level_MainMenu";
 			ChangeLevel(new Level_MainMenu(this));
 			break;
 
 		case SDL_SCANCODE_O:
-			currentLevelString = "Level3";
 			ChangeLevel(new Level_3(this));
 			break;
 
 		case SDL_SCANCODE_I:
-			currentLevelString = "Level1";
 			ChangeLevel(new Level1(this));
 			break;
 		}

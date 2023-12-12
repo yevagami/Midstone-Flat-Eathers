@@ -4,7 +4,9 @@
 //I might have to reorder the methods for organizing purposes
 
 bool Level_test::OnCreate(){
-	
+
+	name = "Level_test";
+
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 	
@@ -187,7 +189,8 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+
+		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

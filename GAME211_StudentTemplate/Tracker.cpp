@@ -36,10 +36,11 @@ void Tracker::scary() {
 
 	for (const auto tracker : allTrackers) {
 		tracker->isTextBordered = true;
-		tracker->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		//tracker->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 		tracker->textColour = SDL_COLOR_ANTIQUE_WHITE;
-		tracker->offsetPosition(-SCREEN_HEIGHT + 400);
+		//tracker->offsetPosition(-SCREEN_HEIGHT + 400);
 	}
+	tracker1->setPosition(50, SCREEN_WIDTH -125);
 	tracker2->setPositionRelativeTo(*tracker1, 25);
 	tracker3->setPositionRelativeTo(*tracker2, 25);
 	tracker4->setPositionRelativeTo(*tracker3, 25);

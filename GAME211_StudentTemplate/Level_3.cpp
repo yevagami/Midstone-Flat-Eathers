@@ -4,6 +4,8 @@
 
 bool Level_3::OnCreate() {
 
+	name = "Level_3";
+
 	//Creating the background
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/background.png"));
 

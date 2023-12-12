@@ -26,14 +26,47 @@ private:
 	Button* shhh;
 
 	vector<Button*> allButtons;
-	Button* button1;
-	Button* button2;
-	//Button*button3;
+	Button* PlayButton;
+	Button* QuitButton;
+	Button* SettingsButton;
+
+	Button* SoundButton;
+
 
 	vector<Button*> allTexts;
 	Button* text1;
 	Button* text2;
 	Button* text3;
+
+
+
+	///	menu		 [ has to be at scene level >:( ]
+	bool isPaused = false;
+
+
+	bool settingsOpen = false;
+	vector<ui::Button*> allSubPauseMenuButtons;
+	ui::Button* subButton1;
+	ui::Button* subButton2;
+	ui::Button* subButton3;
+	ui::Button* subButton4;
+
+	bool soundMenuOpen = false;
+	vector<ui::Button*> allSoundMenuButtons;
+	ui::Button* soundButton1;
+	ui::Button* soundButton2;
+	ui::Button* soundButton3;
+	ui::Button* soundButtonText1;
+	ui::Button* soundButtonText2;
+	ui::Button* soundButtonText3;
+
+
+	//I'll move this when it fully works
+	void CreateSettingsMenu() {
+		
+	}
+
+
 
 public:
 	// This constructor may be different from what you've seen before

@@ -5,6 +5,7 @@
 
 bool Level1::OnCreate(){
 	background = SDL_CreateTextureFromSurface(parentScene->getRenderer(), IMG_Load("Textures/programmer_art/himeko.jpg"));
+	name = "Level1";
 	return true;
 }
 
@@ -68,7 +69,9 @@ void Level1::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 }
 
 void Level1::HandleEvents(const SDL_Event& event) {
+
 	for (Body* body : levelBodies) {
 		body->HandleEvents(event);
 	}
+
 }

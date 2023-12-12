@@ -33,7 +33,6 @@ private:
 
 	//Level 
 	Level* currentLevel;
-	std::string currentLevelString;
 	bool nextLevelFlag = false;
 
 public:

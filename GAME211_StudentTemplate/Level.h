@@ -12,6 +12,8 @@ protected:
 
 public:
 
+	std::string name = "";
+
 	bool canSwitchTheScene = false; //flag to tell the Scene to change the level
 
 	Level(Scene* parentScene_) { parentScene = parentScene_; }

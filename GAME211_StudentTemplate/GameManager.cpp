@@ -127,7 +127,8 @@ void GameManager::HandleEvents() {
 				break;
 			case SDL_SCANCODE_I:
 				//	testing
-				StartFadeInTransition(500);
+				sfxSound.playSound("my bike");
+				//StartFadeInTransition(500);
 				break;
 			case SDL_SCANCODE_M:
 				MemoryManager::isMemorySpammingActive = !MemoryManager::isMemorySpammingActive;
