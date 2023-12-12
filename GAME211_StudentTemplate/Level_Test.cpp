@@ -156,17 +156,16 @@ void Level_test::Update(const float time){
 	
 	//c++ doesn't like it when you are pushing something to a vector
 	//while you are iterating over it
-	if (!spawningBodies.empty()) {
-		for (Body* spawn : spawningBodies) {
-			levelBodies.push_back(spawn);
-			spawn = nullptr;
+	for (Body* spawn : spawningBodies) {
+		levelBodies.push_back(spawn);
+		spawn = nullptr;
 
-		}
-		spawningBodies.clear();
 	}
+	spawningBodies.clear();
+	
 
 	//Cleanup
-	if (trashBodies.empty()) { return; } //Exit early if there are no necessary cleanups
+	 //Exit early if there are no necessary cleanups
 	for (Body* trash : trashBodies) {
 		//Go through the levelBodies vector and find the trash object that still has a  reference in it
 		//https://www.youtube.com/watch?v=SgcHcbQ0RCQ
@@ -192,7 +191,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
 
-		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

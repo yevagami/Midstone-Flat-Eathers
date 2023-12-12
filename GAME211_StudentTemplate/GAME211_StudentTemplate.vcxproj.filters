@@ -323,5 +323,8 @@
     <ClInclude Include="Trigger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Level_List.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

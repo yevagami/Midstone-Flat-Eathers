@@ -37,4 +37,5 @@ void Drop::OnCollide(Body* other, float deltaTime) {
 }
 
 void Drop::OnDestroy() {
+	Body::OnDestroy();
 }
