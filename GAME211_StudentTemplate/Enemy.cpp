@@ -61,7 +61,7 @@ void Enemy::takeDamage(float amount){
 		if (OnDeath) OnDeath(); 
 
 		destroyFlag = true;
-	
+		
 		if (playerReference != nullptr) {
 			playerReference->killCount += 1;
 			playerReference->points += 100;
@@ -100,4 +100,8 @@ void Enemy::state_followPlayer(){
 	//Moves towards the player
 	Vec3 playerDirection = VMath::normalize(playerReference->getPos() - pos);
 	vel = playerDirection * enemyMoveSpeed;
+}
+
+void Enemy::SpawnDrops() {
+
 }

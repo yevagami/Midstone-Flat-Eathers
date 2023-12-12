@@ -8,7 +8,7 @@ Drop::Drop(Level* parentLevel_, Vec3 pos_, Vec3 scale_, int w_, int h_, DropType
 	Body::LoadHitbox(w_, h_);
 	type = DROP;
 
-	dropSprite = Sprite("Textures/programmer_art/player_effects_sheet.png", parentLevel->getParentScene()->getRenderer());
+	dropSprite = Sprite("Textures/programmer_art/sprite_sheet.png", parentLevel->getParentScene()->getRenderer());
 	dropSprite.autoLoadSprites();
 	image = dropSprite.image;
 	texture = dropSprite.texture;
@@ -19,8 +19,20 @@ Drop::Drop(Level* parentLevel_, Vec3 pos_, Vec3 scale_, int w_, int h_, DropType
 
 void Drop::OnCollide(Body* other, float deltaTime) {
 	if (other->type == PLAYER) {
-		destroyFlag = true;
-
+		PlayerBody* player = dynamic_cast<PlayerBody*>(other);
+		if (player == nullptr) { return; }
+		switch (dropType) {
+		case HEALTH:
+			if (player->getCurrentHealth() != player->getMaxHealth()){
+				player->AddHealth(50);
+				destroyFlag = true;
+			}
+			break;
+		case POINTS:
+			player->points += 100;
+			destroyFlag = true;
+			break;
+		}
 	}
 }
 

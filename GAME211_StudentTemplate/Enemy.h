@@ -2,6 +2,7 @@
 #include <functional>
 
 #include "Body.h"
+#include "Drop.h"
 #include <unordered_map>
 
 //This struct is merely for the enemy subtype map
@@ -100,5 +101,8 @@ private:
 	void state_idle();
 	void state_walk();
 	void state_followPlayer();
+
+	//Spawn drops when the enemy dies
+	void SpawnDrops();
 };
 

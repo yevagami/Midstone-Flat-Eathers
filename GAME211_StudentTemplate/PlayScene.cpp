@@ -103,6 +103,7 @@ void PlayScene::Update(const float time) {
 		}
 	}
 	tracker.trackThis(std::to_string(options::FPS) + " fps", tracker.tracker2);
+	tracker.trackThis("Points: " + std::to_string(player->points), tracker.tracker5);
 
 
 
