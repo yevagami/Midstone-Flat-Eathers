@@ -394,7 +394,7 @@ bool Level_3::OnCreate() {
 		if (newMobSpawner->levelWon) {
 			PlayScene* playScenePointer = dynamic_cast<PlayScene*>(parentScene);
 			if (playScenePointer != nullptr) {
-				playScenePointer->QueueNextLevel(new Level1(parentScene));
+				playScenePointer->QueueNextLevel(new Level_test(parentScene));
 			}
 		}
 		});
