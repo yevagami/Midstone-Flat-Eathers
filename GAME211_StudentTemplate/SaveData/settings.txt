@@ -1,4 +1,4 @@
 fps: [120]
 mastervolume: [0.500000]
-musicvolume: [0.300000]
+musicvolume: [0.100000]
 sfxvolume: [0.100000]
