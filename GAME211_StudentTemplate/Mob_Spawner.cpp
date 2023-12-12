@@ -9,6 +9,11 @@ Mob_Spawner::Mob_Spawner(Level* parentLevel_) {
 							static_cast<int>(128.0f * 9.0f) };
 }
 
+Mob_Spawner::Mob_Spawner(Level* parentLevel_, SDL_Rect spawnBounds_) {
+	parentLevel = parentLevel_;
+	spawnBounds = spawnBounds_;
+}
+
 Enemy::subType Mob_Spawner::randomEnemy() {
 	//	create a random device for generating numbers
 	std::random_device rd;

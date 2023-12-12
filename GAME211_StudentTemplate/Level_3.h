@@ -13,7 +13,9 @@ private:
 
 
 public:
-	Mob_Spawner* newMobSpawner = new Mob_Spawner(this);
+	Mob_Spawner* newMobSpawner = new Mob_Spawner(this, SDL_Rect{
+		-942, -190, 800, 100
+		});
 	Level_3(Scene* parentScene_) : Level(parentScene_) {}
 
 	//Method that spawns the enemies

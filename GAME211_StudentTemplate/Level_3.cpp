@@ -506,7 +506,7 @@ void Level_3::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

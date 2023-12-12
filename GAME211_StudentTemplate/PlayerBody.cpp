@@ -215,6 +215,8 @@ void PlayerBody::Update(float deltaTime) {
 	//Update the animation controller
 	animController->UpdateAnimationController(deltaTime);
 	attackAnimController->UpdateAnimationController(deltaTime);
+
+	PrettyPrinting::printXYZ(pos);
 }
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {

@@ -23,6 +23,7 @@ public:
 	int enemiesOnTheLevel = 0;
 	int enemiesKilled = 0;
 	Mob_Spawner(Level* parentLevel_);
+	Mob_Spawner(Level* parentLevel_, SDL_Rect spawnBounds_);
 
 	Enemy::subType randomEnemy();
 	void mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds);
