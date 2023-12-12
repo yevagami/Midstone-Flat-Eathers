@@ -122,6 +122,26 @@ void Level_test::OnDestroy(){
 	} 
 	levelBodies.clear();
 
+	for (Body* body : spawningBodies) {
+		if (body->type == body->PLAYER) {
+			body = nullptr;
+			continue;
+		}
+		body->OnDestroy();
+		delete body;
+	}
+	spawningBodies.clear();
+
+	for (Body* body : trashBodies) {
+		if (body->type == body->PLAYER) {
+			body = nullptr;
+			continue;
+		}
+		body->OnDestroy();
+		delete body;
+	}
+	trashBodies.clear();
+
 	if (background) {
 		SDL_DestroyTexture(background);
 		background = nullptr;
