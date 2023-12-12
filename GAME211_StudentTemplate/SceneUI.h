@@ -3,12 +3,15 @@
 
 #include <MMath.h>
 #include "Scene.h"
-#include "Level1.h"
 #include <vector>
+
 
 #include "Menu.h"
 
-using namespace MATH;
+class GameManager;
+
+using namespace ui;
+//using namespace MATH;
 
 class SceneUI : public Scene {
 private:
@@ -19,24 +22,20 @@ private:
 	Matrix4 projectionMatrix;	// set in OnCreate()
 	Matrix4 inverseProjection;	// set in OnCreate()
 
+
+	Button* shhh;
+
+	vector<Button*> allButtons;
+	Button* button1;
+	Button* button2;
+	//Button*button3;
+
+	vector<Button*> allTexts;
+	Button* text1;
+	Button* text2;
+	Button* text3;
+
 public:
-
-	class Level* level_1;
-
-	bool isBopping;
-
-	bool pauseMenuOpen;
-	bool mainMenuOpen;
-
-	ui::Button* mySceneName;
-	ui::Button* mySmallButton;
-	ui::Button* playersHPBar;
-
-	bool bTestMenu;
-
-	//	soon will just be the UIManager
-	std::vector<ui::Button*> allButtons; // for making buttons using "Menu.h" **NOT UIMANAGER**
-
 	// This constructor may be different from what you've seen before
 	// Notice the second parameter, and look in GameManager.cpp
 	// to see how this constructor is called.

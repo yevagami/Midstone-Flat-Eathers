@@ -39,5 +39,7 @@ struct Sound {
 	//	the sound engine... public :O
 	irrklang::ISoundEngine* engine;
 
+
+	std::vector<std::string> soundList;
 	std::unordered_map<std::string, irrklang::ISoundSource*> soundSources;
 };

@@ -13,6 +13,8 @@ public:
 	const char* name = "";
     class GameManager* game = NULL;
 
+	bool isGameStarted;
+	bool isMainMenuOpen;
 
 	Scene()
 	{} 

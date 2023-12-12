@@ -4,8 +4,8 @@ PlayScene::PlayScene(SDL_Window* sdlWindow_, GameManager* game_) {
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
-	xAxis = 1366.0f;
-	yAxis = 768.0f;
+	xAxis = static_cast<float>(SCREEN_WIDTH);
+	yAxis = static_cast<float>(SCREEN_HEIGHT);
 	player = nullptr;
 	currentLevel = nullptr;
 }
@@ -24,11 +24,15 @@ bool PlayScene::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	//Set the name of the scene for organizing purposes
-	name = "Play Scene";
+	name = "PlayScene";
+
+	//	scene changing flags
+	isGameStarted = true;
+	isMainMenuOpen = false;
+
 
 	//	load trackers
 	tracker.scary();
-
 
 	//	USER INTERFACE
 	CreatePauseMenu();
@@ -36,8 +40,8 @@ bool PlayScene::OnCreate() {
 
 
 	//Creating the level
-	currentLevelString = "Level_MainMenu";
-	currentLevel = new Level_MainMenu(this);
+	currentLevel = new Level_test(this);
+	currentLevelString = "Level_test";
 	if (!currentLevel->OnCreate()) {
 		std::cout << "Something went wrong with the Level\n";
 	}
@@ -46,7 +50,7 @@ bool PlayScene::OnCreate() {
 	player = new PlayerBody(
 		this,
 		Vec3(xAxis * 0.5f, yAxis * 0.5f, 0.0f),
-		Vec3(1.1f,1.1f, 1.1f),
+		Vec3(1.1f, 1.1f, 1.1f),
 		128.0f,
 		128.0f
 	);
@@ -78,61 +82,13 @@ void PlayScene::Update(const float time) {
 		currentLevel->Update(time);
 	}
 
-	///	Level Changing Flags
-	///	To the First Level
-	if(currentLevel->isGameStarted == true && currentLevel->isMainMenuOpen == true) {
-		menuMusicSound.stopAllSounds();
-		musicSound.stopAllSounds(); //	stop all current music
-		currentLevel->isMainMenuOpen = false;
-
-		currentLevelString = "Level_test";
-		ChangeLevel(new Level_test(this));
-	}
-	///	To the Main Menu Level
-	if(currentLevelString != "Level_MainMenu" && currentLevel->isMainMenuOpen == true) {
-		isPaused = false;
-		menuMusicSound.stopAllSounds();
-		musicSound.stopAllSounds();
-	/*	cheatsOpen = false;
-		settingsOpen = false;
-		soundMenuOpen = false;*/
-
-		for(const auto button : allPauseMenuButtons) {
-			//button->isOn = false;
-		}
-		for(const auto button : allCheatMenuButtons) {
-			//button->isOn = false;
-		}
-		for(const auto button : allSoundMenuButtons) {
-			//button->isOn = false;
-		}
-		for(const auto button : allSubPauseMenuButtons) {
-			//button->isOn = false;
-		}
-
-		currentLevelString = "Level_MainMenu";
-		ChangeLevel(new Level_MainMenu(this));
-	}
-
-
-	//	constantly changing music
-	if(currentLevel->canSwitchTheScene == true) {
-		musicSound.stopAllSounds();
-		menuMusicSound.stopAllSounds();
-	}
-
-	if (!musicSound.isPlayingExperimental() && options::MusicVolume >= 0.1 && currentLevel->canSwitchTheScene == false && currentLevelString != "Level_MainMenu") {
-		playRandomMusic();
-	}
-	
-	if(isDead == true && hasGameoverHappened == false) {
-		sfxSound.playSound("gameover");
-		hasGameoverHappened = true;
+	///	Constantly Changing Music
+	if (!musicSound.isPlayingExperimental() && options::MusicVolume >= 0.1 && currentLevel->canSwitchTheScene == false && isDead == false) {
+		GameManager::playRandomMusic(musicSound);
 	}
 
 	///	Trackers [DEBUG THINGS]
-
-	if(isPaused == false && isDead == false) {
+	if (isPaused == false && isDead == false) {
 		int enemycounter = 0;
 		//Keeps track how many enemies are in the level
 		for (const auto& enemy : currentLevel->levelBodies) {
@@ -142,7 +98,7 @@ void PlayScene::Update(const float time) {
 		}
 		tracker.trackThis("P to Pause", tracker.tracker1);
 		tracker.trackThis(std::to_string(enemycounter) + " enemies left", tracker.tracker3);
-		if(currentLevelString != "") {
+		if (currentLevelString != "") {
 			tracker.trackThis("current level: " + currentLevelString, tracker.tracker4);
 		}
 	}
@@ -151,7 +107,7 @@ void PlayScene::Update(const float time) {
 
 
 	///	MENU / USER INTERFACE [ trackers, but live ]
-	if(isPaused == false && isDead == false) {
+	if (isPaused == false && isDead == false) {
 		const std::string healthTrackerString = std::to_string(static_cast<int>(round(player->getCurrentHealth())));
 
 		UI_health->text = healthTrackerString;
@@ -191,11 +147,32 @@ void PlayScene::Update(const float time) {
 	}
 
 	//	pause menu things
-	if(isPaused) {
+	if (isPaused) {
 		soundButtonText1->text = std::to_string(options::MasterVolume);
 		soundButtonText2->text = std::to_string(options::MusicVolume);
 		soundButtonText3->text = std::to_string(options::SoundEffectVolume);
 	}
+
+
+	///	PLAYER DEATH
+	//	if the health is 0 or lower and isDead is currently false
+	if (player->getCurrentHealth() <= 0.0f && isDead == false &&hasGameoverHappened == false) {
+		GameManager::stopAllMusic();
+
+
+		sfxSound.playSound("gameover");
+		isDead = true;
+		hasGameoverHappened = true;
+	}
+
+	if (currentLevel->canSwitchTheScene == true || isDead) {
+		GameManager::stopAllMusic();
+	}
+
+	if (isDead == true && player->getCurrentHealth() > 0.0f) {
+		isDead = false;
+	}
+
 
 }
 
@@ -207,52 +184,48 @@ void PlayScene::Render() {
 	CameraFollowPlayer(player); //Make the camera follow the player
 	currentLevel->Render(renderer, projectionMatrix);
 
-	if(currentLevelString != "Level_MainMenu") {
-		//render the trackers
-		tracker.render(renderer);
+	//render the trackers
+	tracker.render(renderer);
 
-		//	gui
-		for (auto element : allUIElements) {
-			element->Render(renderer);
+	//	gui
+	for (auto element : allUIElements) {
+		element->Render(renderer);
+	}
+
+
+	//	pause menu
+	if (isPaused) {
+		//	main pause menu
+		for (const auto button : allPauseMenuButtons) {
+			button->Render(renderer);
 		}
 
-
-		//	pause menu
-		if (isPaused) {
-			//	main pause menu
-			for (const auto button : allPauseMenuButtons) {
+		//sub pause buttons
+		if (settingsOpen) {
+			for (const auto button : allSubPauseMenuButtons) {
 				button->Render(renderer);
 			}
 
-			//sub pause buttons
-			if (settingsOpen) {
-				for (const auto button : allSubPauseMenuButtons) {
+			//sound menu buttons
+			if (soundMenuOpen) {
+				soundButtonText1->setPositionRelativeTo(*soundButton1, 50, -75);
+				soundButtonText2->setPositionRelativeTo(*soundButton2, 50, -75);
+				soundButtonText3->setPositionRelativeTo(*soundButton3, 50, -75);
+
+				for (const auto button : allSoundMenuButtons) {
 					button->Render(renderer);
-				}
-
-				//sound menu buttons
-				if (soundMenuOpen) {
-					soundButtonText1->setPositionRelativeTo(*soundButton1, 50, -75);
-					soundButtonText2->setPositionRelativeTo(*soundButton2, 50, -75);
-					soundButtonText3->setPositionRelativeTo(*soundButton3, 50, -75);
-
-					for (const auto button : allSoundMenuButtons) {
-						button->Render(renderer);
-					}
-				}
-
-				//	cheat buttons
-				if (cheatsOpen) {
-					for (const auto button : allCheatMenuButtons) {
-						button->Render(renderer);
-					}
 				}
 			}
 
+			//	cheat buttons
+			if (cheatsOpen) {
+				for (const auto button : allCheatMenuButtons) {
+					button->Render(renderer);
+				}
+			}
 		}
 
 	}
-
 
 	SDL_RenderPresent(renderer);
 }
@@ -269,9 +242,7 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 		//	keyboard event checking
 		switch (event.key.keysym.scancode) {
 		case SDL_SCANCODE_P:
-			if(currentLevelString != "Level_MainMenu") {
-				isPaused = !isPaused;
-			}
+			isPaused = !isPaused;
 			break;
 
 		case SDL_SCANCODE_0:
@@ -283,13 +254,7 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			currentLevelString = "Level_test";
 			ChangeLevel(new Level_test(this));
 			break;
-
-		case SDL_SCANCODE_L:
-			menuMusicSound.stopAllSounds();
-			musicSound.stopAllSounds();
-			currentLevelString = "Level_MainMenu";
-			ChangeLevel(new Level_MainMenu(this));
-			break;
+			;
 		}
 	}
 
@@ -309,13 +274,11 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 		}
 	}
 
-	if(currentLevelString != "Level_MainMenu") {
-		for (auto element : allUIElements) {
-			element->HandleEvents(event);
-		}
-
+	for (auto element : allUIElements) {
+		element->HandleEvents(event);
 	}
-	
+
+
 }
 
 void PlayScene::ChangeLevel(Level* newLevel_) {
@@ -330,20 +293,6 @@ void PlayScene::ChangeLevel(Level* newLevel_) {
 	//Throw the player into the new level
 	player->setParentLevel(newLevel_);
 	currentLevel->levelBodies.push_back(player);
-}
-
-void PlayScene::playRandomMusic() {
-	if(musicList.empty()) {
-		for (const auto& pair : musicSound.soundSources) {
-			musicList.push_back(pair.first);
-		}
-	}
-
-	const std::size_t randomIndex = std::rand() % musicList.size();
-	const std::string& randomMusic = musicList[randomIndex];
-	cc.log(not_error, "currently playing", randomMusic);
-	musicSound.playSound(randomMusic);
-
 }
 
 void PlayScene::CameraFollowPlayer(PlayerBody* p) {

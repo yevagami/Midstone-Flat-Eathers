@@ -1,61 +1,13 @@
 #include "SceneUI.h"
-using namespace ui;
-
-#include "EntityMap.h"
-EntityMap euiMap; 
-
 
 
 SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 	window = sdlWindow_;
 	game = game_;
 	renderer = SDL_GetRenderer(window);
-	xAxis = 25.0f;
-	yAxis = 15.0f;
+	xAxis = static_cast<float>(SCREEN_WIDTH);
+	yAxis = static_cast<float>(SCREEN_HEIGHT);
 
-	///	button time
-	auto BUTTON_BACKGROUND = ui::SDL_COLOR_MYSTIC_PURPLE; auto BUTTON_TEXT = ui::SDL_COLOR_BLACK; auto rectangle = SDL_Rect{ 0,0,325,75 }; auto square = ui::SDL_Square;
-	auto BUTTON_HOVERBACKGROUND = ui::SDL_COLOR_GRAY; auto BUTTON_BORDER = SDL_COLOR_DARK_GRAY;
-	auto TEXT_TEXT = ui::SDL_COLOR_ROSE_TOY;
-
-	///	Step 1: Create the Buttons with Initial Values
-	mySceneName = new Button(Font{ "UI scene", 45, fontMap.at("comic serif") }, {}, Colour{ SDL_COLOR_NULL, TEXT_TEXT, SDL_COLOR_NULL });
-
-	//how to make it NOT change the color when cursor on top of it??
-	playersHPBar = new Button(	//	
-		Font{ " players HP here", 30, fontMap.at("comic serif") },
-		rectangle,
-		Colour{ ui::SDL_COLOR_AMBER_STREAM, BUTTON_TEXT, ui::SDL_COLOR_BLACK, ui::SDL_COLOR_AMBER_STREAM });
-
-	mySmallButton = new Button(	//
-		Font{ ":)", 55, fontMap.at("comic serif"),0,0,90 },
-		square,
-		Colour{ BUTTON_BACKGROUND, BUTTON_TEXT, BUTTON_BORDER, BUTTON_HOVERBACKGROUND });
-
-	//	grouping for mass attrbute changing, deleting and rendering
-	allButtons.emplace_back(mySceneName); //	text
-	allButtons.emplace_back(playersHPBar);	//	lowkey the layering (who's rendered on top)
-	allButtons.emplace_back(mySmallButton);
-
-
-	//1.1 individial changes before grouping
-	mySmallButton->scaleDimensions(50);
-	mySmallButton->isPrideful = true;		//	changes colour on click
-	playersHPBar->isTogglable = false;
-	mySceneName->textColour = mySceneName->textColour << SDL_White75;
-
-
-	///	Step 2: Aesthetics
-	for (auto* button : allButtons) {
-		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
-	}
-
-	mySceneName->offsetPosition(-300);	//	offsets the text up
-	playersHPBar->offsetPosition(-300, 500);
-	//	cornering 
-	mySmallButton->setPosition(SCREEN_HEIGHT - mySmallButton->getH(), SCREEN_WIDTH - mySmallButton->getW()); //	places the square button into the top corner
-	
-	isBopping = true;
 }
 
 
@@ -75,25 +27,103 @@ bool SceneUI::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 #pragma endregion
 	name = "SceneUI"; 
-	// we dont need that -scott
-	//shut up scott -Adriel
-	for (auto* button : allButtons) { button->generateHitbox(); }
-	level_1 = new Level1(this);
-	level_1->OnCreate();
+
+
+	isMainMenuOpen = true;
+	isGameStarted = false;
+
+
+	//	the text
+	text1 = new Button(Font{ "the world is !!FLAT!!", 100 });
+	text2 = new Button(Font{ "credits", 50 });
+
+	allTexts.emplace_back(text1);
+
+	for (const auto text : allTexts) {
+		text->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+		text->textColour = SDL_COLOR_ANTIQUE_WHITE;
+		text->isTextBordered = true;
+	}
+	text1->offsetPosition(-300);
+
+
+	//	the buttons
+	button1 = new Button(Font{ "Play Game" }, SDL_Testangle, Colour{});
+	button2 = new Button(Font{ "Quit Game" }, SDL_Testangle, Colour{});
+	//button3 = new Button(Font{}, SDL_Testangle, Colour{});
+
+	allButtons.emplace_back(button1);
+	allButtons.emplace_back(button2);
+
+
+	for (const auto button : allButtons) {
+		button->centerPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		button->backgroundColour = SDL_COLOR_FOREST_GREEN;
+		button->buttonBorderColour = SDL_COLOR_BLACK;
+
+		button->SetOnInteractionCallback([&]() {
+			sfxSound.playSound("select");
+		});
+	}
+	button1->offsetPosition(-100);
+	button2->setPositionRelativeTo(*button1, 150);
+
+	button1->SetOnLeftClick([&]() {
+		cc.log(debug, "in game theory this should send us to a dif level");
+		isGameStarted = true;
+		});
+
+	button2->SetOnLeftClick([&]() {
+		cc.log(debug, "quit game");
+
+		game->StartFadeInTransition(1000,
+			[&]() { GameManager::quitPls(); },
+			[&]() { GameManager::savePls(); });
+		});
+
+
+	//	the background lmao
+	shhh = new Button(Font{}, SDL_Testangle);
+	shhh->backgroundColour = SDL_COLOR_SLATE_BLUE;
+	shhh->offsetPosition(-10, -10);
+	shhh->scaleDimensionsIndividually(11, 11);
+
+
+
+	for (const auto button : allButtons) { button->generateHitbox(); }
+
 
 	return true;
 }
 
 
 void SceneUI::OnDestroy() {
-	for (auto* button : allButtons) { delete button; }
 
-	level_1->OnDestroy();
-	delete level_1;
+
+	for (const auto& button : allButtons) {
+		delete button;
+	}
+
+	for(const auto& text : allTexts) {
+		delete text;
+	}
+
+
 }
 
 
-void SceneUI::Update(const float deltaTime) {
+void SceneUI::Update(const float deltaTime_) {
+
+	if (!menuMusicSound.isPlayingExperimental() && options::MusicVolume >= 0.1) {
+		GameManager::playRandomMusic(menuMusicSound);
+	}
+
+
+	for (const auto& button : allButtons) {
+		button->Update(deltaTime_);
+	}
+
 
 }
 
@@ -102,29 +132,36 @@ void SceneUI::Render() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 
-	level_1->Render(renderer, projectionMatrix);
 
-	//	render the buttons
-	for (auto* button : allButtons) { button->Render(renderer); }
+	shhh->Render(renderer);
+
+	for (const auto& text : allTexts) {
+		text->Render(renderer);
+	}
+
+	for (const auto& button : allButtons) {
+		button->Render(renderer);
+	}
+
+
 
 	SDL_RenderPresent(renderer);
 }
 
 
 void SceneUI::HandleEvents(const SDL_Event& event_) {
-	PrettyPrinting::printMouseCoords(event_);
-	for (const auto button : allButtons) { button->HandleEvents(event_); }
+
+	for (const auto button : allButtons) {
+		button->HandleEvents(event_);
+	}
+
 
 	switch (event_.key.keysym.scancode) {
-	case SDLK_ESCAPE || SDLK_p:
-		pauseMenuOpen = !pauseMenuOpen;
-		break;
+
+
 
 	default:
 		break;
 	}
 
-
-	// send events to player as needed
-	//game->getPlayer()->HandleEvents(event);
 }

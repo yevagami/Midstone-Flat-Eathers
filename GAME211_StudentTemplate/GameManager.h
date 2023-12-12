@@ -157,10 +157,14 @@ private:
 	class Window *windowPtr;
 	class Timer *timer;
 	class Scene *currentScene;
-	Scene *menuScene;
+	//class Scene *menuScene;
+
 
 	//	michael's playground ahahhahahaha
 	std::unique_ptr<FadeTransition> fadeTransition; // frick manual memory management, we quirky pointer
+
+	bool isGameStarted = false;
+	bool isMainMenuOpen = false;
 	bool isPaused;
 
 public:
@@ -177,6 +181,7 @@ public:
 
 	void Run();
 	void HandleEvents();
+	void Update(float deltaTime_);
 	void LoadScene( int i_ );
     bool ValidateCurrentScene();
 
@@ -187,6 +192,8 @@ public:
 	//	Fade OUT transition (fade out from black)
 	//void StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_ = nullptr);
 
+
+	static void playRandomMusic(Sound& audio_);
 
 	//	loading sound effects to be used in the scenes
 	static void LoadSoundEffects() {
@@ -220,9 +227,9 @@ public:
 
 		//load audio into the music SuperMap(tm) here
 		musicSound.loadSound("ominous music", "sound/unnormalized/drone-background-music.ogg");
-		musicSound.loadSound("overworld music", "sound/unnormalized/exploration-music-loop.ogg");
 		musicSound.loadSound("chiptune-y music", "sound/unnormalized/game-soundtrack-4.ogg");
 		musicSound.loadSound("retro epic music", "sound/unnormalized/game-soundtrack-5.ogg");
+		//musicSound.loadSound("overworld music", "sound/unnormalized/exploration-music-loop.ogg");	//	stolen for main menu
 		//musicSound.loadSound("chill background music", "sound/unnormalized/lofi-fusion-background-music.ogg"); //	stolen for main menu
 		musicSound.loadSound("battle music", "sound/unnormalized/battle-theme.ogg");
 
@@ -232,11 +239,8 @@ public:
 	}
 
 	static void LoadMenuMusic() {
-
-		menuMusicSound.loadSound("main menu", "sound/unnormalized/lofi-fusion-background-music.ogg");
-
-
-
+		menuMusicSound.loadSound("chill background music", "sound/unnormalized/lofi-fusion-background-music.ogg");
+		menuMusicSound.loadSound("overworld music", "sound/unnormalized/exploration-music-loop.ogg");
 
 		menuMusicSound.setVolume(options::MusicVolume);
 	}
@@ -250,6 +254,11 @@ public:
 
 	static void savePls() { 
 		options::SaveAllSettigns();
+	}
+
+	static void stopAllMusic() {
+		musicSound.stopAllSounds();
+		menuMusicSound.stopAllSounds();
 	}
 
 };

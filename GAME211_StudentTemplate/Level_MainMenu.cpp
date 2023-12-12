@@ -3,12 +3,9 @@
 
 bool Level_MainMenu::OnCreate(){
 
-	isMainMenuOpen = true;
-	isGameStarted = false;
-
 
 	//	the text
-	text1 = new Button(Font{"the world is !!FLAT!!", 100});
+	text1 = new Button(Font{"ur mom is !!FLAT!!", 100});
 	text2 = new Button(Font{"credits", 50});
 
 	allTexts.emplace_back(text1);
@@ -42,7 +39,6 @@ bool Level_MainMenu::OnCreate(){
 
 	button1->SetOnLeftClick([&]() {
 		cc.log(debug, "in game theory this should send us to a dif level");
-		isGameStarted = true;
 	});
 
 	button2->SetOnLeftClick([&]() {
@@ -57,7 +53,7 @@ bool Level_MainMenu::OnCreate(){
 
 	//	the background lmao
 	shhh = new Button(Font{}, SDL_Testangle);
-	shhh->backgroundColour = SDL_COLOR_SLATE_BLUE;
+	shhh->backgroundColour = SDL_COLOR_ROSE_TOY;
 	shhh->offsetPosition(-10, -10);
 	shhh->scaleDimensionsIndividually(11, 11);
 

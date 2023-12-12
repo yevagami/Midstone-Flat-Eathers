@@ -10,10 +10,8 @@ protected:
 	Scene* parentScene = nullptr;
 
 public:
-	bool canSwitchTheScene = false; //flag to tell the Scene to change the level
 
-	bool isMainMenuOpen = false;
-	bool isGameStarted = false;
+	bool canSwitchTheScene = false; //flag to tell the Scene to change the level
 
 	Level(Scene* parentScene_) { parentScene = parentScene_; }
 	//The vectors where all the bodies will be stored and updated and destroyed 

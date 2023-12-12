@@ -12,8 +12,9 @@ GameManager::GameManager() {
 	options::isRunning = true;
 	isPaused = false;
 	currentScene = nullptr;
-	menuScene = nullptr;
+	//menuScene = nullptr;
 
+	//	loading settings.
 	if(!file.isEmpty(options::settingsFileDirectory)) {
 		options::LoadAllSettigns(options::settingsFileContents);
 	}
@@ -38,7 +39,6 @@ bool GameManager::OnCreate() {
 
 	
 
-
 	windowPtr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (windowPtr == nullptr) {
 		OnDestroy();
@@ -55,10 +55,8 @@ bool GameManager::OnCreate() {
 		return false;
 	}
 
-	//	load the menu scene on top of the current scene
-	menuScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 	// select scene for specific assignment
-	currentScene = new PlayScene(windowPtr->GetSDL_Window(), this);
+	currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
 
 
 	// need to create Player before validating scene
@@ -77,26 +75,11 @@ bool GameManager::OnCreate() {
 void GameManager::Run() {
 	timer->Start();
 
-
 	while (options::isRunning) {
 		timer->UpdateFrameTicks();
 		const float deltaTime = timer->GetDeltaTime();
 
-		if (fadeTransition) {								//	if a fadeTransition unique_ptr exists
-			if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
-				///	keep the present scene visible
-				//currentScene->Render();
-				///	render the fade higher in priority
-				fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
-
-			} else {												// when the fade transition is done...
-				fadeTransition.reset();					//	reset the unique pointer (make it nullptr)
-			}
-		}else {
-			//	if theres no fadeTransition in progress, update and render the scene as usual
-			currentScene->Update(deltaTime);
-			currentScene->Render();
-		}
+		Update(deltaTime);
 		HandleEvents();
 		
 		/// Keep the event loop running at a proper rate
@@ -138,6 +121,7 @@ void GameManager::HandleEvents() {
 			case SDL_SCANCODE_END:
 				//	testing
 				cc.log(update, "SILENCE!!!");
+				menuMusicSound.stopAllSounds();
 				musicSound.stopAllSounds();
 				sfxSound.stopAllSounds();
 				break;
@@ -152,10 +136,14 @@ void GameManager::HandleEvents() {
 				//	testing
 				system("cls");  // NOLINT(concurrency-mt-unsafe)
 				break;
-			//case SDL_SCANCODE_L:
-				//	load the menu scene
-				//LoadScene(1);
-				//break;
+			case SDL_SCANCODE_L:
+					//load the menu scene
+				LoadScene(1);
+				break;
+
+			case SDL_SCANCODE_N:
+				LoadScene(2);
+				break;
 			default:
 				break;
 			}
@@ -164,6 +152,43 @@ void GameManager::HandleEvents() {
 		//	check what events are occuring in the currentScene
 		currentScene->HandleEvents(event);
 	}
+}
+
+void GameManager::Update(float deltaTime_) {
+
+	if (fadeTransition) {								//	if a fadeTransition unique_ptr exists
+		if (!fadeTransition->isComplete()) {	//	when the fadeTransition is in progress
+			///	keep the present scene visible
+			//currentScene->Render();
+			///	render the fade higher in priority
+			fadeTransition->Draw();				//	draws the fade rectangle based on the alpha
+		} else {												// when the fade transition is done...
+			fadeTransition.reset();					//	reset the unique pointer (make it nullptr)
+		} }
+	else {
+		//	if theres no fadeTransition in progress, update and render the scene as usual
+		currentScene->Update(deltaTime_);
+		currentScene->Render();
+	}
+
+
+	//	open the main menu
+	if(currentScene->isGameStarted && currentScene->isMainMenuOpen && currentScene->name != "SceneUI") {
+		stopAllMusic();
+		currentScene->isMainMenuOpen = false;
+		currentScene->isGameStarted = false;
+		LoadScene(1);
+	}
+
+	//	open the first level
+	if(currentScene->isGameStarted && currentScene->isMainMenuOpen && currentScene->name == "SceneUI") {
+		stopAllMusic();
+		currentScene->isMainMenuOpen = false;
+		currentScene->isGameStarted = false;
+		LoadScene(2);
+	}
+
+
 }
 
 
@@ -176,10 +201,6 @@ void GameManager::OnDestroy() {
 	//	not needed cuz its unique and self-manages (allegedly)
 	//if (fadeTransition) delete fadeTransition;
 
-	if (menuScene) {
-		menuScene->OnDestroy();
-		delete menuScene;
-	}
 
 	if (currentScene) {
 		currentScene->OnDestroy();
@@ -217,18 +238,9 @@ void GameManager::LoadScene(const int i_) {
 	switch (i_) {
 	case 1:
 		currentScene = new SceneUI(windowPtr->GetSDL_Window(), this);
-		//currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
 		break;
 	case 2:
-		//currentScene = new Scene2(windowPtr->GetSDL_Window(), this);
-		break;
-	case 3:
-		//currentScene = new Scene3(windowPtr->GetSDL_Window(), this);
-		break;
-		//case 4:
-		//	//currentScene = new Scene4(windowPtr->GetSDL_Window(), this);
-		//	break;
-	case 4:
+		currentScene = new PlayScene(windowPtr->GetSDL_Window(), this);
 		break;
 	default:
 		//currentScene = new Scene1(windowPtr->GetSDL_Window(), this);
@@ -254,6 +266,19 @@ void GameManager::StartFadeInTransition(const Uint64 fadeTime_, const std::funct
 	fadeTransition->SetStartTime();
 
 
+}
+
+void GameManager::playRandomMusic(Sound& audio_) {
+	if (audio_.soundList.empty()) {
+		for (const auto& pair : audio_.soundSources) {
+			audio_.soundList.push_back(pair.first);
+		}
+	}
+
+	const std::size_t randomIndex = std::rand() % audio_.soundList.size();
+	const std::string& randomMusic = audio_.soundList[randomIndex];
+	cc.log(not_error, "currently playing", randomMusic);
+	audio_.playSound(randomMusic);
 }
 
 //void GameManager::StartFadeOutTransition(const Uint64 fadeTime_, const std::function<void()>& callback_) {

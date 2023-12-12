@@ -4,12 +4,9 @@
 #include "Level_test.h"
 #include "Level2.h"
 #include "Level_3.h"
-#include "Level_MainMenu.h"
 #include "Tracker.h"
 
 #include "Menu.h"
-#include "FileManager.h"
-
 
 class GameManager;
 
@@ -62,11 +59,6 @@ public:
 	bool isDead = false;
 	bool hasGameoverHappened = false;
 	void ChangeLevel(Level* newLevel_);
-
-
-	std::vector<std::string> musicList;
-	void playRandomMusic();
-
 
 	///	menu		 [ has to be at scene level >:( ]
 	bool isPaused = false;
@@ -274,7 +266,9 @@ public:
 		button3->SetOnLeftClick([&]() {
 			cc.log(update, "quitting game");
 
-			currentLevel->isMainMenuOpen = true;
+
+			isMainMenuOpen = true;
+
 			//game->StartFadeInTransition(1000,
 			//	//	because those GM methods are static, we dont want to call them through a reference, therefore GameManager::
 			//	[&]() { GameManager::quitPls();},
