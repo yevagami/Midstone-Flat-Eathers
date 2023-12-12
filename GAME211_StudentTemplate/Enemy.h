@@ -52,6 +52,7 @@ private:
 	//Enemy specific variables
 	float enemyMoveSpeed;
 	float enemyPower;
+	float maxDrops = 5;
 	PlayerBody* playerReference = nullptr;
 
 

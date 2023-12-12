@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Level.h"
 #include "PlayerBody.h"
+#include <random>
 
 Enemy::Enemy(Level* parentLevel_, Vec3 pos_, subType type_) {
 	parentLevel = parentLevel_;
@@ -103,5 +104,11 @@ void Enemy::state_followPlayer(){
 }
 
 void Enemy::SpawnDrops() {
+	//This is chat GPT code (yes I know)
+	std::random_device rd;  // Seed for the random number engine
+	std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+	std::uniform_int_distribution<int> distribution(0, maxDrops);
+	int amountToDrop = distribution(gen);
+
 
 }
