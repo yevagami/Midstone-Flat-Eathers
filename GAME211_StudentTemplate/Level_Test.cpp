@@ -1,4 +1,5 @@
 #include "Level_Test.h"
+#include "PlayScene.h"
 
 //I might have to reorder the methods for organizing purposes
 
@@ -94,26 +95,6 @@ bool Level_test::OnCreate(){
 
 #pragma endregion
 
-	Drop* healthPacks = new Drop(
-		this,
-		Vec3(1366 / 2 + 500.0f, 768.0f / 2, 0.0f),
-		Vec3(0.3f, 0.3f, 0.3f),
-		128 * 0.3f, 128 * 0.3f,
-		Drop::DropType::POINTS
-	);
-	levelBodies.push_back(healthPacks);
-	healthPacks = nullptr;
-
-	Drop* points = new Drop(
-		this,
-		Vec3(1366 / 2 - 500.0f, 768.0f / 2, 0.0f),
-		Vec3(0.3f, 0.3f, 0.3f),
-		128 * 0.3f, 128 * 0.3f,
-		Drop::DropType::POINTS
-	);
-	levelBodies.push_back(points);
-	points = nullptr;
-
 	return true;
 }
 
@@ -143,7 +124,6 @@ void Level_test::OnDestroy(){
 
 void Level_test::Update(const float time){
 	//newMobSpawner->waveSpawner(3);
-
 
 	if (newMobSpawner->levelWon) {
 		canSwitchTheScene = true;
@@ -200,7 +180,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

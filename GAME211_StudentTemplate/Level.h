@@ -2,6 +2,7 @@
 #define LEVEL_H
 #include "Solid.h"
 #include "PlayerBody.h"
+#include "Trigger.h"
 
 
 class Scene;

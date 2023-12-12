@@ -603,12 +603,12 @@ void PlayerBody::LoadAnimations() {
 
 	//Load the shooting sprite
 	if (!temp.loadSpriteFromRectInARow(0, 128 * Gun, 128, 128, 4)) { cout << "Gun sprite did not load properly" << endl; return; };
-	anim_shoot = Animation("player_gun_shoot", temp.spriteStorage, 0.15f, 4, true);
+	anim_shoot = Animation("player_gun_shoot", temp.spriteStorage, 0.1f, 4, true);
 	temp.deleteSprites();
 	
 	temp.onDestroy();
 
-	//By default the player looks up
+	//By default the player looks upx
 	animController->PlayAnimation(anim_up);
 
 	//By default the player has the sword

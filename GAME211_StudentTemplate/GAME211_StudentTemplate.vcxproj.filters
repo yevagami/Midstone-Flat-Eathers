@@ -156,9 +156,6 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Visualization</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mob_Spawner.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
@@ -179,6 +176,15 @@
     </ClCompile>
     <ClCompile Include="Level_MainMenu.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Drop.cpp">
+      <Filter>Source Files\Body</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files\Visualization</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +290,6 @@
     <ClInclude Include="SpriteDefs.h">
       <Filter>Header Files\Visualization</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mob_Spawner.h">
       <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
@@ -310,6 +313,15 @@
     </ClInclude>
     <ClInclude Include="Level_MainMenu.h">
       <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Drop.h">
+      <Filter>Header Files\Body</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files\Visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

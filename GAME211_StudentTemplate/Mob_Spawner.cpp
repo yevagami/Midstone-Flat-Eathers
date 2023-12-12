@@ -45,7 +45,6 @@ void Mob_Spawner::mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect s
 		return;
 	}
 
-	std::cout << enemiesOnTheLevel << endl;
 	Enemy* ghost = new Enemy(parentLevel, spawnPosition, subType_);
 
 

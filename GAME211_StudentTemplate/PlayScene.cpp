@@ -262,6 +262,16 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 			currentLevelString = "Level_MainMenu";
 			ChangeLevel(new Level_MainMenu(this));
 			break;
+
+		case SDL_SCANCODE_O:
+			currentLevelString = "Level3";
+			ChangeLevel(new Level_3(this));
+			break;
+
+		case SDL_SCANCODE_I:
+			currentLevelString = "Level1";
+			ChangeLevel(new Level1(this));
+			break;
 		}
 	}
 

@@ -41,7 +41,8 @@ public:
 		PROJECTILE = 2, 
 		PLAYER = 3,
 		ENEMY = 4,
-		DROP = 5
+		DROP = 5,
+		TRIGGER = 6
 	};
 	TYPE type = BODY;
 
@@ -122,6 +123,9 @@ public:
 	virtual void takeDamage(float amount) { return; }
 	void setCutout(SDL_Rect* cutout_) { cutout = cutout_; } //Sets the SRect when rendering from a larger sprite sheet
 
+	//Active stuff
+	bool isActive = true;
+	void setActive(bool activeState) { isActive = activeState; }
 protected:
 	// inherited classes can access this
 	Level* parentLevel = nullptr;

@@ -162,8 +162,8 @@ private:
     Vec3 mouseDirection = {};
     float meleePowerCurrent = 50.0f;
     float meleePowerDefault = 50.0f;
-    float drawAttackDuration = 0.6f;
-    float drawMeleeDurationDefault = 0.6f;
+    float drawAttackDuration = 0.5f;
+    float drawMeleeDurationDefault = 0.5f;
     bool drawAttack = false; //Plays the respective attack animation for a set duration of time
 
     //shooting variables

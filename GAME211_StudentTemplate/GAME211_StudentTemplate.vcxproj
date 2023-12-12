@@ -54,6 +54,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Trigger.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -99,6 +100,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Trigger.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Window.h" />

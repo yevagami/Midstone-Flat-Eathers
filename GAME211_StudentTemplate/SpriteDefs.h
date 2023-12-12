@@ -21,7 +21,8 @@
 		boom = 11,
 		ouch = 12,
 		health = 13,
-		points = 14
+		points = 14,
+		portal = 15
 	};
 
 	enum PlayerWalking {

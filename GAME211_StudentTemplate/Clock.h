@@ -2,6 +2,9 @@
 #include <iostream>
 #include <functional>
 
+#ifndef CLOCK_H
+#define CLOCK_H
+
 class Clock{
 public:
 	//Methods
@@ -20,4 +23,4 @@ public:
 	bool isLooping = false;
 	std::function<void()> callback;
 };
-
+#endif // !CLOCK_H
