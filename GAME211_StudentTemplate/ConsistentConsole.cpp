@@ -62,29 +62,13 @@ bool ConsistentConsole::log(const char* type_, const char* msg_, const std::stri
 inline bool ConsistentConsole::colour(const char* colour_) {
 	static std::unordered_map<const char*, const char*> colours = {
 	{clear, "\033[0m"},
-	{red, "\033[38;5;196m"},
-	{blue, "\033[38;5;27m"},
-	{green, "\033[38;5;46m"},
-	{purple, "\033[38;5;129m"},
-	{cyan, "\033[38;5;51m"},
-	{yellow, "\033[38;5;226m"},
-	{pink, "\033[38;5;213m"},
-	{orange, "\033[38;5;202m"},
-	{turquoise, "\033[38;5;80m"},
-	{violet, "\033[38;5;93m"},
-	{lime, "\033[38;5;154m"},
-	{indigo, "\033[38;5;54m"},
-	{peach, "\033[38;5;208m"},
-	{maroon, "\033[38;5;88m"},
-	{teal, "\033[38;5;23m"},
-	{gold, "\033[38;5;220m"},
-	{lavender, "\033[38;5;183m"},
-	{olive, "\033[38;5;58m"},
-	{coral, "\033[38;5;203m"},
-	{mint, "\033[38;5;120m"},
-	{rose, "\033[38;5;210m"},
-	{steel, "\033[38;5;146m"},
-	{navy, "\033[38;5;17m"}
+	{red, "\033[31m"},
+	{blue , "\033[34m"},
+	{green, "\033[32m"},
+	{purple, "\033[35m"},
+	{cyan, "\033[36m"},
+	{yellow, "\033[33m"},
+	{pink, "\033[95m"}
 	}; if (colours.find(colour_) == colours.end()) { return false; }
 
 	std::cout 
@@ -95,34 +79,18 @@ inline bool ConsistentConsole::colour(const char* colour_) {
 
 inline bool ConsistentConsole::colour(const char* colour_, const char* modifier_) {
 	static std::unordered_map<const char*, const char*> colours = {
-	{clear, "\033[0m"},
-	{red, "\033[38;5;196m"},
-	{blue, "\033[38;5;27m"},
-	{green, "\033[38;5;46m"},
-	{purple, "\033[38;5;129m"},
-	{cyan, "\033[38;5;51m"},
-	{yellow, "\033[38;5;226m"},
-	{pink, "\033[38;5;213m"},
-	{orange, "\033[38;5;202m"},
-	{turquoise, "\033[38;5;80m"},
-	{violet, "\033[38;5;93m"},
-	{lime, "\033[38;5;154m"},
-	{indigo, "\033[38;5;54m"},
-	{peach, "\033[38;5;208m"},
-	{maroon, "\033[38;5;88m"},
-	{teal, "\033[38;5;23m"},
-	{gold, "\033[38;5;220m"},
-	{lavender, "\033[38;5;183m"},
-	{olive, "\033[38;5;58m"},
-	{coral, "\033[38;5;203m"},
-	{mint, "\033[38;5;120m"},
-	{rose, "\033[38;5;210m"},
-	{steel, "\033[38;5;146m"},
-	{navy, "\033[38;5;17m"}
+		{clear, "\033[0m"},
+		{red, "\033[31m"},
+		{blue , "\033[34m"},
+		{green, "\033[32m"},
+		{purple, "\033[35m"},
+		{cyan, "\033[36m"},
+		{yellow, "\033[33m"},
+		{pink, "\033[95m"}
 	}; if (colours.find(colour_) == colours.end()) { return false; }
 
 	static std::unordered_map<const char*, const char*> modifiers = {
-	  {clear, "\033[0m"},
+		{clear, "\033[0m"},
 		{newline, "\n"},
 		{indent, "\t"},
 		{blink, "\033[6m"},
@@ -148,29 +116,13 @@ const char* bold = "bold";
 const char* italic = "italic";
 const char* blink = "blink";
 
-const char* red = "red";
 const char* blue = "blue";
+const char* cyan = "cyan";
 const char* green = "green";
 const char* purple = "purple";
-const char* cyan = "cyan";
-const char* yellow = "yellow";
 const char* pink = "pink";
-const char* orange = "orange";
-const char* turquoise = "turquoise";
-const char* violet = "violet";
-const char* lime = "lime";
-const char* indigo = "indigo";
-const char* peach = "peach";
-const char* maroon = "maroon";
-const char* teal = "teal";
-const char* gold = "gold";
-const char* lavender = "lavender";
-const char* olive = "olive";
-const char* coral = "coral";
-const char* mint = "mint";
-const char* rose = "rose";
-const char* steel = "steel";
-const char* navy = "navy";
+const char* yellow = "yellow";
+const char* red = "red";
 
 const char* error = "error";
 const char* not_error = "not error";

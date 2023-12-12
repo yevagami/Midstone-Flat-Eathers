@@ -1,22 +1,32 @@
 #pragma once
 #include "Level.h"
 #include "Menu.h"
-#include <random>
 
 using namespace ui;
 
-class Level_DeathScreen : public Level{
+
+
+//	DEPRICATED
+
+
+class Level_MainMenu : public Level{
 private:
 
-	std::string randomizeDeathMessage();
-	std::string deathString = "";
-	bool isDeathScreenHere = false;
-	Button* deathText;
+	Button* shhh;
 
+	vector<Button*> allButtons;
+	Button* button1;
+	Button*button2;
+	//Button*button3;
+
+	vector<Button*> allTexts;
+	Button*text1;
+	Button*text2;
+	Button*text3;
 
 public:
 	//Mob_Spawner* newMobSpawner = new Mob_Spawner(this);
-	Level_DeathScreen(Scene* parentScene_) : Level(parentScene_) {}
+	Level_MainMenu(Scene* parentScene_) : Level(parentScene_) {}
 
 	//Method that spawns the enemies
 	bool OnCreate() override;

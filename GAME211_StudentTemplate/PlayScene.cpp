@@ -98,8 +98,6 @@ void PlayScene::Update(const float time) {
 		tracker.trackThis(std::to_string(enemycounter) + " enemies left", tracker.tracker3);
 		if (currentLevel->name != "") {
 			tracker.trackThis("current level: " + currentLevel->name, tracker.tracker4);
-		} else {
-			tracker.trackThis("current level: undefined", tracker.tracker4);
 		}
 	}
 	tracker.trackThis(std::to_string(options::FPS) + " fps", tracker.tracker2);
@@ -261,7 +259,7 @@ void PlayScene::HandleEvents(const SDL_Event& event) {
 		case SDL_SCANCODE_8:
 			menuMusicSound.stopAllSounds();
 			musicSound.stopAllSounds();
-			ChangeLevel(new Level_DeathScreen(this));
+			ChangeLevel(new Level_MainMenu(this));
 			break;
 
 		case SDL_SCANCODE_O:

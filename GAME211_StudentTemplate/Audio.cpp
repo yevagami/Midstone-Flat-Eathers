@@ -42,7 +42,8 @@ bool Sound::isPlaying() const {
 	for(const auto& pair : soundSources) {
 		if(engine->isCurrentlyPlaying(pair.second)) {
 			return true;
-		} }
+		}
+	}
 
 	return false;
 }
@@ -51,3 +52,4 @@ bool Sound::isPlayingExperimental() const {
 	return std::any_of(soundSources.begin(), soundSources.end(),
 		[this](const auto& pair) { return engine->isCurrentlyPlaying(pair.second); });
 }
+
