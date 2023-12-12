@@ -132,7 +132,7 @@ void Level_test::OnDestroy(){
 
 
 void Level_test::Update(const float time){
-	newMobSpawner->waveSpawner(3);
+	//newMobSpawner->waveSpawner(3);
 
 
 	if (newMobSpawner->levelWon) {
@@ -190,7 +190,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

@@ -219,15 +219,26 @@ void PlayerBody::Update(float deltaTime) {
 
 void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	//Get the angle to face the direction of the mouse
-	Vec3 meleeRectInScreen = parentScene->getProjectionMatrix() * Vec3();
-	SDL_Rect meleeRect{ meleeHitbox->x, meleeHitbox->y, 98, 98 };
+	Vec3 spritePos = Vec3(
+		pos.x + (mouseDirection.x * (96)),
+		pos.y + (mouseDirection.y * (96)),
+		0.0f
+	);
+	Vec3 drawSpriteScreenPos = parentScene->getProjectionMatrix() * spritePos;
+	SDL_Rect spriteRec{
+		drawSpriteScreenPos.x - 128 * 0.5f,
+		drawSpriteScreenPos.y - 128 * 0.5f,
+		128,
+		128
+	};
+
 	float angle = atan2f(mouseDirection.y, mouseDirection.x);
 	angle = angle * 180 / 3.14159;
 
 
 	if (drawAttack) {
 		switch (selectedAbilities) {
-		case melee:
+		case melee: 
 			attackAnimController->PlayAnimation(anim_slash);
 			break;
 		case shoot:
@@ -251,11 +262,11 @@ void PlayerBody::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_) {
 	SDL_RendererFlip flip = (angle > 90.0f || angle < -90.0f) ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
 	
 	if (selectedAbilities != shield) {
-		SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, attackAnimCutout, &meleeRect, -angle, nullptr, flip);
+		SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, attackAnimCutout, &spriteRec, -angle, nullptr, flip);
 	}
 	if (isShielding) {
 		attackAnimController->PlayAnimation(anim_shield);
-		SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, attackAnimController->GetCurrentFrame(), &meleeRect, -angle, nullptr, flip);
+		SDL_RenderCopyEx(parentScene->getRenderer(), effectSpriteSheet.texture, attackAnimController->GetCurrentFrame(), &spriteRec, -angle, nullptr, flip);
 	}
 	
 	
@@ -371,8 +382,8 @@ void PlayerBody::updateMeleeHitbox() {
 	//From the mouse direction, sets the hitbox location in screenSpace
 	Matrix4 projectionMat = parentScene->getProjectionMatrix();
 	Vec3 hitboxPos = Vec3(
-		pos.x + (mouseDirection.x * (meleeHitbox->w + 16.0f)),
-		pos.y + (mouseDirection.y * (meleeHitbox->h + 16.0f)),
+		pos.x + (mouseDirection.x * (meleeHitbox->w + 8.0f)),
+		pos.y + (mouseDirection.y * (meleeHitbox->h + 8.0f)),
 		0.0f
 	);
 	Vec3 hitboxPosScreen = projectionMat * hitboxPos;
@@ -478,12 +489,16 @@ void PlayerBody::state_attack(float deltaTime_) {
 		//cooldown check! (if its on cooldown, leave)
 		if (!shooting_cooldown->hasStarted || shooting_cooldown->completed) {
 			shooting_cooldown->Start(); // start the cooldown timer
-			//create a new bullet projectile
-			Vec3 bulletStartPosition = parentScene->getInverseMatrix() * Vec3(meleeHitbox->x, meleeHitbox->y, 0.0f);
 			
+			Vec3 bulletPos = Vec3(
+				pos.x + (mouseDirection.x * (128 + 10)),
+				pos.y + (mouseDirection.y * (128 + 10)),
+				0.0f
+			);
+
 			Projectile* bullet = new Projectile(
 				parentLevel,
-				bulletStartPosition,
+				bulletPos,
 				mouseDirection * projectileSpeed,
 				Vec3(1.0f, 1.0f, 1.0f),
 				128 * 0.3f, 128 * 0.3f,
