@@ -52,9 +52,9 @@ private:
 	//Enemy specific variables
 	float enemyMoveSpeed;
 	float enemyPower;
-	float maxDrops = 5;
+	float maxDrops = 3;
 	PlayerBody* playerReference = nullptr;
-
+	float enemyChaseDistance = 500.0f;
 
 	float enemyHitboxW = 98.0f;
 	float enemyHitboxH = 128.0f;

@@ -99,7 +99,7 @@ bool Level_test::OnCreate(){
 		Vec3(1366 / 2 + 500.0f, 768.0f / 2, 0.0f),
 		Vec3(0.3f, 0.3f, 0.3f),
 		128 * 0.3f, 128 * 0.3f,
-		Drop::DropType::HEALTH
+		Drop::DropType::POINTS
 	);
 	levelBodies.push_back(healthPacks);
 	healthPacks = nullptr;
@@ -142,7 +142,7 @@ void Level_test::OnDestroy(){
 
 
 void Level_test::Update(const float time){
-	newMobSpawner->waveSpawner(3);
+	//newMobSpawner->waveSpawner(3);
 
 
 	if (newMobSpawner->levelWon) {
@@ -200,7 +200,7 @@ void Level_test::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
 
 	for (Body* body : levelBodies) {
 		body->Render(renderer_, projectionMatrix_);
-		body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
+		//body->RenderHitbox(renderer_);		//	[DEBUG] renders all body hitboxes 
 	}
 }
 

@@ -24,12 +24,12 @@ void Drop::OnCollide(Body* other, float deltaTime) {
 		switch (dropType) {
 		case HEALTH:
 			if (player->getCurrentHealth() != player->getMaxHealth()){
-				player->AddHealth(50);
+				player->AddHealth(75);
 				destroyFlag = true;
 			}
 			break;
 		case POINTS:
-			player->points += 100;
+			player->points += 25;
 			destroyFlag = true;
 			break;
 		}
