@@ -8,8 +8,6 @@ class Mob_Spawner {
 	//	a reference to the level this spawner exists in
 	Level* parentLevel;
 
-	//win condition
-	
 	//	number of mobs spawned per wave
 	int mobsPerWave = 10;
 	//	is the wave completed?
@@ -18,6 +16,7 @@ class Mob_Spawner {
 	int currentWave = 0;
 	//	has the wave started?
 	bool waveStarted = false;
+
 public:
 	SDL_Rect spawnBounds;
 	bool levelWon = false;
@@ -28,5 +27,6 @@ public:
 	Enemy::subType randomEnemy();
 	void mobSpawner(int maxSpawns_, Enemy::subType subType_, SDL_Rect spawnBounds);
 	void waveSpawner(int maxWaves_);
+	bool gameCompleted() { return levelWon; }
 };
 

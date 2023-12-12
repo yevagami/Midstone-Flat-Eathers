@@ -1,5 +1,6 @@
 #include "Level_3.h"
-
+#include "Level1.h"
+#include "PlayScene.h"
 //I might have to reorder the methods for organizing purposes
 
 bool Level_3::OnCreate() {
@@ -389,7 +390,16 @@ bool Level_3::OnCreate() {
 
 	wall = nullptr;
 
-#pragma endregion*/
+	Trigger* nextLevelTrigger = new Trigger(this, Vec3(1366.0f / 2.0f, 768.0f / 2.0f + 500, 0.0f), 128, 128, [this]() {
+		if (newMobSpawner->levelWon) {
+			PlayScene* playScenePointer = dynamic_cast<PlayScene*>(parentScene);
+			if (playScenePointer != nullptr) {
+				playScenePointer->QueueNextLevel(new Level1(parentScene));
+			}
+		}
+		});
+	levelBodies.push_back(nextLevelTrigger);
+#pragma endregion
 	return true;
 }
 

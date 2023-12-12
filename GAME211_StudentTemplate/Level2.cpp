@@ -1,4 +1,6 @@
 #include "Level2.h"
+#include "PlayScene.h"
+#include "Level_3.h"
 
 //I might have to reorder the methods for organizing purposes
 
@@ -91,6 +93,15 @@ bool Level2::OnCreate() {
 		IMG_Load("Textures/programmer_art/tile_bottom_level_2.png")
 	);
 	levelBodies.push_back(wall);
+
+	Trigger* nextLevelTrigger = new Trigger(this, Vec3(1366.0f / 2.0f, 768.0f / 2.0f + 500, 0.0f), 128, 128, [this]() {
+		if (newMobSpawner->levelWon) {
+			PlayScene* playScenePointer = dynamic_cast<PlayScene*>(parentScene);
+			if (playScenePointer != nullptr) {
+				playScenePointer->QueueNextLevel(new Level_3(parentScene));
+			}
+		}
+		});
 
 	wall = nullptr;
 

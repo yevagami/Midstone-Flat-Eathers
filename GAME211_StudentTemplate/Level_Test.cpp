@@ -97,13 +97,15 @@ bool Level_test::OnCreate(){
 
 #pragma endregion
 
-	Trigger* newTrigger = new Trigger(this, Vec3(1366.0f / 2.0f, 768.0f / 2.0f + 500, 0.0f), 128, 128, [this]() {
+	Trigger* nextLevelTrigger = new Trigger(this, Vec3(1366.0f / 2.0f, 768.0f / 2.0f + 500, 0.0f), 128, 128, [this]() {
+		if (newMobSpawner->levelWon) {
 			PlayScene* playScenePointer = dynamic_cast<PlayScene*>(parentScene);
 			if (playScenePointer != nullptr) {
-				playScenePointer->QueueNextLevel(new Level1(parentScene));
+				playScenePointer->QueueNextLevel(new Level2(parentScene));
 			}
+		}
 		});
-	levelBodies.push_back(newTrigger);
+	levelBodies.push_back(nextLevelTrigger);
 	return true;
 }
 
@@ -132,7 +134,7 @@ void Level_test::OnDestroy(){
 
 
 void Level_test::Update(const float time){
-	newMobSpawner->waveSpawner(3);
+	newMobSpawner->waveSpawner(1);
 
 	if (newMobSpawner->levelWon) {
 		canSwitchTheScene = true;
