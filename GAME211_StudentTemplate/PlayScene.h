@@ -4,6 +4,7 @@
 #include "Level_test.h"
 #include "Level2.h"
 #include "Level_3.h"
+#include "Level_MainMenu.h"
 #include "Tracker.h"
 
 #include "Menu.h"
@@ -33,6 +34,7 @@ private:
 
 	//Level 
 	Level* currentLevel;
+	std::string currentLevelString;
 
 
 public:
@@ -146,12 +148,12 @@ public:
 
 
 		button1->text = "Settings";
-		button2->text = "Resume";
-		button3->text = "Quit";
+		button2->text = "Resume Game";
+		button3->text = "Return to Menu";
 
 		subButton1->text = "FPS";
 		subButton2->text = "cheats";
-		subButton3->text = "save?";
+		subButton3->text = "save";
 		subButton4->text = "sound";
 
 		soundButton1->text = "master";
@@ -271,10 +273,12 @@ public:
 
 		button3->SetOnLeftClick([&]() {
 			cc.log(update, "quitting game");
-			game->StartFadeInTransition(1000,
-				//	because those GM methods are static, we dont want to call them through a reference, therefore GameManager::
-				[&]() { GameManager::quitPls();},
-				[&]() { GameManager::savePls();} );
+
+			currentLevel->isMainMenuOpen = true;
+			//game->StartFadeInTransition(1000,
+			//	//	because those GM methods are static, we dont want to call them through a reference, therefore GameManager::
+			//	[&]() { GameManager::quitPls();},
+			//	[&]() { GameManager::savePls();} );
 			
 		});
 

@@ -33,6 +33,7 @@ bool GameManager::OnCreate() {
 
 	///	sound
 	LoadMusic();
+	LoadMenuMusic();
 	LoadSoundEffects();
 
 	
@@ -151,9 +152,10 @@ void GameManager::HandleEvents() {
 				//	testing
 				system("cls");  // NOLINT(concurrency-mt-unsafe)
 				break;
-			case SDL_SCANCODE_L:
+			//case SDL_SCANCODE_L:
 				//	load the menu scene
-				LoadScene(1);
+				//LoadScene(1);
+				//break;
 			default:
 				break;
 			}

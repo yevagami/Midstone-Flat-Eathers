@@ -27,7 +27,7 @@ namespace MemoryManager {
     inline extern size_t totalMemory = 0;
     inline extern bool isMemorySpammingActive = false;
 
-    enum class TextColor {
+    enum class TextColour {
         DEFAULT,
         BLACK,
         RED,
@@ -39,33 +39,33 @@ namespace MemoryManager {
         WHITE,
     };
 
-    inline void SetTextColor(const TextColor color_) {
+    inline void SetTextColor(const TextColour color_) {
         switch (color_) {
-        case TextColor::DEFAULT:
+        case TextColour::DEFAULT:
             std::cout << "\033[0m";
             break;
-        case TextColor::BLACK:
+        case TextColour::BLACK:
             std::cout << "\033[30m";
             break;
-        case TextColor::RED:
+        case TextColour::RED:
             std::cout << "\033[31m";
             break;
-        case TextColor::GREEN:
+        case TextColour::GREEN:
             std::cout << "\033[32m";
             break;
-        case TextColor::YELLOW:
+        case TextColour::YELLOW:
             std::cout << "\033[33m";
             break;
-        case TextColor::BLUE:
+        case TextColour::BLUE:
             std::cout << "\033[34m";
             break;
-        case TextColor::MAGENTA:
+        case TextColour::MAGENTA:
             std::cout << "\033[35m";
             break;
-        case TextColor::CYAN:
+        case TextColour::CYAN:
             std::cout << "\033[36m";
             break;
-        case TextColor::WHITE:
+        case TextColour::WHITE:
             std::cout << "\033[37m";
             break;
         default:
@@ -73,8 +73,8 @@ namespace MemoryManager {
         }
     }
 
-    inline void ResetColor() {
-        SetTextColor(TextColor::DEFAULT);
+    inline void ResetColour() {
+        SetTextColor(TextColour::DEFAULT);
     }
 
 }
@@ -85,12 +85,17 @@ void* operator new(const size_t size_) {
     void* ptr = std::malloc(size_);
 
     if(isMemorySpammingActive) {
-    SetTextColor(TextColor::BLUE);
-    std::cout << "Allocated " << size_ << " bytes. Total memory: ";
-    SetTextColor(TextColor::MAGENTA);
+    SetTextColor(TextColour::BLUE);
+    std::cout << "Allocated ";
+    SetTextColor(TextColour::GREEN);
+    std::cout << size_;
+    SetTextColor(TextColour::BLUE);
+   	std::cout << " bytes. Total memory: ";
+    SetTextColor(TextColour::GREEN);
     std::cout << totalMemory;
+    SetTextColor(TextColour::BLUE);
     std::cout << " bytes.\n";
-    ResetColor();
+    ResetColour();
 
     }
 
@@ -103,12 +108,17 @@ void operator delete(void* memory_, const size_t size_) {
     std::free(memory_);
 
     if(isMemorySpammingActive) {
-    SetTextColor(TextColor::RED);
-    std::cout << "Deallocated " << size_ << " bytes. Total memory: ";
-    SetTextColor(TextColor::MAGENTA);
+    SetTextColor(TextColour::RED);
+    std::cout << "Deallocated ";
+    SetTextColor(TextColour::GREEN);
+    std::cout << size_;
+    SetTextColor(TextColour::RED);
+   	std::cout <<" bytes. Total memory: ";
+    SetTextColor(TextColour::GREEN);
     std::cout << totalMemory;
+    SetTextColor(TextColour::RED);
     std::cout << " bytes.\n";
-    ResetColor();
+    ResetColour();
     }
 
 }

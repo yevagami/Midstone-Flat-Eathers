@@ -7,7 +7,6 @@
 #include "Timer.h"
 #include "Scene.h"
 
-
 #include "Audio.h"
 #include "ConsistentConsole.h"
 #include "PrettyPrinting.h"
@@ -16,6 +15,7 @@
 
 //	global classes
 	inline Sound musicSound;
+	inline Sound menuMusicSound;
 	inline Sound sfxSound;
 	inline ConsistentConsole cc(true, "GameManager.h");
 	inline PrettyPrinting pp(pink, purple, cyan);
@@ -42,6 +42,7 @@
 
 			MusicVolume = std::min(newMusicVolume_, MasterVolume);
 			musicSound.setVolume(MusicVolume);
+			menuMusicSound.setVolume(MusicVolume);
 		}
 		inline void SetSFXVolume(const float newSFXVolume_) {
 			if (newSFXVolume_ < -0.0f || newSFXVolume_ > 1.0f) { return; }
@@ -107,6 +108,7 @@
 			}
 			return false;
 		}
+
 		inline void LoadAllSettigns(vector<string>& superVector_) {
 			superVector_ = file.parseTHIS(settingsFileDirectory);
 
@@ -132,17 +134,13 @@
 			return false;
 		}
 
-
-
 	}
-
 #pragma endregion
 
 
 // Use 1000x600 for less than full screen
 const int SCREEN_WIDTH = 1366;
 const int SCREEN_HEIGHT = 768;
-
 
 
 class GameManager {
@@ -217,20 +215,30 @@ public:
 
 	static void LoadMusic() {
 		// DEBUG sound effects - Michael
-		musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
-		musicSound.loadSound("gyat", "sound/test/gyat.ogg");
+		//musicSound.loadSound("theme", "sound/test/19. Select Position (Wii Sports).ogg");
+		//musicSound.loadSound("gyat", "sound/test/gyat.ogg");
 
 		//load audio into the music SuperMap(tm) here
 		musicSound.loadSound("ominous music", "sound/unnormalized/drone-background-music.ogg");
 		musicSound.loadSound("overworld music", "sound/unnormalized/exploration-music-loop.ogg");
 		musicSound.loadSound("chiptune-y music", "sound/unnormalized/game-soundtrack-4.ogg");
 		musicSound.loadSound("retro epic music", "sound/unnormalized/game-soundtrack-5.ogg");
-		musicSound.loadSound("chill background music", "sound/unnormalized/lofi-fusion-background-music.ogg");
+		//musicSound.loadSound("chill background music", "sound/unnormalized/lofi-fusion-background-music.ogg"); //	stolen for main menu
 		musicSound.loadSound("battle music", "sound/unnormalized/battle-theme.ogg");
 
 
 		//	set the music irrklang engine to the current music volume
 		musicSound.setVolume(options::MusicVolume);	//	dont touch this 
+	}
+
+	static void LoadMenuMusic() {
+
+		menuMusicSound.loadSound("main menu", "sound/unnormalized/lofi-fusion-background-music.ogg");
+
+
+
+
+		menuMusicSound.setVolume(options::MusicVolume);
 	}
 
 	//	while the game's running... STOP RUNNING

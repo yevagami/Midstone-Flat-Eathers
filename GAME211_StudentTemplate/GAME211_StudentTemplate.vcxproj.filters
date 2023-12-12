@@ -177,6 +177,9 @@
     <ClCompile Include="Level_3.cpp">
       <Filter>Source Files\Scene\Levels</Filter>
     </ClCompile>
+    <ClCompile Include="Level_MainMenu.cpp">
+      <Filter>Source Files\Scene\Levels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Body.h">
@@ -303,6 +306,9 @@
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Level_3.h">
+      <Filter>Header Files\Scene\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Level_MainMenu.h">
       <Filter>Header Files\Scene\Levels</Filter>
     </ClInclude>
   </ItemGroup>
