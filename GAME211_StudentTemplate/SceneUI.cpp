@@ -7,7 +7,6 @@ SceneUI::SceneUI(SDL_Window* sdlWindow_, GameManager* game_) {
 	renderer = SDL_GetRenderer(window);
 	xAxis = static_cast<float>(SCREEN_WIDTH);
 	yAxis = static_cast<float>(SCREEN_HEIGHT);
-
 }
 
 

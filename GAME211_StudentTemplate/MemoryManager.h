@@ -45,28 +45,28 @@ namespace MemoryManager {
             std::cout << "\033[0m";
             break;
         case TextColour::BLACK:
-            std::cout << "\033[30m";
+            std::cout << "\033[38;5;0m";
             break;
         case TextColour::RED:
-            std::cout << "\033[31m";
+            std::cout << "\033[38;5;196m";
             break;
         case TextColour::GREEN:
-            std::cout << "\033[32m";
+            std::cout << "\033[38;5;46m";
             break;
         case TextColour::YELLOW:
-            std::cout << "\033[33m";
+            std::cout << "\033[38;5;226m";
             break;
         case TextColour::BLUE:
-            std::cout << "\033[34m";
+            std::cout << "\033[38;5;27m";
             break;
         case TextColour::MAGENTA:
-            std::cout << "\033[35m";
+            std::cout << "\033[38;5;129m";
             break;
         case TextColour::CYAN:
-            std::cout << "\033[36m";
+            std::cout << "\033[38;5;51m";
             break;
         case TextColour::WHITE:
-            std::cout << "\033[37m";
+            std::cout << "\033[38;5;15m";
             break;
         default:
             break;
