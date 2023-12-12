@@ -88,18 +88,7 @@ void Body::Update(float deltaTime) {
 }
 
 void Body::HandleEvents( const SDL_Event& event_ ) {
-    
-    //  michael- i'm moving this stuff. imma make a keybinds class for global keybinds, then u can just do "keybindHandler.HandleEvents(event)"
-    //              - its mostly for stuff like escape = quit, mouse input tracking, etc. WE'LL SEE HOW IT GOES!
-    if ( event_.type == SDL_MOUSEBUTTONDOWN ){
-        printf("Mousedown\n");
-    }
-    if ( event_.type == SDL_KEYDOWN ){
-        if ( event_.key.keysym.scancode == SDL_SCANCODE_SPACE){
-            printf("Space\n");
-        }
-    }
-    // etc
+
 }
 
 void Body::Render(SDL_Renderer* renderer_, Matrix4 projectionMatrix_){
